@@ -6,3 +6,4 @@ analyses/audit/*
 .env
 __pycache__/
 *.pyc
+archive/
