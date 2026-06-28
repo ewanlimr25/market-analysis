@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "market-scan decision envelope (v2)",
+  "description": "Excess-currency envelope for /market-scan. Supersedes v1.3 (rubric_version era). Scores in validated forward EXCESS vs SPY (conditional benchmark) by lane, never additive raw_score. Calibration grades excess-per-lane-per-regime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "report_date", "report_kind", "regime", "regime_context", "calls", "report_path"],
+  "properties": {
+    "schema_version": { "const": "2.0" },
+    "report_date": { "type": "string", "format": "date" },
+    "report_kind": { "enum": ["market-scan"] },
+    "regime": { "type": "string", "description": "regime label, e.g. UPTREND / PULLBACK / CHOP / *-REBOUND-THRUST" },
+    "regime_context": { "$ref": "#/$defs/regime_context" },
+    "vol_book": { "type": "array", "items": { "$ref": "#/$defs/vol_entry" } },
+    "watchlist_write_back": { "type": "array", "items": { "type": "string" } },
+    "report_path": { "type": "string" },
+    "calls": { "type": "array", "items": { "$ref": "#/$defs/call" } }
+  },
+  "$defs": {
+    "regime_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["regime_label", "vol_state", "directional_tradable", "s1_standdown"],
+      "properties": {
+        "regime_label": { "type": "string" },
+        "ret5": { "type": ["number", "null"] },
+        "ret10": { "type": ["number", "null"] },
+        "vol_state": { "type": "string", "description": "VRP/gamma vol-state — NOT a direction" },
+        "breadth_pct_green": { "type": ["number", "null"] },
+        "directional_tradable": { "type": "boolean" },
+        "s1_standdown": { "type": "boolean", "description": "momentum-crash / V-rebound / squeeze guard; true => all S1 shorts suppressed" },
+        "event_risk": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "call": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ticker", "lane", "direction", "horizon_validated", "validated_excess", "regime_fit", "tier", "final_size", "gate_verdicts", "invalidation"],
+      "properties": {
+        "ticker": { "type": "string" },
+        "lane": { "enum": ["MOM_SHORT", "MOM_LONG", "OI_FADE", "S2_dp_revert", "S4_pcr_fade", "ivrank_tilt", "vol_earnings", "vol_0dte"] },
+        "direction": { "enum": ["long", "short", "vol_short", "vol_long"] },
+        "horizon_validated": { "enum": [3, 5, 10, 21], "description": "the horizon at which THIS lane's excess is validated" },
+        "validated_excess": { "type": ["number", "null"], "description": "measured forward excess vs SPY for lane/horizon/regime (the score input)" },
+        "excess_hit_minus_base": { "type": ["number", "null"] },
+        "excess_n": { "type": ["integer", "null"] },
+        "regime_fit": { "type": "number", "minimum": 0, "maximum": 1 },
+        "tier": { "enum": ["HIGH", "MEDIUM", "WATCH", "ADVISORY", "STOOD_DOWN", "DROP"] },
+        "cluster_id": { "type": ["string", "null"], "description": "correlation-cluster id; clustered names size once" },
+        "pre_size": { "enum": ["half", "starter", "watch", "skip", null] },
+        "final_size": { "enum": ["half", "starter", "watch", "skip"] },
+        "tail_cap_applied": { "type": ["string", "null"] },
+        "gate_verdicts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["regime_crash", "liquidity", "cluster", "fundamentals", "event_risk", "tail_cap"],
+          "properties": {
+            "regime_crash": { "type": "string" },
+            "liquidity": { "type": "string" },
+            "cluster": { "type": "string" },
+            "fundamentals": { "type": "string" },
+            "event_risk": { "type": "string" },
+            "tail_cap": { "type": "string" }
+          }
+        },
+        "fundamentals_verdict": { "enum": ["CONFIRM", "CAUTION", "VETO", "NA", null] },
+        "structure": { "type": ["string", "null"] },
+        "entry_or_trigger": { "type": ["string", "null"] },
+        "invalidation": { "type": "string" },
+        "key_risks": { "type": "array", "items": { "type": "string" } },
+        "thesis": { "type": ["string", "null"] },
+        "realized_excess_pct": { "type": ["number", "null"], "description": "populated by /calibration-audit on resolution; the closed-loop record" }
+      }
+    },
+    "vol_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["symbol", "lane", "delta_neutral"],
+      "properties": {
+        "symbol": { "type": "string" },
+        "lane": { "enum": ["vol_earnings", "vol_0dte"] },
+        "sell_premium": { "type": ["boolean", "null"] },
+        "vol_state": { "type": ["string", "null"] },
+        "implied_move": { "type": ["number", "null"] },
+        "expected_range": { "type": ["number", "null"] },
+        "net_expectancy": { "type": ["number", "null"], "description": "NET of cost; lead with this" },
+        "suggested_structure": { "type": ["string", "null"] },
+        "stand_aside_reason": { "type": ["string", "null"] },
+        "delta_neutral": { "const": true }
+      }
+    }
+  }
+}

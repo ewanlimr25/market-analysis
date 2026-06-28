@@ -1,0 +1,131 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-05-18",
+ "report_kind": "market-scan",
+ "regime": "UPTREND",
+ "regime_context": {
+  "regime_label": "UPTREND",
+  "ret5": -0.0009,
+  "ret10": 0.0287,
+  "vol_state": "NA(retro)",
+  "directional_tradable": true,
+  "s1_standdown": false,
+  "event_risk": []
+ },
+ "vol_book": [],
+ "watchlist_write_back": [
+  "XE",
+  "BMRN",
+  "NRG",
+  "ABG",
+  "NCLH"
+ ],
+ "report_path": "analyses/scan/2026-05-18/report.md",
+ "calls": [
+  {
+   "ticker": "XE",
+   "lane": "MOM_SHORT",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": null,
+   "regime_fit": 1.0,
+   "tier": "WATCH",
+   "final_size": "starter",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass",
+    "cluster": "n/a",
+    "fundamentals": "NA",
+    "event_risk": "no_op",
+    "tail_cap": "basket"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "reclaims 52w-low anchor 26.9 / market V-rebound",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "VAL",
+   "lane": "MOM_LONG",
+   "direction": "long",
+   "horizon_validated": 10,
+   "validated_excess": null,
+   "regime_fit": 1.0,
+   "tier": "WATCH",
+   "final_size": "starter",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass",
+    "cluster": "n/a",
+    "fundamentals": "NA",
+    "event_risk": "no_op",
+    "tail_cap": "basket"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "loses the 52w-high breakout / sharp risk-off reversal",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "KWEB",
+   "lane": "OI_FADE",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": 0.0187,
+   "regime_fit": 1.0,
+   "tier": "MEDIUM",
+   "final_size": "starter",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass",
+    "cluster": "n/a",
+    "fundamentals": "NA",
+    "event_risk": "no_op",
+    "tail_cap": "basket"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "OI build reverses / name breaks out on real catalyst",
+   "realized_excess_pct": 0.0187
+  },
+  {
+   "ticker": "MA",
+   "lane": "S2_dp_revert",
+   "direction": "long",
+   "horizon_validated": 5,
+   "validated_excess": -0.0414,
+   "regime_fit": 1.0,
+   "tier": "WATCH",
+   "final_size": "starter",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass",
+    "cluster": "n/a",
+    "fundamentals": "NA",
+    "event_risk": "no_op",
+    "tail_cap": "n/a"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "news/earnings emerges; concentration not repeated next session",
+   "realized_excess_pct": -0.0414
+  },
+  {
+   "ticker": "NPO",
+   "lane": "S4_pcr_fade",
+   "direction": "long",
+   "horizon_validated": 5,
+   "validated_excess": 0.0211,
+   "regime_fit": 1.0,
+   "tier": "MEDIUM",
+   "final_size": "starter",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass",
+    "cluster": "n/a",
+    "fundamentals": "NA",
+    "event_risk": "no_op",
+    "tail_cap": "n/a"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "put-heavy turns out informed (gap down on news)",
+   "realized_excess_pct": 0.0211
+  }
+ ]
+}

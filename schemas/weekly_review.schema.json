@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "weekly-review envelope",
+  "description": "Three sharply-separated layers: week_context (diary, 0 signal), weekly_technicals (PRE-REGISTERED, 0 points), calls (validated weekly-horizon lanes, scored in excess). Only calls[] may be sized.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "report_kind", "iso_week", "report_date", "week_context", "calls", "report_path"],
+  "properties": {
+    "schema_version": { "const": "w1.0" },
+    "report_kind": { "const": "weekly-review" },
+    "iso_week": { "type": "string", "description": "e.g. 2026-W22" },
+    "report_date": { "type": "string", "format": "date" },
+    "report_path": { "type": "string" },
+    "week_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weekly_candles", "catalysts", "regime_trajectory"],
+      "properties": {
+        "weekly_candles": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["symbol", "w_open", "w_high", "w_low", "w_close", "w_ret", "close_pos"],
+            "properties": {
+              "symbol": { "type": "string" },
+              "w_open": { "type": "number" }, "w_high": { "type": "number" },
+              "w_low": { "type": "number" }, "w_close": { "type": "number" },
+              "w_ret": { "type": "number" }, "close_pos": { "type": ["number", "null"] },
+              "body_frac": { "type": ["number", "null"] },
+              "structure_vs_prior": { "type": ["string", "null"], "description": "inside/outside/HH-LL/reversal-wk note" }
+            }
+          }
+        },
+        "catalysts": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["event", "date"],
+            "properties": {
+              "event": { "type": "string" }, "date": { "type": "string" },
+              "weekday": { "type": ["string", "null"] },
+              "price_reaction": { "type": ["string", "null"], "description": "anchored daily reaction; reversal-after-catalyst note" }
+            }
+          }
+        },
+        "regime_trajectory": { "type": "string", "description": "Mon→Fri regime/vol-state movement" },
+        "sector_leadership": { "type": ["string", "null"] },
+        "notable_flow": { "type": ["string", "null"], "description": "the week's largest DP/sweep prints (diary, 0 signal)" }
+      }
+    },
+    "weekly_technicals": {
+      "type": "array",
+      "description": "Layer 3 — PRE-REGISTERED, never sized.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["feature", "value", "conviction_points", "status"],
+        "properties": {
+          "feature": { "type": "string" },
+          "value": { "type": "string" },
+          "would_signal": { "type": ["string", "null"] },
+          "conviction_points": { "const": 0 },
+          "status": { "const": "PRE-REGISTERED" },
+          "pre_reg_bar": { "type": ["string", "null"], "description": "e.g. PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH" }
+        }
+      }
+    },
+    "calls": {
+      "type": "array",
+      "description": "Layer 2 — validated weekly-horizon lanes, scored in excess (same shape as the daily v2 call).",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["ticker", "lane", "direction", "horizon_validated", "validated_excess", "tier", "final_size", "invalidation"],
+        "properties": {
+          "ticker": { "type": "string" },
+          "lane": { "enum": ["MOM_SHORT", "MOM_LONG", "OI_FADE"] },
+          "direction": { "enum": ["long", "short"] },
+          "horizon_validated": { "enum": [10, 21], "description": "weekly hold ~2-4 weeks" },
+          "validated_excess": { "type": ["number", "null"] },
+          "regime_fit": { "type": ["number", "null"] },
+          "tier": { "enum": ["HIGH", "MEDIUM", "WATCH", "STOOD_DOWN", "DROP"] },
+          "final_size": { "enum": ["half", "starter", "watch", "skip"] },
+          "cluster_id": { "type": ["string", "null"] },
+          "invalidation": { "type": "string" },
+          "realized_excess_pct": { "type": ["number", "null"] }
+        }
+      }
+    }
+  }
+}
