@@ -84,7 +84,8 @@ Spawn **`risk-sizer`** (hardened `risk-monitor`). In order:
 2. **Liquidity floor** (fail-closed).
 3. **Correlation cluster** — corr ≥ 0.70 = one position (load-bearing: S1 cohorts are often a single
    theme, e.g. the China complex on 2026-06-23 — `RESEARCH/50 §5.3`).
-4. **Fundamentals veto** — spawn `fundamentals-gate` only on names about to be sized (CONFIRM/CAUTION/VETO).
+4. **Fundamentals veto** — YOU (the orchestrator) spawn `fundamentals-gate` on only the names about to be
+   sized and pass its verdicts (CONFIRM/CAUTION/VETO) into `risk-sizer` — subagents cannot spawn subagents.
 5. **Event-risk** — Tier-1 macro / earnings inside the horizon.
 6. **Tail caps** — S1 short sized for the momentum-crash tail; S2 cut on news/earnings; vol-short sized
    for the unsampled left tail and quoted **net of cost** (`RESEARCH/30 §3.1`, Vilkov: 0DTE flips
