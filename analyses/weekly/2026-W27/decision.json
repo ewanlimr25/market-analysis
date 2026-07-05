@@ -1,0 +1,149 @@
+{
+  "schema_version": "w1.0",
+  "report_kind": "weekly-review",
+  "iso_week": "2026-W27",
+  "report_date": "2026-07-02",
+  "report_path": "analyses/weekly/2026-W27/report.md",
+  "week_context": {
+    "weekly_candles": [
+      {
+        "symbol": "SPY",
+        "w_open": 736.53,
+        "w_high": 751.31,
+        "w_low": 732.09,
+        "w_close": 744.78,
+        "w_ret": 0.0217,
+        "close_pos": 0.66,
+        "body_frac": 0.43,
+        "structure_vs_prior": "bullish reversal of W26's -2.5% down week; marginal higher-high (751.31 > prior 750.18) but still below the 06-15 high 756.68 (recovery inside a consolidation, not a breakout); closed upper-half (0.66); gains front-loaded Mon-Tue, flat Wed-Thu post-NFP; follow_through=False (reversed, did not continue the prior down week)"
+      },
+      {
+        "symbol": "QQQ",
+        "w_open": 713.99,
+        "w_high": 737.62,
+        "w_low": 705.17,
+        "w_close": 712.60,
+        "w_ret": 0.0086,
+        "close_pos": 0.23,
+        "body_frac": 0.04,
+        "structure_vs_prior": "INSIDE week (range contained within W26's 745.45/702.81); doji body (body_frac 0.04); rallied +4.2% Mon-Tue to 737.62 then REVERSED -3.2% Wed-Thu to close near its own lows (close_pos 0.23) leaving a 23.6pt upper wick -- the mega-tech bounce FAILED"
+      },
+      {
+        "symbol": "IWM",
+        "w_open": 298.11,
+        "w_high": 302.72,
+        "w_low": 294.68,
+        "w_close": 297.58,
+        "w_ret": -0.0075,
+        "close_pos": 0.36,
+        "body_frac": 0.07,
+        "structure_vs_prior": "marginal higher-high (302.72 > prior 301.50) poked Wed then faded; closed slightly red doji (close_pos 0.36) -- small-cap leadership STALLED after W26's relative strength"
+      }
+    ],
+    "catalysts": [
+      {
+        "event": "June NFP / Employment Situation (holiday-shifted to Thu)",
+        "date": "2026-07-02",
+        "weekday": "Thu",
+        "price_reaction": "+57K vs +115K consensus (MISS); unemployment 4.2% but on a falling participation rate (61.5%, lowest since Mar-2021); Apr/May revised down 74K combined; leisure/hospitality -61K. A soft print EASED the Sept rate-HIKE fear the hawkish Warsh Fed had put on the table (2Y -3.5bp to 4.13%), crushing VIX to 16.15 (-12% wk). BUT the intraday reaction FADED: SPY -0.13%, QQQ -1.73% on the day = 'sell-the-relief' in tech. The week's gains were made Mon-Tue PRE-print, not on NFP."
+      },
+      {
+        "event": "US market HOLIDAY (Independence Day observed)",
+        "date": "2026-07-03",
+        "weekday": "Fri",
+        "price_reaction": "NYSE closed; holiday-shortened 4-day trading week (Mon 06-29 -> Thu 07-02)"
+      }
+    ],
+    "regime_trajectory": "Entered W27 with a relief-bounce recovery off the W26 lows (Mon SPY +1.65%, Tue +0.78% -- risk-on, VIX 18.41 -> 16.45). Settled into CHOP / ROTATION by Thu 07-02 (daily scan: ret10 +0.52%, SPY structurally above 20/50-SMA uptrend, VIX 16.15, uw market-regime TRANSITIONAL / half-size, directional_tradable but low-conviction). Vol collapsed all week (VIX 18.41 -> 16.15, -12%). Critically the recovery was NOT tech-led: QQQ round-tripped its bounce, IWM faded, and the S&P's +2.17% came from large-cap ex-tech -- a defensive/value rotation, continuation of the W26 rotation theme but with leadership handed from small-caps (W26) to large-cap defensives (W27).",
+    "sector_leadership": "SPY (+2.17%) OUTPERFORMED both QQQ (+0.86%) and IWM (-0.75%) -- the tell that the gains came from large-cap NON-tech. uw sector flow (07-02): Technology -$590M OUT; Healthcare / Industrials IN. Leaders: large-cap defensives/value (Healthcare, Financials, Industrials). Laggards: mega-cap Tech (failed bounce) and small-caps (IWM stalled).",
+    "notable_flow": "Diary only (0 signal). Trailing ~2wk net CALL-OI build ranked by RELATIVE build (build / 30d-avg call OI, per the beta-trap discipline): CG 3.77x (takeover-driven -- deal positioning, not fadeable froth), TEL 2.53x (iv_rank 92, ern 07-22), RSI 2.31x & CGNX 2.23x (near-52w-HIGH momentum -- call-build consistent with an uptrend, NOT a fade), FOXA 1.98x (iv_rank 100). Mega-cap tech call-OI build persists but is a QQQ-beta trap (not scored). Notable single-name: MSTR squeezed +22.4% on the week (crypto-beta risk-on) -- a live drag on last week's MOM_SHORT book."
+  },
+  "weekly_technicals": [
+    {
+      "feature": "SPY bullish reversal week (higher-high off the W26 selloff)",
+      "value": "w_ret +2.17%, higher_high=True (751.31>750.18), close_pos 0.66, follow_through=False (reversed the prior down week), still below 06-15 high 756.68",
+      "would_signal": "recovery / failed-breakdown long IF it extends and reclaims the 06-15 high 756.68; until then a bounce inside a consolidation",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "QQQ inside-week doji, failed rally (closed near lows, long upper wick)",
+      "value": "inside_week=True, body_frac 0.04, close_pos 0.23, upper_wick 23.6pt; rallied +4.2% Mon-Tue then reversed -3.2% Wed-Thu",
+      "would_signal": "mega-tech distribution / continuation-down if next week loses 705.17; a failed-bounce inside-week is a bearish-lean tell",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "IWM higher-high fade (small-cap leadership stall)",
+      "value": "higher_high=True (302.72>301.50) but w_ret -0.75%, close_pos 0.36 (poked new high Wed then faded)",
+      "would_signal": "rotation OUT of small-caps / leadership handoff to large-cap value",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "reversal-after-catalyst (soft NFP)",
+      "value": "QQQ reversed its Mon-Tue rally DOWN through the NFP-day Wed-Thu; SPY held flat -- vol crushed with no bullish follow-through",
+      "would_signal": "'sell-the-relief' / vol-crush-without-follow-through as a mean-reversion fade tell",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    }
+  ],
+  "calls": [
+    {
+      "ticker": "VRTX",
+      "lane": "MOM_LONG",
+      "direction": "long",
+      "horizon_validated": 10,
+      "validated_excess": 0.0235,
+      "regime_fit": 0.45,
+      "tier": "WATCH",
+      "final_size": "watch",
+      "cluster_id": "mom_long_defensive_basket",
+      "invalidation": "rotation reverses / mega-tech V-bounces / broad risk-off. Tail-driven lane that needs a TRENDING broad tape; CHOP (ret10 +0.52%) fails it. Basket-only, never per-name; not sized.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "ALL",
+      "lane": "MOM_LONG",
+      "direction": "long",
+      "horizon_validated": 10,
+      "validated_excess": 0.0235,
+      "regime_fit": 0.45,
+      "tier": "WATCH",
+      "final_size": "watch",
+      "cluster_id": "mom_long_defensive_basket",
+      "invalidation": "loses breakout / risk-off reversal. Insurer leg of the defensive rotation basket; collapses to ONE position with VRTX. Not sized.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "OLED",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0081,
+      "regime_fit": 0.25,
+      "tier": "WATCH",
+      "final_size": "watch",
+      "cluster_id": "mom_short_laggards",
+      "invalidation": "broad-green / VIX-crush risk-on tape firms laggards / squeeze -- exactly the momentum-rebound tail that took CME (-4.89%) and MSTR (-20.26%) mid-flight this week. Idiosyncratic laggard, not a rotation name. Not sized.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "CG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0088,
+      "regime_fit": null,
+      "tier": "DROP",
+      "final_size": "skip",
+      "cluster_id": "oi_cg_takeover",
+      "invalidation": "top relative-build name (3.77x) but the call-OI build is TAKEOVER/deal-driven positioning, not fadeable speculative froth. Deal-contaminated -> dropped, not scored.",
+      "realized_excess_pct": null
+    }
+  ]
+}
