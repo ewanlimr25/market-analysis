@@ -37,6 +37,12 @@ Grinblatt-Han disposition, Da-Gurun-Warachka). It is **price-momentum, not flow*
 5. **Split-artifact check:** the screener's `week_52_high/low` can be unadjusted for splits (e.g.
    NFLX/BKNG/ISRG-class names showing spurious pct52 ≈ 0). Cross-check any name entering a cohort against
    live Yahoo 52w data before emitting it.
+6. **ETP exclusion:** exclude inverse/leveraged/vol ETPs from BOTH legs outright — an inverse or vol ETP
+   near its 52w extreme is a statement about the index/vol level, not single-name price structure
+   (2026-07-06: SDOW/VXX/UVXY/UVIX polluted the near-low cohort). The factor's mechanism
+   (anchoring/disposition) is single-name. Tag any remaining plain ETF (incl. bond ETFs — TIP/SHY near
+   lows is rate beta, not relative weakness) `etf: true` so `risk-sizer` can de-weight; never let ETPs
+   crowd real names out of the cohort.
 
 ## Out
 Per name: `{ticker, lane: MOM_LONG|MOM_SHORT, direction, horizon:10, prox_to_52w_extreme,

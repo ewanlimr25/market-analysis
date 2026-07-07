@@ -15,6 +15,11 @@ NEGATIVE; **do not fire it.**
 From the screener as-of T: liquid names (close ≥ $5 AND close·avg30_volume ≥ $50M) with `put_call_ratio`
 in the top 5% of the day's cross-section, an **option-liquidity floor** (call_vol > 0 AND put_vol > 0 AND
 call_vol+put_vol ≥ 1000), and **no earnings within 3 days**. Direction **long**, horizon **5** (also 10).
+**Exclude index/sector/country ETFs:** ETF put flow is structural portfolio hedging — their PCR sits
+persistently in the top decile, so a top-5% cross-sectional screen surfaces them every day as baseline,
+not extreme (2026-07-06: EWC/ACWI/MTUM/XLC/SMH/IYR/KIE). The validated fade is single-name crowd
+sentiment. Also drop names whose PCR spike coincides with a same-day ex-dividend (2026-07-06: ITT) —
+dividend-capture option flow contaminates the ratio.
 
 ## Hard rules (this is LOW-MODERATE confidence — advisory)
 1. **Advisory size only.** The edge lives in mean_exc, not win-rate (hit ≈ base); it is small and
