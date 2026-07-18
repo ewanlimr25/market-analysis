@@ -1,153 +1,142 @@
 {
- "schema_version": "w1.0",
- "report_kind": "weekly-review",
- "iso_week": "2026-W29",
- "report_date": "2026-07-17",
- "report_path": "analyses/weekly/2026-W29/report.md",
- "week_context": {
-  "weekly_candles": [
-   {
-    "symbol": "SPY",
-    "w_open": 752.47,
-    "w_high": 755.58,
-    "w_low": 740.80,
-    "w_close": 743.29,
-    "w_ret": -0.0154,
-    "close_pos": 0.17,
-    "body_frac": 0.62,
-    "structure_vs_prior": "FAILED marginal-new-high / bull-trap. Printed a marginal new intraday high 755.58 Wed (just above W28's 755.42, testing the 06-15 high 756.68) then REVERSED hard Thu-Fri to close -1.54% near the week low (close_pos 0.17) -- the largest red body in weeks and the FIRST down week after the W27+W28 up-run. Technically still higher-high (755.58>755.42) + higher-low (740.80>739.51), but the character is a distribution/reversal candle: new high made and rejected, closed at the lows. follow_through=False (broke the up-run)."
-   },
-   {
-    "symbol": "QQQ",
-    "w_open": 717.72,
-    "w_high": 724.36,
-    "w_low": 686.76,
-    "w_close": 695.33,
-    "w_ret": -0.0416,
-    "close_pos": 0.23,
-    "body_frac": 0.60,
-    "structure_vs_prior": "DECISIVE breakdown -- the bearish tell of the week. Lower-high (724.36<726.39) AND lower-low (686.76<700.91, also < W27 low 705.17) = a clean downside break; big red body -4.16%, the WORST of the three by a wide margin; closed near the low (0.23). REVERSED W28's weekly hammer/bear-trap reclaim -- the mega-tech leadership that took back the wheel in W28 broke down on the AI/semis unwind. Friday gapped down (open 691.65 from Thu close 705.94) and closed 695.33."
-   },
-   {
-    "symbol": "IWM",
-    "w_open": 295.06,
-    "w_high": 297.81,
-    "w_low": 291.64,
-    "w_close": 294.04,
-    "w_ret": -0.0066,
-    "close_pos": 0.39,
-    "body_frac": 0.17,
-    "structure_vs_prior": "The RELATIVE winner for the first time in weeks -- a leadership flip. Lower-high (297.81<300.41) but HIGHER-low (291.64>290.68), a tight narrowing/inside-ish range (body_frac 0.17), closed only -0.66% while QQQ cratered -4.16%. Small-caps held up best = the growth->value/small rotation; the W28 ordering (QQQ>SPY>IWM) fully inverted to IWM>SPY>QQQ."
-   },
-   {
-    "symbol": "^VIX",
-    "w_open": 16.32,
-    "w_high": 19.50,
-    "w_low": 15.64,
-    "w_close": 18.77,
-    "w_ret": 0.2488,
-    "close_pos": 0.81,
-    "body_frac": 0.63,
-    "structure_vs_prior": "Vol EXPANSION -- the W28 crush fully unwound. Closed 18.77, +24.9% w/w from W28's 15.03 (low of that sequence 14.96); rose steadily Mon->Fri and spiked to 19.50 intraday Friday, closing near the week high (0.81). Confirms the risk-off regime flip: the cheap protection W28 pre-flagged into this event cluster PAID."
-   }
+  "schema_version": "w1.0",
+  "report_kind": "weekly-review",
+  "iso_week": "2026-W29",
+  "report_date": "2026-07-17",
+  "report_path": "analyses/weekly/2026-W29/report.md",
+  "week_context": {
+    "weekly_candles": [
+      {
+        "symbol": "SPY",
+        "w_open": 752.47,
+        "w_high": 755.58,
+        "w_low": 740.8,
+        "w_close": 743.29,
+        "w_ret": -0.0154,
+        "close_pos": 0.17,
+        "body_frac": 0.62,
+        "structure_vs_prior": "FAILED marginal-new-high / bull-trap. Printed a marginal new intraday high 755.58 Wed (just above W28's 755.42, testing the 06-15 high 756.68) then REVERSED hard Thu-Fri to close -1.54% near the week low (close_pos 0.17) -- the largest red body in weeks and the FIRST down week after the W27+W28 up-run. Technically still higher-high (755.58>755.42) + higher-low (740.80>739.51), but the character is a distribution/reversal candle: new high made and rejected, closed at the lows. follow_through=False (broke the up-run)."
+      },
+      {
+        "symbol": "QQQ",
+        "w_open": 717.72,
+        "w_high": 724.36,
+        "w_low": 686.76,
+        "w_close": 695.33,
+        "w_ret": -0.0416,
+        "close_pos": 0.23,
+        "body_frac": 0.6,
+        "structure_vs_prior": "DECISIVE breakdown -- the bearish tell of the week. Lower-high (724.36<726.39) AND lower-low (686.76<700.91, also < W27 low 705.17) = a clean downside break; big red body -4.16%, the WORST of the three by a wide margin; closed near the low (0.23). REVERSED W28's weekly hammer/bear-trap reclaim -- the mega-tech leadership that took back the wheel in W28 broke down on the AI/semis unwind. Friday gapped down (open 691.65 from Thu close 705.94) and closed 695.33."
+      },
+      {
+        "symbol": "IWM",
+        "w_open": 295.06,
+        "w_high": 297.81,
+        "w_low": 291.64,
+        "w_close": 294.04,
+        "w_ret": -0.0066,
+        "close_pos": 0.39,
+        "body_frac": 0.17,
+        "structure_vs_prior": "The RELATIVE winner for the first time in weeks -- a leadership flip. Lower-high (297.81<300.41) but HIGHER-low (291.64>290.68), a tight narrowing/inside-ish range (body_frac 0.17), closed only -0.66% while QQQ cratered -4.16%. Small-caps held up best = the growth->value/small rotation; the W28 ordering (QQQ>SPY>IWM) fully inverted to IWM>SPY>QQQ."
+      },
+      {
+        "symbol": "^VIX",
+        "w_open": 16.32,
+        "w_high": 19.5,
+        "w_low": 15.64,
+        "w_close": 18.77,
+        "w_ret": 0.2488,
+        "close_pos": 0.81,
+        "body_frac": 0.63,
+        "structure_vs_prior": "Vol EXPANSION -- the W28 crush fully unwound. Closed 18.77, +24.9% w/w from W28's 15.03 (low of that sequence 14.96); rose steadily Mon->Fri and spiked to 19.50 intraday Friday, closing near the week high (0.81). Confirms the risk-off regime flip: the cheap protection W28 pre-flagged into this event cluster PAID."
+      }
+    ],
+    "catalysts": [
+      {
+        "event": "June CPI (softer than expected)",
+        "date": "2026-07-14",
+        "weekday": "Tue",
+        "price_reaction": "Headline CPI -0.4% m/m, 3.5% y/y (vs 3.8% exp, down from 4.2% May); core FLAT m/m, 2.6% y/y; energy -5.7% m/m (biggest drop since Apr 2020). A DOVISH surprise -- reinforced a July hold at 3.50-3.75% (CME FedWatch ~84.5% no-change). Reaction: risk-on Tue, Nasdaq +0.9%/S&P +0.4%, and the melt-up extended to a marginal SPY new high Wed. BUT the good-news rally was fully reversed Thu-Fri = a sell-the-good-news exhaustion tell (Layer-3)."
+      },
+      {
+        "event": "Q2 big-bank earnings (record beats)",
+        "date": "2026-07-14",
+        "weekday": "Tue",
+        "price_reaction": "JPM/GS/BofA/Citi/WFC reported Tue pre-open; MS Wed. JPMorgan posted a RECORD $21.2B quarterly profit ($7.70 EPS incl. a $4.6B Visa-stake gain; core $6.14 vs $5.74 est), revenue $57.3B (+~$7.4B beat), every business line at record revenue. Financials (XLF +0.99% wk) were one of the few green sectors -- but the bank strength could NOT hold the tape once the AI/semis unwind took over."
+      },
+      {
+        "event": "AI/semiconductor unwind (the week's driver)",
+        "date": "2026-07-16",
+        "weekday": "Thu-Fri",
+        "price_reaction": "The melt-up reversed hard Thu-Fri on an AI-capex-doubt + China-AI shock. (1) Chinese startup Moonshot AI unveiled a model it claimed narrows the gap with US frontier offerings -- jolted semis. (2) Alphabet -4%+ on a Bloomberg report it was behind schedule on Gemini 3.5 Pro delivery. (3) Broad worry the AI capex spree is 'harder to justify' drove chips toward a bear market -- SMH -8.9% on the week (3rd weekly decline in 4). (4) A US-Iran escalation spiked oil (USO +14%, XLE +4.7%). Net: QQQ -4.16%, SMH -8.9%, VIX +24.9% -- a leadership rotation OUT of AI/growth INTO energy and defensives."
+      }
+    ],
+    "regime_trajectory": "FLIP from W28's trending-up/risk-on to risk-OFF/vol-expansion by Friday. Mon 07-13 opened soft but still low-vol (SPY 749.17, VIX 17.16) carrying W28's constructive tone; Tue-Wed a soft-CPI + record-bank-earnings melt-up to a marginal SPY new high (755.58 intraday Wed, VIX crushed toward 15.64). Then Thu-Fri a sharp risk-off reversal: QQQ broke to a lower-low 686.76, SPY failed the new high and closed near the lows (743.29, close_pos 0.17), VIX spiked to 19.50 and closed 18.77 (+24.9% w/w). ret10 rolled from positive (W28) to negative. Net Mon->Fri: an incipient-correction / CHOP-with-a-risk-off-tilt regime; directional_tradable turns FALSE (whippy, no clean directional edge), vol-state ELEVATED and rising. Continues the higher-order weekly chop (W26 down, W27 up, W28 to new highs, W29 rejected).",
+    "sector_leadership": "FULL risk-off rotation, a near-total reversal of W28. Winners (07-10->07-17): Oil USO +14.04%, Energy XLE +4.72%, REITs XLRE +2.18%, Staples XLP +1.27%, Financials XLF +0.99% (bank-earnings bid), Health XLV +0.16%. Laggards: Semis SMH -8.92%, Tech XLK -5.48%, Biotech XBI -3.00%, Gold GLD -2.28%, Cons-Disc XLY -1.54%, Industrials XLI -1.38%. W28's leaders (Semis/Tech) are this week's worst; energy extended its lead on the US-Iran oil spike; defensives + value + small-caps outperformed = classic de-grossing/risk-off week led by an AI-capex-doubt shock.",
+    "notable_flow": "Trailing-5d NET call-minus-put OI build (oi_net_5d), normalized by avg_30_day_call_oi (68-file panel to 07-17), floors + persistence + earnings/near-high/ETF gates applied. NO clean scored single-name fade cleared this week. The high-relative-build names all CUT: FHN 4.84x = a single ~100k-contract Jan-2027 $31-call block (persistence 1.00, lumpy institutional, not crowd accretion -- the CG artifact); SLGN/AVTR/EQPT/CC = single-day-dominated (share 0.90-1.00); PVH/ROST/MUU = net-positive only because PUTS were closed (call_build NEGATIVE) = a sign artifact, not call building; EWC (iShares Canada) / IWF (Russell 1000 Growth) = ETFs; the biotech cluster (SRRK/AARD/AVIR/CCCC/KOD/AGEN) = binary earnings early-Aug. The cleanest profile was ACVA (persistence 0.53, pct_52w 0.27 not-near-high, genuine call build) but it FAILS the $50M liquidity floor ($23M/day). BEKE cleared liquidity ($73M) but is a China-property ADR that ran +11.8% on a likely real China-property catalyst = fade-into-a-catalyst (invalidation). Mega-cap semis' crowded AI calls are QQQ-beta (excluded) and were already unwinding in the selloff."
+  },
+  "weekly_technicals": [
+    {
+      "feature": "SPY failed marginal-new-high / bull-trap reversal",
+      "value": "Printed 755.58 intraday Wed (>W28 755.42, testing 06-15 high 756.68) then reversed to close -1.54% at close_pos 0.17 (near low), body_frac 0.62; first red week after the W27+W28 up-run; follow_through=False",
+      "would_signal": "distribution / trend-exhaustion SHORT IF next week confirms below the reclaim (~740) -- a new high made and rejected, closed at the lows, is textbook failed-breakout structure",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "QQQ lower-high + lower-low breakdown (W28 reclaim FAILED)",
+      "value": "lower_high (724.36<726.39), lower_low (686.76<700.91, <W27 705.17), w_ret -4.16% (worst of three), close_pos 0.23; reversed W28's weekly hammer/bear-trap reclaim",
+      "would_signal": "mega-tech leadership breakdown / momentum-crash continuation SHORT IF it holds below ~700; the failed-reclaim-then-break is the bearish mirror of W28's bear-trap",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "reversal-after-catalyst (soft CPI + record banks bought then SOLD)",
+      "value": "dovish June CPI (2.6% core) + JPM record $21.2B profit drove a Tue-Wed melt-up to a marginal SPY new high, then a full Thu-Fri reversal (QQQ -4.16%, VIX +24.9%)",
+      "would_signal": "sell-the-good-news / risk-off distribution regime -- a tape that rejects a dovish print + blowout earnings is exhibiting demand exhaustion at the highs",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "IWM relative-strength flip (small-caps least-bad)",
+      "value": "IWM -0.66% held a HIGHER-low (291.64>290.68) with a tight body (0.17) while QQQ broke -4.16%; leadership inverted to IWM>SPY>QQQ",
+      "would_signal": "growth->value/small rotation IF it persists; the relative-strength leg of the risk-off rotation, small-caps absorbing flows leaving mega-tech",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    }
   ],
-  "catalysts": [
-   {
-    "event": "June CPI (softer than expected)",
-    "date": "2026-07-14",
-    "weekday": "Tue",
-    "price_reaction": "Headline CPI -0.4% m/m, 3.5% y/y (vs 3.8% exp, down from 4.2% May); core FLAT m/m, 2.6% y/y; energy -5.7% m/m (biggest drop since Apr 2020). A DOVISH surprise -- reinforced a July hold at 3.50-3.75% (CME FedWatch ~84.5% no-change). Reaction: risk-on Tue, Nasdaq +0.9%/S&P +0.4%, and the melt-up extended to a marginal SPY new high Wed. BUT the good-news rally was fully reversed Thu-Fri = a sell-the-good-news exhaustion tell (Layer-3)."
-   },
-   {
-    "event": "Q2 big-bank earnings (record beats)",
-    "date": "2026-07-14",
-    "weekday": "Tue",
-    "price_reaction": "JPM/GS/BofA/Citi/WFC reported Tue pre-open; MS Wed. JPMorgan posted a RECORD $21.2B quarterly profit ($7.70 EPS incl. a $4.6B Visa-stake gain; core $6.14 vs $5.74 est), revenue $57.3B (+~$7.4B beat), every business line at record revenue. Financials (XLF +0.99% wk) were one of the few green sectors -- but the bank strength could NOT hold the tape once the AI/semis unwind took over."
-   },
-   {
-    "event": "AI/semiconductor unwind (the week's driver)",
-    "date": "2026-07-16",
-    "weekday": "Thu-Fri",
-    "price_reaction": "The melt-up reversed hard Thu-Fri on an AI-capex-doubt + China-AI shock. (1) Chinese startup Moonshot AI unveiled a model it claimed narrows the gap with US frontier offerings -- jolted semis. (2) Alphabet -4%+ on a Bloomberg report it was behind schedule on Gemini 3.5 Pro delivery. (3) Broad worry the AI capex spree is 'harder to justify' drove chips toward a bear market -- SMH -8.9% on the week (3rd weekly decline in 4). (4) A US-Iran escalation spiked oil (USO +14%, XLE +4.7%). Net: QQQ -4.16%, SMH -8.9%, VIX +24.9% -- a leadership rotation OUT of AI/growth INTO energy and defensives."
-   }
-  ],
-  "regime_trajectory": "FLIP from W28's trending-up/risk-on to risk-OFF/vol-expansion by Friday. Mon 07-13 opened soft but still low-vol (SPY 749.17, VIX 17.16) carrying W28's constructive tone; Tue-Wed a soft-CPI + record-bank-earnings melt-up to a marginal SPY new high (755.58 intraday Wed, VIX crushed toward 15.64). Then Thu-Fri a sharp risk-off reversal: QQQ broke to a lower-low 686.76, SPY failed the new high and closed near the lows (743.29, close_pos 0.17), VIX spiked to 19.50 and closed 18.77 (+24.9% w/w). ret10 rolled from positive (W28) to negative. Net Mon->Fri: an incipient-correction / CHOP-with-a-risk-off-tilt regime; directional_tradable turns FALSE (whippy, no clean directional edge), vol-state ELEVATED and rising. Continues the higher-order weekly chop (W26 down, W27 up, W28 to new highs, W29 rejected).",
-  "sector_leadership": "FULL risk-off rotation, a near-total reversal of W28. Winners (07-10->07-17): Oil USO +14.04%, Energy XLE +4.72%, REITs XLRE +2.18%, Staples XLP +1.27%, Financials XLF +0.99% (bank-earnings bid), Health XLV +0.16%. Laggards: Semis SMH -8.92%, Tech XLK -5.48%, Biotech XBI -3.00%, Gold GLD -2.28%, Cons-Disc XLY -1.54%, Industrials XLI -1.38%. W28's leaders (Semis/Tech) are this week's worst; energy extended its lead on the US-Iran oil spike; defensives + value + small-caps outperformed = classic de-grossing/risk-off week led by an AI-capex-doubt shock.",
-  "notable_flow": "Trailing-5d NET call-minus-put OI build (oi_net_5d), normalized by avg_30_day_call_oi (68-file panel to 07-17), floors + persistence + earnings/near-high/ETF gates applied. NO clean scored single-name fade cleared this week. The high-relative-build names all CUT: FHN 4.84x = a single ~100k-contract Jan-2027 $31-call block (persistence 1.00, lumpy institutional, not crowd accretion -- the CG artifact); SLGN/AVTR/EQPT/CC = single-day-dominated (share 0.90-1.00); PVH/ROST/MUU = net-positive only because PUTS were closed (call_build NEGATIVE) = a sign artifact, not call building; EWC (iShares Canada) / IWF (Russell 1000 Growth) = ETFs; the biotech cluster (SRRK/AARD/AVIR/CCCC/KOD/AGEN) = binary earnings early-Aug. The cleanest profile was ACVA (persistence 0.53, pct_52w 0.27 not-near-high, genuine call build) but it FAILS the $50M liquidity floor ($23M/day). BEKE cleared liquidity ($73M) but is a China-property ADR that ran +11.8% on a likely real China-property catalyst = fade-into-a-catalyst (invalidation). Mega-cap semis' crowded AI calls are QQQ-beta (excluded) and were already unwinding in the selloff."
- },
- "weekly_technicals": [
-  {
-   "feature": "SPY failed marginal-new-high / bull-trap reversal",
-   "value": "Printed 755.58 intraday Wed (>W28 755.42, testing 06-15 high 756.68) then reversed to close -1.54% at close_pos 0.17 (near low), body_frac 0.62; first red week after the W27+W28 up-run; follow_through=False",
-   "would_signal": "distribution / trend-exhaustion SHORT IF next week confirms below the reclaim (~740) -- a new high made and rejected, closed at the lows, is textbook failed-breakout structure",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "QQQ lower-high + lower-low breakdown (W28 reclaim FAILED)",
-   "value": "lower_high (724.36<726.39), lower_low (686.76<700.91, <W27 705.17), w_ret -4.16% (worst of three), close_pos 0.23; reversed W28's weekly hammer/bear-trap reclaim",
-   "would_signal": "mega-tech leadership breakdown / momentum-crash continuation SHORT IF it holds below ~700; the failed-reclaim-then-break is the bearish mirror of W28's bear-trap",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "reversal-after-catalyst (soft CPI + record banks bought then SOLD)",
-   "value": "dovish June CPI (2.6% core) + JPM record $21.2B profit drove a Tue-Wed melt-up to a marginal SPY new high, then a full Thu-Fri reversal (QQQ -4.16%, VIX +24.9%)",
-   "would_signal": "sell-the-good-news / risk-off distribution regime -- a tape that rejects a dovish print + blowout earnings is exhibiting demand exhaustion at the highs",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "IWM relative-strength flip (small-caps least-bad)",
-   "value": "IWM -0.66% held a HIGHER-low (291.64>290.68) with a tight body (0.17) while QQQ broke -4.16%; leadership inverted to IWM>SPY>QQQ",
-   "would_signal": "growth->value/small rotation IF it persists; the relative-strength leg of the risk-off rotation, small-caps absorbing flows leaving mega-tech",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  }
- ],
- "calls": [
-  {
-   "ticker": "ACVA",
-   "lane": "OI_FADE",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0088,
-   "regime_fit": 0.55,
-   "tier": "DROP",
-   "final_size": "skip",
-   "cluster_id": "oi_fade_none_cleared",
-   "invalidation": "NO SCORED SINGLE-NAME THIS WEEK. ACVA was the cleanest OI_FADE profile (trailing-5d rel-build 1.90x, persistence 0.53, pct_52w 0.27 = not-near-high, genuine call accretion 5428/22 call/put, earnings 08-10 outside the h10 hold) BUT it FAILS the $50M liquidity floor at ~$23M/day -> cut, fail-closed. No other name cleared the full stack: FHN/SLGN/AVTR = single-day block prints (persistence ~1.0); PVH/ROST/MUU = put-unwind sign artifacts (call_build negative); EWC/IWF = ETFs; SRRK/AARD/AVIR/CCCC = biotech binaries into early-Aug earnings; BEKE cleared liquidity ($73M) but is a China-property ADR +11.8% on a real catalyst (fade-into-catalyst = invalidation). Regime turned mildly favorable for shorts (risk-off, VIX+24.9%) but with no clean beta-neutral name the honest output is EMPTY.",
-   "realized_excess_pct": null
-  },
-  {
-   "ticker": "MOM_LONG_BASKET",
-   "lane": "MOM_LONG",
-   "direction": "long",
-   "horizon_validated": 10,
-   "validated_excess": 0.0235,
-   "regime_fit": 0.30,
-   "tier": "WATCH",
-   "final_size": "skip",
-   "cluster_id": "mom_long_near_high_basket",
-   "invalidation": "Regime-fit DROPPED from W28's 0.55 back toward unfavorable (~0.30): the tape flipped risk-OFF, SPY failed a new high and closed near lows, ret10 rolled negative, mega-tech (the near-high cohort's core) broke down -4.16%. A long-near-52w-high basket into a failed-breakout / vol-expanding week is fighting the tape. Remains BASKET-only / never per-name regardless. Off until a trending-up regime re-establishes (ret10 back >+1% for >=2wk).",
-   "realized_excess_pct": null
-  },
-  {
-   "ticker": "MOM_SHORT",
-   "lane": "MOM_SHORT",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0081,
-   "regime_fit": 0.20,
-   "tier": "STOOD_DOWN",
-   "final_size": "skip",
-   "cluster_id": "mom_short_near_low",
-   "invalidation": "STOOD DOWN on the crash-guard (s1_standdown). A sharp semis/tech selloff (SMH -8.9%, QQQ -4.16%) + VIX +24.9% is an incipient momentum-crash -- exactly the condition where the momentum-REBOUND squeeze tail against near-52w-low shorts is most live (the lane went 0-for-3 in W26 this way). Shorting battered laggards into a fresh vol spike invites the violent mean-reversion bounce. Stand down until vol stabilizes.",
-   "realized_excess_pct": null
-  }
- ]
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.55,
+      "note": "NO SCORED SINGLE-NAME THIS WEEK. ACVA was the cleanest OI_FADE profile (trailing-5d rel-build 1.90x, persistence 0.53, pct_52w 0.27 = not-near-high, genuine call accretion 5428/22 call/put, earnings 08-10 outside the h10 hold) BUT it FAILS the $50M liquidity floor at ~$23M/day -> cut, fail-closed. No other name cleared the full stack: FHN/SLGN/AVTR = single-day block prints (persistence ~1.0); PVH/ROST/MUU = put-unwind sign artifacts (call_build negative); EWC/IWF = ETFs; SRRK/AARD/AVIR/CCCC = biotech binaries into early-Aug earnings; BEKE cleared liquidity ($73M) but is a China-property ADR +11.8% on a real catalyst (fade-into-catalyst = invalidation). Regime turned mildly favorable for shorts (risk-off, VIX+24.9%) but with no clean beta-neutral name the honest output is EMPTY.",
+      "candidates": [
+        "ACVA"
+      ],
+      "cluster_id": "oi_fade_none_cleared"
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.3,
+      "note": "Regime-fit DROPPED from W28's 0.55 back toward unfavorable (~0.30): the tape flipped risk-OFF, SPY failed a new high and closed near lows, ret10 rolled negative, mega-tech (the near-high cohort's core) broke down -4.16%. A long-near-52w-high basket into a failed-breakout / vol-expanding week is fighting the tape. Remains BASKET-only / never per-name regardless. Off until a trending-up regime re-establishes (ret10 back >+1% for >=2wk).",
+      "cluster_id": "mom_long_near_high_basket"
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.2,
+      "note": "STOOD DOWN on the crash-guard (s1_standdown). A sharp semis/tech selloff (SMH -8.9%, QQQ -4.16%) + VIX +24.9% is an incipient momentum-crash -- exactly the condition where the momentum-REBOUND squeeze tail against near-52w-low shorts is most live (the lane went 0-for-3 in W26 this way). Shorting battered laggards into a fresh vol spike invites the violent mean-reversion bounce. Stand down until vol stabilizes.",
+      "cluster_id": "mom_short_near_low"
+    }
+  ]
 }

@@ -1,136 +1,128 @@
 {
- "schema_version": "w1.0",
- "report_kind": "weekly-review",
- "iso_week": "2026-W28",
- "report_date": "2026-07-10",
- "report_path": "analyses/weekly/2026-W28/report.md",
- "week_context": {
-  "weekly_candles": [
-   {
-    "symbol": "SPY",
-    "w_open": 748.74,
-    "w_high": 755.42,
-    "w_low": 739.51,
-    "w_close": 754.95,
-    "w_ret": 0.0137,
-    "close_pos": 0.97,
-    "body_frac": 0.39,
-    "structure_vs_prior": "clean uptrend continuation of W27's recovery; higher-high (755.42 > 751.31) AND higher-low (739.51 > 732.09); NEW closing high for the sequence, a hair below the 06-15 intraday high 756.68; big lower wick (lw 0.58) from the Wed flush that was fully reclaimed Thu-Fri; closed at 0.97 of range = maximal strength close; follow_through=True (extended the prior up week)"
-   },
-   {
-    "symbol": "QQQ",
-    "w_open": 719.93,
-    "w_high": 726.39,
-    "w_low": 700.91,
-    "w_close": 725.51,
-    "w_ret": 0.0181,
-    "close_pos": 0.97,
-    "body_frac": 0.22,
-    "structure_vs_prior": "WEEKLY HAMMER / bullish reversal; sold Mon-Wed and UNDERCUT the prior week's low (700.91 < 705.17 = lower-low + lower-high, a bear-trap) then V-recovered Thu-Fri to close +1.81%, the BEST of the three; huge lower wick (lw 0.75); reclaimed mega-tech leadership after lagging in W27's defensive rotation; reversed W27's failed-rally doji"
-   },
-   {
-    "symbol": "IWM",
-    "w_open": 297.75,
-    "w_high": 300.41,
-    "w_low": 290.68,
-    "w_close": 295.99,
-    "w_ret": -0.0053,
-    "close_pos": 0.55,
-    "body_frac": 0.18,
-    "structure_vs_prior": "lower-high (300.41 < 302.72) AND lower-low (290.68 < 294.68), red week (-0.53%) while SPY/QQQ made gains; small-caps the clear laggard for a second week; closed mid-range (0.55) off the Wed low; the ONLY major to close red = rotation stayed OUT of small-caps"
-   }
+  "schema_version": "w1.0",
+  "report_kind": "weekly-review",
+  "iso_week": "2026-W28",
+  "report_date": "2026-07-10",
+  "report_path": "analyses/weekly/2026-W28/report.md",
+  "week_context": {
+    "weekly_candles": [
+      {
+        "symbol": "SPY",
+        "w_open": 748.74,
+        "w_high": 755.42,
+        "w_low": 739.51,
+        "w_close": 754.95,
+        "w_ret": 0.0137,
+        "close_pos": 0.97,
+        "body_frac": 0.39,
+        "structure_vs_prior": "clean uptrend continuation of W27's recovery; higher-high (755.42 > 751.31) AND higher-low (739.51 > 732.09); NEW closing high for the sequence, a hair below the 06-15 intraday high 756.68; big lower wick (lw 0.58) from the Wed flush that was fully reclaimed Thu-Fri; closed at 0.97 of range = maximal strength close; follow_through=True (extended the prior up week)"
+      },
+      {
+        "symbol": "QQQ",
+        "w_open": 719.93,
+        "w_high": 726.39,
+        "w_low": 700.91,
+        "w_close": 725.51,
+        "w_ret": 0.0181,
+        "close_pos": 0.97,
+        "body_frac": 0.22,
+        "structure_vs_prior": "WEEKLY HAMMER / bullish reversal; sold Mon-Wed and UNDERCUT the prior week's low (700.91 < 705.17 = lower-low + lower-high, a bear-trap) then V-recovered Thu-Fri to close +1.81%, the BEST of the three; huge lower wick (lw 0.75); reclaimed mega-tech leadership after lagging in W27's defensive rotation; reversed W27's failed-rally doji"
+      },
+      {
+        "symbol": "IWM",
+        "w_open": 297.75,
+        "w_high": 300.41,
+        "w_low": 290.68,
+        "w_close": 295.99,
+        "w_ret": -0.0053,
+        "close_pos": 0.55,
+        "body_frac": 0.18,
+        "structure_vs_prior": "lower-high (300.41 < 302.72) AND lower-low (290.68 < 294.68), red week (-0.53%) while SPY/QQQ made gains; small-caps the clear laggard for a second week; closed mid-range (0.55) off the Wed low; the ONLY major to close red = rotation stayed OUT of small-caps"
+      }
+    ],
+    "catalysts": [
+      {
+        "event": "June FOMC meeting minutes (Warsh's first meeting)",
+        "date": "2026-07-08",
+        "weekday": "Wed",
+        "price_reaction": "Committee unanimously held funds at 3.50-3.75%; minutes revealed a deep 9-8 hawkish/dovish split with a few officials weighing HIKES ('nine hawkish dots'; Warsh's deliberate silence noted). Reaction MUTED on the day (futures held slightly negative, 2Y ticked up; QQQ dipped to its weekly low 700.91, VIX spiked to 18.91 intraday) but the hawkish tone did NOT hold: risk-on reasserted Thu-Fri to SPY new highs, VIX crushed to 15.03. Futures now price funds toward ~4% by year-end despite the soft June NFP -- equities SHRUGGED IT OFF (the reversal-after-catalyst tell in Layer-3)."
+      },
+      {
+        "event": "Q2 bank earnings + June CPI (forward, next week)",
+        "date": "2026-07-14",
+        "weekday": "Tue",
+        "price_reaction": "PRE-REGISTERED forward catalyst, not this week: big-bank Q2 prints and June CPI land the week of 07-13/14/15. The vol-crush into VIX 15.03 sets up an event-risk asymmetry for W29 -- cheap protection into a data-heavy week."
+      }
+    ],
+    "regime_trajectory": "risk-on grind-UP all week with one midweek wobble. Mon 07-06 opened the new-high push (SPY 751.28, VIX 15.57). Wed 07-08 a shallow flush on the hawkish FOMC minutes (QQQ 700.91, VIX intraday 18.91) was fully reclaimed. Thu-Fri sharp reassertion to SPY new closing high 754.95, VIX crushed to 15.03 (low 14.96, lowest in the sequence). Net Mon->Fri: TRENDING-up, low-vol, risk-on -- a regime FLIP from W27's CHOP/ROTATION (ret10 now positive and rising vs +0.52% last week). uw regime: risk-on, momentum-rebound tail live against shorts.",
+    "sector_leadership": "FULL REVERSAL of W27's defensive/value rotation. Leaders (07-02->07-10): Energy XLE +3.49%, Semis SMH +3.16%, Tech XLK +2.87%, Comm XLC +1.86%. Laggards: Materials XLB -2.15%, Health XLV -1.77%, Industrials XLI -1.08%, Staples XLP -1.02%, Utilities XLU -0.76%. Cyclical/growth leadership fully back; W27's defensive winners (Health/Staples/Utils) are this week's laggards -- which is exactly why the W27 defensive-basket watch names (ABBV -5.64%) would have lost.",
+    "notable_flow": "Trailing call-OI build, normalized by avg_30_day_call_oi with the pinned gates (Common-Stock only, liquidity + persistence floors, deal/earnings/near-high/listing-age carve-outs). Naive top-of-list all EXCLUDE: TECH 2.69x = confirmed M&A target (Merck KGaA $11.3B, 06-26); RSI 1.72x near-52w-high = uptrend build; TEL/SHOO/SLM/ENSG/CGNX = earnings inside the 2-4wk hold window; CBRS = IPO 05-14 (<60td listed); UNM = $3.8B Fortitude Re deal announced 07-06. HONESTY CORRECTION: last week's diary flagged CG at 3.77x -- a persistence check shows 97% of CG's build landed in a SINGLE day (06-29->06-30) via two ~100k-contract OTM call blocks = a lumpy institutional hedge, NOT persistent crowd accretion; the naive 2wk-sum ranking overstated it. The ONE clean, persistent, beta-neutral, non-deal, non-earnings-in-window fade is MAT (see Layer-2). Mega-cap tech (TSLA/MSFT/META/NVDA/AMD/AVGO/MU) call-build persists = QQQ-beta trap. Crypto-beta risk-on again (BTDR/MSTR bid)."
+  },
+  "weekly_technicals": [
+    {
+      "feature": "SPY new-high breakout (higher-high + higher-low)",
+      "value": "w_ret +1.37%, higher_high=True (755.42>751.31), higher_low=True (739.51>732.09), close_pos 0.97, NEW closing high 754.95 (intraday 755.42 still a hair below the 06-15 high 756.68), follow_through=True",
+      "would_signal": "trend-continuation long IF it clears 756.68 and holds; a maximal-strength close at 0.97 of range with HH+HL is textbook breakout structure",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "QQQ weekly hammer / bullish-reversal bear-trap",
+      "value": "undercut prior-week low (700.91<705.17) then V-recovered to close +1.81% (best of the three); lower wick 0.75, close_pos 0.97, body_frac 0.22; reversed W27's failed-rally doji",
+      "would_signal": "mega-tech leadership reclaimed / failed-breakdown long IF next week holds above the reclaim; the classic bear-trap-then-reclaim structure",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "IWM lower-high + lower-low laggard (2nd week)",
+      "value": "lower_high (300.41<302.72), lower_low (290.68<294.68), only major to close red (-0.53%), close_pos 0.55",
+      "would_signal": "small-caps failing to confirm the new-high tape = narrow/large-cap-led advance; would signal caution on breadth IF it persists",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "reversal-after-catalyst (hawkish FOMC minutes shrugged off)",
+      "value": "hawkish 9-8-split June minutes (Wed) dipped QQQ to its low + spiked VIX to 18.91 intraday, then risk-on FULLY reclaimed it Thu-Fri to new highs, VIX crushed to 15.03",
+      "would_signal": "'buy-the-hawkish-dip' vol-crush regime-strength tell IF the pattern repeats; the tape overriding a hawkish macro print is a risk-on structural signal",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    }
   ],
-  "catalysts": [
-   {
-    "event": "June FOMC meeting minutes (Warsh's first meeting)",
-    "date": "2026-07-08",
-    "weekday": "Wed",
-    "price_reaction": "Committee unanimously held funds at 3.50-3.75%; minutes revealed a deep 9-8 hawkish/dovish split with a few officials weighing HIKES ('nine hawkish dots'; Warsh's deliberate silence noted). Reaction MUTED on the day (futures held slightly negative, 2Y ticked up; QQQ dipped to its weekly low 700.91, VIX spiked to 18.91 intraday) but the hawkish tone did NOT hold: risk-on reasserted Thu-Fri to SPY new highs, VIX crushed to 15.03. Futures now price funds toward ~4% by year-end despite the soft June NFP -- equities SHRUGGED IT OFF (the reversal-after-catalyst tell in Layer-3)."
-   },
-   {
-    "event": "Q2 bank earnings + June CPI (forward, next week)",
-    "date": "2026-07-14",
-    "weekday": "Tue",
-    "price_reaction": "PRE-REGISTERED forward catalyst, not this week: big-bank Q2 prints and June CPI land the week of 07-13/14/15. The vol-crush into VIX 15.03 sets up an event-risk asymmetry for W29 -- cheap protection into a data-heavy week."
-   }
+  "calls": [
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0088,
+      "regime_fit": 0.5,
+      "tier": "MEDIUM",
+      "final_size": "starter",
+      "cluster_id": "oi_fade_mat",
+      "invalidation": "THE ONE SCORED CALL. Clean OI_FADE short: persistent call-OI build every one of 10 days (accelerating into 07-09/10), normalized 0.90x avg_30_day_call_oi, max single-day share 0.40 (passes persistence). Beta-neutral (toys/consumer-disc, no cluster overlap), NOT mega-cap-beta, NOT an ETF/new-listing, NOT a deal, NOT near-52w-high (pct_52w_range 0.031 -- fresh 52w low 07-09). Fundamentals CONFIRM the short: Goldman cut to Sell 07-09 same day it hit a fresh low = crowd piling into bounce-bet calls on a battered name (the textbook crowded-embedded-leverage fade). Entry 07-10 close $13.33, liquid (~$65M/day $-vol). SIZE = starter/half-cap only, NOT full: shorting into a broad new-high VIX-15 tape is the standing headwind. EARNINGS 08-04 is ~18td out, inside an h21 hold -> run to h10 and FLATTEN before the print. Invalidation: call unwind, a real bottom/beat, or a regime-classifier strong-rebound thrust before entry.",
+      "realized_excess_pct": null
+    }
   ],
-  "regime_trajectory": "risk-on grind-UP all week with one midweek wobble. Mon 07-06 opened the new-high push (SPY 751.28, VIX 15.57). Wed 07-08 a shallow flush on the hawkish FOMC minutes (QQQ 700.91, VIX intraday 18.91) was fully reclaimed. Thu-Fri sharp reassertion to SPY new closing high 754.95, VIX crushed to 15.03 (low 14.96, lowest in the sequence). Net Mon->Fri: TRENDING-up, low-vol, risk-on -- a regime FLIP from W27's CHOP/ROTATION (ret10 now positive and rising vs +0.52% last week). uw regime: risk-on, momentum-rebound tail live against shorts.",
-  "sector_leadership": "FULL REVERSAL of W27's defensive/value rotation. Leaders (07-02->07-10): Energy XLE +3.49%, Semis SMH +3.16%, Tech XLK +2.87%, Comm XLC +1.86%. Laggards: Materials XLB -2.15%, Health XLV -1.77%, Industrials XLI -1.08%, Staples XLP -1.02%, Utilities XLU -0.76%. Cyclical/growth leadership fully back; W27's defensive winners (Health/Staples/Utils) are this week's laggards -- which is exactly why the W27 defensive-basket watch names (ABBV -5.64%) would have lost.",
-  "notable_flow": "Trailing call-OI build, normalized by avg_30_day_call_oi with the pinned gates (Common-Stock only, liquidity + persistence floors, deal/earnings/near-high/listing-age carve-outs). Naive top-of-list all EXCLUDE: TECH 2.69x = confirmed M&A target (Merck KGaA $11.3B, 06-26); RSI 1.72x near-52w-high = uptrend build; TEL/SHOO/SLM/ENSG/CGNX = earnings inside the 2-4wk hold window; CBRS = IPO 05-14 (<60td listed); UNM = $3.8B Fortitude Re deal announced 07-06. HONESTY CORRECTION: last week's diary flagged CG at 3.77x -- a persistence check shows 97% of CG's build landed in a SINGLE day (06-29->06-30) via two ~100k-contract OTM call blocks = a lumpy institutional hedge, NOT persistent crowd accretion; the naive 2wk-sum ranking overstated it. The ONE clean, persistent, beta-neutral, non-deal, non-earnings-in-window fade is MAT (see Layer-2). Mega-cap tech (TSLA/MSFT/META/NVDA/AMD/AVGO/MU) call-build persists = QQQ-beta trap. Crypto-beta risk-on again (BTDR/MSTR bid)."
- },
- "weekly_technicals": [
-  {
-   "feature": "SPY new-high breakout (higher-high + higher-low)",
-   "value": "w_ret +1.37%, higher_high=True (755.42>751.31), higher_low=True (739.51>732.09), close_pos 0.97, NEW closing high 754.95 (intraday 755.42 still a hair below the 06-15 high 756.68), follow_through=True",
-   "would_signal": "trend-continuation long IF it clears 756.68 and holds; a maximal-strength close at 0.97 of range with HH+HL is textbook breakout structure",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "QQQ weekly hammer / bullish-reversal bear-trap",
-   "value": "undercut prior-week low (700.91<705.17) then V-recovered to close +1.81% (best of the three); lower wick 0.75, close_pos 0.97, body_frac 0.22; reversed W27's failed-rally doji",
-   "would_signal": "mega-tech leadership reclaimed / failed-breakdown long IF next week holds above the reclaim; the classic bear-trap-then-reclaim structure",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "IWM lower-high + lower-low laggard (2nd week)",
-   "value": "lower_high (300.41<302.72), lower_low (290.68<294.68), only major to close red (-0.53%), close_pos 0.55",
-   "would_signal": "small-caps failing to confirm the new-high tape = narrow/large-cap-led advance; would signal caution on breadth IF it persists",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "reversal-after-catalyst (hawkish FOMC minutes shrugged off)",
-   "value": "hawkish 9-8-split June minutes (Wed) dipped QQQ to its low + spiked VIX to 18.91 intraday, then risk-on FULLY reclaimed it Thu-Fri to new highs, VIX crushed to 15.03",
-   "would_signal": "'buy-the-hawkish-dip' vol-crush regime-strength tell IF the pattern repeats; the tape overriding a hawkish macro print is a risk-on structural signal",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  }
- ],
- "calls": [
-  {
-   "ticker": "MOM_LONG_BASKET",
-   "lane": "MOM_LONG",
-   "direction": "long",
-   "horizon_validated": 10,
-   "validated_excess": 0.0235,
-   "regime_fit": 0.55,
-   "tier": "WATCH",
-   "final_size": "watch",
-   "cluster_id": "mom_long_near_high_basket",
-   "invalidation": "regime-fit IMPROVED vs W27 (0.45->0.55): the tape is now TRENDING-up (new highs, ret10 positive/rising) which is the condition this tail-driven lane needs. Still NOT sized: cohort is dilute (480 names, 46% ETFs), Financials/Healthcare cluster-correlation risk, and the edge is tail-driven (median ~0, hit-base -9.3pp) so it is BASKET-ONLY, never per-name. Gate to half-cap only if ret10 sustains >+1% for >=2wk and the cohort tightens. V-rebound novelty may fade.",
-   "realized_excess_pct": null
-  },
-  {
-   "ticker": "MAT",
-   "lane": "OI_FADE",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0088,
-   "regime_fit": 0.50,
-   "tier": "MEDIUM",
-   "final_size": "starter",
-   "cluster_id": "oi_fade_mat",
-   "invalidation": "THE ONE SCORED CALL. Clean OI_FADE short: persistent call-OI build every one of 10 days (accelerating into 07-09/10), normalized 0.90x avg_30_day_call_oi, max single-day share 0.40 (passes persistence). Beta-neutral (toys/consumer-disc, no cluster overlap), NOT mega-cap-beta, NOT an ETF/new-listing, NOT a deal, NOT near-52w-high (pct_52w_range 0.031 -- fresh 52w low 07-09). Fundamentals CONFIRM the short: Goldman cut to Sell 07-09 same day it hit a fresh low = crowd piling into bounce-bet calls on a battered name (the textbook crowded-embedded-leverage fade). Entry 07-10 close $13.33, liquid (~$65M/day $-vol). SIZE = starter/half-cap only, NOT full: shorting into a broad new-high VIX-15 tape is the standing headwind. EARNINGS 08-04 is ~18td out, inside an h21 hold -> run to h10 and FLATTEN before the print. Invalidation: call unwind, a real bottom/beat, or a regime-classifier strong-rebound thrust before entry.",
-   "realized_excess_pct": null
-  },
-  {
-   "ticker": "MOM_SHORT_STANDDOWN",
-   "lane": "MOM_SHORT",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0081,
-   "regime_fit": 0.10,
-   "tier": "STOOD_DOWN",
-   "final_size": "skip",
-   "cluster_id": "mom_short_laggards",
-   "invalidation": "STOOD DOWN. New closing highs + positive/rising ret10 + VIX crushed to 15.03 = the momentum-rebound tail that inverts near-52w-low shorts (Daniel-Moskowitz). Confirmed by last week's W26 book resolving 07-10 with ALL THREE MOM_SHORT shorts squeezed (FXI -2.42, CME -5.16, MSTR -11.42 excess). No shorts emitted.",
-   "realized_excess_pct": null
-  }
- ]
+  "lane_status": [
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.55,
+      "note": "regime-fit IMPROVED vs W27 (0.45->0.55): the tape is now TRENDING-up (new highs, ret10 positive/rising) which is the condition this tail-driven lane needs. Still NOT sized: cohort is dilute (480 names, 46% ETFs), Financials/Healthcare cluster-correlation risk, and the edge is tail-driven (median ~0, hit-base -9.3pp) so it is BASKET-ONLY, never per-name. Gate to half-cap only if ret10 sustains >+1% for >=2wk and the cohort tightens. V-rebound novelty may fade.",
+      "cluster_id": "mom_long_near_high_basket"
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.1,
+      "note": "STOOD DOWN. New closing highs + positive/rising ret10 + VIX crushed to 15.03 = the momentum-rebound tail that inverts near-52w-low shorts (Daniel-Moskowitz). Confirmed by last week's W26 book resolving 07-10 with ALL THREE MOM_SHORT shorts squeezed (FXI -2.42, CME -5.16, MSTR -11.42 excess). No shorts emitted.",
+      "cluster_id": "mom_short_laggards"
+    }
+  ]
 }

@@ -22,7 +22,7 @@
         "w_open": 713.99,
         "w_high": 737.62,
         "w_low": 705.17,
-        "w_close": 712.60,
+        "w_close": 712.6,
         "w_ret": 0.0086,
         "close_pos": 0.23,
         "body_frac": 0.04,
@@ -92,58 +92,41 @@
       "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
     }
   ],
-  "calls": [
+  "calls": [],
+  "lane_status": [
     {
-      "ticker": "VRTX",
       "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
       "direction": "long",
-      "horizon_validated": 10,
-      "validated_excess": 0.0235,
       "regime_fit": 0.45,
-      "tier": "WATCH",
-      "final_size": "watch",
-      "cluster_id": "mom_long_defensive_basket",
-      "invalidation": "rotation reverses / mega-tech V-bounces / broad risk-off. Tail-driven lane that needs a TRENDING broad tape; CHOP (ret10 +0.52%) fails it. Basket-only, never per-name; not sized.",
-      "realized_excess_pct": null
+      "note": "[VRTX] rotation reverses / mega-tech V-bounces / broad risk-off. Tail-driven lane that needs a TRENDING broad tape; CHOP (ret10 +0.52%) fails it. Basket-only, never per-name; not sized. || [ALL] loses breakout / risk-off reversal. Insurer leg of the defensive rotation basket; collapses to ONE position with VRTX. Not sized.",
+      "candidates": [
+        "VRTX",
+        "ALL"
+      ],
+      "cluster_id": "mom_long_defensive_basket"
     },
     {
-      "ticker": "ALL",
-      "lane": "MOM_LONG",
-      "direction": "long",
-      "horizon_validated": 10,
-      "validated_excess": 0.0235,
-      "regime_fit": 0.45,
-      "tier": "WATCH",
-      "final_size": "watch",
-      "cluster_id": "mom_long_defensive_basket",
-      "invalidation": "loses breakout / risk-off reversal. Insurer leg of the defensive rotation basket; collapses to ONE position with VRTX. Not sized.",
-      "realized_excess_pct": null
-    },
-    {
-      "ticker": "OLED",
       "lane": "MOM_SHORT",
+      "disposition": "NO_NAME_CLEARED",
       "direction": "short",
-      "horizon_validated": 10,
-      "validated_excess": 0.0081,
       "regime_fit": 0.25,
-      "tier": "WATCH",
-      "final_size": "watch",
-      "cluster_id": "mom_short_laggards",
-      "invalidation": "broad-green / VIX-crush risk-on tape firms laggards / squeeze -- exactly the momentum-rebound tail that took CME (-4.89%) and MSTR (-20.26%) mid-flight this week. Idiosyncratic laggard, not a rotation name. Not sized.",
-      "realized_excess_pct": null
+      "note": "broad-green / VIX-crush risk-on tape firms laggards / squeeze -- exactly the momentum-rebound tail that took CME (-4.89%) and MSTR (-20.26%) mid-flight this week. Idiosyncratic laggard, not a rotation name. Not sized.",
+      "candidates": [
+        "OLED"
+      ],
+      "cluster_id": "mom_short_laggards"
     },
     {
-      "ticker": "CG",
       "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
       "direction": "short",
-      "horizon_validated": 10,
-      "validated_excess": 0.0088,
       "regime_fit": null,
-      "tier": "DROP",
-      "final_size": "skip",
-      "cluster_id": "oi_cg_takeover",
-      "invalidation": "top relative-build name (3.77x) but the call-OI build is TAKEOVER/deal-driven positioning, not fadeable speculative froth. Deal-contaminated -> dropped, not scored.",
-      "realized_excess_pct": null
+      "note": "top relative-build name (3.77x) but the call-OI build is TAKEOVER/deal-driven positioning, not fadeable speculative froth. Deal-contaminated -> dropped, not scored.",
+      "candidates": [
+        "CG"
+      ],
+      "cluster_id": "oi_cg_takeover"
     }
   ]
 }

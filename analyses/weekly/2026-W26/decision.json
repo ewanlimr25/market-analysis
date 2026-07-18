@@ -1,174 +1,174 @@
 {
- "schema_version": "w1.0",
- "report_kind": "weekly-review",
- "iso_week": "2026-W26",
- "report_date": "2026-06-26",
- "report_path": "analyses/weekly/2026-W26/report.md",
- "week_context": {
-  "weekly_candles": [
-   {
-    "symbol": "SPY",
-    "w_open": 747.7,
-    "w_high": 750.18,
-    "w_low": 716.58,
-    "w_close": 728.99,
-    "w_ret": -0.025,
-    "close_pos": 0.37,
-    "body_frac": 0.56,
-    "structure_vs_prior": "lower-low follow-through; big body, closed lower-third (risk-off confirmation)"
-   },
-   {
-    "symbol": "QQQ",
-    "w_open": 742.02,
-    "w_high": 745.45,
-    "w_low": 702.81,
-    "w_close": 706.52,
-    "w_ret": -0.0478,
-    "close_pos": 0.09,
-    "body_frac": 0.83,
-    "structure_vs_prior": "bearish OUTSIDE week (engulfed prior range), closed on the low \u2014 mega-cap distribution"
-   },
-   {
-    "symbol": "IWM",
-    "w_open": 297.13,
-    "w_high": 301.5,
-    "w_low": 292.4,
-    "w_close": 299.83,
-    "w_ret": 0.0091,
-    "close_pos": 0.82,
-    "body_frac": 0.3,
-    "structure_vs_prior": "higher-high, closed strong \u2014 DIVERGED green from tech (rotation)"
-   }
+  "schema_version": "w1.0",
+  "report_kind": "weekly-review",
+  "iso_week": "2026-W26",
+  "report_date": "2026-06-26",
+  "report_path": "analyses/weekly/2026-W26/report.md",
+  "week_context": {
+    "weekly_candles": [
+      {
+        "symbol": "SPY",
+        "w_open": 747.7,
+        "w_high": 750.18,
+        "w_low": 716.58,
+        "w_close": 728.99,
+        "w_ret": -0.025,
+        "close_pos": 0.37,
+        "body_frac": 0.56,
+        "structure_vs_prior": "lower-low follow-through; big body, closed lower-third (risk-off confirmation)"
+      },
+      {
+        "symbol": "QQQ",
+        "w_open": 742.02,
+        "w_high": 745.45,
+        "w_low": 702.81,
+        "w_close": 706.52,
+        "w_ret": -0.0478,
+        "close_pos": 0.09,
+        "body_frac": 0.83,
+        "structure_vs_prior": "bearish OUTSIDE week (engulfed prior range), closed on the low — mega-cap distribution"
+      },
+      {
+        "symbol": "IWM",
+        "w_open": 297.13,
+        "w_high": 301.5,
+        "w_low": 292.4,
+        "w_close": 299.83,
+        "w_ret": 0.0091,
+        "close_pos": 0.82,
+        "body_frac": 0.3,
+        "structure_vs_prior": "higher-high, closed strong — DIVERGED green from tech (rotation)"
+      }
+    ],
+    "catalysts": [
+      {
+        "event": "FOMC decision + SEP (Warsh's 1st mtg; core-PCE proj revised 2.7%->3.3%, hawkish)",
+        "date": "2026-06-17",
+        "weekday": "Wed",
+        "price_reaction": "prior-week print; set the hawkish backdrop — mega-cap tech led down into W26"
+      },
+      {
+        "event": "PCE deflator / Personal Income",
+        "date": "2026-06-26",
+        "weekday": "Fri",
+        "price_reaction": "month-end print; week closed risk-off, QQQ -4.78% on the lows, no intraweek reversal"
+      }
+    ],
+    "regime_trajectory": "Entered W26 CHOP post-hawkish-FOMC; trajected toward PULLBACK as mega-cap tech sold off (QQQ outside-week down). Fri 2026-06-26 daily regime = CHOP (ret10 -1.19%) but breadth 60% green => rotation, not broad risk-off.",
+    "sector_leadership": "Laggards: Technology / Communication-Services (QQQ -4.78%). Leaders: small-caps / Financials (IWM +0.91%, made a higher high).",
+    "notable_flow": "Heavy 5-day net CALL-OI build in mega-cap tech (NVDA/MSFT/AMZN/META/AAPL) — the OI-fade setup. Diary only, 0 signal."
+  },
+  "weekly_technicals": [
+    {
+      "feature": "QQQ bearish outside-week closing on the low",
+      "value": "close_pos 0.09, body_frac 0.83, outside_week=True",
+      "would_signal": "continuation-down / distribution if next week loses 702.81",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "SPY lower-low follow-through",
+      "value": "lower_low=True, follow_through=True, close_pos 0.37",
+      "would_signal": "weekly trend-continuation down",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "IWM higher-high vs QQQ down (breadth divergence)",
+      "value": "IWM higher_high=True close_pos 0.82 while QQQ -4.78%",
+      "would_signal": "small-cap rotation / breadth-bullish for IWM",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    },
+    {
+      "feature": "reversal-after-catalyst (hawkish FOMC)",
+      "value": "no intraweek reversal — week confirmed the risk-off move",
+      "would_signal": "if it had reversed: failed-breakdown long; it did not",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
+    }
   ],
-  "catalysts": [
-   {
-    "event": "FOMC decision + SEP (Warsh's 1st mtg; core-PCE proj revised 2.7%->3.3%, hawkish)",
-    "date": "2026-06-17",
-    "weekday": "Wed",
-    "price_reaction": "prior-week print; set the hawkish backdrop \u2014 mega-cap tech led down into W26"
-   },
-   {
-    "event": "PCE deflator / Personal Income",
-    "date": "2026-06-26",
-    "weekday": "Fri",
-    "price_reaction": "month-end print; week closed risk-off, QQQ -4.78% on the lows, no intraweek reversal"
-   }
+  "calls": [
+    {
+      "ticker": "NVDA",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0088,
+      "regime_fit": 1.0,
+      "tier": "MEDIUM",
+      "final_size": "half",
+      "invalidation": "5d call-OI build reverses / breaks out on real catalyst",
+      "realized_excess_pct": null,
+      "cluster_id": "oi_megacap_tech"
+    },
+    {
+      "ticker": "MARA",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0088,
+      "regime_fit": 1.0,
+      "tier": "MEDIUM",
+      "final_size": "starter",
+      "invalidation": "OI build reverses / BTC rips",
+      "realized_excess_pct": null,
+      "cluster_id": "oi_crypto_meme"
+    },
+    {
+      "ticker": "FXI",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0081,
+      "regime_fit": 1.0,
+      "tier": "MEDIUM",
+      "final_size": "starter",
+      "invalidation": "reclaims 52w-low anchor 31.49 / China stimulus V-rebound",
+      "realized_excess_pct": null,
+      "cluster_id": "mom_china"
+    },
+    {
+      "ticker": "CME",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0081,
+      "regime_fit": 1.0,
+      "tier": "MEDIUM",
+      "final_size": "starter",
+      "invalidation": "reclaims 52w-low anchor 224.4 / market V-rebound",
+      "realized_excess_pct": null,
+      "cluster_id": "mom_exchanges"
+    },
+    {
+      "ticker": "MSTR",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0081,
+      "regime_fit": 1.0,
+      "tier": "MEDIUM",
+      "final_size": "starter",
+      "invalidation": "reclaims 52w-low anchor 85.0 / BTC V-rebound",
+      "realized_excess_pct": null
+    }
   ],
-  "regime_trajectory": "Entered W26 CHOP post-hawkish-FOMC; trajected toward PULLBACK as mega-cap tech sold off (QQQ outside-week down). Fri 2026-06-26 daily regime = CHOP (ret10 -1.19%) but breadth 60% green => rotation, not broad risk-off.",
-  "sector_leadership": "Laggards: Technology / Communication-Services (QQQ -4.78%). Leaders: small-caps / Financials (IWM +0.91%, made a higher high).",
-  "notable_flow": "Heavy 5-day net CALL-OI build in mega-cap tech (NVDA/MSFT/AMZN/META/AAPL) \u2014 the OI-fade setup. Diary only, 0 signal."
- },
- "weekly_technicals": [
-  {
-   "feature": "QQQ bearish outside-week closing on the low",
-   "value": "close_pos 0.09, body_frac 0.83, outside_week=True",
-   "would_signal": "continuation-down / distribution if next week loses 702.81",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "SPY lower-low follow-through",
-   "value": "lower_low=True, follow_through=True, close_pos 0.37",
-   "would_signal": "weekly trend-continuation down",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "IWM higher-high vs QQQ down (breadth divergence)",
-   "value": "IWM higher_high=True close_pos 0.82 while QQQ -4.78%",
-   "would_signal": "small-cap rotation / breadth-bullish for IWM",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  },
-  {
-   "feature": "reversal-after-catalyst (hawkish FOMC)",
-   "value": "no intraweek reversal \u2014 week confirmed the risk-off move",
-   "would_signal": "if it had reversed: failed-breakdown long; it did not",
-   "conviction_points": 0,
-   "status": "PRE-REGISTERED",
-   "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs / cross-regime / BH FDR 0.10"
-  }
- ],
- "calls": [
-  {
-   "ticker": "NVDA",
-   "lane": "OI_FADE",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0088,
-   "regime_fit": 1.0,
-   "tier": "MEDIUM",
-   "final_size": "half",
-   "invalidation": "5d call-OI build reverses / breaks out on real catalyst",
-   "realized_excess_pct": null,
-   "cluster_id": "oi_megacap_tech"
-  },
-  {
-   "ticker": "MARA",
-   "lane": "OI_FADE",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0088,
-   "regime_fit": 1.0,
-   "tier": "MEDIUM",
-   "final_size": "starter",
-   "invalidation": "OI build reverses / BTC rips",
-   "realized_excess_pct": null,
-   "cluster_id": "oi_crypto_meme"
-  },
-  {
-   "ticker": "FXI",
-   "lane": "MOM_SHORT",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0081,
-   "regime_fit": 1.0,
-   "tier": "MEDIUM",
-   "final_size": "starter",
-   "invalidation": "reclaims 52w-low anchor 31.49 / China stimulus V-rebound",
-   "realized_excess_pct": null,
-   "cluster_id": "mom_china"
-  },
-  {
-   "ticker": "CME",
-   "lane": "MOM_SHORT",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0081,
-   "regime_fit": 1.0,
-   "tier": "MEDIUM",
-   "final_size": "starter",
-   "invalidation": "reclaims 52w-low anchor 224.4 / market V-rebound",
-   "realized_excess_pct": null,
-   "cluster_id": "mom_exchanges"
-  },
-  {
-   "ticker": "MSTR",
-   "lane": "MOM_SHORT",
-   "direction": "short",
-   "horizon_validated": 10,
-   "validated_excess": 0.0081,
-   "regime_fit": 1.0,
-   "tier": "MEDIUM",
-   "final_size": "starter",
-   "invalidation": "reclaims 52w-low anchor 85.0 / BTC V-rebound",
-   "realized_excess_pct": null
-  },
-  {
-   "ticker": "ABBV",
-   "lane": "MOM_LONG",
-   "direction": "long",
-   "horizon_validated": 10,
-   "validated_excess": 0.0235,
-   "regime_fit": 0.5,
-   "tier": "WATCH",
-   "final_size": "watch",
-   "invalidation": "biotech basket loses 52w-high breakouts / sharp risk-off",
-   "realized_excess_pct": null,
-   "cluster_id": "mom_long_biotech_basket"
-  }
- ]
+  "lane_status": [
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.5,
+      "note": "biotech basket loses 52w-high breakouts / sharp risk-off",
+      "candidates": [
+        "ABBV"
+      ],
+      "cluster_id": "mom_long_biotech_basket"
+    }
+  ]
 }

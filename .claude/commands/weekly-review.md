@@ -62,7 +62,13 @@ For SPY/QQQ/IWM and any Layer-2 candidate, surface from `weekly_features.parquet
 are documentation. Emit `analyses/weekly/<iso-week>/decision.json` (schema `schemas/weekly_review.schema.json`):
 - `week_context` (Layer 1 diary: weekly candles, catalysts+reactions, regime trajectory, sector leadership, notable flow)
 - `weekly_technicals[]` (Layer 3: each feature with `conviction_points: 0, status: PRE-REGISTERED, would_signal`)
-- `calls[]` (Layer 2: validated weekly-horizon lanes, scored in excess — same call shape as the daily v2 envelope)
+- `calls[]` (Layer 2: validated weekly-horizon lanes — **real single-name tickers ONLY**. Every entry's
+  `ticker` must be an actual market symbol; the schema now enforces `^[A-Z][A-Z0-9.\-]{0,6}$`.)
+- `lane_status[]` (Layer 2 lane-level disposition — where a lane fired conceptually but produced **no sized
+  single-name call**: MOM_LONG is basket-only, MOM_SHORT may be crash-guard stood-down, OI_FADE may clear no
+  name). **Never invent a synthetic ticker** (`MOM_LONG_BASKET`, `MOM_SHORT_STANDDOWN`, …) to force such a
+  row into `calls[]` — that was the pre-2026-07 bug. Use `{lane, disposition (BASKET_WATCH|STOOD_DOWN|
+  NO_NAME_CLEARED), direction, regime_fit, note, candidates[] (real symbols surfaced but not sized)}`.
 Validate with `scripts/validate_decision.py`. Persist nothing to the conviction watchlist that isn't a Layer-2 call.
 
 ## Phase E — Report
@@ -85,6 +91,9 @@ Validate with `scripts/validate_decision.py`. Persist nothing to the conviction 
 Print sections 1–2 to chat; the rest opens from the file.
 
 ## Failure modes
-- No Layer-2 candidate (no near-extreme momentum / OI-fade name) → §2 is explicitly empty; the diary (§1) and
-  pre-registered technicals (§3) still ship. A "no scored setup" week is a normal, correct output.
+- No Layer-2 candidate (no near-extreme momentum / OI-fade name) → `calls[]` is empty; record the lane's
+  posture in `lane_status[]` (why it produced nothing), NOT as a placeholder row in `calls[]`. The diary (§1)
+  and pre-registered technicals (§3) still ship. A "no scored setup" week is a normal, correct output.
+- A basket-only (MOM_LONG) or stood-down (MOM_SHORT) lane is a `lane_status[]` entry, never a `calls[]` row —
+  a single ticker under MOM_LONG would misrepresent a basket lane as a per-name call.
 - Never let a Layer-3 weekly-technical pattern size a trade. That guard is the entire reason this command is split.

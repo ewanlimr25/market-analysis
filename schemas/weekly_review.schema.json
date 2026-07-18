@@ -71,7 +71,7 @@
         "type": "object", "additionalProperties": false,
         "required": ["ticker", "lane", "direction", "horizon_validated", "validated_excess", "tier", "final_size", "invalidation"],
         "properties": {
-          "ticker": { "type": "string" },
+          "ticker": { "type": "string", "pattern": "^[A-Z][A-Z0-9.\\-]{0,6}$", "description": "a real market symbol ONLY. Lane-level dispositions (basket-only watch, crash-guard stand-down, no name cleared the stack) go in lane_status[], never as a synthetic ticker like MOM_LONG_BASKET." },
           "lane": { "enum": ["MOM_SHORT", "MOM_LONG", "OI_FADE"] },
           "direction": { "enum": ["long", "short"] },
           "horizon_validated": { "enum": [10, 21], "description": "weekly hold ~2-4 weeks" },
@@ -82,6 +82,23 @@
           "cluster_id": { "type": ["string", "null"] },
           "invalidation": { "type": "string" },
           "realized_excess_pct": { "type": ["number", "null"] }
+        }
+      }
+    },
+    "lane_status": {
+      "type": "array",
+      "description": "Layer 2 lane-level disposition for lanes that fired conceptually but produced NO sized single-name call this week (MOM_LONG is basket-only; MOM_SHORT can be crash-guard stood-down; OI_FADE may clear no name). Keeps calls[] strictly per-ticker. NOT sized, NOT resolved as a call by /calibration-audit; consumed only for gate-effectiveness / diary.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["lane", "disposition", "direction", "note"],
+        "properties": {
+          "lane": { "enum": ["MOM_SHORT", "MOM_LONG", "OI_FADE"] },
+          "disposition": { "enum": ["BASKET_WATCH", "STOOD_DOWN", "NO_NAME_CLEARED"], "description": "BASKET_WATCH = basket-only lane on watch (never per-name); STOOD_DOWN = suppressed by the regime/crash gate; NO_NAME_CLEARED = lane ran but no single name cleared the full stack (liquidity/quality/deal cuts)." },
+          "direction": { "enum": ["long", "short"] },
+          "regime_fit": { "type": ["number", "null"] },
+          "note": { "type": "string", "description": "why the lane produced no sized call (moved here from the old placeholder-row invalidation)." },
+          "candidates": { "type": "array", "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9.\\-]{0,6}$" }, "description": "real symbols the lane surfaced but did not size (empty for a whole-lane stand-down)." },
+          "cluster_id": { "type": ["string", "null"] }
         }
       }
     }

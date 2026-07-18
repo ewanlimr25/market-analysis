@@ -24,6 +24,11 @@ never auto-edit an agent/command/schema.
 - Collect `analyses/scan/*/decision.json` + `analyses/weekly/*/decision.json`. Validate each
   (`scripts/validate_decision.py`); skip + flag malformed.
 - A call is **resolved** when its `horizon_validated` window has fully matured against today's data.
+- **Only `calls[]` rows are resolvable calls.** Weekly `lane_status[]` rows (BASKET_WATCH / STOOD_DOWN /
+  NO_NAME_CLEARED) are lane-level dispositions, NOT sized calls — never resolve them as P&L. Read them in
+  Step 4 (gate effectiveness): a STOOD_DOWN entry's `candidates[]` are the would-be shorts the gate
+  suppressed. (Pre-2026-07 weekly files encoded these as synthetic tickers `MOM_LONG_BASKET` /
+  `MOM_SHORT_STANDDOWN` inside `calls[]`; those have been migrated to `lane_status[]`.)
 
 ## Step 1 — Resolve to realized excess (per call)
 For each resolved call: entry = the session after `report_date`; realized excess = ticker forward return − SPY
