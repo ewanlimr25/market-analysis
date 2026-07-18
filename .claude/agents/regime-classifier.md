@@ -34,11 +34,16 @@ A context block: `{date, regime_label, vol_state, breadth, event_risk[], directi
   guard); (b) a top relative call-OI-build cohort exists (OI-fade); (c) a DP one-sided-concentration
   event fired (S2); (d) a top-5% PCR cohort exists (S4). All four empty/suppressed → false, and
   /market-scan outputs "No directional edge today" + the vol book. State which checks passed.
-- **`s1_standdown` (the crash guard)** — true when a strong 5d up-thrust is underway (`ret5 > 2.5%`, or
-  `ret5 > 1.5%` off a recent ≥2% dip): the **momentum-crash / V-rebound / junk-rally / short-squeeze**
-  regime that inverts the relative-weakness short (`RESEARCH/30 §3.1`, Daniel-Moskowitz 2016). When true,
-  `momentum` MOM_SHORT (relative-weakness) shorts are suppressed and all sizing is capped. This guard firing on ~6/54 sample
-  days is expected and correct.
+- **`s1_standdown` (the crash / V-reversal guard)** — true in two mirror-image mean-reversion regimes that
+  both invert the relative-weakness short (`RESEARCH/30 §3.1`, Daniel-Moskowitz 2016):
+  - (a) a strong 5d up-thrust is underway (`ret5 > 2.5%`, or `ret5 > 1.5%` off a recent ≥2% dip) —
+    momentum-crash / V-rebound / junk-rally / short-squeeze already in progress;
+  - (b) a sharp **unconfirmed** 5d dip (`ret5 < −2%` while `ret10 > −2%`) — a short-term SPY selloff that has
+    NOT become a downtrend, so a V-bounce is likely (**added 2026-07-18 calibration audit**: MOM_SHORT sized
+    book was 0-for-9 shorting into exactly this setup — trailing ret5 ≈ −2.5% that then rebounded). It
+    deliberately does NOT fire in a *confirmed* downtrend (`ret10 ≤ −2%`), where the short leg is meant to work.
+  When true, `momentum` MOM_SHORT (relative-weakness) shorts are suppressed and all sizing is capped. This
+  guard firing on ~26/68 panel days (post-audit) is expected and correct — the short leg is meant to be rare.
 
 ## Event calendar
 Build `event_risk[]`: Tier-1 US macro (CPI/PPI/PCE/FOMC/NFP) in the next ~10 trading days (WebSearch to

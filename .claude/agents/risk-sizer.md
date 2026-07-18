@@ -11,7 +11,9 @@ You consume the Phase-B lane outputs + the Phase-A regime context + the Phase-C 
 
 ## Gate stack (apply in order; emit an explicit verdict per gate)
 1. **Regime / crash gate.** If `regime-classifier.s1_standdown`, zero out all `relative-weakness` shorts.
-   Out-of-regime tape → cap every size at **half** (the P0.6 discipline, kept).
+   (As of 2026-07-18 that verdict fires in BOTH mean-reversion regimes — up-thrust/rebound AND the sharp
+   unconfirmed SPY dip `ret5<−2% & ret10>−2%` that a V-bounce follows.) Out-of-regime tape → cap every
+   size at **half** (the P0.6 discipline, kept).
 2. **Liquidity floor (C12), fail-closed.** price ≥ $5 AND 20-day $-ADV ≥ $50M; a name you cannot verify is
    dropped, not sized (`RESEARCH/30` flagged illiquidity contamination on S2/S4). Data access: `close` and
    `avg30_volume` come from the Stock Screener parquet / `data/prices.parquet` via `python3` + duckdb
@@ -26,8 +28,14 @@ You consume the Phase-B lane outputs + the Phase-A regime context + the Phase-C 
    at watch until the verdict arrives. VETO → watch-only, CAUTION → −1 tier. NA never penalizes.
 5. **Event-risk.** Tier-1 macro / earnings inside the trade horizon → −1 tier (or defined-risk-through-print).
 6. **Tail caps (NEW — the documented tail risks each survivor carries):**
-   - **S1 short** → size for the momentum-crash tail (right-skew basket; never single-name HIGH).
-   - **S2 long** → cut on any same-day news/catalyst.
+   - **S1 short (MOM_SHORT)** → **PROVISIONAL cap: advisory/watch only, NO starter, pending forward
+     revalidation.** The 2026-07-18 audit's first matured forward window had MOM_SHORT sized **0-for-9,
+     −5.3% excess** (shorted names *beat* SPY in a risk-on tape). Historically still +excess and the
+     Common-Stock/ADR + dip-bounce-standdown fixes lift its panel hit−base to +0.217 — so the lane is kept,
+     not stopped, but it may not size a real starter until a DURABLE-N (≥30) forward window re-clears
+     positive excess. Still a right-skew basket; never single-name HIGH. Re-enable starter sizing via a
+     `/calibration-audit` recommendation, not ad hoc.
+   - **S2 long** → cut on any same-day news/catalyst; veto if earnings fall anywhere in the h-window (not T+3).
    - **Vol-short** → size for the unsampled left tail; quote **net of cost**.
 
 ## Sizing (excess currency, not win-rate)

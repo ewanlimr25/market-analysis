@@ -50,8 +50,14 @@ def classify_regime(T):
     ret5  = c0/c5  - 1 if c5  else 0
     ret10 = c0/c10 - 1 if c10 else 0
     drawdown15 = (lo15/c10 - 1) if (lo15 and c10) else 0
-    # crash/V-rebound/squeeze guard for S1 shorts: strong 5d up-thrust (esp. off a recent dip)
-    s1_standdown = (ret5 > 0.025) or (ret5 > 0.015 and drawdown15 < -0.02)
+    # crash/V-rebound/squeeze guard for S1 shorts:
+    #   (a) strong 5d up-thrust (esp. off a recent dip)  -> rebound/junk-rally/squeeze already underway;
+    #   (b) sharp UNCONFIRMED 5d dip (ret5<-2% while ret10 not in a downtrend) -> mean-reversion BOUNCE risk.
+    # (b) added 2026-07-18 calibration audit: MOM_SHORT sized book was 0-for-9 shorting into short-term
+    # SPY dips (trailing ret5 ~ -2.5%) that then V-rebounded. It is the mirror of (a); it deliberately does
+    # NOT fire in a confirmed downtrend (ret10<=-2%), where the short leg is supposed to work.
+    s1_standdown = ((ret5 > 0.025) or (ret5 > 0.015 and drawdown15 < -0.02)
+                    or (ret5 < -0.02 and ret10 > -0.02))
     if ret10 >  0.015: label = "UPTREND"
     elif ret10 < -0.015: label = "PULLBACK"
     else: label = "CHOP"
@@ -69,6 +75,7 @@ def fire(T):
           FROM read_parquet({SCR!r})
           WHERE date=DATE '{T}' AND close>=5 AND close*avg30_volume>=50e6
             AND week_52_low>0 AND close<=1.02*week_52_low
+            AND issue_type IN ('Common Stock','ADR')   -- exclude ETPs (leveraged/inverse/cash) [audit 2026-07-18]
             AND (next_earnings_date IS NULL OR next_earnings_date > DATE '{T}'+10)
           ORDER BY dist ASC LIMIT 15""").fetchall()
         for tk,cl,lo,dist in rows:
@@ -81,6 +88,7 @@ def fire(T):
       FROM read_parquet({SCR!r})
       WHERE date=DATE '{T}' AND close>=5 AND close*avg30_volume>=50e6
         AND week_52_high>0 AND close>=0.95*week_52_high
+        AND issue_type IN ('Common Stock','ADR')   -- exclude ETPs [audit 2026-07-18]
         AND (next_earnings_date IS NULL OR next_earnings_date > DATE '{T}'+10)
       ORDER BY prox DESC LIMIT 15""").fetchall()
     for tk,cl,hi,prox in rows:
@@ -116,7 +124,7 @@ def fire(T):
       SELECT ticker, tot, buyp/tot AS buyshare FROM dp
       {erjoin}
       WHERE (buyp/tot>=0.90 OR sellp/tot>=0.90)
-        AND (e.ned IS NULL OR e.ned > DATE '{T}'+3)
+        AND (e.ned IS NULL OR e.ned > DATE '{T}'+5)   -- veto ER anywhere inside the h5 window (was +3; leak fixed audit 2026-07-18)
         AND e.it='Common Stock' AND e.idx=false
       ORDER BY tot DESC LIMIT 15""").fetchall()
     for tk,tot,buyshare in rows:
@@ -131,7 +139,8 @@ def fire(T):
         FROM read_parquet({SCR!r})
         WHERE date=DATE '{T}' AND close>=5 AND close*avg30_volume>=50e6
           AND call_volume>0 AND put_volume>0 AND (call_volume+put_volume)>=1000
-          AND (next_earnings_date IS NULL OR next_earnings_date> DATE '{T}'+3))
+          AND issue_type IN ('Common Stock','ADR')   -- exclude ETPs [audit 2026-07-18]
+          AND (next_earnings_date IS NULL OR next_earnings_date> DATE '{T}'+5))   -- full h5 window (was +3) [audit 2026-07-18]
       SELECT ticker, put_call_ratio FROM d WHERE put_call_ratio>=p95
       ORDER BY put_call_ratio DESC LIMIT 15""").fetchall()
     for tk,pcr in rows:

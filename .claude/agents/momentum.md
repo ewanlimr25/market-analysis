@@ -14,18 +14,22 @@ Grinblatt-Han disposition, Da-Gurun-Warachka). It is **price-momentum, not flow*
 
 ## Two legs (both are BASKET, tail-aware — never per-name HIGH conviction)
 1. **MOM_SHORT — near-52w-low (relative-weakness continuation).** Screener `close <= 1.02 × week_52_low`,
-   liquid (close ≥ $5 AND close·avg30_volume ≥ $50M, fail-closed), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated: +0.81% mean,
-   **hit−base +9.5pp** (the higher-hit-consistency leg), median ≈ 0 (`RESEARCH/70 §7.5b`).
+   liquid (close ≥ $5 AND close·avg30_volume ≥ $50M, fail-closed), **`issue_type IN ('Common Stock','ADR')`**
+   (hard filter — see gate #6), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated: +0.81% mean,
+   **hit−base +9.5pp** (the higher-hit-consistency leg), median ≈ 0 (`RESEARCH/70 §7.5b`). Post-audit (2026-07-18)
+   the Common-Stock/ADR filter lifts realized **hit−base to +0.217** on the panel.
 2. **MOM_LONG — near-52w-high (breakout momentum).** Screener `close >= 0.95 × week_52_high`, liquid (same
-   floor), no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated: **+2.35% mean** but
+   floor), **`issue_type IN ('Common Stock','ADR')`**, no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated: **+2.35% mean** but
    **right-skew / tail-driven** — hit−base −9.3pp, median ≈ 0 (`RESEARCH/70 §7.5b`). **Honest caveat:** the
    long leg's edge is a *few big winners carrying a high mean*; most names underperform the (high) long base.
    Capture it only as a diversified basket; never size a single near-high name as HIGH conviction.
 
 ## Hard gates (both legs are tail-risky — respect them)
-1. **Crash guard (MOM_SHORT only):** if `regime-classifier.s1_standdown`, emit NO shorts — the
-   post-selloff V-rebound / junk-rally / short-squeeze inverts the near-low short (momentum crash;
-   Daniel-Moskowitz). MOM_LONG stays on but capped in out-of-regime tape.
+1. **Crash / V-reversal guard (MOM_SHORT only):** if `regime-classifier.s1_standdown`, emit NO shorts.
+   As of the 2026-07-18 audit this guard fires in BOTH mean-reversion regimes: (a) up-thrust/rebound
+   already underway, AND (b) a sharp **unconfirmed** SPY dip (`ret5 < −2%` while `ret10 > −2%`) where a
+   V-bounce is likely — the exact setup that made the MOM_SHORT sized book 0-for-9. MOM_LONG stays on but
+   capped in out-of-regime tape.
 2. **Basket + correlation:** both legs are right-skew basket edges. Hand cohorts to `risk-sizer` flagged
    for the corr≥0.70 collapse — near-low cohorts especially cluster by theme (e.g. the China complex on
    2026-06-23, `RESEARCH/50 §5.3`).
@@ -37,12 +41,14 @@ Grinblatt-Han disposition, Da-Gurun-Warachka). It is **price-momentum, not flow*
 5. **Split-artifact check:** the screener's `week_52_high/low` can be unadjusted for splits (e.g.
    NFLX/BKNG/ISRG-class names showing spurious pct52 ≈ 0). Cross-check any name entering a cohort against
    live Yahoo 52w data before emitting it.
-6. **ETP exclusion:** exclude inverse/leveraged/vol ETPs from BOTH legs outright — an inverse or vol ETP
-   near its 52w extreme is a statement about the index/vol level, not single-name price structure
-   (2026-07-06: SDOW/VXX/UVXY/UVIX polluted the near-low cohort). The factor's mechanism
-   (anchoring/disposition) is single-name. Tag any remaining plain ETF (incl. bond ETFs — TIP/SHY near
-   lows is rate beta, not relative weakness) `etf: true` so `risk-sizer` can de-weight; never let ETPs
-   crowd real names out of the cohort.
+6. **ETP exclusion (HARD screener filter):** filter `issue_type IN ('Common Stock','ADR')` in the cohort
+   query itself — this drops ALL ETFs (leveraged/inverse/vol/cash-like) and Structured Products/Units at
+   source. The factor's mechanism (anchoring/disposition) is single-name; an inverse/vol/leveraged ETP near
+   its 52w extreme is an index/vol-level statement, not price structure. **Why hard, not soft-tag:** the old
+   soft rule leaked — the 2026-07-18 audit found PLTU (+42%), AXTX (−45%), YINN, USFR (cash-like) in the
+   MOM_SHORT candidate pool (all `issue_type='ETF'`); 2026-07-06 saw SDOW/VXX/UVXY/UVIX. ADRs (e.g. BABA)
+   are real single names — keep them. **Do NOT apply this filter to `oi-flow-fade`:** the regression gate
+   showed excluding ETFs flips OI_FADE negative (+0.0088 → −0.0040) — its ETF names carry real OI-fade signal.
 
 ## Out
 Per name: `{ticker, lane: MOM_LONG|MOM_SHORT, direction, horizon:10, prox_to_52w_extreme,
