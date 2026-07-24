@@ -21,7 +21,7 @@ OUT_PARQUET = os.path.join(DATA, "prices.parquet")
 
 # lead for ATR(14)/regime context; tail through last panel date
 START = "2026-01-15"
-END   = "2026-06-27"   # inclusive-ish; chart API uses period2 exclusive of next day
+END   = "2026-07-18"   # inclusive-ish; chart API uses period2 exclusive of next day (extended 2026-07-18 to include panel through 2026-07-17)
 
 def epoch(d): return int(time.mktime(time.strptime(d, "%Y-%m-%d")))
 
