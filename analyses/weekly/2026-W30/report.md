@@ -57,13 +57,15 @@ bullish over the same session — a hedging tell, two-sided, not a short-book co
 
 ### Sector leadership
 
-`XLE +3.36% · XLU +2.48% · XLI +1.81% · XLB +1.45% · XLRE +1.17% · XLV +0.92%` — then
-`SMH +0.84% · XLK +0.17% · XLF +0.09%` — then `XLP −1.24% · XLY −5.22%` (TSLA).
+`XLE +3.36% · XLU +2.48% · XLI +1.81% · XLB +1.44% · XLRE +1.17% · XLV +0.92%` — then
+`SMH +0.84% · XLK +0.17% · XLF +0.09%` — then `XLP −1.24% · XLC −3.93%` (GOOGL/META) ·
+`XLY −5.22%` (TSLA, worst). An ~8.6pp spread inside a −1.09% index.
 Money flow confirms: **out of** Technology (−$392.5M) and Consumer Cyclical (−$160.6M), **into** Consumer
 Defensive and Energy.
 
-> ⚠️ **XLC is one session stale** (last close 07-23), so its −6.45% spans 07-16→07-23 and is not comparable
-> to the others. Directionally it was the worst sector; the magnitude is not on the same window.
+> **Corrected.** An earlier live-feed read had XLC a session stale (last bar 07-23) and gave −6.45% over a
+> 07-16→07-23 window. The panel figure is **−3.93%** over the correct 07-17→07-24 window. The lag was
+> transient and did not reproduce; all sector figures above are now measured off `data/prices.parquet`.
 
 The structural item: **the near-52w-high cohort now contains essentially no mega-cap technology.** It is
 industrials, insurance, rails and regional banks (OII, TRV, FAF, PKG, WAB, CSX, RTX, BAC, SPG). That cohort

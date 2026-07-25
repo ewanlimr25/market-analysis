@@ -34,40 +34,19 @@ con = duckdb.connect()
 # calendar days -- see scripts/_calendar.py for why. [audit 2026-07-24]
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _calendar import hz_end  # noqa: E402
+from _regime import classify_regime as _classify_regime  # noqa: E402
 
 def panel_dates():
     return [r[0].isoformat() for r in con.execute(
         f"SELECT distinct date FROM read_parquet({SCR!r}) ORDER BY date").fetchall()]
 
 # ---- regime gate (from SPY) -------------------------------------------------
+# Lives in scripts/_regime.py so the harness, the live scan and the lanes cannot drift
+# apart on the label or the crash guard -- same reasoning as the _calendar.hz_end move.
+# [2026-W30 weekly review: a Phase-B lane reported CHOP/-1.37% against the panel's
+#  PULLBACK/-2.122%, and nothing reconciled them automatically.]
 def classify_regime(T):
-    r = con.execute(f"""
-      WITH s AS (SELECT date, close, row_number() OVER (ORDER BY date) rn
-                 FROM read_parquet('{PX}') WHERE ticker='SPY' AND date<=DATE '{T}')
-      SELECT
-        (SELECT close FROM s ORDER BY date DESC LIMIT 1) c0,
-        (SELECT close FROM s ORDER BY date DESC LIMIT 1 OFFSET 5) c5,
-        (SELECT close FROM s ORDER BY date DESC LIMIT 1 OFFSET 10) c10,
-        (SELECT min(close) FROM (SELECT close FROM s ORDER BY date DESC LIMIT 15)) lo15
-    """).fetchone()
-    c0,c5,c10,lo15 = r
-    if not (c0 and c10): return {"label":"UNKNOWN","ret5":None,"ret10":None,"s1_standdown":True}
-    ret5  = c0/c5  - 1 if c5  else 0
-    ret10 = c0/c10 - 1 if c10 else 0
-    drawdown15 = (lo15/c10 - 1) if (lo15 and c10) else 0
-    # crash/V-rebound/squeeze guard for S1 shorts:
-    #   (a) strong 5d up-thrust (esp. off a recent dip)  -> rebound/junk-rally/squeeze already underway;
-    #   (b) sharp UNCONFIRMED 5d dip (ret5<-2% while ret10 not in a downtrend) -> mean-reversion BOUNCE risk.
-    # (b) added 2026-07-18 calibration audit: MOM_SHORT sized book was 0-for-9 shorting into short-term
-    # SPY dips (trailing ret5 ~ -2.5%) that then V-rebounded. It is the mirror of (a); it deliberately does
-    # NOT fire in a confirmed downtrend (ret10<=-2%), where the short leg is supposed to work.
-    s1_standdown = ((ret5 > 0.025) or (ret5 > 0.015 and drawdown15 < -0.02)
-                    or (ret5 < -0.02 and ret10 > -0.02))
-    if ret10 >  0.015: label = "UPTREND"
-    elif ret10 < -0.015: label = "PULLBACK"
-    else: label = "CHOP"
-    if s1_standdown: label += "/REBOUND-THRUST"
-    return {"label":label,"ret5":round(ret5,4),"ret10":round(ret10,4),"s1_standdown":s1_standdown}
+    return _classify_regime(T, con)
 
 # ---- lanes ------------------------------------------------------------------
 def fire(T):

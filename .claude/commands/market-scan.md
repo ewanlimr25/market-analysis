@@ -41,6 +41,10 @@ Each exists because the hand-written version was wrong at least once. Prefer the
 | `earnings_gate.py --date D --horizon H --tickers ...` | Does a name report inside the **trading-day** window? | S2 leaked 5 names and S4 leaked 4 on 2026-07-24 using calendar-day windows |
 | `liquidity.py --tickers ... --date D` | Price + 20d $-ADV + the C12 floor | a hand-multiplied $-ADV was out by 2.9× (PLNT, 2026-07-24) |
 | `oi_build.py --tickers ... --date D` | Per-day call/put OI split, `persistence_ratio`, `oi_rel_build` | `oi_change` is a ratio, `oi_diff_plain` is the delta; and a call-only read sign-flips |
+| `regime_check.py --date D` | The authoritative regime, from the same function the harness gates on | a lane reported CHOP/ret10 −1.37% against the panel's PULLBACK/−2.122% (2026-W30) |
+| `regime_check.py --claim-label X --claim-ret10 Y` | **Arbitrate a figure a sub-agent handed back** — exit 1 on disagreement | same; a lane that mis-reads the regime mis-scores its own regime-fit |
+| `prior_verdicts.py --tickers ...` | What was already decided: VETO/EXCLUDED/held, and the **live** invalidation | OI_FADE re-proposed ALLE (vetoed 07-24) and SSNC (excluded); momentum read ORCL's superseded $144.22 stop instead of the live $123.50 |
+| `catalyst_split.py --tickers ... --date D` | Did the OI build **survive its own catalyst**, or already resolve pre-print? | SSNC passed `earnings_gate` cleanly (next print Oct) while its build had died at its 07-23 print |
 | `validate_decision.py --file <decision.json>` | Envelope validation (Phase E) | already existed and was being hand-rolled |
 
 ## When to invoke

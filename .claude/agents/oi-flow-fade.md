@@ -31,6 +31,21 @@ returns plausible fractions), and `oi_net_5d` is NET call **minus** put — a ca
 and nearly inverted an exit on 2026-07-15. A net that turns negative because PUTS opened is a wash, not the
 call unwind that invalidates the short: check `last_call_net`.
 
+**Then run `python3 scripts/catalyst_split.py --tickers <survivors> --date T` on every survivor.** A high
+`oi_rel_build` whose catalyst ALREADY LANDED inside the build window is resolved pre-print positioning, not
+a crowd to fade — the crowd was right and has been paid. `earnings_gate.py` cannot see this: it looks
+forward, so a name that reported yesterday and next reports in three months passes it cleanly. Persistence
+cannot see it either — persistence measures day-concentration, not catalyst timing. The discriminator is
+whether the build CONTINUED past the print. 2026-W30, both at `rel_build` ≈ 2.5 and both passing the
+forward gate:
+
+| | post-catalyst net | verdict |
+|---|---|---|
+| SSNC | **+1** of +4,113 (0.0%) | RESOLVED_PRE_PRINT — build died at its 07-23 print while the stock gapped +10.35%. Do not fade. |
+| ALLE | **+1,533** of +4,308 (35.6%) | LIVE_BUILD — accretion continued past the print. A real crowd. |
+
+A `RESOLVED_PRE_PRINT` or `UNKNOWN` verdict is a CUT, not a downgrade-to-watch.
+
 Underlying definition, unchanged — from `data/features.parquet` as-of T (built look-ahead-safe) when the
 panel is current, else the raw OI panel via the script: liquid names (close ≥ $5 AND
 close·avg30_volume ≥ $50M) ranked by **relative** call-OI build — the trailing-5d net call−put build

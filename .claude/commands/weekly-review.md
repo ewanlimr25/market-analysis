@@ -28,14 +28,40 @@ and how the regime trajected Mon→Fri. **Three layers, never blended:**
 - Weekend / post-Friday-close weekly recap; "review the week"; `/weekly-review`.
 - NOT for a daily post-market scan (use `/market-scan`) or a single ticker (use `uw insights deep-dive`).
 
+## Helper scripts — use these, do not hand-roll them
+Every one of these exists because the step it replaces was got wrong at least once. Prefer them over inline
+python/duckdb; they fail CLOSED and carry the incident that motivated them in their docstring.
+
+| Script | Use it for | Replaces the error |
+|---|---|---|
+| `preflight.py --date D` | panel + truth-set freshness before anything else | scanning a half-exported panel |
+| `regime_check.py --date D` / `--range A:B` | the authoritative regime, and the **Mon→Fri trajectory** in one call | — |
+| `regime_check.py --claim-label X --claim-ret10 Y` | **arbitrate what a lane reported back** (exit 1 on disagreement) | a lane returning CHOP/−1.37% against the panel's PULLBACK/−2.122% |
+| `prior_verdicts.py --tickers T` | what was already decided about a name (VETO/EXCLUDED/held + **live** invalidation) | re-proposing ALLE (vetoed) and SSNC (excluded); reading ORCL's superseded stop |
+| `catalyst_split.py --tickers T --date D` | did the OI build **survive its own catalyst**, or is it resolved pre-print positioning | SSNC passing the forward earnings gate while signal-dead |
+| `week_context.py --week-end D` | weekly candles + sector spread + DP flow, **with per-series staleness flags** | quoting a stale XLC return alongside same-window figures |
+| `earnings_gate.py --tickers T --horizon 21` | forward earnings inside the 2–4wk hold | calendar-day windows; PLNT's date drifting into the hold |
+| `held_book.py --prior <conviction.json>` | mark held names, flag vestigial invalidations | holding to an entry-era stop after a >10% favorable run |
+| `oi_build.py`, `liquidity.py`, `chart.py` | OI build / $50M floor / path-aware prices | `oi_change` vs `oi_diff_plain`; call-only sign flips |
+| `validate_decision.py --file` | schema-check the envelope | hand-rolled jsonschema |
+
 ## Phase A — Build the week's bars + structure (documentation substrate)
-1. `python3 scripts/truthset/weekly_features.py` → `data/weekly_features.parquet` (weekly OHLC + candle anatomy:
+1. `python3 scripts/preflight.py --date <Fri>` — stop if it is not clear.
+2. `python3 scripts/truthset/weekly_features.py` → `data/weekly_features.parquet` (weekly OHLC + candle anatomy:
    `close_pos, body_frac, upper/lower_wick, inside_week, outside_week, higher_high, lower_low,
    hammer_or_hanging, star_or_inverted, follow_through`).
-2. **Catalyst anchoring:** WebSearch the week's Tier-1 macro prints (CPI/PPI/PCE/FOMC/NFP) with their weekday,
+3. `python3 scripts/week_context.py --week-end <Fri>` → the whole diary substrate: index candles with
+   structure tags, sector 5-session returns **ranked and staleness-flagged**, and the week's largest dark-pool
+   prints. **Take sector figures from here, not from a live-feed read** — a lagging series silently spans a
+   different window than the ones beside it.
+4. **Catalyst anchoring:** WebSearch the week's Tier-1 macro prints (CPI/PPI/PCE/FOMC/NFP) with their weekday,
    and tag the daily price reaction (e.g. "CPI Wed → SPY gapped +0.8%, faded to close red = intraweek reversal").
-   This is the event-conditioning layer; record it, don't score it.
-3. **Regime trajectory:** run `regime-classifier` for Mon and Fri of the week; report how the label/vol-state moved.
+   This is the event-conditioning layer; record it, don't score it. **If no Tier-1 print landed, say so
+   explicitly** — a week whose structure came from single-name earnings is a different observation, and the
+   macro pre-registration arm must accrue nothing from it.
+5. **Regime trajectory:** `python3 scripts/regime_check.py --range <Mon>:<Fri>` gives the whole Mon→Fri path
+   (label, ret5/ret10, dd15, `s1_standdown` per day) from the same function the harness gates on. Run the
+   `regime-classifier` agent for the vol-state layer (VIX term structure, GEX, VRP, breadth) it adds on top.
 
 ## Phase B — Layer 2: validated lanes at the weekly horizon (SCORED)
 Run the **`momentum`** and **`oi-flow-fade`** lanes on the weekly timeframe (hold 2–4 weeks ≈ daily h10–h21):
@@ -44,6 +70,20 @@ Run the **`momentum`** and **`oi-flow-fade`** lanes on the weekly timeframe (hol
 These carry their validated-excess priors and are scored/sized by `risk-sizer` exactly as in `/market-scan`
 (regime gate, crash guard, correlation cluster, fundamentals veto, tail caps, half-cap). The liquidity-reversion
 (S2) and PCR (S4) lanes are daily-horizon and are **not** re-run weekly.
+
+**Reconcile every lane return before scoring it — lanes do not carry prior state and have handed back bad
+data in all three of these ways:**
+1. `python3 scripts/regime_check.py --date <Fri> --claim-label <what the lane said> --claim-ret10 <its figure>`
+   — a lane that mis-reads the regime mis-scores its own regime-fit. Exit 1 means use the panel figure.
+2. `python3 scripts/prior_verdicts.py --tickers <every candidate>` — a candidate killed on fundamentals or
+   catalyst-resolution comes back looking clean, because the reason it died lives *outside* the lane's gates.
+   Exit 1 means do not score it without stating what changed.
+3. `python3 scripts/catalyst_split.py --tickers <OI_FADE candidates> --date <Fri>` — a build whose catalyst
+   already landed inside the window is resolved positioning, not a crowd. The forward earnings gate cannot
+   see this.
+
+Then `prior_verdicts.py --tickers <held names>` for the **live** invalidation on anything carried, and
+`held_book.py --prior <latest conviction.json>` for marks. Never re-read an entry-era stop from an old file.
 
 ## Phase C — Layer 3: weekly technicals (PRE-REGISTERED, 0 POINTS)
 For SPY/QQQ/IWM and any Layer-2 candidate, surface from `weekly_features.parquet`:
