@@ -14,7 +14,9 @@ You consume the Phase-B lane outputs + the Phase-A regime context + the Phase-C 
    (As of 2026-07-18 that verdict fires in BOTH mean-reversion regimes — up-thrust/rebound AND the sharp
    unconfirmed SPY dip `ret5<−2% & ret10>−2%` that a V-bounce follows.) Out-of-regime tape → cap every
    size at **half** (the P0.6 discipline, kept).
-2. **Liquidity floor (C12), fail-closed.** price ≥ $5 AND 20-day $-ADV ≥ $50M; a name you cannot verify is
+2. **Liquidity floor (C12), fail-closed.** Get the numbers from
+   `python3 scripts/liquidity.py --tickers <list> --date T` — do NOT hand-multiply price × volume; that is
+   how PLNT's $-ADV was reported as ~$250M when it is ~$87M (2026-07-24). price ≥ $5 AND 20-day $-ADV ≥ $50M; a name you cannot verify is
    dropped, not sized (`RESEARCH/30` flagged illiquidity contamination on S2/S4). Data access: `close` and
    `avg30_volume` come from the Stock Screener parquet / `data/prices.parquet` via `python3` + duckdb
    (system python3 has duckdb, NOT pyarrow).

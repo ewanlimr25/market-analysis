@@ -30,6 +30,19 @@ All UW data via the `uw` CLI (`uw <group> <sub> --json --quiet`, `--date YYYY-MM
 advisory only. OHLC/excess outcomes for the live calibration loop come from the Yahoo **chart API**
 (path-aware), never the close-only `mcp__yahoo-finance__*` tools.
 
+### Helper scripts — use these instead of hand-writing the query
+Each exists because the hand-written version was wrong at least once. Prefer them; they fail closed.
+
+| Script | Use it for | Why it exists |
+|---|---|---|
+| `preflight.py --date D` | **Run FIRST, before Phase A.** Panel presence/rows + truth-set edge vs D | a lane silently read a 5-session-stale parquet and returned an inverted regime (2026-07-24) |
+| `chart.py` | OHLC, `--rets 5,10`, `--52w`, `--rsi` (Wilder) | the mandated chart API had no ad-hoc entry point; RSI existed nowhere |
+| `held_book.py --prior <conviction.json>` | Held-position marks, day-excess, **distance to each invalidation leg** | flags a VESTIGIAL stop — one further away than the open gain, or drifted beyond entry |
+| `earnings_gate.py --date D --horizon H --tickers ...` | Does a name report inside the **trading-day** window? | S2 leaked 5 names and S4 leaked 4 on 2026-07-24 using calendar-day windows |
+| `liquidity.py --tickers ... --date D` | Price + 20d $-ADV + the C12 floor | a hand-multiplied $-ADV was out by 2.9× (PLNT, 2026-07-24) |
+| `oi_build.py --tickers ... --date D` | Per-day call/put OI split, `persistence_ratio`, `oi_rel_build` | `oi_change` is a ratio, `oi_diff_plain` is the delta; and a call-only read sign-flips |
+| `validate_decision.py --file <decision.json>` | Envelope validation (Phase E) | already existed and was being hand-rolled |
+
 ## When to invoke
 - Post-market / multi-day directional or vol scan; EOD briefing; `/market-scan`.
 ## When NOT to invoke
@@ -39,6 +52,11 @@ advisory only. OHLC/excess outcomes for the live calibration loop come from the 
 ---
 
 ## Phase A — Regime & beta context (the master gate)
+**First run `python3 scripts/preflight.py --date <D>`** — it verifies the five UW exports are present and
+non-empty AND that the truth-set parquets reach the trade date. Exit 1 means a lane could silently read a
+stale panel (on 2026-07-24 the momentum lane did exactly that and returned an inverted regime). Abort and
+ask for a re-export / rebuild rather than scanning on it.
+
 Spawn **`regime-classifier`**. It returns the regime label, vol-state, breadth, event calendar, and two
 gating verdicts every later phase consumes:
 - `directional_tradable` — is there a regime in which any directional lane has validated excess today?
@@ -54,8 +72,8 @@ liquidity-event / sentiment / vol) — the opposite of the old fleet's four corr
 
 | Lane | Agent | Edge (measured) | Horizon | Confidence |
 |---|---|---|---|---|
-| **Momentum (both legs)** | `momentum` | 52w-range factor (rank-IC t=+6.8): SHORT near-low (+0.81% / +9.5pp hit) + LONG near-high (+2.35% mean, **tail-driven**), h10 | **swing10/weekly10** | **HIGH** (short crash-gated; long=basket/tail) |
-| **OI-flow fade (NEW)** | `oi-flow-fade` | heavy 5-day call-OI build → underperformance; short **hit 0.61 vs 0.41 base, +2.1% median, n=640** — most robust edge; orthogonal to momentum (corr −0.17) | swing10 | **HIGH for this panel** (provisional) |
+| **Momentum (both legs)** | `momentum` | 52w-range factor (rank-IC t=+6.8): SHORT near-low (**−0.03% mean**, hit 0.48 vs 0.27 — watch-only capped) + LONG near-high (**+0.18% mean**, median −1.06%, **tail-driven**), h10 *(re-baselined 2026-07-24)* | **swing10/weekly10** | **HIGH** (short crash-gated; long=basket/tail) |
+| **OI-flow fade (NEW)** | `oi-flow-fade` | heavy 5-day call-OI build → underperformance; short **hit 0.56 vs 0.38 base, +1.21% median, n=906** *(re-baselined 2026-07-24; the old +2.1%/n=640 was ~2× inflated by leveraged/thematic ETFs)* — still the most robust edge; orthogonal to momentum (corr −0.17) | swing10 | **HIGH for this panel** (provisional) |
 | Liquidity reversion | `liquidity-reversion` | DP one-sided-concentration → 3–5d reversal (S2; long-tilted, news-gated) | swing3/weekly5 | MODERATE |
 | Sentiment contrarian | `sentiment-contrarian` | PCR-high fade-long (S4) + `ivrank_chg_5d` rising-IV tilt (h3, the only 3-regime-stable factor) | swing5–10 / h3 | LOW-MOD (advisory) |
 | Vol book (non-dir) | `vol-book` | earnings IV-crush SELL-VOL (vs implied move) + 0DTE-VRP premium-selling | event / 0DTE | MODERATE, net-of-cost |
@@ -95,8 +113,12 @@ Final size = `f(score) × tail_cap × regime_cap`. Optionally spawn a bounded `b
 
 ## Phase E — Report, envelope, calibration, write-back
 1. `mkdir -p analyses/scan/YYYY-MM-DD`; write `report.md` (structure below) + `decision.json`
-   (envelope **v2**, `schemas/decision_envelope.v2.schema.json`), validate, fix the envelope until it passes.
+   (envelope **v2**, `schemas/decision_envelope.v2.schema.json`). **Validate with
+   `python3 scripts/validate_decision.py --file <path>`** (do not hand-roll jsonschema); fix until it passes.
 2. Persist the top conviction names to `conviction_<date>`; next run pulls adverse-flow exits.
+   Reconcile the PRIOR file first with `python3 scripts/held_book.py --prior <prev conviction.json>` —
+   sub-agents do not carry open positions, so this is the orchestrator's job, and the script flags a
+   **vestigial** invalidation (a stop further away than the open gain, or drifted beyond entry).
 3. The `/calibration-audit` loop now grades **forward excess per lane per regime** (not raw WR).
 4. **Regression gate:** after any lane/threshold change, run `python3 artifacts/retro_harness.py --all` —
    ship the change only if no lane/tier goes negative-excess (`RESEARCH/50 §5.4`).

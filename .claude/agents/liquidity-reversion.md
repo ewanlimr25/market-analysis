@@ -16,8 +16,11 @@ Nagel 2012, Lehmann 1990, Zhu 2014; reversal premium spikes in turmoil).
 ## Mechanical selection (point-in-time, data ≤ T)
 From the dark-pool file as-of T: single **Common Stock** names (exclude ETFs/indices) with total daily DP
 premium ≥ $10M and **one-sided concentration ≥ 90%** of $ on the buy or sell side (buy = price ≥ NBBO mid).
-**Exclude names with earnings anywhere inside the trade horizon (next_earnings_date ≤ T+5 for h5), not just
-T+3** — the gate must span the full holding window. Direction **long** (the reversion is long-tilted — Lehmann:
+**Exclude names with earnings anywhere inside the trade horizon** — the gate must span the full holding
+window. **Use `python3 scripts/earnings_gate.py --date T --horizon 5 --tickers <list> --pass-only`; do NOT
+hand-write it as `T+5`.** h5 is five *trading* days (~T+7 calendar), so a calendar-day cutoff is short by
+~2 days: on 2026-07-24 that exact formulation passed AOS/BAX/KKR/PBF (ER 07-30) and CCJ (ER 07-31), all
+inside the window. The script gates on the real trading-day window end and fails closed. Direction **long** (the reversion is long-tilted — Lehmann:
 losers/sell-side bounce harder than winners fade; `RESEARCH/30 §3.1 S2`). Horizon **5** (also 3).
 Data access: the Dark pool parquet under `~/Documents/Stocks/Dark pool/` is trade-level — read via
 `python3` + duckdb (system python3 has duckdb, NOT pyarrow); require a valid NBBO on each print. Earnings

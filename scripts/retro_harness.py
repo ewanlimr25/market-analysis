@@ -16,8 +16,8 @@ Usage:
   python3 retro_harness.py --all                       # validate across all panel days (aggregate excess by lane)
   python3 retro_harness.py --all --compare-old         # also resolve the old system's decision.json calls
 """
-import duckdb, glob, json, argparse, os, statistics
-from datetime import date as _date, timedelta as _timedelta
+import duckdb, glob, json, argparse, os, statistics, sys
+from datetime import date as _date
 
 STOCKS = os.path.expanduser("~/Documents/Stocks")
 DATA   = os.path.expanduser("~/Development/market-analysis/data")
@@ -30,27 +30,10 @@ FEAT = os.path.join(DATA, "features.parquet")   # for the oi_net_5d fade lane (P
 
 con = duckdb.connect()
 
-# ---- horizon end on the TRADING calendar ------------------------------------
-# Outcomes in returns.parquet are measured over N *trading* days (Yahoo grid), so an
-# earnings gate written as DATE 'T'+N compares against N *calendar* days and leaves a
-# hole (~4 days at h10, ~2 at h5) where a print lands inside the measured window but
-# passes the gate. Gate on the real window end instead. [audit 2026-07-24]
-_TRADING_DAYS = [r[0] for r in con.execute(
-    f"SELECT DISTINCT date FROM read_parquet('{PX}') WHERE ticker='SPY' ORDER BY date").fetchall()]
-
-def hz_end(T, h):
-    """Date h trading days after T.
-
-    If the panel does not reach that far -- which is always true for a LIVE date at the
-    panel edge -- extrapolate on a 5-day week instead of clamping to T. Clamping would
-    collapse the gate to `ned > T` and silently let every upcoming earnings through: a
-    gate must fail CLOSED. The extrapolation rounds outward for the same reason.
-    """
-    t = _date.fromisoformat(T) if isinstance(T, str) else T
-    fut = [d for d in _TRADING_DAYS if d > t]
-    if len(fut) >= h:
-        return fut[h - 1].isoformat()
-    return (t + _timedelta(days=round(h * 7 / 5) + 1)).isoformat()
+# Gates compare against the end of the real TRADING-day window, never DATE 'T'+N
+# calendar days -- see scripts/_calendar.py for why. [audit 2026-07-24]
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _calendar import hz_end  # noqa: E402
 
 def panel_dates():
     return [r[0].isoformat() for r in con.execute(

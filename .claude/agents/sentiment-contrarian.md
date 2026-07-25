@@ -14,8 +14,12 @@ NEGATIVE; **do not fire it.**
 ## Mechanical selection (point-in-time, data ≤ T)
 From the screener as-of T: liquid names (close ≥ $5 AND close·avg30_volume ≥ $50M) with `put_call_ratio`
 in the top 5% of the day's cross-section, an **option-liquidity floor** (call_vol > 0 AND put_vol > 0 AND
-call_vol+put_vol ≥ 1000), and **no earnings inside the trade horizon (next_earnings_date > T+horizon:
-T+5 for h5, T+10 for h10 — not the old fixed T+3, which left an earnings blind spot; audit 2026-07-18)**.
+call_vol+put_vol ≥ 1000), and **no earnings inside the trade horizon**.
+**Use `python3 scripts/earnings_gate.py --date T --horizon 10 --tickers <list> --pass-only`; do NOT
+hand-write it as `T+horizon`.** The horizon is in *trading* days (h10 ≈ T+14 calendar), so a calendar-day
+cutoff is short by ~4 days: on 2026-07-24 that formulation passed DOX/NI (ER 08-05), KGS (08-06) and WEN
+(08-07), all inside h10. They were caught only by the informed-put screen downstream — the gate should not
+depend on a second filter catching its misses. The script gates on the real window end and fails closed.
 Direction **long**, horizon **5** (also 10).
 **Exclude ETFs at source — hard filter `issue_type IN ('Common Stock','ADR')`:** ETF put flow is structural
 portfolio hedging — their PCR sits persistently in the top decile, so a top-5% cross-sectional screen

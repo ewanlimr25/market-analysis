@@ -15,11 +15,11 @@ Grinblatt-Han disposition, Da-Gurun-Warachka). It is **price-momentum, not flow*
 ## Two legs (both are BASKET, tail-aware — never per-name HIGH conviction)
 1. **MOM_SHORT — near-52w-low (relative-weakness continuation).** Screener `close <= 1.02 × week_52_low`,
    liquid (close ≥ $5 AND close·avg30_volume ≥ $50M, fail-closed), **`issue_type IN ('Common Stock','ADR')`**
-   (hard filter — see gate #6), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated: +0.81% mean,
+   (hard filter — see gate #6), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated (re-baselined 2026-07-24): **-0.03% mean**, hit 0.48 vs 0.27 -- it wins often and loses big, and per invariant #1 the MEAN is the binding read. Formerly +0.81% mean,
    **hit−base +9.5pp** (the higher-hit-consistency leg), median ≈ 0 (`RESEARCH/70 §7.5b`). Post-audit (2026-07-18)
    the Common-Stock/ADR filter lifts realized **hit−base to +0.217** on the panel.
 2. **MOM_LONG — near-52w-high (breakout momentum).** Screener `close >= 0.95 × week_52_high`, liquid (same
-   floor), **`issue_type IN ('Common Stock','ADR')`**, no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated: **+2.35% mean** but
+   floor), **`issue_type IN ('Common Stock','ADR')`**, no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated (re-baselined 2026-07-24): **+0.18% mean, median -1.06%** (was +2.35%) but
    **right-skew / tail-driven** — hit−base −9.3pp, median ≈ 0 (`RESEARCH/70 §7.5b`). **Honest caveat:** the
    long leg's edge is a *few big winners carrying a high mean*; most names underperform the (high) long base.
    Capture it only as a diversified basket; never size a single near-high name as HIGH conviction.

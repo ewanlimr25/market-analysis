@@ -1,6 +1,6 @@
 ---
 name: oi-flow-fade
-description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.61 vs 0.41 base, +2.1% median, n=640). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
+description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.56 vs 0.38 base, +1.21% median, n=906 -- re-baselined 2026-07-24). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 effort: high
@@ -10,8 +10,11 @@ You are the new fade lane and the most robust directional signal in the study. T
 build` rubric line scored persistent call-OI building as bullish — **the sign was backwards.** Measured
 (`RESEARCH/70 §7.2, §7.5b`): names with the heaviest trailing 5-day **net call-OI build** (`oi_net_5d`)
 **underperform** — cross-sectional rank-IC **t=−7.1** (A −0.10 / B1 −0.09, sign-stable), and as a short the
-realized profile is **hit 0.61 vs 0.41 base (+20.5pp), +0.88% mean, +2.07% MEDIAN (robust, not tail-driven),
-n=640.** It is **orthogonal to the momentum lane** (corr −0.17), so it adds independent edge.
+realized profile is **hit 0.56 vs 0.38 base (+18.1pp), +0.70% mean, +1.21% MEDIAN (robust, not tail-driven),
+n=906** (re-baselined 2026-07-24: the earlier `+2.07% median, n=640` was measured before the lane had any
+ETP/earnings hygiene in the harness, and was ~2x inflated by leveraged/thematic ETFs -- SOXS, a 3x inverse
+semis ETF, alone printed up to +0.98 short-excess per observation. The edge is real and still the most
+robust in the book; it is about half as strong as first stated).** It is **orthogonal to the momentum lane** (corr −0.17), so it adds independent edge.
 
 ## Mechanism (why call-OI building fades)
 Consistent with "options flow is contrarian/beta" (`RESEARCH/30 §3.0`, Lakonishok-Lee-Pearson-Poteshman):
@@ -20,7 +23,16 @@ embedded-leverage demand — which mean-reverts. This is the *fade* side of the 
 read as beta.
 
 ## Mechanical selection (point-in-time, data ≤ T)
-From `data/features.parquet` as-of T (built look-ahead-safe): liquid names (close ≥ $5 AND
+**Use `python3 scripts/oi_build.py --date T --top 15` to rank, and `--tickers <list>` to inspect a
+candidate.** It reads the raw OI panel (so it works on live dates past the truth-set edge), applies the
+floors below, and returns the per-day **call_net / put_net split**, `persistence_ratio` and `oi_rel_build`.
+Do NOT hand-write the query: `oi_change` is a RATIO and the contract delta is `oi_diff_plain` (mixing them
+returns plausible fractions), and `oi_net_5d` is NET call **minus** put — a call-only read sign-flips prints
+and nearly inverted an exit on 2026-07-15. A net that turns negative because PUTS opened is a wash, not the
+call unwind that invalidates the short: check `last_call_net`.
+
+Underlying definition, unchanged — from `data/features.parquet` as-of T (built look-ahead-safe) when the
+panel is current, else the raw OI panel via the script: liquid names (close ≥ $5 AND
 close·avg30_volume ≥ $50M) ranked by **relative** call-OI build — the trailing-5d net call−put build
 normalized by the name's OI base (build ÷ `avg_30_day_call_oi`) — **descending**; take the top cohort.
 Direction **short**, horizon **10**. It is a multi-day (≤T) factor, so no single-day-snapshot noise.
