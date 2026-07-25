@@ -20,8 +20,10 @@ Excess-scored, regime-first market analysis. Built from the hindsight-validated 
 5. **Pre-registered ≠ scored.** Weekly technicals and all PR-* items are documented, never sized, until their
    bar clears on data that postdates registration.
 6. **Regression gate is law:** `python3 scripts/retro_harness.py --all` must show no lane **below its recorded
-   baseline** after any lane/threshold change. **Baseline (2026-07-24, commit `2b32bad`, panel→07-24):**
+   baseline** after any lane/threshold change. **Baseline (verified 2026-07-25, commit `4ec89dc`, panel→07-24):**
    MOM_LONG +0.0018 · **MOM_SHORT −0.0003** · OI_FADE +0.0070 · S2 +0.0006 · S4 +0.0044.
+   Figures first recorded at `2b32bad` and re-verified unchanged at `4ec89dc` (the `hz_end()` move into
+   `scripts/_calendar.py` is behavior-preserving across all 73 panel days).
    MOM_SHORT is *knowingly* negative: `2b32bad` fixed the **measuring instrument** (calendar→trading-day
    earnings window on all lanes; OI_FADE had no ETP/earnings hygiene at all), exposing a lane that was always
    ≈−0.0003 behind a polluted universe. **A red MOM_SHORT is the expected baseline, not a new regression** —
