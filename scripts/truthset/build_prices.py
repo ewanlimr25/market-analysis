@@ -10,7 +10,7 @@ Output: data/prices.parquet  (columns: ticker, date, open, high, low, close, adj
 Stdlib + duckdb only. Threaded with retry/backoff; fail-soft per ticker.
 """
 from __future__ import annotations
-import urllib.request, json, time, os, sys
+import urllib.request, json, time, os, sys, datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -21,7 +21,25 @@ OUT_PARQUET = os.path.join(DATA, "prices.parquet")
 
 # lead for ATR(14)/regime context; tail through last panel date
 START = "2026-01-15"
-END   = "2026-07-18"   # inclusive-ish; chart API uses period2 exclusive of next day (extended 2026-07-18 to include panel through 2026-07-17)
+
+def resolve_end():
+    """Panel tail date. Defaults to TODAY so the truth set cannot silently rot.
+
+    A hardcoded END is what let the panel sit 5 sessions stale on 2026-07-24 while
+    every lane still read from it — the constant was correct when written and simply
+    was never bumped again. Override with `--end YYYY-MM-DD` (or TRUTHSET_END) when
+    you need to reproduce a historical panel edge exactly.
+    Note the chart API treats period2 as exclusive of the next day, so END lands on
+    the last TRADING day <= END (a weekend END just resolves back to that Friday).
+    """
+    for i, a in enumerate(sys.argv):
+        if a == "--end" and i + 1 < len(sys.argv):
+            return sys.argv[i + 1]
+        if a.startswith("--end="):
+            return a.split("=", 1)[1]
+    return os.environ.get("TRUTHSET_END") or datetime.date.today().isoformat()
+
+END = resolve_end()
 
 def epoch(d): return int(time.mktime(time.strptime(d, "%Y-%m-%d")))
 
