@@ -17,7 +17,7 @@ Usage:
   python3 retro_harness.py --all --compare-old         # also resolve the old system's decision.json calls
 """
 import duckdb, glob, json, argparse, os, statistics
-from datetime import date as _date
+from datetime import date as _date, timedelta as _timedelta
 
 STOCKS = os.path.expanduser("~/Documents/Stocks")
 DATA   = os.path.expanduser("~/Development/market-analysis/data")
@@ -29,6 +29,28 @@ DP  = sorted(glob.glob(f"{STOCKS}/Dark pool/dp-eod-report-*.parquet"))
 FEAT = os.path.join(DATA, "features.parquet")   # for the oi_net_5d fade lane (Phase 7)
 
 con = duckdb.connect()
+
+# ---- horizon end on the TRADING calendar ------------------------------------
+# Outcomes in returns.parquet are measured over N *trading* days (Yahoo grid), so an
+# earnings gate written as DATE 'T'+N compares against N *calendar* days and leaves a
+# hole (~4 days at h10, ~2 at h5) where a print lands inside the measured window but
+# passes the gate. Gate on the real window end instead. [audit 2026-07-24]
+_TRADING_DAYS = [r[0] for r in con.execute(
+    f"SELECT DISTINCT date FROM read_parquet('{PX}') WHERE ticker='SPY' ORDER BY date").fetchall()]
+
+def hz_end(T, h):
+    """Date h trading days after T.
+
+    If the panel does not reach that far -- which is always true for a LIVE date at the
+    panel edge -- extrapolate on a 5-day week instead of clamping to T. Clamping would
+    collapse the gate to `ned > T` and silently let every upcoming earnings through: a
+    gate must fail CLOSED. The extrapolation rounds outward for the same reason.
+    """
+    t = _date.fromisoformat(T) if isinstance(T, str) else T
+    fut = [d for d in _TRADING_DAYS if d > t]
+    if len(fut) >= h:
+        return fut[h - 1].isoformat()
+    return (t + _timedelta(days=round(h * 7 / 5) + 1)).isoformat()
 
 def panel_dates():
     return [r[0].isoformat() for r in con.execute(
@@ -76,7 +98,7 @@ def fire(T):
           WHERE date=DATE '{T}' AND close>=5 AND close*avg30_volume>=50e6
             AND week_52_low>0 AND close<=1.02*week_52_low
             AND issue_type IN ('Common Stock','ADR')   -- exclude ETPs (leveraged/inverse/cash) [audit 2026-07-18]
-            AND (next_earnings_date IS NULL OR next_earnings_date > DATE '{T}'+10)
+            AND (next_earnings_date IS NULL OR next_earnings_date > DATE '{hz_end(T,10)}')  -- trading-day h10 [audit 2026-07-24]
           ORDER BY dist ASC LIMIT 15""").fetchall()
         for tk,cl,lo,dist in rows:
             calls.append({"ticker":tk,"lane":"MOM_SHORT","direction":"short","horizon":10,
@@ -89,7 +111,7 @@ def fire(T):
       WHERE date=DATE '{T}' AND close>=5 AND close*avg30_volume>=50e6
         AND week_52_high>0 AND close>=0.95*week_52_high
         AND issue_type IN ('Common Stock','ADR')   -- exclude ETPs [audit 2026-07-18]
-        AND (next_earnings_date IS NULL OR next_earnings_date > DATE '{T}'+10)
+        AND (next_earnings_date IS NULL OR next_earnings_date > DATE '{hz_end(T,10)}')  -- trading-day h10 [audit 2026-07-24]
       ORDER BY prox DESC LIMIT 15""").fetchall()
     for tk,cl,hi,prox in rows:
         calls.append({"ticker":tk,"lane":"MOM_LONG","direction":"long","horizon":10,
@@ -99,8 +121,19 @@ def fire(T):
     try:
         rows = con.execute(f"""
           SELECT f.ticker, f.oi_net_5d FROM read_parquet('{FEAT}') f
+          JOIN (SELECT ticker, any_value(next_earnings_date) ned, any_value(issue_type) it,
+                       any_value(is_index) idx FROM read_parquet({SCR!r})
+                WHERE date=DATE '{T}' GROUP BY ticker) e USING(ticker)
           WHERE f.date=DATE '{T}' AND f.oi_net_5d IS NOT NULL AND f.close>=5
             AND f.close*f.avg30_volume>=50e6
+            -- [audit 2026-07-24] this lane previously had NO earnings gate and NO ETP
+            -- exclusion (the 2026-07-18 hygiene pass reached MOM_SHORT/MOM_LONG/S4 and
+            -- skipped it, since features.parquet carries no issue_type). 34% of its picks
+            -- were untradeable -- 301/1095 slots ETFs, 72 earnings-in-h10 -- and the edge
+            -- was carried largely by shorting leveraged inverse ETFs (SOXS up to +0.98
+            -- short-excess/obs across a semis rally), i.e. beta, not an OI edge.
+            AND (e.ned IS NULL OR e.ned > DATE '{hz_end(T,10)}')
+            AND e.it IN ('Common Stock','ADR') AND e.idx=false
           ORDER BY f.oi_net_5d DESC LIMIT 15""").fetchall()
         for tk,v in rows:
             calls.append({"ticker":tk,"lane":"OI_FADE","direction":"short","horizon":10,
@@ -124,7 +157,7 @@ def fire(T):
       SELECT ticker, tot, buyp/tot AS buyshare FROM dp
       {erjoin}
       WHERE (buyp/tot>=0.90 OR sellp/tot>=0.90)
-        AND (e.ned IS NULL OR e.ned > DATE '{T}'+5)   -- veto ER anywhere inside the h5 window (was +3; leak fixed audit 2026-07-18)
+        AND (e.ned IS NULL OR e.ned > DATE '{hz_end(T,5)}')   -- veto ER anywhere inside the h5 window (+3 -> +5 audit 2026-07-18; calendar -> trading-day audit 2026-07-24)
         AND e.it='Common Stock' AND e.idx=false
       ORDER BY tot DESC LIMIT 15""").fetchall()
     for tk,tot,buyshare in rows:
@@ -140,7 +173,7 @@ def fire(T):
         WHERE date=DATE '{T}' AND close>=5 AND close*avg30_volume>=50e6
           AND call_volume>0 AND put_volume>0 AND (call_volume+put_volume)>=1000
           AND issue_type IN ('Common Stock','ADR')   -- exclude ETPs [audit 2026-07-18]
-          AND (next_earnings_date IS NULL OR next_earnings_date> DATE '{T}'+5))   -- full h5 window (was +3) [audit 2026-07-18]
+          AND (next_earnings_date IS NULL OR next_earnings_date> DATE '{hz_end(T,5)}'))   -- full h5 window (+3 -> +5 audit 2026-07-18; calendar -> trading-day audit 2026-07-24)
       SELECT ticker, put_call_ratio FROM d WHERE put_call_ratio>=p95
       ORDER BY put_call_ratio DESC LIMIT 15""").fetchall()
     for tk,pcr in rows:
