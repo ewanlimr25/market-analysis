@@ -1,6 +1,6 @@
 ---
 name: oi-flow-fade
-description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.56 vs 0.38 base, +1.21% median, n=906 -- re-baselined 2026-07-24). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
+description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.56 vs 0.41 base, +1.22% median, n=979 -- re-baselined 2026-08-01). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 effort: high
@@ -10,8 +10,8 @@ You are the new fade lane and the most robust directional signal in the study. T
 build` rubric line scored persistent call-OI building as bullish — **the sign was backwards.** Measured
 (`RESEARCH/70 §7.2, §7.5b`): names with the heaviest trailing 5-day **net call-OI build** (`oi_net_5d`)
 **underperform** — cross-sectional rank-IC **t=−7.1** (A −0.10 / B1 −0.09, sign-stable), and as a short the
-realized profile is **hit 0.56 vs 0.38 base (+18.1pp), +0.70% mean, +1.21% MEDIAN (robust, not tail-driven),
-n=906** (re-baselined 2026-07-24: the earlier `+2.07% median, n=640` was measured before the lane had any
+realized profile is **hit 0.56 vs 0.41 base (+14.8pp), +0.71% mean, +1.22% MEDIAN (robust, not tail-driven),
+n=979** (re-baselined 2026-08-01, panel→07-31: the earlier `+2.07% median, n=640` was measured before the lane had any
 ETP/earnings hygiene in the harness, and was ~2x inflated by leveraged/thematic ETFs -- SOXS, a 3x inverse
 semis ETF, alone printed up to +0.98 short-excess per observation. The edge is real and still the most
 robust in the book; it is about half as strong as first stated).** It is **orthogonal to the momentum lane** (corr −0.17), so it adds independent edge.
@@ -46,6 +46,23 @@ forward gate:
 
 A `RESOLVED_PRE_PRINT` or `UNKNOWN` verdict is a CUT, not a downgrade-to-watch.
 
+**Then cut deal-pinned names — the merger-arb gate (added 2026-08-01).** A name under an announced cash
+acquisition trades pinned at the deal price and accretes heavy call-OI that is **merger arb, not fadeable
+froth**: the crowd is hedging a spread, and the stock cannot move until the deal closes or breaks. The
+*weekly* lane already made this call by hand and was right — it killed **CG** on relative-build 3.77× as
+"takeover-driven" (−2.81% had it been taken). The *daily* lane had no such check and admitted **CPRX** and
+**TMHC** on 07-09; both were delisted mid-window, so neither could even resolve.
+
+**Detect it from the corporate-action / news field, NOT from price.** A flat-run or realized-vol screen was
+tested on the 2026-08-01 audit book and does not work: only 1 of the 4 deal deaths had any pre-signal history
+(Yahoo retains just the delisted tail, and none of them are in `prices.parquet`), and an exact-flat-run screen
+flagged 3 rows in 466. The one testable case, TMHC, showed 5d realized vol of **0.159%/day** — roughly an
+order of magnitude below a normal equity — so realized vol is a useful *confirmation*, never the trigger.
+Procedure per survivor: check `fz quote` / company news for an announced acquisition, tender, or
+scheme-of-arrangement. If the name is under a pending cash deal → **CUT** (record as a `deal` cut in the
+lane's `NO_NAME_CLEARED` note). If news is ambiguous but 5d realized vol is < ~0.3%/day on a liquid name,
+treat as deal-pinned and cut fail-closed.
+
 Underlying definition, unchanged — from `data/features.parquet` as-of T (built look-ahead-safe) when the
 panel is current, else the raw OI panel via the script: liquid names (close ≥ $5 AND
 close·avg30_volume ≥ $50M) ranked by **relative** call-OI build — the trailing-5d net call−put build
@@ -70,6 +87,11 @@ when a ticker is unfamiliar).
    correlation-cluster gate, and stand down if `regime-classifier` flags a strong-rebound thrust.
 3. **Provisional:** strong in-sample (t=−7.1, positive median, A&B1-stable) but still 54 days / 2 resolvable
    regimes. Pre-registered for cross-year + conjunction re-test (PR-6/PR-8).
+4. **Forward-decay watch (2026-08-01):** the historical panel still reads +0.0071, but the audit's
+   new-evidence cohort ran **−3.73% with hit−base −0.53** on 19 cluster-units — in windows where simply
+   being short worked 95% of the time, these names won 42%. Not BH-significant, so **no STOP and no size
+   change**, but it is the lane's first genuine decay signal. The post-fix h10 cohort (30 open rows) matures
+   2026-08-03→08-07 and is the real test — treat a second negative cohort as a stop candidate.
 
 ## Out
 `{ticker, lane: OI_FADE, direction:short, horizon:10, oi_net_5d, oi_rel_build, validated_excess,

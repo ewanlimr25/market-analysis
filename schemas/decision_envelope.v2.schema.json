@@ -14,7 +14,12 @@
     "vol_book": { "type": "array", "items": { "$ref": "#/$defs/vol_entry" } },
     "watchlist_write_back": { "type": "array", "items": { "type": "string" } },
     "report_path": { "type": "string" },
-    "calls": { "type": "array", "items": { "$ref": "#/$defs/call" } }
+    "calls": { "type": "array", "items": { "$ref": "#/$defs/call" } },
+    "lane_status": {
+      "type": "array",
+      "description": "Lane-level disposition for a lane that fired conceptually but produced NO sized single-name call today (MOM_LONG is basket-only; MOM_SHORT can be crash-guard stood-down; OI_FADE may clear no name). Keeps calls[] strictly per-ticker. NOT sized, NOT resolved as a call by /calibration-audit; consumed only for gate-effectiveness / diary. Mirrors weekly_review.schema.json -- added 2026-08-01 after the daily scan re-introduced the synthetic ticker BASKET_NEAR_52W_HIGH into calls[], where it looked resolvable and landed as INCONCLUSIVE every audit.",
+      "items": { "$ref": "#/$defs/lane_status_entry" }
+    }
   },
   "$defs": {
     "regime_context": {
@@ -32,12 +37,37 @@
         "event_risk": { "type": "array", "items": { "type": "object" } }
       }
     },
+    "lane_status_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lane", "disposition", "direction", "note"],
+      "properties": {
+        "lane": { "enum": ["MOM_SHORT", "MOM_LONG", "OI_FADE"] },
+        "disposition": {
+          "enum": ["BASKET_WATCH", "STOOD_DOWN", "NO_NAME_CLEARED"],
+          "description": "BASKET_WATCH = basket-only lane on watch (never per-name); STOOD_DOWN = suppressed by the regime/crash gate; NO_NAME_CLEARED = lane ran but no single name cleared the full stack (liquidity/quality/deal cuts)."
+        },
+        "direction": { "enum": ["long", "short"] },
+        "regime_fit": { "type": ["number", "null"] },
+        "note": { "type": "string", "description": "why the lane produced no sized call." },
+        "candidates": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9.\\-]{0,6}$" },
+          "description": "real symbols the lane surfaced but did not size (empty for a whole-lane stand-down)."
+        },
+        "cluster_id": { "type": ["string", "null"] }
+      }
+    },
     "call": {
       "type": "object",
       "additionalProperties": false,
       "required": ["ticker", "lane", "direction", "horizon_validated", "validated_excess", "regime_fit", "tier", "final_size", "gate_verdicts", "invalidation"],
       "properties": {
-        "ticker": { "type": "string" },
+        "ticker": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9.\\-]{0,6}$",
+          "description": "a REAL exchange symbol. Synthetic basket placeholders (BASKET_NEAR_52W_HIGH, MOM_LONG_BASKET, MOM_SHORT_STANDDOWN) belong in lane_status[], not here -- the pattern is what enforces that. [audit 2026-08-01]"
+        },
         "lane": { "enum": ["MOM_SHORT", "MOM_LONG", "OI_FADE", "S2_dp_revert", "S4_pcr_fade", "ivrank_tilt", "vol_earnings", "vol_0dte"] },
         "direction": { "enum": ["long", "short", "vol_short", "vol_long"] },
         "horizon_validated": { "enum": [3, 5, 10, 21], "description": "the horizon at which THIS lane's excess is validated" },

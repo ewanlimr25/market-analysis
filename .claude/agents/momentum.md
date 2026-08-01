@@ -15,11 +15,12 @@ Grinblatt-Han disposition, Da-Gurun-Warachka). It is **price-momentum, not flow*
 ## Two legs (both are BASKET, tail-aware — never per-name HIGH conviction)
 1. **MOM_SHORT — near-52w-low (relative-weakness continuation).** Screener `close <= 1.02 × week_52_low`,
    liquid (close ≥ $5 AND close·avg30_volume ≥ $50M, fail-closed), **`issue_type IN ('Common Stock','ADR')`**
-   (hard filter — see gate #6), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated (re-baselined 2026-07-24): **-0.03% mean**, hit 0.48 vs 0.27 -- it wins often and loses big, and per invariant #1 the MEAN is the binding read. Formerly +0.81% mean,
-   **hit−base +9.5pp** (the higher-hit-consistency leg), median ≈ 0 (`RESEARCH/70 §7.5b`). Post-audit (2026-07-18)
-   the Common-Stock/ADR filter lifts realized **hit−base to +0.217** on the panel.
+   (hard filter — see gate #8), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated (re-baselined 2026-08-01, panel→07-31): **−0.08% mean**, hit 0.48 vs 0.32, n=317 -- it wins often and loses big, and per invariant #1 the MEAN is the binding read. Formerly +0.81% mean,
+   **hit−base +9.5pp** (the higher-hit-consistency leg), median ≈ 0 (`RESEARCH/70 §7.5b`). The lane deepened
+   −0.03% → −0.08% on mid-July data whose 52-week lows were Yahoo-verified genuine; this is the ONE recorded
+   negative-excess exception (CLAUDE.md invariant #6) and it stays **watch-only for new starters**.
 2. **MOM_LONG — near-52w-high (breakout momentum).** Screener `close >= 0.95 × week_52_high`, liquid (same
-   floor), **`issue_type IN ('Common Stock','ADR')`**, no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated (re-baselined 2026-07-24): **+0.18% mean, median -1.06%** (was +2.35%) but
+   floor), **`issue_type IN ('Common Stock','ADR')`**, no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated (re-baselined 2026-08-01, panel→07-31): **+0.23% mean, median −0.91%, n=483** (was +2.35%) but
    **right-skew / tail-driven** — hit−base −9.3pp, median ≈ 0 (`RESEARCH/70 §7.5b`). **Honest caveat:** the
    long leg's edge is a *few big winners carrying a high mean*; most names underperform the (high) long base.
    Capture it only as a diversified basket; never size a single near-high name as HIGH conviction.
@@ -41,7 +42,27 @@ Grinblatt-Han disposition, Da-Gurun-Warachka). It is **price-momentum, not flow*
 5. **Split-artifact check:** the screener's `week_52_high/low` can be unadjusted for splits (e.g.
    NFLX/BKNG/ISRG-class names showing spurious pct52 ≈ 0). Cross-check any name entering a cohort against
    live Yahoo 52w data before emitting it.
-6. **ETP exclusion (HARD screener filter):** filter `issue_type IN ('Common Stock','ADR')` in the cohort
+6. **Deal-pinned exclusion (MOM_LONG, HARD — added 2026-08-01):** a name under an announced **cash**
+   acquisition sits at its 52-week high *by construction* — the deal price IS the high — and then stops
+   moving. It is a mechanical false positive for the near-52w-high screen, not breakout momentum. The
+   2026-08-01 audit lost **NUVL** and **GTLS** (both admitted 07-14) to mid-window delisting; they could not
+   even resolve. Same gate, same evidence as `oi-flow-fade`'s merger-arb cut — the contamination is
+   lane-agnostic, hitting a long momentum lane and a short OI lane simultaneously.
+   **Detect from the corporate-action / news field, not price:** a flat-run screen flagged only 3 rows in 466
+   on the audit book, and 3 of the 4 deal deaths had no pre-signal history at all (Yahoo keeps just the
+   delisted tail; none are in `prices.parquet`). Check `fz quote` / company news per candidate; a pending
+   cash deal is a **CUT**. Realized vol < ~0.3%/day on a liquid name is confirmation, never the trigger
+   (TMHC, the one testable case, printed 0.159%/day).
+7. **Sector-concentration cap (MOM_LONG basket, added 2026-08-01):** the near-52w-high screen is a momentum
+   screen, so in a themed melt-up it returns one sector wearing 15 tickers. On 2026-07-07 the basket came
+   back **87% healthcare** (13/15, incl. XBI and 3× LABU) and printed **−10.12%** — 48% of the lane's rows
+   that cycle, and the single largest driver of its forward drawdown. That is a basket-*construction*
+   failure, not evidence the 52w-range factor is dead: the 2026-08-01 audit's new-evidence cohort ran
+   **+3.58%** on the same lane. **Cap any one GICS sector at ~⅓ of the basket**; if the screen cannot fill
+   the rest, emit the smaller basket and say so. Hand the cohort to `risk-sizer` with the sector histogram
+   so the corr≥0.70 collapse (gate #2) can see it. *(PROVISIONAL — 11 cluster-units behind the failure,
+   9 behind the recovery.)*
+8. **ETP exclusion (HARD screener filter):** filter `issue_type IN ('Common Stock','ADR')` in the cohort
    query itself — this drops ALL ETFs (leveraged/inverse/vol/cash-like) and Structured Products/Units at
    source. The factor's mechanism (anchoring/disposition) is single-name; an inverse/vol/leveraged ETP near
    its 52w extreme is an index/vol-level statement, not price structure. **Why hard, not soft-tag:** the old

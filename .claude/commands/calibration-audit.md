@@ -33,8 +33,17 @@ never auto-edit an agent/command/schema.
 ## Step 1 — Resolve to realized excess (per call)
 For each resolved call: entry = the session after `report_date`; realized excess = ticker forward return − SPY
 same-window return at `horizon_validated`; record `realized_excess_pct`, win = excess>0, and the same-window SPY
-base. Write back into the envelope's `realized_excess_pct` field (closes the loop). INCONCLUSIVE if data
-unavailable — never a loss.
+base. **STAGE these in `analyses/audit/<date>/resolved_calls.json` — do NOT write them back into the scan or
+weekly envelope.** The Hard rule ("never edit outside `analyses/audit/<date>/`") wins over closing the loop
+in place: an envelope is the immutable record of what was decided with the information available on
+`report_date`, and an audit that edits it destroys the very evidence the next audit re-reads. This is what
+the 07-18, 07-25 and 08-01 cycles all did in practice; the instruction previously said "write back into the
+envelope" and contradicted the Hard rules. [reconciled 2026-08-01]
+
+A call is INCONCLUSIVE if data is unavailable — never a loss. Distinguish three non-resolved states, because
+pooling them overstates data failure: **OPEN** (window not yet matured), **PENDING** (no entry session has
+traded yet — the whole final Friday book on a weekend run), and **INCONCLUSIVE** (genuinely unresolvable,
+e.g. the name was delisted mid-window in a cash merger).
 
 ## Step 2 — Per-lane, per-regime calibration (the core table)
 For each lane × regime stratum with decided-N ≥ 10:
@@ -69,7 +78,19 @@ pre-registration progress, and "what we'd change" — as **proposed** edits (fil
 resolved-N behind it), never applied. Print SUMMARY to chat.
 
 ## Hard rules
-- Propose-only; never edit outside `analyses/audit/<date>/`.
+- Propose-only; never edit outside `analyses/audit/<date>/`. This governs Step 1 too — realized excess is
+  **staged**, never written back into an envelope.
+- **A lane below its recorded baseline is not automatically a regression.** The panel grows, and a signal day
+  only enters the aggregate once its h-window matures, so the pooled mean drifts on its own. Before flagging
+  one, run both isolation checks (CLAUDE.md invariant #6): (a) re-run the *baseline commit's own*
+  `retro_harness.py` against the current panel — identical output proves any refactor behavior-preserving;
+  (b) split resolved rows by whether they had matured at the old panel edge — the baseline cohort must still
+  reproduce the recorded figures. Only a lane that fails both is a real regression. [added 2026-08-01]
+- **To grade a gate that suppresses its own evidence, force it off.** A stood-down lane emits no calls, so an
+  envelope-based effectiveness test is stuck at N<10 forever. Re-fire the harness's own lane query on the
+  gate-days with the gate disabled and resolve from the truth set — that is the exact counterfactual book.
+  This took the crash guard from N=6/one episode to 100 name-days across three (p=0.010). Cluster by day
+  before testing: one gate-day is one correlated observation, not N. [added 2026-08-01]
 - Never recommend removing a risk gate on thin (<10 decided) effectiveness data — a gate's value is insurance
   against the regime not yet in the data.
 - Stratify every number by regime; never pool; an edge that flips sign across regimes is beta.
