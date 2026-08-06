@@ -1,0 +1,190 @@
+{
+  "schema_version": "w1.0",
+  "report_kind": "weekly-review",
+  "iso_week": "2026-W31",
+  "report_date": "2026-07-31",
+  "report_path": "analyses/weekly/2026-W31/report.md",
+  "week_context": {
+    "weekly_candles": [
+      {
+        "symbol": "SPY",
+        "w_open": 744.91,
+        "w_high": 748.895,
+        "w_low": 729.1,
+        "w_close": 747.03,
+        "w_ret": 0.0028,
+        "close_pos": 0.906,
+        "body_frac": 0.107,
+        "structure_vs_prior": "WEEKLY HAMMER. Lower low (729.10 < prior 735.21) but closed at 90.6% of the weekly range with a body of only 10.7% and a lower wick of 15.81 points -- 8.5x the upper wick (1.87). follow_through = FALSE: this week did NOT confirm the prior two down weeks, it reversed them. Close-to-close (07-24 738.93 -> 07-31 747.03) is +1.10%; the open-to-close w_ret of +0.28% understates the week because SPY gapped up into Monday's open. Reclaimed both the 20-SMA and 50-SMA it lost last week. Third consecutive lower_low nonetheless -- the low is still stepping down even as the close recovers."
+      },
+      {
+        "symbol": "QQQ",
+        "w_open": 691.68,
+        "w_high": 695.77,
+        "w_low": 661.14,
+        "w_close": 687.99,
+        "w_ret": -0.0053,
+        "close_pos": 0.775,
+        "body_frac": 0.107,
+        "structure_vs_prior": "WEEKLY HAMMER, the most extreme of the three. Lower low at 661.14 -- a further -3.1% under last week's 682.48 -- then closed at 77.5% of the range on a 10.7% body with a 26.85-point lower wick (6.6x the 4.09 upper wick). Still follow_through = TRUE (open-to-close negative, confirming direction) even as the candle shape flipped bullish: the week both extended the de-rating intraweek AND recovered most of it. Close-to-close +0.55%, breaking a two-week losing run of -3.12% / -2.55%."
+      },
+      {
+        "symbol": "IWM",
+        "w_open": 293.98,
+        "w_high": 295.52,
+        "w_low": 287.83,
+        "w_close": 291.2,
+        "w_ret": -0.0095,
+        "close_pos": 0.438,
+        "body_frac": 0.362,
+        "structure_vs_prior": "NO HAMMER -- the divergence of the week. Fifth consecutive lower_low, follow_through TRUE, but close_pos only 0.438 (mid-range) on a 36.2% body: three times SPY's and QQQ's body fraction. Close-to-close +0.01% -- literally flat (291.17 -> 291.20) while SPY added +1.10%. Small caps made the same lower low and did NOT participate in the recovery. This breaks last week's relative-strength inversion, where IWM had fallen HALF as much as QQQ."
+      }
+    ],
+    "catalysts": [
+      {
+        "event": "FOMC decision -- HAWKISH HOLD. Fed funds held at 3.50-3.75% on a 9-3 vote; all three dissents (Hammack/Cleveland, Kashkari/Minneapolis, Logan/Dallas) were for a HIKE, citing inflation above the 2% target for more than five years. Tier-1.",
+        "date": "2026-07-29",
+        "weekday": "Wednesday (2:00pm ET)",
+        "price_reaction": "SPY -1.54% (740.86 -> 729.46), QQQ -2.04%, IWM -1.64%, Dow -2.19% (its worst session since April 2025). Breadth collapsed to 31.80% green -- the only sub-40% day of the week. VIX 18.21 -> 20.66 (+13.5%). The regime label flipped CHOP -> PULLBACK on this single session (ret5 -2.400%, ret10 -3.360%). Three dissents FOR A HIKE is the mechanism: the market repriced the risk that the Fed is behind on inflation, not that it is about to ease."
+      },
+      {
+        "event": "Core PCE (June) -- COOLER. +0.1% m/m vs +0.2% expected; +3.3% y/y, in line. Q2 GDP also slowed to 1.5% from 2.1%. Tier-1.",
+        "date": "2026-07-30",
+        "weekday": "Thursday (8:30am ET)",
+        "price_reaction": "FULL REVERSAL OF THE FOMC DAY IN ONE SESSION. SPY +1.68% (729.46 -> 741.69), more than erasing Wednesday's -1.54%; QQQ +3.30%, XLK +5.50%, SMH +6.88%. VIX 20.66 -> 17.09 (-17.3%). Regime flipped back PULLBACK -> CHOP. This is the week's cleanest event-conditioned observation and the FIRST Tier-1 macro reversal datapoint the pre-registration arm has accrued in three weeks (2026-W30 had zero Tier-1 prints)."
+      },
+      {
+        "event": "Microsoft + Meta Q2 earnings (after close). MSFT: revenue $90.01B vs $87.62B est, Azure +43% cc vs +40.2% est, FY26 Azure revenue through $100B for the first time. META: EPS $6.18 vs $7.22 est, expenses +55% to $42B against revenue +28%, net income -14% to $15.8B, Q3 revenue guide $61-64B vs $63.15B est.",
+        "date": "2026-07-29",
+        "weekday": "Wednesday (after close)",
+        "price_reaction": "Opposite reactions on the SAME AI-capex question, next session 07-30: MSFT +15.51% (390.54 -> 451.10), META -7.95% (585.61 -> 539.03). The market did not reject AI capex this week -- it rejected capex WITHOUT the revenue line to carry it. MSFT finished the week +21.75%, META -6.47%. This is the discriminator that was absent in 2026-W30, when GOOGL was sold DESPITE a beat purely on a raised capex guide."
+      },
+      {
+        "event": "Apple + Amazon Q2 earnings (after close). AMZN: revenue and AWS growth both beat. AAPL: fiscal-Q3 cleared the bar, iPhone unit revenue +22%, but Services and China revenue missed.",
+        "date": "2026-07-30",
+        "weekday": "Thursday (after close)",
+        "price_reaction": "Again opposite, next session 07-31: AMZN +15.32% (235.50 -> 271.58), its largest single-day gain in over a decade; AAPL -7.35% (333.43 -> 308.91). AMZN closed the week +17.00% and drove XLY to +6.11%, the top sector; AAPL closed -7.24%. Four mega-caps reported in 48 hours and split exactly 2-2."
+      },
+      {
+        "event": "Long-end yields to multi-year highs -- the week's actual macro mechanism, and it moved AFTER the dovish PCE print, not on the FOMC.",
+        "date": "2026-07-30/2026-07-31",
+        "weekday": "Thursday-Friday",
+        "price_reaction": "10y (^TNX) 4.68% -> 4.74% on the week, Friday intraday high 4.75% (highest since January 2025); 30y (^TYX) 5.16% -> 5.28%, a level last seen in 2007. Both closed the week AT their weekly highs, and both rose most on Thu/Fri AFTER the cool inflation print -- a term-premium/supply move, not an inflation-expectations move. Transmission is direct and visible: XLU -4.19% (worst sector), XLRE -1.92%, TLT -1.20%. Last week's defensive leaders were this week's worst losses."
+      },
+      {
+        "event": "Memory/storage melt-up unwinds -- the continuation of the reversal 2026-W30's diary flagged on its final session.",
+        "date": "2026-07-27/2026-07-31",
+        "weekday": "all week",
+        "price_reaction": "MU -10.63%, SNDK -15.43% on the week. SNDK's daily path was -11.02 / -14.25 / -7.32 / +25.99 / -5.09 -- a >25% single-day squeeze inside a >15% down week. MU printed -2.25 / -8.85 / -9.94 / +18.36 / -5.90. 2026-W30's diary recorded the Friday 07-24 reversal (MU -7.0%, SNDK -10.8%) as the week's notable item; it extended for a full week. DIARY ONLY, 0 signal -- recorded because a prior diary observation continued, not because it is tradeable."
+      }
+    ],
+    "regime_trajectory": "CHOP -> PULLBACK (Wed) -> CHOP, a full round trip inside five sessions. Panel figures from scripts/regime_check.py --range 2026-07-27:2026-07-31 (SPY, data/prices.parquet): Mon 07-27 CHOP ret5 -0.400% / ret10 -1.350% / dd15 -1.470%; Tue 07-28 CHOP -0.990% / -1.460% / -1.820%; Wed 07-29 PULLBACK -2.400% / -3.360% / -3.360% (FOMC); Thu 07-30 CHOP +0.480% / -1.200% / -2.830% (PCE); Fri 07-31 CHOP +1.100% / +0.500% / -1.860%. s1_standdown = FALSE on all five sessions. ret10 finished POSITIVE (+0.500%) for the first time since 2026-07-10, having been -3.360% on Wednesday -- a 3.9pp swing in two sessions. CRASH-GUARD NEAR-MISS WORTH RECORDING: the Friday state (ret5 +1.100%, dd15 -1.860%) sits just inside two of the three stand-down legs -- leg (a2) needs ret5 > 1.5% with dd15 < -2.0%, and both figures are within 0.4pp / 0.14pp of firing. The guard is technically FALSE but this IS the V-rebound shape it exists to catch, which is the binding argument against any new short opened here. VOL STATE: VIX 18.58 -> 18.67 -> 18.21 -> 20.66 -> 17.09 -> 15.99, ending the week -14.0% vs the prior Friday and at the LOWEST close of the whole 07-13..07-31 stretch; VIX3M 19.02 gives a VIX/VIX3M ratio of 0.84 -- steep contango, a fully normalized term structure. Dealer GEX flipped: SPY total_gex +$1.19B, regime POSITIVE, zero-gamma level 746.93 against a 747.06 spot -- SPY closed 0.13 points ABOVE its gamma flip, i.e. knife-edge, having been FULLY_NEGATIVE every session of 2026-W30. QQQ total_gex -$8.2M, effectively zero, also at the flip. DATA-QUALITY FLAG: `uw options-structure gex` labelled QQQ 'FULLY_NEGATIVE' ('All strikes have negative net GEX') while its own per_strike array carries clearly positive strikes (678 +2.3M, 681 +4.6M, 687 +70.2M, 688 +94.1M). The label is self-contradictory; total_gex ~= 0 at the flip is the read used here, not the label. Consistent with the previously-recorded 0DTE QQQ gamma-sign defect. BREADTH DID NOT CONFIRM THE RECOVERY: 64.96% / 60.46% / 31.80% / 57.40% / 45.07% green -- Friday closed SPY +0.72% on only 45.07% breadth, and the two strongest index sessions (Thu/Fri) were the two narrowest relative to their index move.",
+    "sector_leadership": "A COMPLETE INVERSION of 2026-W30, and the cleanest evidence that this was a rates event wearing a risk-on costume. All figures from scripts/week_context.py (5-session, 07-24 -> 07-31 close, panel-sourced, no staleness flags raised on any series). Leaders: XLY +6.11% (AMZN alone), XLC +1.82% (GOOGL +11.38% carrying META -6.47%), XLF +1.12%, XLP +1.09%. Middle: XLV -0.01%, XLE -0.12%, XLK -0.30%. Laggards: XLI -1.54%, XLB -1.62%, XLRE -1.92%, SMH -3.68%, XLU -4.19%. Last week's top three (XLE +3.36%, XLU +2.48%, XLI +1.81%) are three of this week's bottom five; last week's worst (XLY -5.22%) is this week's best. The rate-proxies (XLU, XLRE) were hit precisely as the long end broke to multi-year highs. NOTE THE XLK PARADOX: XLK finished -0.30% in a week when its largest holding MSFT gained +21.75%. Mega-cap winners were fully offset by breadth-wide tech damage (SMH -3.68%, MU -10.63%, SNDK -15.43%, AAPL -7.24%, NVDA -2.94%) -- XLK also traded an intraweek low of 166.46 on Wednesday, -5.4% under the prior Friday close. Verified independently against the Yahoo chart API: XLK 175.88 -> 175.35. The index-level calm is an artifact of two enormous single-name gains inside a broadly weak tape.",
+    "notable_flow": "Dark-pool premium, week of 07-27 (top by $, from scripts/week_context.py): SPY $70.2B (81.8k prints), MU $56.9B (175.5k prints), QQQ $50.5B (84.5k), SNDK $35.0B (152.8k), NVDA $27.1B (74.9k), AAPL $24.8B (56.7k), MSFT $22.3B (58.6k), AMZN $16.8B (45.2k), SMH $15.8B (20.4k), AMD $14.5B (49.1k), META $12.9B (38.6k), TSLA $11.8B (40.5k), INTC $11.6B (34.1k), GOOGL $9.8B (26.8k), AVGO $8.1B (17.4k). MU and SNDK repeat as the anomaly for a SECOND consecutive week and both got LARGER: MU $46.2B/144k -> $56.9B/175k, SNDK $26.8B/107k -> $35.0B/153k. MU printed more dark-pool prints than SPY and QQQ combined for the second week running, while falling -10.63%; SNDK printed 152.8k while falling -15.43%. Whatever this is, it absorbed institutional-scale two-way volume through both the melt-up AND the unwind. DIARY ONLY, 0 signal: raw flow measured as beta in research/20 and research/70 and is not scored in this repo."
+  },
+  "weekly_technicals": [
+    {
+      "feature": "Weekly hammer on SPY AND QQQ after a lower low -- with IWM refusing to confirm",
+      "value": "SPY: lower_low TRUE, hammer_or_hanging TRUE, close_pos 0.906, body_frac 0.107, lower wick 15.81 vs upper 1.87 (8.5x). QQQ: lower_low TRUE, hammer_or_hanging TRUE, close_pos 0.775, body_frac 0.107, lower wick 26.85 vs upper 4.09 (6.6x). IWM: lower_low TRUE, hammer_or_hanging FALSE, close_pos 0.438, body_frac 0.362 -- no hammer, mid-range close, and flat on the week (+0.01% close-to-close) against SPY +1.10%.",
+      "would_signal": "A weekly hammer following a lower low after two consecutive down weeks is the textbook bullish-reversal candle and WOULD read as a tradeable long tilt into the following week. The IWM non-confirmation WOULD cut against it: a reversal carried by two mega-cap earnings gaps and not ratified by small caps is a narrow reversal, and the breadth series agrees (Friday +0.72% on 45.07% green).",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH-surviving at FDR 0.10. This panel has ~20 weekly observations -- no power. Marshall-Young-Rose (2006) is weak-to-null on candlestick patterns in liquid names."
+    },
+    {
+      "feature": "Reversal-after-catalyst -- Tier-1 MACRO arm (FIRST OBSERVATION IN THREE WEEKS)",
+      "value": "OBSERVED, and it is a clean full reversal. FOMC Wed 07-29 (hawkish hold, 9-3, three dissents FOR A HIKE) -> SPY -1.54%, breadth 31.80%, VIX +13.5%, regime flipped to PULLBACK. Core PCE Thu 07-30 (+0.1% m/m vs +0.2% est) -> SPY +1.68%, MORE than erasing the FOMC-day loss in the very next session, VIX -17.3%, regime flipped back to CHOP. Net over the two Tier-1 sessions: SPY +0.11%. 2026-W30 accrued nothing to this arm (zero Tier-1 prints); this week accrues one full observation.",
+      "would_signal": "A Tier-1 macro move fully reversed by the NEXT Tier-1 print WOULD read as event-driven noise rather than repricing -- i.e. fade the catalyst-day move rather than extend it. Note this is the OPPOSITE outcome to 2026-W30's single-name arm, where the GOOGL/TSLA catalyst move HELD through the following session. The two arms are now on record with opposite results, which is exactly the discrimination this feature exists to test.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT (>=2yr / >=30 obs). Two macro-arm observations on record is not a sample; /calibration-audit accrues."
+    },
+    {
+      "feature": "Reversal-after-catalyst -- single-name EARNINGS arm, capex-with-revenue discriminator",
+      "value": "Four mega-caps reported in 48 hours and split exactly 2-2, on the SAME AI-capex question that drove all of 2026-W30. Rewarded: MSFT +15.51% next-session (Azure +43% cc, revenue beat), AMZN +15.32% next-session (AWS growth beat). Punished: META -7.95% (expenses +55% vs revenue +28%, net income -14%, soft guide), AAPL -7.35% (Services + China miss). None of the four next-session moves reversed within the week.",
+      "would_signal": "That capex is punished only when the revenue line does not carry it WOULD reframe 2026-W30's 'AI-capex repricing' as a narrower 'capex-without-revenue repricing'. It WOULD also argue that catalyst-day earnings gaps HOLD (0-for-4 reversed this week, consistent with 2026-W30's GOOGL/TSLA gaps holding) -- i.e. PEAD-consistent, and a standing argument against fading a held positive-surprise gap. This is already applied as a tail-cap objection in the OI_FADE lane; it is NOT scored here.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT (>=2yr / >=30 obs). n=4 this week, n=2 in W30."
+    },
+    {
+      "feature": "Rates-driven sector inversion -- a full flip of the prior week's leadership on a long-end break",
+      "value": "10y 4.68% -> 4.74% (Friday intraday 4.75%, highest since Jan-2025); 30y 5.16% -> 5.28% (highest since 2007). Both closed AT their weekly highs and both rose most on Thu/Fri, AFTER the cool PCE print. XLU -4.19% and XLRE -1.92% were the laggards; XLU and XLE had been the prior week's leaders. Rank correlation of sector returns W30 -> W31 is visibly negative: last week's top three are three of this week's bottom five.",
+      "would_signal": "A leadership set that fully inverts week-over-week on a long-end break WOULD read as a rates-driven rotation rather than a risk-appetite recovery, and WOULD argue against reading the index-level weekly hammer as a broad risk-on signal. Untested -- this panel has no power for a weekly rank-inversion claim.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT (>=2yr / >=30 obs)."
+    },
+    {
+      "feature": "Index calm masking record single-name dispersion (the XLK paradox)",
+      "value": "SPY +1.10% and XLK -0.30% on the week, while inside them: MSFT +21.75%, AMZN +17.00%, GOOGL +11.38% against AAPL -7.24%, META -6.47%, MU -10.63%, SNDK -15.43%. A ~37pp spread between the best and worst mega-cap. XLK finished DOWN despite its largest holding gaining 21.75%, and traded an intraweek low 5.4% under the prior Friday's close.",
+      "would_signal": "Extreme intra-index dispersion inside a small index move WOULD argue that index-level regime labels are carrying less information than usual, and WOULD favour cross-sectional lanes (which score relative excess) over any index-directional read. This is an argument about which lane to trust, not a signal -- and it is NOT allowed to alter any lane's regime_fit this week.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT (>=2yr / >=30 obs)."
+    },
+    {
+      "feature": "Dealer gamma flip -- SPY closed 0.13 points above its zero-gamma level",
+      "value": "SPY total_gex +$1.19B, regime POSITIVE, zero_gamma_level 746.93 vs spot 747.06. SPY was FULLY_NEGATIVE on every session of 2026-W30. QQQ total_gex -$8.2M -- effectively zero, also sitting at its flip. Both indices closed the week balanced on the gamma boundary.",
+      "would_signal": "A cross from short-gamma to long-gamma WOULD read as dealer flow switching from amplifying to dampening moves -- lower realized vol, more mean-reversion, and a mechanical argument for the VIX 15.99 print holding. At 0.13 points above the flip it WOULD equally invert on any gap down, so it signals fragility of state rather than direction. Per CLAUDE.md, dealer GEX/DEX feeds the VOL-STATE ONLY and NEVER a direction; recorded here strictly as vol-state context.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT (>=2yr / >=30 obs). Also gated on the GEX-label defect noted in week_context.regime_trajectory being fixed upstream."
+    }
+  ],
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.35,
+      "note": "NO SCORED SINGLE-NAME -- second consecutive week, and the regime got WORSE for this lane, not better. Regime-fit cut 0.70 -> 0.35 vs 2026-W30: the PULLBACK that supported a short lane lasted exactly one session (Wed 07-29), ret10 finished POSITIVE (+0.500%) for the first time since 07-10, VIX closed at 15.99 (lowest since 07-13, -14.0% on the week), and SPY crossed back above its zero-gamma level into POSITIVE dealer gamma. Ran the full stack on a 10-day build window as-of 07-31 (scripts/oi_build.py --days 10 --top 30): 30 names ranked. Cuts, in order: LIQUIDITY $50M/$5 floor removed CLYM/PLOW/CURB/APAM/SPCU/DIG/QRHC/MEME/BRUN/DRV/CBRG/SLP/ASIX/GBFH (14). PERSISTENCE >=0.85 single-block disqualifier removed DBX 0.882, INFY 1.090, SSNC 1.143, TEX 0.927, YMM 0.985. ETP cut on screener issue_type removed MTUM (ETF), NOWL (ETF), SHAZ (issue_type NULL -- fail-closed). EARNINGS h21 (window 08-01..08-30, trading-day) blocked QGEN 08-05, SOLV 08-05, TPG 08-04, GMED 08-06. Four names reached final adjudication and all four die: (1) AVTR -- by far the strongest mechanical signal in the panel, rel_build 4.082 on a 10d window (2.657 on 5d), net +175,675 on a 43,034 avg-30d base, persistence 0.271 genuinely organic, ADV $172.6M PASS, earnings 11-04 clear of h21, catalyst LIVE with 63.4% of the build accruing ON OR AFTER the 07-29 print (+40,486 / +47,578 / +23,325 on 07-29/30/31 -- the build ACCELERATED through its own catalyst). FUNDAMENTALS VETO SUSTAINED, tested and unmet on both re-admit halves in the 07-30 and 07-31 daily scans; the 07-31-datelined PT-raise item was a lagged republication of the 07-30 actions, not fresh coverage. Nothing over the weekend changes it. (2) HRI -- VETO SUSTAINED and worsening: printed +2.89% on 07-31, so the 'shorting a completed collapse into an active bounce tail' objection is stronger, not weaker. (3) KBR -- RESOLVED_PRE_PRINT via scripts/catalyst_split.py: only 12.5% of the build (+1,656 of +13,298) accrued on or after its 07-30 print; the build DIED at its catalyst. That is spent positioning, not a crowd left to fade. (4) ALLE -- carries the 07-24 fundamentals VETO AND has now failed the lane's own mechanism: last_call_net -945, calls genuinely CLOSING, which is the pre-registered OI_FADE invalidation. Independently note the tail-cap that has now blocked this lane four weeks running: every VETO in the set is the same pattern (a positive-surprise gap that HELD, plus post-print PT raises), and this week's Layer-3 earnings arm went 0-for-4 on catalyst-gap reversals -- the PEAD objection to fading held beats is accumulating evidence, not weakening.",
+      "candidates": [
+        "AVTR",
+        "HRI",
+        "KBR",
+        "ALLE"
+      ],
+      "cluster_id": "oi_fade_none_cleared"
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.25,
+      "note": "STOOD DOWN FOR NEW STARTERS BY STANDING POLICY (CLAUDE.md invariant #6), and this week the regime independently argues the same way. s1_standdown computes FALSE on all five sessions, but it is a NEAR MISS on Friday and the shape is exactly what the guard exists to catch: ret5 +1.100% against a 1.5% leg-(a2) trigger, dd15 -1.860% against a -2.0% trigger -- both within 0.4pp/0.14pp. This IS an unconfirmed V-rebound off the 07-29 low, unlike 2026-W30 where ret10 -2.12% was past the -2% confirmed-downtrend boundary and the guard was affirmatively inapplicable. Regime-fit accordingly cut 0.60 -> 0.25. Moot under the cap either way: the lane's re-baselined excess is NEGATIVE and got MORE negative this week -- see the regression-gate note below. REGRESSION GATE (scripts/retro_harness.py --all, 78 panel days, run 2026-07-31): MOM_LONG +0.0023 (baseline +0.0018, PASS) - MOM_SHORT -0.0008 (baseline -0.0003, BELOW) - OI_FADE +0.0071 (baseline +0.0070, PASS) - S2 +0.0021 (baseline +0.0006, PASS) - S4 +0.0051 (baseline +0.0044, PASS). MOM_SHORT drifting -0.0003 -> -0.0008 is NOT a regression caused by a change (no lane or threshold was touched this week) -- the panel grew 73 -> 78 days and n 281 -> 317, so it is not like-for-like -- but it is a further deterioration in the one lane already carrying a written negative-excess exception, and it reinforces rather than relaxes the watch-only cap. Not re-baselined here; that is a /calibration-audit and CLAUDE.md decision. CANDIDATES, after full hygiene (pct_52w_range in [0,1], $5/$50M floor, issue_type in Common Stock/ADR, trading-day earnings gate at h21) AND an independent per-name 52-week verification against the Yahoo chart API: BLDR 1.6%, PATK 1.9%, LII 2.2%, ALNY 2.6%, COIN 2.7%, QS 3.1%, MSTR 3.5%, CRH 3.8%, GPI 5.8%, OLN 6.1%, HDB 7.9%. None sized. THREE NAMES CUT ON CORRUPT DATA, NOT ON MERIT -- see the data-integrity note: KLAC, BKNG, CLBK.",
+      "candidates": [
+        "BLDR",
+        "PATK",
+        "LII",
+        "ALNY",
+        "COIN",
+        "QS",
+        "MSTR",
+        "CRH",
+        "GPI",
+        "OLN",
+        "HDB"
+      ],
+      "cluster_id": "mom_short_policy_capped"
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.4,
+      "note": "BASKET-ONLY, never per-name, and NOT sized. Regime-fit lifted 0.30 -> 0.40: ret10 turned positive (+0.500%) for the first time since 07-10 and the index printed a weekly hammer, which is a better tape for a long-momentum basket than last week's confirmed PULLBACK. It does NOT reach the starter bar. Two independent reasons: (1) the lane's prior is +0.18% mean with a -1.06% MEDIAN, tail-driven -- the harness re-read this week gives +0.0023 mean / -0.0091 median / hit 0.47 vs base 0.60 (hit-base -0.130, n=483), i.e. the basket loses more often than the benchmark and only wins on the tail, which is exactly why it never sizes per-name; (2) +0.18-0.23% sits under the +0.3% starter threshold. Standing re-entry condition unchanged and still unmet: ret10 back above +1% for >=2 consecutive weeks (currently +0.500%, one week). COMPOSITION -- the diary item worth recording, and it has ROTATED AGAIN. Seven names pass full hygiene at h21 with an independent Yahoo 52-week verification on every one: ILMN 99.3%, ING 99.0%, BMY 98.5%, WBS 98.1%, BPOP 98.0%, CAKE 96.8%, ENVA 96.4%. That is healthcare (ILMN, BMY) plus financials (ING, WBS, BPOP, ENVA) plus one restaurant -- and it is a DIFFERENT set from 2026-W30's industrials/insurance/rails cohort (OII, TRV, FAF, PKG, WAB, CSX, RTX, SPG). Two weeks running, the near-52w-high cohort contains essentially ZERO mega-cap technology -- and it still does not, in the very week MSFT gained +21.75% and AMZN +17.00%, because both remain well below their own 52-week highs. The cohort keeps surviving because it is not what is being repriced.",
+      "candidates": [
+        "ILMN",
+        "ING",
+        "BMY",
+        "WBS",
+        "BPOP",
+        "CAKE",
+        "ENVA"
+      ],
+      "cluster_id": "mom_long_basket"
+    }
+  ]
+}
