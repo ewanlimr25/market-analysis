@@ -28,7 +28,20 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from chart import bars, rsi14  # noqa: E402
 
-CLOSED = ("CLOSED", "DROPPED", "CUT_CONFIRMED", "COVER", "EXIT")
+# A terminal verdict is matched on its LEADING TOKEN, never as a substring. Substring
+# matching was wrong in BOTH directions against the verdicts that actually occur:
+#   - "EXIT" matched inside HOLD_TO_BINDING_EXIT and HID a live position (2026-07-31 and
+#     again 2026-08-03, where the tool printed "no open positions" while PLNT was live on
+#     the final session of its h10 window);
+#   - conversely "CLOSED" and "CUT_CONFIRMED" do NOT contain the bare "CLOSE", "CUT" and
+#     "CUT/TRIM" verdicts also present in the panel, so genuinely closed positions leaked
+#     back in as open.
+# The leading token carries the disposition: HOLD_TO_BINDING_EXIT is a HOLD that happens to
+# name its exit; CLOSED_ON_TIME_STOP is a CLOSE.
+CLOSED_HEADS = frozenset({
+    "CLOSE", "CLOSED", "COVER", "COVERED", "CUT",
+    "DROP", "DROPPED", "EXIT", "EXITED", "STOP", "STOPPED",
+})
 # A real invalidation level is always a THRESHOLD, so require a comparison operator
 # immediately before it. Bare dollar figures in prose are usually something else --
 # analyst price targets ("DB cut $61->$55"), or a distance ("price clause $18+ away") --
@@ -39,11 +52,28 @@ PRICE_RE = re.compile(r"(?<!-)[><≥≤]\s*\$\s*([0-9]+(?:\.[0-9]+)?)")
 RSI_RE = re.compile(r"RSI\s*[>≥]\s*([0-9]+(?:\.[0-9]+)?)", re.I)
 
 
-def _positions(doc: dict) -> list[dict]:
+def _head(value: object) -> str:
+    """Leading alphabetic token of a verdict/status, upper-cased. 'CUT/TRIM' -> 'CUT'."""
+    m = re.match(r"[A-Z]+", str(value if value is not None else "").strip().upper())
+    return m.group(0) if m else ""
+
+
+def _is_closed(p: dict) -> bool:
+    return any(_head(p.get(k)) in CLOSED_HEADS for k in ("verdict", "status"))
+
+
+def _positions(doc: dict) -> tuple[list[dict], list[dict]]:
+    """Split the prior file's positions into (open, closed).
+
+    An unrecognized or missing verdict stays OPEN on purpose. Surfacing a position that was
+    already closed is recoverable in one glance; silently hiding a live one is what this
+    function has twice done, and it is not recoverable -- the orchestrator sees "no open
+    positions" and moves on. Fail toward visibility.
+    """
     rec = doc.get("held_position_reconciliation") or {}
-    return [p for p in rec.get("positions", [])
-            if not any(k in str(p.get("verdict", "")).upper() for k in CLOSED)
-            and not any(k in str(p.get("status", "")).upper() for k in CLOSED)]
+    allp = [p for p in (rec.get("positions") or []) if isinstance(p, dict)]
+    return ([p for p in allp if not _is_closed(p)],
+            [p for p in allp if _is_closed(p)])
 
 
 def _invalidation_text(p: dict) -> str:
@@ -76,10 +106,14 @@ def reconcile(prior_path: str, benchmark: str = "SPY") -> dict:
     bench_ret = bench[-1]["close"] / bench[-2]["close"] - 1 if len(bench) > 1 else 0.0
     asof = bench[-1]["date"]
 
+    open_positions, closed_positions = _positions(doc)
     out = {"as_of": asof, "benchmark": benchmark,
-           "benchmark_day_ret_pct": round(100 * bench_ret, 3), "positions": []}
+           "benchmark_day_ret_pct": round(100 * bench_ret, 3), "positions": [],
+           "excluded_closed": [{"ticker": p.get("ticker"),
+                                "verdict": p.get("verdict"),
+                                "status": p.get("status")} for p in closed_positions]}
 
-    for p in _positions(doc):
+    for p in open_positions:
         tk = p.get("ticker")
         direction = (p.get("direction") or "long").lower()
         entry = p.get("entry_price")
@@ -146,6 +180,13 @@ def main() -> int:
 
     print(f"held-book reconciliation as of {res['as_of']}  "
           f"({res['benchmark']} {res['benchmark_day_ret_pct']:+.2f}% on the day)")
+    # Never print a bare "nothing here" -- always say what was read and what was filtered,
+    # so an empty result can be distinguished from a position that was wrongly excluded.
+    n_open, n_closed = len(res["positions"]), len(res["excluded_closed"])
+    print(f"  read {n_open + n_closed} position(s): {n_open} open, {n_closed} closed")
+    for e in res["excluded_closed"]:
+        tag = e["verdict"] or e["status"]
+        print(f"    excluded (closed): {e['ticker']}  [{tag}]")
     if not res["positions"]:
         print("  no open positions carried in that file")
     for p in res["positions"]:
