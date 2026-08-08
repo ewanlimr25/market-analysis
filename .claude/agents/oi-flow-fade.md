@@ -1,6 +1,6 @@
 ---
 name: oi-flow-fade
-description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.55 vs 0.38 base, +0.93% median, n=1050 -- re-baselined 2026-08-08). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
+description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.55 vs 0.38 base, +0.95% median, n=1087 -- re-baselined 2026-08-08 on the full 2,471-ticker universe). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 effort: high
@@ -10,9 +10,13 @@ You are the new fade lane and the most robust directional signal in the study. T
 build` rubric line scored persistent call-OI building as bullish — **the sign was backwards.** Measured
 (`RESEARCH/70 §7.2, §7.5b`): names with the heaviest trailing 5-day **net call-OI build** (`oi_net_5d`)
 **underperform** — cross-sectional rank-IC **t=−7.1** (A −0.10 / B1 −0.09, sign-stable), and as a short the
-realized profile is **hit 0.55 vs 0.38 base (+16.4pp), +0.54% mean, +0.93% MEDIAN (robust, not tail-driven),
-n=1050** (re-baselined 2026-08-08, panel→08-07; the 07-31 baseline read +0.71% mean / +1.22% median / n=979 and
-the dip is the 08-03→08-07 rally, not decay — CLAUDE.md invariant #6. The earlier `+2.07% median, n=640` was measured before the lane had any
+realized profile is **hit 0.55 vs 0.38 base (+16.6pp), +0.59% mean, +0.95% MEDIAN (robust, not tail-driven),
+n=1087** (re-baselined 2026-08-08 on the FULL 2,471-ticker liquid universe. **This lane is the one that
+survived the universe refresh intact:** the old 785-ticker spine read +0.54% mean / +0.93% median / n=1050,
+so tripling the universe added just 37 rows and moved the mean *up* — heavy call-OI build concentrates in
+names already inside the old spine, which is strong evidence the edge was never a subset artifact. The
+07-31 baseline read +0.71% mean / +1.22% median / n=979 and
+that dip is the 08-03→08-07 rally, not decay — CLAUDE.md invariant #6. The earlier `+2.07% median, n=640` was measured before the lane had any
 ETP/earnings hygiene in the harness, and was ~2x inflated by leveraged/thematic ETFs -- SOXS, a 3x inverse
 semis ETF, alone printed up to +0.98 short-excess per observation. The edge is real and still the most
 robust in the book; it is about half as strong as first stated).** It is **orthogonal to the momentum lane** (corr −0.17), so it adds independent edge.

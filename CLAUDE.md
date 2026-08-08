@@ -20,22 +20,30 @@ Excess-scored, regime-first market analysis. Built from the hindsight-validated 
 5. **Pre-registered ≠ scored.** Weekly technicals and all PR-* items are documented, never sized, until their
    bar clears on data that postdates registration.
 6. **Regression gate is law:** `python3 scripts/retro_harness.py --all` must show no lane **below its recorded
-   baseline** after any lane/threshold change. **Baseline (verified 2026-08-08, panel→08-07, 83 days):**
-   MOM_LONG +0.0008 · **MOM_SHORT −0.0043** · OI_FADE +0.0054 · S2 +0.0007 · S4 +0.0039.
-   > ⚠️ **STALE AS OF 2026-08-08 — universe refresh, re-baseline NOT yet adopted.** The figures above were
-   > measured on `universe.json` frozen at **785** tickers (2026-06-28); it was refreshed to the full liquid
-   > screener spine (**2,471**, `scripts/truthset/build_universe.py`) and `prices.parquet` rebuilt 783→2,449
-   > tickers. On the refreshed universe the harness reads:
-   > **MOM_LONG −0.0108 (n 506→1066) · MOM_SHORT −0.0128 (n 351→803) · OI_FADE +0.0059 (n 1050→1087) ·
-   > S2 +0.0009 (n 559→1123) · S4 +0.0035 (n 396→1145)**.
-   > This is **not** a code regression and **not** panel growth — it is a third cause, a universe expansion,
-   > and it was isolated: the *same new code* re-run against the *old 785* reproduces all five lanes to the
-   > last digit. The old numbers were measured on a hand-frozen, activity-ranked subset; these are the full
-   > liquid universe. Note what did NOT move: **OI_FADE — the only lane that sizes — gained just 37 rows and
-   > held (+0.0054→+0.0059)**, because heavy call-OI build concentrates in names already in the 785. S2/S4
-   > held their means while n doubled. The two momentum legs, both already unsized (MOM_LONG WATCH/BASKET
-   > ONLY, MOM_SHORT watch-only cap), carry the whole drop — so no live sizing changes either way.
-   > **Do not read the new figures as a regression, and do not treat them as the baseline until adopted.**
+   baseline** after any lane/threshold change. **Baseline (adopted 2026-08-08 on the FULL liquid universe,
+   panel→08-07, 83 days, 2,471-ticker spine):**
+   **MOM_LONG −0.0108 (n=1066) · MOM_SHORT −0.0128 (n=803) · OI_FADE +0.0059 (n=1087) ·
+   S2 +0.0009 (n=1123) · S4 +0.0035 (n=1145).**
+   **Every baseline is only meaningful against the universe it was measured on — state the spine size
+   whenever you record one.** The prior baseline (MOM_LONG +0.0008 · MOM_SHORT −0.0043 · OI_FADE +0.0054 ·
+   S2 +0.0007 · S4 +0.0039, n = 506/351/1050/559/396) was measured on `universe.json` hand-frozen at **785**
+   tickers on 2026-06-28 — an activity-ranked subset, not the tradeable universe — while `build_features.py`
+   used the live screener spine, leaving **1,688 feature tickers with no price row at all**. Refreshing the
+   spine to the full liquid screener universe (`scripts/truthset/build_universe.py`, 2,471 tickers, prices
+   783→2,449) roughly doubled every lane's n and is the entire cause of the change. **This was a third kind
+   of baseline move — not a code regression, not panel growth, but a universe expansion — and it was isolated
+   the same way: the same new code re-run against the old 785 reproduced all five lanes to the last digit.**
+   **What the expansion revealed, and what it did not:**
+   - **OI_FADE — the only lane that sizes — is unmoved (+0.0054 → +0.0059) on +37 rows.** Heavy call-OI build
+     concentrates in names already inside the old 785, so tripling the universe barely touched it. That is a
+     genuine robustness result and the strongest evidence the lane is not a subset artifact.
+   - **S2 and S4 held their means while n doubled** (+0.0007→+0.0009, +0.0039→+0.0035). Both advisory-only.
+   - **Both momentum legs carry the entire drop**, and both were already unsized — so *no live sizing changed*.
+     MOM_LONG +0.0008 → −0.0108 is corroborating evidence for what the forward book already said (BH(0.10)
+     negative, −4.65%, p=0.008). MOM_SHORT's mean deepened −0.0043 → −0.0128, and more importantly its
+     **hit−base collapsed +0.162 → +0.029**: the "wins often, loses big" consolation was itself a
+     subset artifact. On the full universe the lane barely beats its own base rate. Treat the +16pp hit−base
+     figure wherever it still appears in prose as superseded.
    **The baseline is panel-dependent — re-verify it before reading a dip as a regression.** The pooled mean
    moves on its own as the panel grows, because a signal day only enters the aggregate once its h-window
    matures. Two isolation checks, both run 2026-08-08 (`analyses/audit/2026-08-08/harness_split.py`):
@@ -47,7 +55,12 @@ Excess-scored, regime-first market analysis. Built from the hindsight-validated 
    (b) **cohort split by maturity edge** — rows that had matured at the old 07-31 edge still reproduce the prior
    baseline to the last digit (+0.0023 · −0.0008 · +0.0071 · +0.0021 · +0.0051 @ `de91fe9`; before that
    +0.0018 · −0.0003 · +0.0070 · +0.0006 · +0.0044 @ `4ec89dc`, first recorded at `2b32bad`).
-   Only after BOTH checks is a below-baseline lane a real regression.
+   (c) **same code, old universe** — added 2026-08-08 after the spine refresh. When `universe.json` (and so
+   `prices.parquet`) changes, re-run the current code against the PREVIOUS ticker list; it must reproduce the
+   previous baseline to the last digit, which proves the delta is the added names and not the rebuild. Cheap
+   to do without refetching: filter the new `prices.parquet` to the old spine, rebuild returns, run the gate.
+   Only after the applicable checks is a below-baseline lane a real regression. **Check the spine size first —
+   a baseline compared across two different universes is not a comparison at all.**
    **2026-08-08 is the worked example of why this invariant exists: ALL FIVE lanes fell at once, and it was one
    macro window.** Both checks passed, and the 190-row increment had its `base` column **pinned at 1.00 for
    every long lane and 0.00 for every short** — SPY rose in 100% of the new windows, because signal days
@@ -60,30 +73,34 @@ Excess-scored, regime-first market analysis. Built from the hindsight-validated 
    earnings window on all lanes; OI_FADE had no ETP/earnings hygiene at all), exposing a lane that was always
    negative behind a polluted universe. It went −0.0003 → −0.0008 on 36 mid-July rows (signal days 07-13→17,
    mean −0.0041) whose 52-week lows were Yahoo-verified genuine, then −0.0008 → −0.0043 on the 08-03→07 rally
-   above — a short lane measured across windows where SPY rose every time. Both moves are real signal, not
-   instrument error. **A red MOM_SHORT is the expected baseline, not a new regression** — it is capped
-   watch-only for new starters, so no live sizing depends on it. This is the ONE recorded exception to
-   "no lane negative-excess"; do not add another without the same written rationale.
+   above — a short lane measured across windows where SPY rose every time, then **−0.0043 → −0.0128 on the
+   2026-08-08 universe refresh**, which more than doubled its n and collapsed its hit−base to +0.029. All three
+   moves are real signal, not instrument error, and all three are the same story: every time the measuring
+   universe got *less* flattering, this lane got worse. **A red MOM_SHORT is the expected baseline, not a new
+   regression** — it is capped watch-only for new starters, so no live sizing depends on it. This is the ONE
+   recorded exception to "no lane negative-excess"; do not add another without the same written rationale.
 7. **Path-aware outcomes from the Yahoo chart API**, never the close-only `mcp__yahoo-finance__*` tools.
 
 ## The validated lanes (priors from research/20, 50, 70)
-**Harness column re-baselined 2026-08-08 (panel→08-07, 83 days).** Parentheses hold the **immediately prior
-(07-31) baseline**, so the pair shows one cycle of drift — not a live prior. Separately, every pre-07-24
-figure was measured on a universe with a calendar-day earnings gate and, for OI_FADE, no ETP exclusion at
-all; those corrections are now described in the per-lane notes rather than the parentheses (see invariant #6).
-**Read this whole column against invariant #6's 2026-08-08 note:** every lane fell vs the 07-31 baseline
-because the new rows are one 08-03→08-07 rally, not five independent decays.
+**Harness column re-baselined 2026-08-08 on the FULL liquid universe (panel→08-07, 83 days, 2,471-ticker
+spine).** Parentheses hold the **prior 785-ticker-spine figure**, so the pair shows what the universe
+refresh revealed — not a live prior and NOT one cycle of drift. Separately, every pre-07-24 figure was
+measured on a universe with a calendar-day earnings gate and, for OI_FADE, no ETP exclusion at all; those
+corrections are described in the per-lane notes (see invariant #6).
+**Read this whole column against invariant #6:** the two momentum legs fell hard because the old spine was a
+flattering subset, OI_FADE was untouched by tripling the universe, and S2/S4 held their means on double the
+n. Nothing here is a decay signal.
 **These are HISTORICAL-panel priors.** The forward book is graded separately by `/calibration-audit`; as of
 2026-08-08 the forward cluster-unit read is softer on every lane except S4 (see
 `analyses/audit/2026-08-08/SUMMARY.md`), but no lane cleared BH(0.10), so none is stopped.
 
 | Lane | Dir | Horizon | Realized (harness, 2026-08-08 baseline) | Note |
 |---|---|---|---|---|
-| `oi-flow-fade` (OI_FADE) | short | h10 | hit 0.55 vs 0.38, **+0.93% median / +0.54% mean, n=1050** *(was +1.22% med / +0.71% mean, n=979)* | **most robust**; heavy 5d call-OI build → underperform. Pre-07-24 figure was inflated ~2× by leveraged/thematic ETFs (SOXS 3× inverse semis et al.) the live lane never trades. **Forward watch — decay signal NOT confirmed:** the 08-01 audit flagged a −3.73% new-evidence cohort (hit−base −0.53) as possible decay and named the post-fix h10 cohort as the test. That cohort matured and **reversed the sign: +1.99%, hit−base +0.67** (9 units, 3 exit-days, ANECDOTE). Neither read is durable — do not act on either; re-test when the 17 open h10 rows mature |
-| `momentum` MOM_SHORT (near-52w-low) | short | h10 | **−0.43% mean**, hit 0.46 vs 0.29, n=351 *(was −0.08%, n=317)* | crash-gated (`s1_standdown`) + **watch-only cap for new starters**; wins often, loses big — the negative mean is the binding read, not the +16.2pp hit-base. The deepening from −0.08% is the 08-03→07 rally (invariant #6), not new decay |
-| `momentum` MOM_LONG (near-52w-high) | long | h10 | +0.08% mean, median −1.13%, n=506, **tail-driven** *(was +0.23%, n=483)* | **WATCH/BASKET ONLY — this lane never sizes.** Basket only, never per-name HIGH; sector-concentration capped (gate #7). Enforced by `risk-sizer.md`'s advisory map and confirmed forward: **0 of 52 resolved calls were ever sized**. It is also the one lane clearing BH(0.10) negative on the forward book under day-clustering (−4.65%, p=0.008, 14 basket-days, PROVISIONAL-N — below the DURABLE-N bar a STOP requires) |
-| `liquidity-reversion` (S2) | long | h3–5 | +0.07%, n=559 *(was +0.21%)* | DP one-sided concentration, news-gated; advisory-only |
-| `sentiment-contrarian` (S4) | long | h5–10 | +0.39%, n=396 *(was +0.51%)* | PCR-high fade; + ivrank_chg_5d h3 tilt (advisory). The only lane positive forward as well as historically |
+| `oi-flow-fade` (OI_FADE) | short | h10 | hit 0.55 vs 0.38, **+0.95% median / +0.59% mean, n=1087** *(785-spine: +0.93% med / +0.54% mean, n=1050)* | **most robust — and the universe refresh proved it.** Tripling the spine added only 37 rows and moved the mean +0.0054→+0.0059: the edge was never a subset artifact. Heavy call-OI build; heavy 5d call-OI build → underperform. Pre-07-24 figure was inflated ~2× by leveraged/thematic ETFs (SOXS 3× inverse semis et al.) the live lane never trades. **Forward watch — decay signal NOT confirmed:** the 08-01 audit flagged a −3.73% new-evidence cohort (hit−base −0.53) as possible decay and named the post-fix h10 cohort as the test. That cohort matured and **reversed the sign: +1.99%, hit−base +0.67** (9 units, 3 exit-days, ANECDOTE). Neither read is durable — do not act on either; re-test when the 17 open h10 rows mature |
+| `momentum` MOM_SHORT (near-52w-low) | short | h10 | **−1.28% mean**, median −1.39%, hit 0.40 vs 0.37, n=803 *(785-spine: −0.43%, hit 0.46 vs 0.29, n=351)* | crash-gated (`s1_standdown`) + **watch-only cap for new starters**. The negative mean is the binding read — and on the full universe the **hit−base collapsed +16.2pp → +2.9pp**, so "wins often, loses big" was itself a subset artifact. Do not cite the +16.2pp figure |
+| `momentum` MOM_LONG (near-52w-high) | long | h10 | **−1.08% mean**, median −1.37%, hit 0.43 vs 0.62, n=1066 *(785-spine: +0.08%, n=506)* | **WATCH/BASKET ONLY — this lane never sizes.** The full universe turns it outright negative, corroborating the forward book's BH(0.10)-negative read. Basket only, never per-name HIGH; sector-concentration capped (gate #7). Enforced by `risk-sizer.md`'s advisory map and confirmed forward: **0 of 52 resolved calls were ever sized**. It is also the one lane clearing BH(0.10) negative on the forward book under day-clustering (−4.65%, p=0.008, 14 basket-days, PROVISIONAL-N — below the DURABLE-N bar a STOP requires) |
+| `liquidity-reversion` (S2) | long | h3–5 | +0.09%, n=1123 *(785-spine: +0.07%, n=559)* | DP one-sided concentration, news-gated; advisory-only. Held its mean on double the n |
+| `sentiment-contrarian` (S4) | long | h5–10 | +0.35%, n=1145 *(785-spine: +0.39%, n=396)* | PCR-high fade; + ivrank_chg_5d h3 tilt (advisory). Held its mean on ~3× the n. The only lane positive forward as well as historically |
 | `vol-book` | non-dir | event/0DTE | VOL-ONLY | earnings IV-crush + 0DTE-VRP, net-of-cost |
 | `fundamentals-gate` | veto | — | risk filter | Finnhub = veto, not alpha (`research/80`) |
 
