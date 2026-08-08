@@ -15,15 +15,22 @@ Grinblatt-Han disposition, Da-Gurun-Warachka). It is **price-momentum, not flow*
 ## Two legs (both are BASKET, tail-aware — never per-name HIGH conviction)
 1. **MOM_SHORT — near-52w-low (relative-weakness continuation).** Screener `close <= 1.02 × week_52_low`,
    liquid (close ≥ $5 AND close·avg30_volume ≥ $50M, fail-closed), **`issue_type IN ('Common Stock','ADR')`**
-   (hard filter — see gate #8), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated (re-baselined 2026-08-01, panel→07-31): **−0.08% mean**, hit 0.48 vs 0.32, n=317 -- it wins often and loses big, and per invariant #1 the MEAN is the binding read. Formerly +0.81% mean,
-   **hit−base +9.5pp** (the higher-hit-consistency leg), median ≈ 0 (`RESEARCH/70 §7.5b`). The lane deepened
-   −0.03% → −0.08% on mid-July data whose 52-week lows were Yahoo-verified genuine; this is the ONE recorded
-   negative-excess exception (CLAUDE.md invariant #6) and it stays **watch-only for new starters**.
+   (hard filter — see gate #8), no earnings within 10d. Direction **short**, horizon **10** (also 21). Validated (re-baselined 2026-08-08, panel→08-07): **−0.43% mean**, hit 0.46 vs 0.29, n=351 -- it wins often and loses big, and per invariant #1 the MEAN is the binding read. Formerly +0.81% mean,
+   **hit−base +9.5pp** (the higher-hit-consistency leg), median ≈ 0 (`RESEARCH/70 §7.5b`). The lane went
+   −0.03% → −0.08% on mid-July data whose 52-week lows were Yahoo-verified genuine, then −0.08% → −0.43% on
+   the 08-03→08-07 rally — a short lane measured across windows where SPY rose every time, not new decay
+   (CLAUDE.md invariant #6). This is the ONE recorded negative-excess exception and it stays
+   **watch-only for new starters**.
 2. **MOM_LONG — near-52w-high (breakout momentum).** Screener `close >= 0.95 × week_52_high`, liquid (same
-   floor), **`issue_type IN ('Common Stock','ADR')`**, no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated (re-baselined 2026-08-01, panel→07-31): **+0.23% mean, median −0.91%, n=483** (was +2.35%) but
-   **right-skew / tail-driven** — hit−base −9.3pp, median ≈ 0 (`RESEARCH/70 §7.5b`). **Honest caveat:** the
+   floor), **`issue_type IN ('Common Stock','ADR')`**, no earnings within 10d. Direction **long**, horizon **10** (also 21). Validated (re-baselined 2026-08-08, panel→08-07): **+0.08% mean, median −1.13%, n=506** (was +0.23% at the 07-31 baseline; +2.35% pre-hygiene) but
+   **right-skew / tail-driven** — hit−base −16.6pp, median ≈ 0 (`RESEARCH/70 §7.5b`). **Honest caveat:** the
    long leg's edge is a *few big winners carrying a high mean*; most names underperform the (high) long base.
    Capture it only as a diversified basket; never size a single near-high name as HIGH conviction.
+   **WATCH/BASKET ONLY — this leg never sizes.** Enforced by `risk-sizer.md`'s advisory map and confirmed
+   forward by the 2026-08-08 audit: **0 of 52 resolved MOM_LONG calls were ever sized**. It is also the one
+   lane clearing BH(0.10) negative on the forward book under day-clustering (−4.65%, p=0.008, 14 basket-days)
+   — PROVISIONAL-N, below the DURABLE-N bar a STOP requires, so the lane is kept, but emit it as
+   `BASKET_WATCH` in `lane_status[]` and never as a sized `calls[]` row.
 
 ## Hard gates (both legs are tail-risky — respect them)
 1. **Crash / V-reversal guard (MOM_SHORT only):** if `regime-classifier.s1_standdown`, emit NO shorts.

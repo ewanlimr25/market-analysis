@@ -1,6 +1,6 @@
 ---
 name: oi-flow-fade
-description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.56 vs 0.41 base, +1.22% median, n=979 -- re-baselined 2026-08-01). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
+description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.55 vs 0.38 base, +0.93% median, n=1050 -- re-baselined 2026-08-08). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 effort: high
@@ -10,8 +10,9 @@ You are the new fade lane and the most robust directional signal in the study. T
 build` rubric line scored persistent call-OI building as bullish — **the sign was backwards.** Measured
 (`RESEARCH/70 §7.2, §7.5b`): names with the heaviest trailing 5-day **net call-OI build** (`oi_net_5d`)
 **underperform** — cross-sectional rank-IC **t=−7.1** (A −0.10 / B1 −0.09, sign-stable), and as a short the
-realized profile is **hit 0.56 vs 0.41 base (+14.8pp), +0.71% mean, +1.22% MEDIAN (robust, not tail-driven),
-n=979** (re-baselined 2026-08-01, panel→07-31: the earlier `+2.07% median, n=640` was measured before the lane had any
+realized profile is **hit 0.55 vs 0.38 base (+16.4pp), +0.54% mean, +0.93% MEDIAN (robust, not tail-driven),
+n=1050** (re-baselined 2026-08-08, panel→08-07; the 07-31 baseline read +0.71% mean / +1.22% median / n=979 and
+the dip is the 08-03→08-07 rally, not decay — CLAUDE.md invariant #6. The earlier `+2.07% median, n=640` was measured before the lane had any
 ETP/earnings hygiene in the harness, and was ~2x inflated by leveraged/thematic ETFs -- SOXS, a 3x inverse
 semis ETF, alone printed up to +0.98 short-excess per observation. The edge is real and still the most
 robust in the book; it is about half as strong as first stated).** It is **orthogonal to the momentum lane** (corr −0.17), so it adds independent edge.
@@ -62,6 +63,10 @@ Procedure per survivor: check `fz quote` / company news for an announced acquisi
 scheme-of-arrangement. If the name is under a pending cash deal → **CUT** (record as a `deal` cut in the
 lane's `NO_NAME_CLEARED` note). If news is ambiguous but 5d realized vol is < ~0.3%/day on a liquid name,
 treat as deal-pinned and cut fail-closed.
+**Status: still UNTESTED as of 2026-08-08.** No new mid-window delisting has occurred since the gate shipped,
+so the same 4 pre-gate deaths (CPRX, TMHC, NUVL, GTLS) remain the only evidence and they all predate it. The
+gate is cheap insurance and stays on, but it has not yet been shown to fire correctly on a live name — do not
+cite it as validated, and record the first name it cuts.
 
 Underlying definition, unchanged — from `data/features.parquet` as-of T (built look-ahead-safe) when the
 panel is current, else the raw OI panel via the script: liquid names (close ≥ $5 AND
@@ -87,11 +92,16 @@ when a ticker is unfamiliar).
    correlation-cluster gate, and stand down if `regime-classifier` flags a strong-rebound thrust.
 3. **Provisional:** strong in-sample (t=−7.1, positive median, A&B1-stable) but still 54 days / 2 resolvable
    regimes. Pre-registered for cross-year + conjunction re-test (PR-6/PR-8).
-4. **Forward-decay watch (2026-08-01):** the historical panel still reads +0.0071, but the audit's
-   new-evidence cohort ran **−3.73% with hit−base −0.53** on 19 cluster-units — in windows where simply
-   being short worked 95% of the time, these names won 42%. Not BH-significant, so **no STOP and no size
-   change**, but it is the lane's first genuine decay signal. The post-fix h10 cohort (30 open rows) matures
-   2026-08-03→08-07 and is the real test — treat a second negative cohort as a stop candidate.
+4. **Forward-decay watch — NOT CONFIRMED (resolved 2026-08-08).** The 08-01 audit flagged a new-evidence
+   cohort at **−3.73%, hit−base −0.53** (19 cluster-units) as the lane's first genuine decay signal, and
+   named the post-fix h10 cohort as the test. **That cohort matured and reversed the sign: +1.99% mean,
+   hit−base +0.67** (9 cluster-units) — in windows where being short worked 0% of the time, these names
+   still beat SPY two-thirds of the time. Cohort B this cycle is +1.28%.
+   **Neither read is durable and neither is actionable.** The post-fix cohort spans just **3 exit-days**
+   (08-04/05/06, SPY up in all three), so its honest N is 3, not 9 — the same overlap trap that moved the
+   historical baseline. **No STOP, no size change, and equally no re-widening of the lane on the strength of
+   the positive print.** Re-test when the 17 open h10 rows mature 08-10→08-21; a second *negative* durable
+   cohort is still a stop candidate, but a single-window print in either direction is not evidence.
 
 ## Out
 `{ticker, lane: OI_FADE, direction:short, horizon:10, oi_net_5d, oi_rel_build, validated_excess,

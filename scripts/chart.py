@@ -27,19 +27,27 @@ UA = {"User-Agent": "Mozilla/5.0"}
 
 
 def bars(ticker: str, rng: str = "6mo") -> list[dict]:
-    """Daily OHLCV, oldest first. Rows with a null close are dropped (holidays/halts)."""
+    """Daily OHLCV + `adj` (split/dividend-adjusted close), oldest first.
+
+    Rows with a null close are dropped (holidays/halts). **Use `adj`, not `close`, for any
+    multi-day return or excess** -- the truth set (`truthset/build_prices.py`) and every
+    calibration-audit resolver measure on adjusted closes, so mixing the two silently
+    mis-prices any window containing a dividend or split.
+    """
     url = (f"https://query2.finance.yahoo.com/v8/finance/chart/{ticker}"
-           f"?range={rng}&interval=1d")
+           f"?range={rng}&interval=1d&events=div%2Csplit")
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25) as r:
         res = json.load(r)["chart"]["result"][0]
     ts, q = res["timestamp"], res["indicators"]["quote"][0]
+    # Yahoo omits `adjclose` on some symbols; fall back to raw close rather than failing.
+    adj = (res["indicators"].get("adjclose") or [{}])[0].get("adjclose") or q["close"]
     out = []
     for i, t in enumerate(ts):
-        if q["close"][i] is None:
+        if q["close"][i] is None or adj[i] is None:
             continue
         out.append({"date": dt.datetime.fromtimestamp(t, dt.UTC).strftime("%Y-%m-%d"),
                     "open": q["open"][i], "high": q["high"][i], "low": q["low"][i],
-                    "close": q["close"][i], "volume": q["volume"][i]})
+                    "close": q["close"][i], "adj": adj[i], "volume": q["volume"][i]})
     return out
 
 

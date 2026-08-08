@@ -60,6 +60,13 @@ negative). Cross-check by re-running `python3 scripts/retro_harness.py --all` an
 the historical backtest and the realized forward book.
 
 ## Step 4 — Gate effectiveness (does the discipline help?)
+- **Suppressed candidates: run `python3 scripts/suppression_resolve.py` — do NOT resolve them off the audit's
+  own bars cache.** That cache is built from `calls[]` tickers, and a suppressed name is by definition one
+  that never became a call, so it has no bars and silently prints "unresolved" — indistinguishable from a
+  window that has not matured. Every audit through 2026-08-08 under-reported gate evidence this way (fetching
+  the missing names recovered ACVA at −3.03%). The script fetches them and reports RESOLVED / OPEN / PENDING /
+  INCONCLUSIVE separately, clustered by lane-period. It lives in `scripts/` because `analyses/audit/` is
+  gitignored and a fix made only in an audit dir does not survive the cycle. [added 2026-08-08]
 - **Crash guard:** on `s1_standdown` days, did suppressed MOM_SHORT names actually rip (gate saved a loss) or
   fall (gate cost edge)? Report downgrade-effectiveness with decided-N; advisory below N=10.
 - **Fundamentals veto / correlation cluster / tail caps:** did vetoed/clustered/capped names underperform the
@@ -86,6 +93,15 @@ resolved-N behind it), never applied. Print SUMMARY to chat.
   `retro_harness.py` against the current panel — identical output proves any refactor behavior-preserving;
   (b) split resolved rows by whether they had matured at the old panel edge — the baseline cohort must still
   reproduce the recorded figures. Only a lane that fails both is a real regression. [added 2026-08-01]
+- **A cohort's N is its count of distinct EXIT-DAYS, not its count of rows.** Rows whose h-windows overlap
+  share one macro draw. The tell is the `base` column: pinned at 1.00 for long lanes / 0.00 for short lanes
+  means the benchmark moved one way across every window in the cohort, so the whole cohort is one
+  observation. On 2026-08-08 this decided two readings at once — all five harness lanes fell below baseline
+  on a 190-row increment that was a single 08-03→08-07 rally, and the long-awaited post-fix h10 cohort
+  turned out to span **3 exit-days**, so its 19 rows could not grade the engine at durable N. It also
+  dissolved a false positive: MOM_SHORT's per-name p=0.039 became p=0.134 once clustered by exit-day.
+  Report exit-day counts next to every cohort N, and never let a single-window print — in either
+  direction — change a lane's size or status. [added 2026-08-08]
 - **To grade a gate that suppresses its own evidence, force it off.** A stood-down lane emits no calls, so an
   envelope-based effectiveness test is stuck at N<10 forever. Re-fire the harness's own lane query on the
   gate-days with the gate disabled and resolve from the truth set — that is the exact counterfactual book.
