@@ -53,9 +53,9 @@ Five commitments follow from that, and they are enforced in code, not just prose
 | `vol-book` | non-directional | event / 0DTE | earnings IV crush, 0DTE variance-risk-premium — quoted net of cost |
 | `fundamentals-gate` | veto only | — | fundamentals are a risk filter here, not a source of alpha |
 
-Per-lane measured excess, sample sizes, and the caveats attached to each live in `CLAUDE.md` and are
-re-baselined on every audit cycle. They are **historical-panel priors**; the forward book is graded
-separately and can disagree.
+Per-lane measured excess, sample sizes, and the caveats attached to each live in `CLAUDE.md` (full detail
+in [`docs/lanes.md`](docs/lanes.md)) and are re-baselined on every audit cycle. They are **historical-panel
+priors**; the forward book is graded separately and can disagree.
 
 This is deliberately **not** a microstructure options-flow engine. Raw flow was measured here and came
 back as beta, so it is used as a filter and cut from scoring.
@@ -150,6 +150,7 @@ analyses/
   weekly/YYYY-Www/     weekly review report.md + decision.json                   (tracked)
   audit/YYYY-MM-DD/    forward calibration working files                    (local-only)
 data/                  the truth set — see above                            (local-only)
+docs/                  regression-gate and per-lane detail behind CLAUDE.md's index
 research/              the clean-room study the engine was built from
 schemas/               JSON Schema for the decision envelope (v2) and the weekly review
 scripts/               helper scripts + the regression harness
@@ -193,18 +194,25 @@ python3 scripts/retro_harness.py --all
 
 Every lane, re-measured on the full panel. A lane below its recorded baseline is *not* automatically a
 regression — the pooled mean moves on its own as the panel grows, because a signal day only enters the
-aggregate once its forward window matures. Two isolation checks have to run first:
+aggregate once its forward window matures, and the baseline is also only meaningful against the ticker
+universe it was measured on. Three isolation checks have to run first:
 
 1. **Old code, new data** — run the baseline commit's harness against the current panel. If the old code
    also reproduces the drop, the code is not the cause.
 2. **Cohort split by maturity edge** — rows that had already matured at the previous baseline must still
    reproduce the previous numbers to the last digit.
+3. **Same code, old universe** — when the ticker universe itself changes, re-run the current code against
+   the previous ticker list; it must reproduce the previous baseline, which proves the delta is the added
+   names and not the rebuild.
 
-Only when both pass is a below-baseline lane real decay. The worked example is instructive: on one cycle
-**all five lanes fell at once**, and it was a single correlated draw — every new row exited into the same
-week-long rally, so SPY rose in 100% of the new windows. Five lanes did not independently decay; one rally
-out-ran all five. When an increment's benchmark base rate is pinned at 0.00 or 1.00 rather than mid-range,
-its true sample size is the number of distinct **exit days**, not the number of rows.
+Only when the applicable checks pass is a below-baseline lane real decay. The worked example is
+instructive: on one cycle **all five lanes fell at once**, and it was a single correlated draw — every new
+row exited into the same week-long rally, so SPY rose in 100% of the new windows. Five lanes did not
+independently decay; one rally out-ran all five. When an increment's benchmark base rate is pinned at 0.00
+or 1.00 rather than mid-range, its true sample size is the number of distinct **exit days**, not the number
+of rows.
+
+Full baseline history, worked examples, and the exact isolation-check runs: [`docs/regression-gate.md`](docs/regression-gate.md).
 
 ---
 
