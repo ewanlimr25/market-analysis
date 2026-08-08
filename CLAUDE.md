@@ -22,6 +22,20 @@ Excess-scored, regime-first market analysis. Built from the hindsight-validated 
 6. **Regression gate is law:** `python3 scripts/retro_harness.py --all` must show no lane **below its recorded
    baseline** after any lane/threshold change. **Baseline (verified 2026-08-08, panel→08-07, 83 days):**
    MOM_LONG +0.0008 · **MOM_SHORT −0.0043** · OI_FADE +0.0054 · S2 +0.0007 · S4 +0.0039.
+   > ⚠️ **STALE AS OF 2026-08-08 — universe refresh, re-baseline NOT yet adopted.** The figures above were
+   > measured on `universe.json` frozen at **785** tickers (2026-06-28); it was refreshed to the full liquid
+   > screener spine (**2,471**, `scripts/truthset/build_universe.py`) and `prices.parquet` rebuilt 783→2,449
+   > tickers. On the refreshed universe the harness reads:
+   > **MOM_LONG −0.0108 (n 506→1066) · MOM_SHORT −0.0128 (n 351→803) · OI_FADE +0.0059 (n 1050→1087) ·
+   > S2 +0.0009 (n 559→1123) · S4 +0.0035 (n 396→1145)**.
+   > This is **not** a code regression and **not** panel growth — it is a third cause, a universe expansion,
+   > and it was isolated: the *same new code* re-run against the *old 785* reproduces all five lanes to the
+   > last digit. The old numbers were measured on a hand-frozen, activity-ranked subset; these are the full
+   > liquid universe. Note what did NOT move: **OI_FADE — the only lane that sizes — gained just 37 rows and
+   > held (+0.0054→+0.0059)**, because heavy call-OI build concentrates in names already in the 785. S2/S4
+   > held their means while n doubled. The two momentum legs, both already unsized (MOM_LONG WATCH/BASKET
+   > ONLY, MOM_SHORT watch-only cap), carry the whole drop — so no live sizing changes either way.
+   > **Do not read the new figures as a regression, and do not treat them as the baseline until adopted.**
    **The baseline is panel-dependent — re-verify it before reading a dip as a regression.** The pooled mean
    moves on its own as the panel grows, because a signal day only enters the aggregate once its h-window
    matures. Two isolation checks, both run 2026-08-08 (`analyses/audit/2026-08-08/harness_split.py`):
