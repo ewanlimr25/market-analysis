@@ -240,5 +240,8 @@ python3 -m pytest -m unit      # fast, no network or panel dependency
 
 ## License
 
-No license is granted. Published for inspection and discussion; not for redistribution or use as a
-trading system.
+[MIT](LICENSE) — use, modify, and redistribute freely, keeping the copyright and permission notice.
+
+The license covers the code and the writing. It does not make any measurement here more reliable than
+the *Honest limitations* section says it is, and it disclaims all warranty and liability: if you run this
+or trade off it, that is entirely your own risk.
