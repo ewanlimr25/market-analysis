@@ -1,0 +1,65 @@
+{
+  "conviction_date": "2026-08-07",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-07 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-07/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters for an EIGHTH consecutive session (07-29, 07-30, 07-31, 08-03, 08-04, 08-05, 08-06, 08-07); the book stays FLAT for a FIFTH. The vol book is EMPTY for a THIRD consecutive session -- tonight the 0DTE-VRP mechanical gate flipped GREEN for the first time in 3 sessions (dealers rotated LONG gamma in both SPY and QQQ), but the LOW-VIX-tercile conditional expectancy is net negative for both names once costs are applied, so the sleeve stays empty on economics rather than mechanics. Directionally: OI_FADE had two names (USFD, UTHR) clear the ENTIRE mechanical stack -- the second time in three sessions this has happened (EXLS/UCTT did on 08-05) -- and both are blocked ONLY by the lane's own regime standdown (Hard Rule #2), which is firing again tonight under UPTREND/REBOUND-THRUST. MOM_LONG stays out on tier math (+0.23% vs the +0.30% bar) plus the tail-cap (negative median) plus the DURABLE-N bar -- a repeat of every prior session's binding reasons. MOM_SHORT (TTD) is triply out: s1_standdown, invariant-#6 watch-only cap, negative baseline. S2 and S4 are ADVISORY lanes that never size regardless of measured excess.",
+    "net_book_new_starter_pct_exposure": "0 new starters; 0 open positions carried forward"
+  },
+  "held_position_reconciliation": {
+    "note": "Prior file analyses/scan/2026-08-06/conviction_2026-08-06.json has held_position_reconciliation.positions = [] and book_state.positions = 0 -- genuinely flat, not the held_book EXIT-substring bug (that file's own note already ruled the bug out directly against the 08-06 conviction record). Nothing to reconcile tonight; 0 open positions carried forward.",
+    "positions": []
+  },
+  "regime": {
+    "label": "UPTREND/REBOUND-THRUST",
+    "ret5": "+3.510%",
+    "ret10": "+4.650%",
+    "dd15": "-1.280%",
+    "s1_standdown": true,
+    "standdown_margin_pp": 1.01,
+    "note": "Margin trajectory: 08-05 +3.03pp -> 08-06 +1.12pp -> 08-07 +1.01pp. Today's decay is only -0.11pp vs the prior session's -1.91pp drop -- the decay has FLATTENED, not reversed. dd15 -1.28% still shows no pullback underneath the thrust. VOL REGIME FLIPPED tonight: both SPY and QQQ dealers rotated to LONG gamma (SPY spot 772.84 vs flip 772.36 = +0.06% above; QQQ spot 722.39 vs flip 721.08 = +0.18% above), versus short gamma on 08-05/08-06. VIX 14.90, a fresh cycle low (LOW tercile, cuts 16.35/18.43).",
+    "breadth_divergence": "YES -- pct_green 63.82% (321 adv / 180 decl) but options-flow bullish only 37.7% on a green tape -- flow is not confirming breadth."
+  },
+  "watch_only": {
+    "OI_FADE": [
+      "USFD -- $108.88, $-ADV $276.8M (scripts/liquidity.py PASS, Common Stock), rel_build 2.42, persistence 1.074, earnings 11-05 clear, catalyst_split LIVE 94.5% post-08-06-print. Cleared the ENTIRE mechanical stack. REGIME-BLOCKED ONLY (lane Hard Rule #2, tied to s1_standdown/rebound-thrust). Fundamentals CAUTION on file (Q2 beat + guide raise + 3 PT hikes partially justifies the OI build, would cost -1 tier if ever sized). Correlation to UTHR UNVERIFIED -- USFD is absent from data/prices.parquet (frozen 785-name universe), FAIL-CLOSED, not a pass.",
+      "UTHR -- $538.84, $-ADV $240.9M (scripts/liquidity.py PASS, Common Stock), rel_build 1.31, persistence 1.031, earnings 11-04 clear, catalyst_split LIVE 67.2% post-08-05-print. Cleared the ENTIRE mechanical stack. REGIME-BLOCKED ONLY, same Hard Rule #2. Fundamentals CONFIRM on file (Q2 Tyvaso miss, -7.5% on the print, insider MSPR -31.76 selling 19/20 months -- fundamentals SUPPORT the fade, would cost 0 tier). THE STRONGEST OI_FADE CANDIDATE ON FILE right now if the standdown ever lifts -- re-check first on any regime change.",
+      "NXPI -- MECHANISM-CUT upstream by the lane itself (unresolved Ambarella M&A rumor + 98.6% single-day build), never reached the regime question.",
+      "FORWARD-DECAY WATCH -- the 08-03->08-07 post-hygiene-fix h10 cohort closes TODAY. The 08-08 /calibration-audit is the first cycle that can grade the current engine against the 2026-08-01 new-evidence cohort's -3.73% mean / hit-base -0.53 decay signal."
+    ],
+    "MOM_SHORT": [
+      "STOOD_DOWN on three independent grounds (s1_standdown +1.01pp margin; invariant-#6 watch-only cap; the lane's own NEGATIVE -0.0008 baseline).",
+      "TTD -- $13.80, 2.2% of 52w range, $-ADV $247.2M (scripts/liquidity.py PASS, Common Stock). Only survivor; POST excluded on a prior VETO on file, PLTD excluded as an inverse leveraged ETP."
+    ],
+    "MOM_LONG": [
+      "BASKET_WATCH -- ABNB / NTRA / FIVN, barred on tier math (+0.23% vs the +0.30% bar, median negative, tail-carried), the tail-cap, and the DURABLE-N bar. Sector cap (gate #7) passes clean (Consumer Cyclical / Healthcare / Technology). ABNB-NTRA correlation verified at 0.55 (below 0.70, no collapse); FIVN correlation UNVERIFIED -- absent from data/prices.parquet, FAIL-CLOSED.",
+      "Fundamentals: ABNB CAUTION (-1, insider MSPR -70.98, 42.6x P/E at a fresh high); NTRA CAUTION (-1, insider MSPR -61.28, net margin -9.05%); FIVN CONFIRM (0, beat+raise+index inclusion, caveat GAAP EPS guide cut).",
+      "Event risk: CPI 08-12 and PPI 08-13 both fall inside this h10 window -- an additional -1 tier if ever sized (ABNB/NTRA to -2 total, FIVN to -1)."
+    ],
+    "S2_dp_revert": [
+      "ADVISORY_WATCH -- advisory lane never sizes regardless of measured excess.",
+      "TXN ($980.8M DP notional, 96.2% buy-side) and RTX ($529.5M, 95.1%) both passed the full gate stack. RTX-TXN correlation checked at -0.15 (data/prices.parquet, trailing 3 months) -- no cluster, informational only since the lane never sizes."
+    ],
+    "S4_pcr_fade": [
+      "ADVISORY_WATCH -- advisory lane never sizes.",
+      "26 names post-gate, led by LPX (PCR 25.59), BRZE (25.21), TENB (17.18). Separate ivrank_chg_5d h3 tilt list of 18 names, kept separate, never stacked onto PCR scores.",
+      "Still the only lane positive forward as well as historically (+0.51% hist, n=370). Does not change the advisory clause."
+    ],
+    "VOL_BOOK": [
+      "0DTE-VRP: mechanical gate GREEN for the first time in 3 sessions (dealers LONG gamma both names) but STAND ASIDE on economics -- LOW VIX tercile conditional expectancy net negative for both SPY (~-0.16% net) and QQQ (~-0.08% net). SPY's +0.06% cushion above flip is razor-thin; watch for a gamma-regime flip back to short intraday.",
+      "Earnings IV-crush: ENVX examined at contract level and REJECTED (implied ~19.9% vs a chronically fat-tailed underlying already realizing ~93-102% annualized; corroborated after the fact, ENVX ran +14.9%/+19.0% over the next 5/10 days). TRMB flagged but NOT deep-dived -- carried to next session pending contract-level examination, not sized tonight."
+    ]
+  },
+  "data_quality_carry_forward": [
+    "prices.parquet COVERAGE GAP -- still unfixed. USFD and FIVN are both absent from the frozen 785-name universe.json tonight, which blocks a real correlation read on the OI_FADE pair and the MOM_LONG basket's third leg. Both treated FAIL-CLOSED (unverified, not passed) per the standing memory, not silently assumed independent.",
+    "Both fail-closed names (USFD, FIVN) are moot for TONIGHT's sizing since their lanes are already watch-only/regime-blocked for other reasons -- but this gap will bind for real the first time a clean OI_FADE or MOM_LONG name is otherwise ready to size and happens to be absent from the frozen universe."
+  ],
+  "next_actions": [
+    "2026-08-08: /calibration-audit due -- first cycle grading the post-hygiene-fix engine on the 08-03->08-07 h10 OI_FADE/MOM_SHORT cohort. Also the natural point to review whether MOM_SHORT's DURABLE-N forward window has accrued enough to reconsider the provisional starter-sizing freeze.",
+    "Re-check USFD/UTHR the moment s1_standdown lifts -- both are mechanically live OI_FADE shorts sitting one regime flag away from sizing; UTHR is the stronger of the two on fundamentals (CONFIRM vs CAUTION).",
+    "CPI 08-12 / PPI 08-13 back-to-back -- re-run event-risk gate before opening anything with an h5/h10 window between now and then.",
+    "TRMB -- needs a contract-level deep-dive before the vol_earnings book can score it."
+  ]
+}

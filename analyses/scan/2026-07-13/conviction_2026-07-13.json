@@ -1,0 +1,40 @@
+{
+  "conviction_date": "2026-07-13",
+  "purpose": "Top conviction (sized) names from the 2026-07-13 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-13/decision.json",
+  "names": [
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $16.50 (~52w-range midpoint reclaim), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-10",
+      "adverse_flow_exit_check": "CARRY-FORWARD, not re-sized on 2026-07-13. Now ~$13.84 vs $13.33 entry -- thesis intact/still accreting per the 2026-W28 weekly review. On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. Re-check whether the Consumer Cyclical sector-inflow headwind (the reason this was capped at starter, not half) has intensified or faded."
+    },
+    {
+      "ticker": "ICE",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close back above the pre-build breakout level, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-13",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. CAUTION fundamentals (beat-streak + strong margins fight the short) -- re-check whether the beat-streak has extended (argues for VETO) or whether insider selling has escalated (argues for CONFIRM/upsize consideration, though never above the lane's half ceiling). Earnings 07-30 remains outside the h10 window for now -- re-check as the window rolls forward."
+    },
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "RSI reclaims neutral (>45) with a close back above the prior consolidation range, or the BBB- downgrade narrative is reversed by a rating action/guidance upgrade.",
+      "entry_date": "2026-07-13",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. CONFIRM fundamentals (BBB- downgrade / 'first domino' narrative) -- re-check for a ratings reversal or guidance upgrade that would flip toward CAUTION/VETO. Note the lane's own base excess (+0.81%) already caps this at starter -- do not upsize on conviction alone even if flow strengthens further."
+    }
+  ]
+}

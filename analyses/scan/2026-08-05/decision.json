@@ -1,0 +1,97 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-05",
+  "report_kind": "market-scan",
+  "regime": "UPTREND/REBOUND-THRUST",
+  "regime_context": {
+    "regime_label": "UPTREND/REBOUND-THRUST",
+    "ret5": 0.0553,
+    "ret10": 0.0299,
+    "breadth_pct_green": 48.71,
+    "directional_tradable": true,
+    "s1_standdown": true,
+    "vol_state": "VOL-ACCELERATION-PRONE -- the dealer book FLIPPED vs 08-04. SPY GEX regime NEGATIVE (dealers net SHORT gamma), spot 771.34 vs zero-gamma flip 775.97, i.e. spot BELOW the flip. On 08-04 it was the reverse (spot 772.17 vs flip 767.91, long gamma / vol-suppressive). Spot barely moved; the FLIP LEVEL rose 767.91 -> 775.97 and crossed over spot. QQQ GEX regime POSITIVE (long gamma) -- sign corroborated by positive total_gex and trusted, but its printed zero_gamma_level of 249.5 is an implausible calc artifact against per-strike data clustering at 698-720, so the LEVEL is not trusted. VIX 15.81 and falling steadily through the thrust (20.66 on 07-29 -> 17.09 -> 15.99 -> 15.86 -> 16.50 -> 15.81). VRP: SPY iv30d 13.46% vs realized 13.37% = +0.09pp, essentially FAIR; QQQ iv30d 22.01% vs realized 25.68% = -3.67pp, i.e. IV UNDERPRICING realized (negative VRP). CRITICAL PROCESS NOTE: the zerodte_setup.py gamma-sign bug BIT tonight for the first time in four sessions -- the script emitted SPY as GO_PREMIUM_SELL_INTRADAY labelled 'long-gamma: quieter, mean-reverting' while the CLI read NEGATIVE/short-gamma. Per the standing rule the CLI wins. The three prior sessions recorded 'script and CLI agreed, bug did not bite'; absence of symptom was NOT a fix, and it has now produced a live premium-sell recommendation into a short-gamma tape. dd15 -2.400% (regime_check.py, no schema field for it). s1_standdown fired on leg (a): ret5 +5.530% vs the +2.5% trigger = a +3.03pp margin, the MOST DECISIVE firing of this streak (1.61pp on 08-04, 0.0139pp on 08-03).",
+    "event_risk": [
+      {
+        "date": "2026-08-07",
+        "event": "NFP (July) -- Tier-1, only 2 trading days out. Nothing directional is open so it binds nothing tonight, but it sits inside any h5 or h10 window opened from here and was a binding input to standing aside on the QQQ 0DTE book.",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-12",
+        "event": "CPI (July) -- Tier-1. Inside an h10 window opened today (ends 2026-08-20).",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-13",
+        "event": "PPI (July) -- Tier-1, back-to-back with CPI. Also inside the h10 window.",
+        "tier": 1
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": null,
+      "candidates": ["ETN", "JCI", "NUE", "SWK", "PH", "ITW"],
+      "note": "final_size=watch. 78-name basket cleared all gates. TWO INDEPENDENT BARS, both unchanged from prior sessions: (1) lane excess +0.23% is below the +0.30% starter bar AND its median is -0.91%, so the mean is tail-carried, not typical; (2) risk-sizer.md bars this lane from starter sizing outright until a DURABLE-N (>=30) forward window re-clears positive excess, re-enabled via a /calibration-audit recommendation rather than ad hoc. Basket-only, never per-name HIGH. Sector concentration OK at Industrials 23.1%, inside the 1/3 cap. MATERIAL INCOMPLETENESS: 207 of 285 raw candidates (73%) were dropped FAIL-CLOSED on the prices.parquet coverage gap -- build_prices.py reads a universe.json frozen at 785 symbols (783 written tonight) while features.parquet spans 2,466 tickers. Composition is clean but NOT complete, and the correlation/coverage check returns nothing for absentees, which looks like a pass."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": ["FLUT", "XPEV"],
+      "note": "final_size=watch. TRIPLY OUT: (1) s1_standdown fired on leg (a) with a +3.03pp margin, the most decisive of the streak; (2) invariant-#6 watch-only cap for new starters; (3) knowingly negative baseline (-0.0008). COHORT CORRECTED BY THE ORCHESTRATOR from 3 names to 2. The lane reported CCI, FLUT and XPEV with closes of $30.18, $18.65 and $20.13, marking all three 'Yahoo Verified'. Independent chart-API reads returned $73.84, $92.91 and $11.75 -- the verification column was not Yahoo data. On re-verification FLUT (pct_52w_range 1.4%) and XPEV (0.1%, low set 2026-08-05) ARE genuine near-52w-lows, but CCI sits 11.2% up its 52-week range and is a FALSE SHORT under the lane's own <=2% criterion. CCI CUT. This is the pct_52w_range failure mode in its in-range-but-wrong form. No live harm because the lane is stood down, but the lane's Yahoo-verification step is unreliable and needs hardening. 4 further names fail-closed on the prices.parquet coverage gap."
+    },
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": ["EXLS", "UCTT"],
+      "note": "final_size=watch. SIXTH consecutive zero-starter session, but the FIRST blocked by REGIME rather than MECHANISM -- a meaningful change. For 07-29 through 08-04 every candidate died on a mechanism gate. Tonight EXLS and UCTT clear the entire mandatory stack, orchestrator-re-verified rather than taken on the lane's word: EXLS $33.68 / $88.8M ADV, reports 10-27, rel_build 1.344, persistence 0.833, catalyst LIVE (91.2% of build post the 07-28 print), issue_type Common Stock; UCTT $80.20 / $125.7M ADV, reports 10-27, rel_build 1.109, persistence 0.591, catalyst LIVE (36.1% post the 08-03 print), issue_type Common Stock. They are blocked ONLY by the lane's Hard Rule #2, which stands the lane down on a REBOUND-THRUST -- tonight's label is literally .../REBOUND-THRUST with s1_standdown TRUE on the widest margin of the streak. Under CHOP or PULLBACK either would be a legitimate starter at the lane baseline (+0.71% mean / +1.22% median, hit 0.56 vs 0.41, n=979). Both carry a long_caution flag: they remain top relative-build names, so they are not long candidates either. NEW FAILURE MODE FOUND AND CUT -- AZN: cleared liquidity ($161.50, $604M ADV), earnings (next print 11-05) and catalyst_split (LIVE), but 81% of the 5-day call-OI build (+21,964 of +27,148) landed on 08-04, the same day as Bristol-Myers deal-talk headlines, followed by -7.7% on the report and +6% today on a denial. That is binary M&A-headline risk driving the OI, not organic crowded conviction; cut under the merger-arb gate's spirit as a pre-announcement rumor rather than a signed deal. The standing 7-gate checklist does not currently catch this class. FORWARD-DECAY READ: tonight adds no resolvable data point (nothing sized), but the setup is consistent with the decay hypothesis rather than against it -- a crowded-call mean-reversion short forced into a broad, breadth-confirmed up-thrust is exactly where the -3.73% / hit-base -0.53 new-evidence miss would come from. The actual test remains the 08-03 -> 08-07 post-fix h10 cohort, unchanged."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "short_gamma_fair_vrp",
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "Worst configuration for a 0DTE premium seller. Dealers are net SHORT gamma (CLI regime NEGATIVE, spot 771.34 below the 775.97 flip), i.e. vol-acceleration-prone, while gross VRP is essentially FAIR (iv30d 13.46% vs realized 13.37%, +0.09pp). A fair gross VRP goes negative net of the half-spread (Vilkov, RESEARCH/30 sec 3.1) before any premium is charged for the short-gamma acceleration tail -- there is no edge available to pay for that tail. NOTE: scripts/zerodte_setup.py recommended GO_PREMIUM_SELL_INTRADAY here, labelling the book 'long-gamma: quieter, mean-reverting'; that is the known gamma-sign bug and the CLI overrides it."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "long_gamma_negative_vrp",
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "Gamma sign genuinely POSITIVE (long gamma, mean-reverting) and that part is fine, but VRP is NEGATIVE: iv30d 22.01% vs realized 25.68% = -3.67pp. IV is UNDERPRICING realized vol, so a premium seller is paid less than the vol that actually shows up -- before costs are charged at all. Stacked with confirmed front-end backwardation (0DTE IV 1.50x VIX) and NFP two trading days out on 08-07. Net-of-cost expectancy negative."
+    },
+    {
+      "symbol": "YELP",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "rich_front_confirmed_backwardation_but_illiquid",
+      "implied_move": 0.1107,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "CUT BY THE ORCHESTRATOR after the lane proposed it as tonight's only live vol trade. The vol signal is real -- confirmed term-structure backwardation, front 76.9% (16dte) vs back 63.4% (44dte), ratio 1.212, into an 08-06 print with an 11.07% implied move. But it FAILS THE LIQUIDITY FLOOR, which is fail-closed: 20d $-ADV $24.7M against the $50M floor (price $25.69 clears), with only 192 contracts of front-month OI. A defined-risk iron fly on that chain pays the entire theoretical crush edge away in bid-ask. The lane raised the thin chain as a sizing caveat; it is a floor breach, not a caveat. Its earnings-gate BLOCK is explicitly NOT the reason -- an earnings-crush trade is deliberately into the print. ZTS, LEG, CECO and SGI were separately not actioned: the uw earnings-play iv_rank field returned a constant 100 across all 10 names tonight (non-discriminating, unusable as the richness filter) and none showed a confirming near/far IV spread (ratio 1.0)."
+    }
+  ],
+  "watchlist_write_back": ["EXLS", "UCTT", "FLUT", "XPEV", "AZN"],
+  "report_path": "analyses/scan/2026-08-05/report.md"
+}

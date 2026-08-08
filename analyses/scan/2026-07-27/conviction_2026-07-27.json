@@ -1,0 +1,78 @@
+{
+ "conviction_date": "2026-07-27",
+ "purpose": "Phase-D gate-stack pressure test of three held-book decisions (no new Phase-B lane output was in scope tonight). Persisted for the next run's held-position reconciliation.",
+ "source_decision_envelope": "analyses/scan/2026-07-27/decision.json",
+ "book_state": {
+  "positions": 1,
+  "all_shorts": true,
+  "detail": "ZERO new starters (out of scope tonight). Regime CHOP, s1_standdown FALSE (mechanical, correctly silent -- ret5 -0.40% nowhere near the -2% unconfirmed-dip trigger), but a violent one-day squeeze hit the pct_52w_range 0-10% cohort specifically (independently reproduced: n=67, mean +2.41%/median +2.08%/79% positive here vs the arbitrated n=87/+3.11%/+2.61%/89% -- same finding, different universe-hygiene granularity). Three held-book actions taken: ORCL (MOM_SHORT) CLOSED on h10 expiry + cohort-inversion risk; PLNT (OI_FADE) HELD at current size with the exit rule tightened from a calendar deadline to the earlier of h10 (2026-08-03) or a genuine negative call_net print; PRMB (OI_FADE) retroactively CLOSED, having been silently dropped from the held book 07-08 through 07-24 and never reconciled -- graded at its own h10 (+4.94% short-excess) for the calibration record.",
+  "net_book_new_starter_pct_exposure": "0 new starters; 1 carried held short (PLNT, unchanged size); 2 closes tonight (ORCL remainder, PRMB retroactive)"
+ },
+ "held_position_reconciliation": {
+  "note": "Reconciled against 2026-07-27 truth-set prices (data/prices.parquet, panel current through today) + fresh UW OI panel via scripts/oi_build.py + scripts/liquidity.py. PRMB reconciliation gap (07-08 through 07-24) closed out tonight as a one-time correction; see rationale.",
+  "positions": [
+   {
+    "ticker": "ORCL",
+    "lane": "MOM_SHORT",
+    "direction": "short",
+    "entry_date": "2026-07-13",
+    "entry_price": 131.54,
+    "close_2026_07_27": 119.9,
+    "gross_pnl_pct_remainder": 8.85,
+    "excess_pct_remainder_marked": 7.5,
+    "verdict": "CLOSE",
+    "action_taken": "Close remaining half at the 2026-07-28 open. h10 (10 trading days from 07-13 entry) expires 2026-07-27 -- today. No stop triggered ($123.50 close/2-day confirm, +3.00% away); this is a proactive horizon-driven close, not a stop-out.",
+    "rationale": "Today ORCL +4.27% (+4.25% short-excess against it) as part of a violent, cohort-wide squeeze concentrated at pct_52w_range 0-10% -- ORCL sits at 2.2% (confirmed via features.parquet), squarely in the squeeze cohort, and ranks in its upper third by move size (18th of 67 in this agent's own recount; 29th of 87 per the arbitrated figures) -- a stronger-than-average participant in an inverting factor, not a name shrugging it off. Combined with: h10 statistical license expiring today, the lane's own documented 0-for-9/-5.3%-excess matured forward window (same failure mode), a dense FOMC (07-29) + MSFT/META/ARM (07-29 AH) + AAPL/AMZN (07-30 AH) event stack on negative dealer gamma, and the MOM_SHORT tail cap already treating this lane as unvalidated for anything beyond legacy maintenance -- close is the correct call over a discretionary quarter-size carry-through-prints. Blended trade excess vs SPY across both halves: +11.22% (first half, 07-13->07-24) and +7.50% (second half marked 07-13->07-27, to be finalized against the actual 07-28 open fill)."
+   },
+   {
+    "ticker": "PLNT",
+    "lane": "OI_FADE",
+    "direction": "short",
+    "entry_date": "2026-07-20",
+    "entry_price": 55.2,
+    "close_2026_07_27": 54.22,
+    "gross_pnl_pct": 1.78,
+    "today_short_excess_pct": null,
+    "verdict": "HOLD",
+    "action_taken": "Hold current size, no add. Exit rule TIGHTENED: replace the prior 2026-08-05 hard-calendar deadline with the earlier of (a) h10 = 2026-08-03 (trading-day-confirmed, no US market holiday intervenes 07-28->08-03), or (b) the first genuinely negative call_net print.",
+    "rationale": "Not in today's squeeze cohort (pct_52w_range 22.3%; today's +1.38% is in line with the mid-range control's +0.62% median -- no factor event for this name). Cut condition NOT met: tonight call_net +14 (call +118/put +104). 5d net-OI trajectory +750/+395/-4/+180/+14 -- rel_build 0.023, persistence_ratio 0.562, build confirmed dead via scripts/oi_build.py but not reversed. The h10-driven exit removes the 08-06 pre-market ER from the position's remaining life entirely, one trading day earlier than the old deadline, and prevents the drift-past-horizon failure mode PRMB just demonstrated. NOTE for tooling: scripts/_calendar.py's hz_end() returns 2026-08-04 for this query (fail-closed extrapolation past the live panel edge, rounds outward by construction) -- 08-03 is the precise trading-day answer and should drive the exit; flagged, not a live blocker since both dates clear the ER."
+   },
+   {
+    "ticker": "PRMB",
+    "lane": "OI_FADE",
+    "direction": "short",
+    "status": "CLOSED_RETROACTIVE_RECONCILIATION",
+    "entry_date": "2026-07-07",
+    "entry_price": 24.9,
+    "h10_date": "2026-07-21",
+    "h10_close": 23.69,
+    "h10_graded_excess_pct": 4.94,
+    "close_2026_07_27": 22.85,
+    "gross_pnl_pct_from_entry": 8.23,
+    "verdict": "CLOSED_CONFIRMED",
+    "rationale": "Opened as an OI_FADE starter short 2026-07-07, tier MEDIUM, fundamentals CAUTION -- and never appeared in any conviction_*.json from 2026-07-08 through 2026-07-24 (confirmed by direct search of analyses/scan/). Real reconciliation-process failure, not a data artifact. Graded at its own h10 (2026-07-21, $23.69): PRMB -4.859% vs SPY +0.076% = +4.94% short-excess, a clean OI_FADE win -- recorded as the calibration-audit outcome. Build was a single-day block (persistence_ratio 0.986, the 07-21 print = 98.6% of the 5d sum) and fully dead since (net +364/+27/+2 the last three sessions). The additional +3.29pp of gross drift accrued 07-21->07-27 is unmanaged accident, not lane edge, and is excluded from the graded figure. Liquidity confirmed PASS ($22.85, $63.3M 20d $-ADV via scripts/liquidity.py)."
+   }
+  ]
+ },
+ "names": [],
+ "watch_shortlist": [
+  {
+   "ticker": "SQUEEZE_COHORT_2026-07-27",
+   "lane": "MOM_SHORT",
+   "reason": "Not a tradeable name -- a factor/regime data point for the record. pct_52w_range 0-10% cohort (mcap>$1B, ETPs removed) rallied a clean monotonic +2.41% mean / +2.08% median / 79% positive (this agent's recount, n=67) today, vs a flat mid-range control and a flat near-high cohort, while SPY was +0.02%. The 52w-range factor's normal sign (low beats high, rank-IC t=+6.8) was inverted for a single session with no multi-day lead-in. Costs nothing on the entry side (MOM_SHORT new starters already watch-only capped) but is the reason the ORCL held short was closed on schedule rather than extended. Watch for persistence into 07-28/07-29 -- if the cohort keeps squeezing into FOMC, that would argue the tail-cap policy needs to stay in force well past any single DURABLE-N revalidation window, not just through it."
+  }
+ ],
+ "flags_for_orchestrator": [
+  "COHORT-LEVEL SQUEEZE THAT s1_standdown CANNOT SEE. Today the pct_52w_range 0-10% cohort (the MOM_SHORT target) returned mean +3.11% / median +2.61% excess vs SPY, 89% positive (n=87, mcap>$1B, ETPs removed), against a mid-range control of +0.62% and a near-high cohort of -0.06% -- a monotonic gradient that INVERTS the 52w-range factor's normal sign (rank-IC t=+6.8). SPY was +0.02%, so the index-level guard was correctly silent. The guard reads SPY's ret5 and is STRUCTURALLY BLIND to cohort-level squeezes. Propose for /calibration-audit: add a cohort-level arm to s1_standdown (e.g. near-52w-low cohort 1d median excess > +1.5% => stand down the short leg), gated through the regression harness. Do NOT hand-patch mid-scan.",
+  "THE MOMENTUM LANE REPORTED THE COHORT BOUNCE BACKWARDS -- SECOND CONSECUTIVE WRONG TAPE FIGURE. It claimed 'median +0.01 bps / mean -0.28 bps / all moves within +/-50 bps / ORCL idiosyncratic'; truth is mean +3.11% / median +2.61% / 89% positive. It had 1d return data for only 28 of its 81 names, and '+/-50 bps for every name' is impossible for an equity cohort on any day -- the return computation is broken, not thin. On 07-24 the same lane returned an inverted regime off a stale parquet. UNLIKE 07-24, THIS ONE WOULD HAVE CHANGED A DECISION IF TRUSTED: it argued for carrying ORCL through the squeeze. Treat this lane's tape/cohort statistics as unverified until it is fixed; the regime hand-off alone was not sufficient protection because the defect is in its own return math, not its regime read.",
+  "MOMENTUM LANE ETP EXCLUSION FAILED. Its top-5 MOM_SHORT candidates were TIP (iShares TIPS bond ETF), AAPD (inverse AAPL), BOIL (2x nat-gas), SKUU, SKHY -- all ETPs, in the very lane whose prior was re-baselined to remove ETP inflation. It also mislabelled a close/w52h ratio as 'pct_52w_range' (printing 1.1341 for a 0-100% quantity). Its claimed filter was issue_type = Common Stock/ADR; that filter is not working.",
+  "S4's ONLY FIRED NAME WAS A DIVIDE-BY-NEAR-ZERO ARTIFACT -- REJECTED. PFGC's PCR 90.06 = put_volume 1441 / call_volume 16. OI-based PCR is 3489/2778 = 1.26, i.e. NO accumulated put-heavy positioning. 1,441 puts cannot be 'dispersed across strikes' as the lane claimed. The entire top of the PCR distribution is this class (SLGN 714 on 14 calls, RAL 122 on 29, RSI 70 on 86). ROOT CAUSE: the lane's liquidity floor is on the UNDERLYING's $-ADV (PFGC passed at $197.9M) -- the wrong axis. Propose a minimum call-volume (denominator) floor plus an OI-PCR corroboration requirement before any PCR extreme is fireable.",
+  "S2 RE-INFLATED ITS OWN PRIOR. It was handed the re-baselined +0.06% and then characterized its edge as '+0.5-1% vs SPY over 3-5 days' in the same report. It also labelled all 54 names LONG while ranking a MIX of buy-side and sell-side one-sidedness (SNPS 90.8% sell-side, FDS 96.3% buy-side, both 'long'), and wrote output to /tmp instead of the scratchpad. Harmless tonight (zero sized) but the list is not decision-grade.",
+  "HELD-BOOK RECONCILIATION FAILURE RECOVERED BY LUCK. PRMB was a live OI_FADE starter short from 07-07 that appears in NO conviction/held-book file 07-08 through 07-24 -- 12 sessions unreconciled. It was recovered only because the OI lane happened to surface the ticker tonight for an unrelated reason (a stale single-day block). It was a WINNER: +4.94% short-excess at its own h10 (07-21), never recorded. PROPOSE A STANDING PHASE-E CHECK: every name in the prior envelope with final_size != 'skip' MUST appear in the next run's held-position reconciliation, or the run fails loudly.",
+  "HORIZON EXPIRY IS NOW THE BINDING EXIT AND SHOULD BE EXPLICIT AT ENTRY. Both tonight's closes were horizon-driven, not stop-driven: ORCL's h10 expired exactly today (07-13 + 10 td), PRMB's expired 07-21 and it drifted 4 extra sessions unnoticed. A lane's validated excess is an h-statistic; holding past h is unvalidated drift. PLNT's exit was accordingly re-cut from a calendar deadline (08-05) to its actual horizon (h10 = 08-03), which also removed its 08-06 ER from the position entirely. PROPOSE: every sized call records an explicit horizon_expiry_date at entry, and Phase E flags any position past it. This composes with the 07-24 vestigial-invalidation lesson: re-derive the stop after a >10% favorable move AND close at the horizon.",
+  "hz_end() IS A GATING WINDOW, NOT AN EXIT-DATE FUNCTION -- NOT A BUG. hz_end('2026-07-20',10) returns 2026-08-04 while direct trading-day count gives 08-03. Its docstring states it extrapolates on a 5-day week past the panel edge and deliberately ROUNDS OUTWARD (hz_end('2026-07-24',10) returns a Saturday). That is correct fail-closed behavior for earnings-gate windows and wrong for precise exit dates. Use direct trading-day counting for horizon expiry. risk-sizer initially mis-framed this as a tooling gap in the stale-fallback family; it is not.",
+  "VOL BOOK IS SEPARATE FROM THE DIRECTIONAL BOOK ON PLNT. A legitimate IV-crush structure exists into PLNT's 08-06 print (implied move 11.3%/$6.12, VRP +0.274, term backwardation). The directional short now exits 08-03, BEFORE the print, so the two never overlap -- but if the vol trade is taken it must be booked and P&L-tracked as its own structure, never as a modification of the short. Also: STAND ASIDE on Wed 07-29 0DTE regardless of the morning model read (FOMC 2pm ET; the 0DTE stack was never conditioned on a scheduled macro binary).",
+  "STALE LANE PRIORS STILL CITED IN OLDER ENVELOPES. The 07-07/07-13/07-20 decision.json entries for these same three names cite pre-correction figures (MOM_SHORT +0.81%/9.5pp; OI_FADE +2.07%/20.0pp/n=640). Known-stale per CLAUDE.md invariant #6. Do not re-cite when grading; tonight's envelope uses the 2026-07-24 re-baseline (MOM_SHORT -0.03%/hit 0.48 vs 0.27; OI_FADE +0.70% mean/+1.21% median/n=906)."
+ ],
+ "regression_gate": "NOT RUN AND NOT REQUIRED -- no lane logic or threshold was changed tonight. All four defects above are LOGGED PROPOSALS for /calibration-audit, not applied edits; `git status` confirms scripts/ and artifacts/ are untouched. Any of the proposed fixes (cohort arm on s1_standdown, S4 denominator floor, momentum ETP filter + return math, horizon_expiry_date) must clear `python3 scripts/retro_harness.py --all` against the 4ec89dc baseline before shipping: MOM_LONG +0.0018 / MOM_SHORT -0.0003 / OI_FADE +0.0070 / S2 +0.0006 / S4 +0.0044."
+}

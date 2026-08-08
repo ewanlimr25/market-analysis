@@ -1,0 +1,178 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-07-28",
+ "report_kind": "market-scan",
+ "regime": "CHOP",
+ "regime_context": {
+  "regime_label": "CHOP (mechanical). SPY ret5 -0.990% / ret10 -1.460% / dd15 -1.820%. s1_standdown FALSE -- neither the up-thrust leg (ret5>+2.5%) nor the unconfirmed-dip leg (ret5<-2% AND ret10>-2%) fires tonight; ret5 nowhere near -2%. directional_tradable TRUE. Out-of-strong-regime half-cap ceiling (P0.6) applies book-wide -- no call sizes above half tonight. IMPORTANT CONTEXT (not a gate trigger): the 07-27 near-52w-low squeeze cohort (+2.4/+3.7% mean excess, 80-89% positive) fully round-tripped today to -0.40%/-1.15% mean, 33-49% positive, while the near-52w-high cohort outperformed (+0.59%/+1.48%). Two independent recomputes agree the normal 52w-range factor sign reasserted -- this is why the ORCL MOM_SHORT close on its 07-27 h10 expiry (rather than an extension) is validated in hindsight, and why no MOM_SHORT starters would have been justified tonight even if the lane had surfaced clean candidates. Breadth divergence: price breadth green (S&P500 71.0%, broad 61.9%) but flow breadth only 36.9% bullish; uw risk market-regime reads TRANSITIONAL/CHOPPY, 'reduce size'. SPY below both 20sma (746.65) and 50sma (744.86).",
+  "ret5": -0.99,
+  "ret10": -1.46,
+  "vol_state": "FULLY_NEGATIVE dealer gamma -- SPY total GEX -$947.1M, QQQ -$1,076.6M -> vol-amplifying, not suppressing. VRP FAIR both sides (SPY +2.77%, QQQ +0.55%) = no premium edge either way. VIX 18.21, down from 18.67. GEX/DEX feed vol-state only, no directional read taken.",
+  "breadth_pct_green": 71.0,
+  "directional_tradable": true,
+  "s1_standdown": false,
+  "event_risk": [
+   {
+    "date": "2026-07-29",
+    "event": "FOMC decision + press conference (2pm ET)",
+    "tier": 1,
+    "horizon_day": 1
+   },
+   {
+    "date": "2026-07-29",
+    "event": "MSFT / META / ARM / QCOM earnings (AH)",
+    "tier": 1,
+    "horizon_day": 1
+   },
+   {
+    "date": "2026-07-30",
+    "event": "AAPL / AMZN earnings (AH)",
+    "tier": 1,
+    "horizon_day": 2
+   },
+   {
+    "date": "2026-08-03",
+    "event": "PLNT OI_FADE short h10 exit (pre-registered, earlier of h10 or negative call_net)",
+    "tier": null,
+    "horizon_day": 4
+   },
+   {
+    "date": "2026-08-06",
+    "event": "PLNT earnings (pre-market) -- falls AFTER the PLNT short's own h10 exit (08-03), so it is correctly outside the held short's remaining window",
+    "tier": 1,
+    "horizon_day": 7
+   },
+   {
+    "date": "2026-08-07",
+    "event": "NFP",
+    "tier": 1,
+    "horizon_day": 8
+   },
+   {
+    "date": "2026-08-12",
+    "event": "CPI",
+    "tier": 1,
+    "horizon_day": 11
+   },
+   {
+    "date": "2026-11-03",
+    "event": "HOG earnings -- far outside any h5/h10 window opened tonight, clears the S4 tail-cap's earnings-in-h-window veto",
+    "tier": 1,
+    "horizon_day": null
+   }
+  ]
+ },
+ "watchlist_write_back": [
+  "ORCL (MOM_SHORT) -- CLOSED per the 07-27 decision, executed at the 07-28 open $118.18. Entry 07-13 $131.54; first half trimmed 07-24 @ $114.99 (+11.21% short-excess); second half closed 07-28 @ $118.18 (+8.82% short-excess). Blended realized short-excess across both halves ~+10.02%. Position is flat. ORCL printed a new 52w intraday low ($114.50) today and reversed to close $119.96 -- closing-at-the-open beat closing-at-the-close by roughly 1.5pp on the remaining exposure, a small but real cost of the horizon-driven proactive close vs. a hypothetical same-day exit; recorded for /calibration-audit as a resolved MOM_SHORT win, and as a data point for the 'close at horizon, don't try to time the print' discipline.",
+  "PLNT (OI_FADE) -- HOLD at current half size. Pre-registered exit rule (earlier of h10=2026-08-03 or first genuinely negative call_net print) is NOT triggered: tonight's call/put print is +1,197/+21 = net +1,176, the largest single-day call build of the 5-session window (5d series: +395/-4/+180/+14/+1,176) -- persistence_ratio 0.668, still under the 0.85 single-block disqualifier but a clear re-acceleration, not a continuation of the 07-27 'build is dead' read. Fundamentals gate now reads CAUTION (-1 tier; downgraded from CONFIRM on 07-27) -- zero post-07-20 PT raises or fresh Buy upgrades (the named soft-invalidation), one further analyst CUT (Deutsche Bank $61->$55, 07-22), tape tilts bearish. New corroborating evidence found tonight, not part of the validated OI_FADE spec (evidence-quality only, logged for /calibration-audit, not a hand-patched gate): dark-pool block prints are overwhelmingly sell-side into today's +3.17% up day (07-27 buy_ratio 0.16/$29.4M, 07-28 buy_ratio 0.00/$10.4M on ~1.35x normal volume) and tonight's call-OI build carries NEGATIVE net call premium (-$45,693, i.e. calls being written/sold, not bought) -- both point away from a bullish accumulating crowd and toward distribution/premium-selling, which corroborates rather than undermines the short. Net effect: HOLD, not TRIM or CUT -- see decision.calls[PLNT].thesis for the full reasoning and the discretionary risk stop added for the FOMC/Mag7 event window.",
+  "HOG (S4_pcr_fade) -- WATCH, not sized. Orchestrator arbitration confirmed, not overturned. Advisory-only lane (+0.44% mean prior) already caps this at watch regardless of score; independently, no fundamentals-gate verdict exists for HOG in tonight's run (analyses/scan/2026-07-28/ was empty at Phase D start) -- flagging back to the orchestrator per gate rule 4 to spawn fundamentals-gate on HOG before any future starter-scale consideration. Mechanism is contradicted on a premium-signed basis (net_put_premium -$11,791 = puts net SOLD, not bought; net_call_premium +$4,669; bull_bear_skew +0.249 bullish) against a contract-count PCR of 5.37 that read the crowd as put-heavy -- the crowd S4's contract-count spec would fade does not exist on a dollars-at-risk basis, and the whole book is ~$66K premium across 1,956 contracts (~$0.34/contract), too thin to call a crowd either way. Tier-1 macro/mega-cap event stack (FOMC + MSFT/META/ARM/QCOM 07-29, AAPL/AMZN 07-30) sits inside the h5-10 trade horizon on a vol-amplifying negative-gamma tape -- -1 tier. HOG's own earnings (11-03) clear the h-window veto cleanly. Would reconsider post-FOMC (earliest 07-30) if: (a) fundamentals-gate returns CONFIRM/CAUTION (not VETO), (b) premium-signed flow flips to corroborate the contract-count PCR read, and (c) the event stack clears without a regime break.",
+  "CORRELATION CLUSTER -- HOG vs PLNT: no shared theme (motorcycles/recreational discretionary vs. fitness services), judged PASS by sector/theme inspection. Could not compute a quantitative 60-session pairwise correlation: HOG is absent from data/prices.parquet (truth-set panel), only PLNT is covered. Flagging as a truth-set coverage gap for the orchestrator to backfill -- not decision-blocking tonight since HOG is WATCH (not sized) and PLNT is an unchanged hold, so no multi-name basket is being sized together.",
+  "TAIL CAP LEDGER -- MOM_SHORT new-starter cap (advisory/watch-only, PROVISIONAL) cost nothing tonight: the lane produced zero candidates worth sizing (SKHY, FRVO survived gates but the lane itself declined to size them) and today's cohort round-trip (squeeze cohort -0.40%/-1.15% mean, reversing 07-27's inversion) argues the normal factor sign has reasserted, which is exactly the environment the cap is meant to protect against being caught offside in. S4 tail cap (cut on same-day catalyst; veto if earnings inside h-window) -- no same-day catalyst identified for HOG's 07-28 reversal bar (a technical follow-through on the 07-23 print, not a fresh news event), earnings well outside window: both sub-conditions PASS, HOG stays at watch purely on the advisory-lane cap + missing fundamentals + event-risk stacking, not the tail cap itself. OI_FADE carries no lane-specific tail cap (S1-short/S2-long/vol-short only per gate 6) -- PLNT's build re-acceleration argues, if anything, for the pre-registered exit rule to keep governing rather than for a discretionary early cut.",
+  "LANE PRIOR NOTE -- tonight's OI_FADE figure (+0.70% mean/n=906) and MOM_SHORT figure (-0.03% mean) are the 2026-07-24 re-baselined harness numbers per CLAUDE.md invariant #6; do not re-cite pre-07-24 figures for these lanes."
+ ],
+ "report_path": "analyses/scan/2026-07-28/report.md",
+ "calls": [
+  {
+   "ticker": "ORCL",
+   "lane": "MOM_SHORT",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": -0.03,
+   "excess_hit_minus_base": 21.0,
+   "excess_n": null,
+   "regime_fit": 0.4,
+   "tier": "DROP",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "skip",
+   "tail_cap_applied": "N/A -- position closed on h10 expiry per the 07-27 decision; the PROVISIONAL MOM_SHORT starter cap governed the (correct) decision NOT to extend or re-enter, not this close.",
+   "gate_verdicts": {
+    "regime_crash": "N/A -- position resolved, no new sizing.",
+    "liquidity": "N/A -- close executed at the 07-28 open $118.18, ADV ~$4.7B, no execution-quality concern.",
+    "cluster": "N/A -- position resolved.",
+    "fundamentals": "N/A -- position resolved, CONFIRM carried through the hold (BBB- downgrade thesis intact throughout).",
+    "event_risk": "N/A -- closed ahead of the FOMC/Mag7 event stack per the 07-27 decision's own reasoning.",
+    "tail_cap": "N/A -- resolved position."
+   },
+   "fundamentals_verdict": "CONFIRM",
+   "structure": "CLOSED at the 2026-07-28 open, $118.18.",
+   "entry_or_trigger": "Entered 2026-07-13 @ $131.54. Trimmed 50% 2026-07-24 @ $114.99 (+11.21% short-excess). Remainder closed 2026-07-28 @ $118.18 (+8.82% short-excess). Blended: ~+10.02%.",
+   "invalidation": "N/A -- resolved via the pre-registered h10 horizon-expiry rule, not a stop-out. Note: ORCL made a new 52w intraday low ($114.50) today and reversed to close $119.96. On a SHORT, the $118.18 open fill therefore captured MORE than a close fill would have: +8.82% short-excess at the open vs +7.69% at the close (+10.16% vs +8.80% gross), i.e. closing at the open beat closing at the close by +1.13pp of excess. [CORRECTED by orchestrator: the sizer's original text asserted the opposite sign; watchlist_write_back had it right.]",
+   "key_risks": [],
+   "thesis": "52-week-range momentum short, closed on schedule at its own h10 horizon per the 07-27 decision. Realized ~+10.02% blended short-excess across both halves -- a clean MOM_SHORT win, recorded for /calibration-audit against the lane's currently-negative -0.03% mean prior and its PROVISIONAL watch-only cap for new starters (which this legacy position predates).",
+   "realized_excess_pct": 10.02
+  },
+  {
+   "ticker": "PLNT",
+   "lane": "OI_FADE",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": 0.7,
+   "excess_hit_minus_base": 18.0,
+   "excess_n": 906,
+   "regime_fit": 0.55,
+   "tier": "MEDIUM",
+   "cluster_id": null,
+   "pre_size": "half",
+   "final_size": "half",
+   "tail_cap_applied": "No OI_FADE-specific tail cap in gate 6 (S1-short/S2-long/vol-short only) -- general half-cap discipline holds, unchanged size.",
+   "gate_verdicts": {
+    "regime_crash": "N/A -- OI_FADE is not S1/relative-weakness-gated, s1_standdown irrelevant to this lane. General out-of-strong-regime half-cap ceiling already respected (position at half, not above).",
+    "liquidity": "PASS -- scripts/liquidity.py: close $55.94, 20d $-ADV $94.4M, clears the $50M floor with room; confirms no repeat of the 07-24 $250M hand-multiplication error.",
+    "cluster": "PASS -- only other tonight's-book name is HOG, no shared theme (fitness services vs. motorcycles/recreational). See correlation-cluster note in watchlist_write_back re: HOG's absence from the truth-set panel for a quantitative recompute.",
+    "fundamentals": "CAUTION (-1 tier, NOT veto) -- downgraded from CONFIRM (07-27) to CAUTION tonight. Zero post-07-20 PT raises or fresh Buy upgrades (the named soft-invalidation trigger has NOT fired); Deutsche Bank CUT $61->$55 (07-22); Wells Fargo flat $65 (07-20); William Blair flat Hold (07-27) -- marginal analyst tape tilts bearish, consistent with the short, not against it. Contradicting: clean 4/4 EPS beat streak, net insider buying, rev +14.4%/EPS +31.4% YoY. Supporting: guidance-cut/membership-execution deterioration, securities-fraud class actions, D/E 2.61 securitized whole-business debt.",
+    "event_risk": "PLNT's own ER (2026-08-06 pre-market) falls AFTER the position's own h10 exit (2026-08-03) -- the print is correctly outside the remaining window, unchanged from 07-27's reasoning. FOMC (07-29) + MSFT/META/ARM/QCOM (07-29 AH) + AAPL/AMZN (07-30 AH) fall INSIDE the remaining 4-session hold window as broad market-wide vol risk (not company-specific catalysts) -- noted, does not independently veto a held short with an already-defined exit rule.",
+    "tail_cap": "N/A for OI_FADE specifically. Cut condition (a genuinely negative call_net print) NOT met tonight -- net +1,176, the largest single-day build of the window, a re-acceleration not a continuation of decay."
+   },
+   "fundamentals_verdict": "CAUTION",
+   "structure": "short equity, half-cap, unchanged size. Discretionary risk stop ADDED tonight (new, not part of the original pre-registered rule): close above $59.50 with 2-day confirm -- bounds tail risk through the FOMC/Mag7 event window without pre-empting the pre-registered horizon/call_net exit rule. This is a supplementary risk control, not a replacement for the exit rule.",
+   "entry_or_trigger": "Entered 2026-07-20 @ $55.20. Close 2026-07-28 $55.94, -1.51% short-excess (losing). 5d net call-minus-put OI trajectory (most recent last): +395/-4/+180/+14/+1,176 (tonight, call +1,197/put +21). persistence_ratio 0.668 (< 0.85 disqualifier). Build re-accelerated hard tonight after appearing dead on 07-27.",
+   "invalidation": "HOLD, not CUT or TRIM. Exit at the EARLIER of: (a) 2026-08-03 close [h10, 4 trading days remaining: 07-29/07-30/07-31/08-03], or (b) the first genuinely negative call_net print (neither triggered tonight). Supplementary discretionary stop: close > $59.50, 2-day confirm (added tonight for FOMC/Mag7 event-window risk, does not override (a)/(b)). Would flip to CUT before the horizon if: a 2nd/3rd analyst PT raise or fresh Buy upgrade lands (the still-unfired soft-invalidation), OR dark-pool buy_ratio flips decisively positive (>0.5) with volume confirming accumulation (reversing tonight's 0.00 read), OR the discretionary stop is hit.",
+   "key_risks": [
+    "Losing position (-1.51% short-excess) with only 4 sessions to its pre-registered horizon and a dense Tier-1 macro/mega-cap event stack (FOMC + 5 Mag7 prints) running through the entire remaining window on a vol-amplifying negative-gamma tape",
+    "Tonight's call-OI build re-accelerated to the largest single-day print of the window (+1,176 net) -- directly contradicts the 07-27 'build is dead, low remaining edge' read that supported holding passively; the pre-registered cut condition (negative call_net) is further from firing tonight than it was two sessions ago",
+    "Fundamentals gate downgraded CONFIRM -> CAUTION tonight; a genuinely mixed fundamental picture (4/4 EPS beat streak + insider buying vs. guidance-cut narrative + 2.61x D/E + fraud litigation) that could break either way",
+    "Today's +3.17% is unexplained (no dated name-specific catalyst found) and lands on the same session as the record call build -- plausibly early positioning into the 08-06 print, which falls after this position's own exit, but this is inference, not evidence",
+    "The two new corroborating signals found tonight (DP block-print distribution, negative net call premium on the build) are NOT part of the validated OI_FADE spec (which trades raw oi_net_5d contract counts, not premium-signed or DP one-sidedness) -- they support the HOLD decision as evidence quality, not as an additional validated gate; do not hand-patch the lane spec off this reasoning (invariant #5). Log as a /calibration-audit proposal (premium-sign + DP corroboration overlay for OI_FADE) instead."
+   ],
+   "thesis": "OI_FADE short nearing its own h10 horizon (4 sessions left), currently losing on a short-excess basis. The mechanical exit rule (earlier of h10 or a negative call_net print) is explicit and has NOT been triggered -- tonight's record call-OI build is a re-acceleration of the very signal the lane trades, not a reason to abandon the rule early. Evidence outside the validated spec (DP block-print distribution, negative-premium call writing) corroborates rather than contradicts the short. Fundamentals CAUTION and an unexplained pop are real reasons for vigilance, not for overriding a pre-registered rule four sessions from its own resolution -- especially since the named soft-invalidation (analyst upgrade/PT raise) still has not fired. HOLD at current half size, add a discretionary risk stop ($59.50, 2-day confirm) to bound the FOMC/Mag7 event-window tail risk that a pure buy-and-hold-to-horizon posture would otherwise carry uncapped.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "HOG",
+   "lane": "S4_pcr_fade",
+   "direction": "long",
+   "horizon_validated": 5,
+   "validated_excess": 0.44,
+   "excess_hit_minus_base": null,
+   "excess_n": null,
+   "regime_fit": 0.3,
+   "tier": "ADVISORY",
+   "cluster_id": null,
+   "pre_size": "starter",
+   "final_size": "watch",
+   "tail_cap_applied": "S4 tail cap: cut on same-day news/catalyst (PASS -- no dated name-specific catalyst identified for today's reversal bar; it reads as a technical follow-through on the 07-23 print, 4 sessions prior, not a fresh event); veto if earnings fall anywhere in the h-window (PASS -- next print 2026-11-03, far outside h5/h10 opened tonight). Neither sub-condition forces a cut/veto; the name is capped at watch by the lane's own advisory-only classification plus the missing-fundamentals and event-risk gates below, not by this tail cap.",
+   "gate_verdicts": {
+    "regime_crash": "N/A -- S4 is not S1/relative-weakness-gated. General out-of-strong-regime half-cap ceiling would apply if sized, moot at watch.",
+    "liquidity": "PASS -- scripts/liquidity.py: close $25.29, 20d $-ADV $68.9M, clears the $50M floor.",
+    "cluster": "PASS -- no shared theme vs. PLNT (the only other name in tonight's book); see truth-set coverage gap note in watchlist_write_back.",
+    "fundamentals": "MISSING -- no fundamentals-gate verdict on record for HOG; analyses/scan/2026-07-28/ was empty at the start of Phase D. Flagging back to the orchestrator per gate rule 4: hold at watch until a verdict arrives, before any future starter-scale sizing. This is not independently determinative tonight since the advisory-lane cap already limits HOG to watch, but must be resolved before HOG can ever be sized.",
+    "event_risk": "-1 tier -- Tier-1 macro/mega-cap event stack (FOMC 07-29 + MSFT/META/ARM/QCOM 07-29 AH + AAPL/AMZN 07-30 AH) sits inside the h5-10 trade horizon on a vol-amplifying negative-gamma tape. HOG's own earnings (11-03) clear the h-window veto cleanly (see tail_cap).",
+    "tail_cap": "See tail_cap_applied -- both S4 sub-conditions PASS."
+   },
+   "fundamentals_verdict": null,
+   "structure": "WATCH only -- no position taken.",
+   "entry_or_trigger": "Would-be long entry near today's close $25.29 off the reversal-bar setup, IF sized. Not triggered tonight.",
+   "invalidation": "N/A -- no position. Would reconsider for starter sizing (never above starter -- S4 is capped, see CLAUDE.md lane table) post-FOMC (earliest 07-30) if: (a) fundamentals-gate returns CONFIRM or CAUTION (not VETO) once spawned by the orchestrator, (b) premium-signed options flow flips to corroborate the contract-count PCR read (net_put_premium turns positive, i.e. puts actually being bought), and (c) the FOMC/Mag7 event stack clears without a regime break.",
+   "key_risks": [
+    "MECHANISM CONTRADICTED: net_put_premium -$11,791 (puts net SOLD) vs net_call_premium +$4,669 (calls net bought); bull_bear_skew +0.249 bullish -- on a premium-weighted (dollars-at-risk) basis, the put-heavy crowd S4's contract-count spec (vol_PCR 5.37, put_vol 1,649/call_vol 307) claims to fade does not exist",
+    "Book is ~$66K total premium across 1,956 contracts (~$0.34/contract) -- too thin to confidently call a crowd in either direction",
+    "OI-PCR 84.1st percentile (1.183) is elevated but NOT extreme (p90=1.446, p95=2.203); the same test would have similarly ranked PFGC's already-rejected 1.26, so this metric alone does not separate a real signal from noise -- the denominator floor (call_vol >=75, HOG clears at 307) is what separates them here, not the OI-PCR level",
+    "Consumer-discretionary, rate-sensitive name entering an h5-10 window that runs through FOMC and five Mag7 prints on a vol-amplifying negative-gamma tape",
+    "No fundamentals-gate verdict on record -- unresolved risk-filter gap"
+   ],
+   "thesis": "S4 sentiment-contrarian long candidate: a 4-session post-earnings capitulation (07-21 high $28.45 -> $24.79, -12.9%) followed by today's reversal bar (open 24.53, low 24.45, close 25.29, +2.02%/+1.78% excess, closing near the high) on an elevated (84.1st pctl) but not extreme OI-PCR, clearing the new call-volume denominator floor that killed PFGC's divide-by-near-zero artifact. Advisory-only lane (+0.44% mean prior, never sized beyond watch) combined with a contradicted premium-signed mechanism, a missing fundamentals verdict, and a dense Tier-1 event stack inside the trade horizon -- orchestrator's WATCH read is CONFIRMED, not overturned. Log the premium-sign contradiction as a /calibration-audit evidence-quality proposal (a denominator-style hygiene check analogous to the PFGC fix), not as a new hard veto -- invariant #5 (pre-registered ≠ scored).",
+   "realized_excess_pct": null
+  }
+ ]
+}

@@ -1,0 +1,74 @@
+{
+ "conviction_date": "2026-08-04",
+ "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-04 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+ "source_decision_envelope": "analyses/scan/2026-08-04/decision.json",
+ "book_state": {
+  "positions": 0,
+  "all_shorts": false,
+  "detail": "ZERO new starters across every lane and the book remains FLAT for a second session -- PLNT closed 2026-08-03 on its pre-registered h10 time stop (+0.33% realized short excess on a -1.77% gross; invariant #1 doing its job). Every lane is out for a SOURCED, STRUCTURAL reason, not a marginal miss. MOM_LONG: +0.23% vs the +0.30% bar AND barred outright from starter sizing by risk-sizer.md pending a DURABLE-N forward re-clear. MOM_SHORT: s1_standdown fired decisively (1.61pp margin, vs 0.0139pp yesterday) + invariant-#6 watch-only cap + negative baseline. OI_FADE: fifth consecutive zero-starter; all 15 candidates died on >=1 independent gate. S2 and S4: both ADVISORY lanes, which never size regardless of measured excess -- the sizing-map clause that has been re-derived from scratch on four separate nights and is now closed. The vol book is the only actionable output, for the fifth session running.",
+  "net_book_new_starter_pct_exposure": "0 new starters; 0 open positions carried forward"
+ },
+ "held_position_reconciliation": {
+  "note": "Reconciled with scripts/held_book.py --prior analyses/scan/2026-08-03/conviction_2026-08-03.json on the fix/held-book-verdict-matching branch. The tool now reports 'read 1 position(s): 0 open, 1 closed' and NAMES the exclusion (PLNT [CLOSED_ON_TIME_STOP]), instead of the bare 'no open positions' that hid a live position on 07-31 and again on 08-03. Nothing required hand-reconciliation this session. SPY +1.80% on the day.",
+  "positions": []
+ },
+ "watch_only": {
+  "MOM_LONG": [
+   "BASKET_WATCH (49 names, +0.23% vs the +0.30% bar, median NEGATIVE -0.91%, tail-carried). Top by proximity to 52w-high: SWK, JCI, NEU, ETN, NUE. Sector max 24.5% Industrials, inside the 1/3 cap.",
+   "135 of 184 screened names FAIL-CLOSED on the prices.parquet coverage gap -- basket composition is clean but NOT complete.",
+   "SECOND, INDEPENDENT BAR: risk-sizer.md bars this lane from starter sizing until a DURABLE-N (>=30) forward window re-clears positive excess, re-enabled via a /calibration-audit recommendation, not ad hoc."
+  ],
+  "MOM_SHORT": [
+   "STOOD_DOWN (s1_standdown leg a1, decisive 1.61pp margin) -- GME: genuine near-52w-low, Yahoo and the screener now AGREE (low 18.545 set 08-03, close 19.21, pct_52w_range 6.96%, in-range and correct). The lane's screen did NOT return it at all this session, though it did on 08-03. Kept out by the crash gate and the invariant-#6 cap, not by any data defect. Re-check next session.",
+   "CLBK: VERIFIED FALSE SHORT, correctly excluded. Screener week_52_low $10.60 vs Yahoo $6.2091 AND week_52_high $25.83 vs $11.7409 -- the row is broken in both fields; true pct_range 81.9%, not 0.9%. Do not re-propose without a fresh Yahoo verification.",
+   "101 of 2,870 liquid common stocks still carry an out-of-range pct_52w_range on the trade-date panel."
+  ],
+  "OI_FADE": [
+   "FIFTH consecutive zero-starter session. Mechanism/persistence>0.85: HNI 0.999, HXL 0.993, HIG 0.988, INFY 0.984, LZM 0.983, AZN 0.950, EXLS 0.869, MRCY 1.260, APAM 1.068.",
+   "Earnings inside h10: SOLV (08-05), MRCY (08-18), LZM. ETP by issue_type: MTUM, SPCU, DIG.",
+   "Liquidity: HNI $29.8M ADV, APAM $39.9M, MYGN $3.17 close, LZM $3.74 close, SPCU $14.4M, DIG $2.6M.",
+   "AVTR (fundamentals VETO sustained, 16 prior mentions; build was ORGANIC at persistence 0.427 and catalyst-live -- killed ONLY by the veto).",
+   "PLNT remains EARNINGS-BLOCKED for re-entry (reports 2026-08-06, inside the 08-04..08-19 h10 window)."
+  ],
+  "S2_dp_revert": [
+   "ADVISORY -> watch (10, h5 closes 2026-08-12): GDS, BNS, LYB, SWK, AMP, SPGI, LPLA, CORZ, CAKE, TT",
+   "GDS reports 2026-08-13 -- clear of h5 by a SINGLE session, would be BLOCKED at h10.",
+   "BNS/SWK/AMP are 08-03 BASKET_WATCH repeats. 35 of 45 fail-closed on coverage."
+  ],
+  "S4_pcr_fade": {
+   "viable_not_fired_advisory_lane": [
+    "ICLR (PCR 61.97)",
+    "LYV (10.52)",
+    "NVS (7.62)",
+    "TCOM (6.82)"
+   ],
+   "ivrank_tilt_h3_only": [
+    "NVS (+6.86) -- ORTHOGONAL to the PCR signal, noted, NEVER summed"
+   ],
+   "needs_fundamentals_before_any_future_sizing": [
+    "ICLR",
+    "LYV",
+    "NVS",
+    "TCOM"
+   ],
+   "blocked_unresolved_tail": [
+    "KKR -- the 07-24 h5 earnings block RESOLVED (reported 07-30), but the 2026-07-21/22 EQT/KKR/Advent takeover-rumor tail-block was never re-verified and STILL STANDS"
+   ],
+   "pool_definition_note": "The lane used the full >=p95 PCR cohort (40 names, cutoff 3.07) where retro_harness.py truncates at LIMIT 15. Both are defensible readings of 'top 5% PCR' and NVS/TCOM are legitimately above p95, but the +0.51% prior was MEASURED on the LIMIT-15 definition, so transferring it to names outside that pool is a prior-transfer stretch worth settling.",
+   "fail_closed_missing_from_prices_parquet_count": 9
+  }
+ },
+ "orchestrator_action_items": [
+  "prices.parquet coverage gap -- SEVENTH consecutive session. 783 tickers vs a 2,466-ticker features spine; root cause is build_prices.py reading a static data/universe.json frozen 2026-06-28 while build_features.py uses the live screener spine. Cost tonight: 135 MOM_LONG + 35 S2 + 9 S4 fail-closed. FIX: regenerate universe.json from the screener spine, rebuild prices/returns/features, then RE-RUN the regression gate -- this shifts the harness baseline panel (invariant #6). Deliberately NOT done mid-scan.",
+  "earnings_gate.py line 64 one-sided bound bit AGAIN: LZM was BLOCKED on a 2026-07-29 print that had ALREADY HAPPENED. Fails closed so it is safe, and LZM died on mechanism anyway. Must be fixed PAIRED with retro_harness.py:63,76,138, which carries the identical bound and imports nothing from the lane script -- patching only the lane path makes the live engine more permissive than the instrument grading it. Route to /calibration-audit.",
+  "FIFTH lane misreport this cycle, momentum: claimed 'Sized: 49 names' (barred on two independent grounds) and returned forward excess as 'not yet resolved' rather than testing the starter bar; separately MISSED GME, a clean in-range near-52w-low. Prior instances: S4's invented '+0.7% starter bar' (tonight), S2's CAKE 'clean' (tonight), the 08-03 GME inverted Yahoo read, the 07-31 earnings-gate '0 dropped', the ROST prior_verdicts bug. Independent orchestrator re-runs remain MANDATORY -- every one of these was caught only that way.",
+  "S2 read issue_type from stock-screener-2026-07-23.parquet -- a STALE panel -- on an 08-04 scan. Re-run on the trade-date panel: no ETP leaked, outcome unchanged. Worth a standing instruction to lanes to pin the screener file to the trade date.",
+  "POSITIVE CONTROL: OI_FADE reproduced EXACTLY on every gate (persistence, liquidity, issue_type, earnings), name for name -- second consecutive honest session. Not every lane is misreporting, and this one should be left alone.",
+  "held_book.py verdict-matching fix VERIFIED on the branch fix/held-book-verdict-matching: leading-token matching replaces substring matching, so HOLD_TO_BINDING_EXIT no longer reads as closed and bare CUT/CLOSE verdicts no longer leak in as open; unrecognized verdicts now stay OPEN by design; the tool prints what it read and what it filtered instead of a bare 'no open positions'. 27/27 tests pass (tests/test_held_book_verdicts.py). Ready to commit.",
+  "zerodte_setup.py QQQ gamma-sign bug (logged 07-30) did NOT bite tonight -- script and CLI agreed on long-gamma for both SPY and QQQ, orchestrator-verified. THIRD consecutive session of agreement. Still unfixed; absence of symptom is not a fix.",
+  "Sizing-map conflict CLOSED (open since 07-31): risk-sizer.md:45's trailing clause '< +0.3% OR ADVISORY LANE -> watch' is the operative one. An advisory lane never sizes regardless of measured excess. Recorded here so the next cycle does not re-derive it from scratch for a fourth time.",
+  "NEXT /calibration-audit DUE 2026-08-08. The 30 OI_FADE + 30 MOM_SHORT post-fix h10 rows mature 08-03..08-07 -- the first cohort that grades the CURRENT engine and the first real test of OI_FADE's Cohort-B decay (-3.73%, hit-base -0.53). Tonight contributed ZERO new rows to it.",
+  "SCHEMA GAP: decision_envelope.v2 restricts lane_status.lane to ['MOM_SHORT','MOM_LONG','OI_FADE'], so the two ADVISORY lanes (S2_dp_revert, S4_pcr_fade) have no structured slot and had to be written as free-text watchlist_write_back strings tonight. On a zero-starter night the advisory lanes carry the only regime-appropriate names, so this pushes real content out of the queryable part of the envelope. Propose extending the enum. Route to /calibration-audit."
+ ],
+ "process_findings_summary": "Book FLAT for a second session and a fifth straight night where the vol book is the only actionable output. The night's substantive result is not a trade but a CLOSED AMBIGUITY: the sizing-map conflict carried open since 07-31 is resolved by risk-sizer.md:45's trailing clause -- '< +0.3% OR ADVISORY LANE -> watch' -- which means an advisory lane never sizes regardless of measured excess. That is why S4, the only lane positive FORWARD (+1.16%, DURABLE) as well as historically (+0.51%) and fully regime-appropriate tonight, still does not size. Four lanes were checked independently and three misreported: momentum claimed 'Sized: 49 names' (barred on two independent grounds) and separately MISSED GME, a clean in-range near-52w-low; S4 invented a '+0.7% starter bar' that exists nowhere in the repo, reaching the right answer by wrong reasoning; S2 read a STALE 07-23 screener for its ETP cut and called CAKE 'clean' against prior_verdicts.py. OI_FADE reproduced EXACTLY, name for name, for the second consecutive session -- the positive control. The crash guard fired decisively rather than by 0.0139pp, and the 08-01 audit now measures it at p=0.010 across 100 suppressed name-days, so its firing is the engine working. Two infrastructure defects recurred (prices.parquet coverage, 7th session; earnings_gate.py one-sided bound, which blocked LZM on a print that had already happened) and one was verified FIXED (held_book.py verdict matching, 27/27 tests green)."
+}

@@ -1,0 +1,158 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-07-24",
+  "report_kind": "market-scan",
+  "regime": "PULLBACK",
+  "regime_context": {
+    "regime_label": "PULLBACK (unchanged tier from 07-23, DEEPENED). SPY 738.93 (+0.10%), ret5 -0.587% / ret10 -2.122%; below 20-SMA (746.15) and 50-SMA (745.07). ret5 stabilized (-1.67% -> -0.59%) while ret10 deepened (-1.80% -> -2.12%) -- a grind-down, not a crash. No RISK_OFF escalation (VIX term structure still contango and easing) and no reversion to CHOP (ret10 well past the -1.5% band). Breadth bifurcated: 72.17% green price breadth (363 adv / 140 decl, median +0.97%) vs SPY +0.10% -- median stock rallied, mega-cap tech dragged the cap-weighted index -- but options-flow breadth only 33% bullish (2074 vs 4215), a hedging/distribution tell that is two-sided, not a confirmation of the short book. Standing 2026-07-18 policy in force: MOM_SHORT advisory/watch-only for NEW starters regardless of s1_standdown; S2/S4 advisory-only. Zero new directional starters tonight -- the only name clearing the full OI_FADE gate stack (ALLE) was vetoed on fundamentals.",
+    "ret5": -0.587,
+    "ret10": -2.122,
+    "vol_state": "ELEVATED-BUT-CONTAINED / SHORT-GAMMA-AMPLIFICATION, FAIR-VRP. VIX 18.58 (-0.12 d/d). Term structure CONTANGO intact and easing at the front: VIX9D 17.62 < VIX 18.58 < VIX3M 20.51 (VIX9D fell 18.15 -> 17.62) = vol de-escalation, not stress inversion. SPY GEX -1.556B (less negative than 07-23's -2.47B), QQQ GEX -1.753B (deepened from -1.18B) -- both FULLY_NEGATIVE, dealer hedging amplifies moves in either direction. VRP FAIR on both (SPY +0.0177, QQQ -0.0138) = no premium edge. GEX/DEX fed vol-state ONLY; no directional read taken.",
+    "breadth_pct_green": 72.17,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {"date": "2026-07-29", "event": "FOMC statement + press conference (no SEP/dot-plot)", "tier": 1, "horizon_day": 3},
+      {"date": "2026-07-29", "event": "MSFT + META earnings (postmarket)", "tier": "single-name Mag7", "horizon_day": 3},
+      {"date": "2026-07-30", "event": "Core PCE (8:30am ET)", "tier": 1, "horizon_day": 4},
+      {"date": "2026-07-30", "event": "AAPL + AMZN earnings (postmarket)", "tier": "single-name Mag7", "horizon_day": 4},
+      {"date": "2026-08-05", "event": "PLNT hard exit deadline (last full session before its 08-06 pre-market ER)", "tier": "position-specific", "horizon_day": 8},
+      {"date": "2026-08-06", "event": "PLNT Q2 earnings (pre-market) -- 1 trading day inside h10", "tier": "single-name", "horizon_day": 9},
+      {"date": "2026-08-07", "event": "NFP / Employment Situation (July)", "tier": 1, "horizon_day": 10}
+    ]
+  },
+  "calls": [
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.81,
+      "excess_hit_minus_base": 9.5,
+      "excess_n": null,
+      "regime_fit": 0.7,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "half",
+      "final_size": "half",
+      "tail_cap_applied": "MOM_SHORT PROVISIONAL: no adds permitted until a DURABLE-N>=30 forward-positive-excess re-validation clears via /calibration-audit. Additionally TRIMMED 50% tonight for momentum-crash/V-rebound tail at maximum range extension.",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- s1_standdown FALSE, affirmatively supported: ret10 -2.122% is past the -2% confirmed-downtrend boundary, so this is NOT the unconfirmed-V-bounce setup the guard catches. regime_cap = 0.5 (out-of-regime half-cap; SPY below both SMAs on negative GEX).",
+        "liquidity": "PASS -- $-ADV ~$4.6B, price $114.99, far above the $5 / $50M floor.",
+        "cluster": "PASS -- Technology vs PLNT Consumer Cyclical, different lanes, no >=0.70 cluster. Portfolio-level net-short-beta concentration noted (2 shorts + short-premium vol book), addressed via sizing not a new hedge.",
+        "fundamentals": "NA -- not re-run this session (held position, no new sizing; fundamentals gate is spawned on names about to be sized).",
+        "event_risk": "-1 TIER -- FOMC 07-29, Core PCE 07-30, NFP 08-07 all inside h10 on fully-negative GEX. A dovish surprise gets amplified by dealer short-gamma hedging. Reinforces the trim.",
+        "tail_cap": "APPLIED -- TRIM 50%. Position at pct_52w_range 0.1% (fresh 52w low $114.75 printed today) and RSI-14 27.4 = maximum extension, precisely the momentum-crash tail this lane must respect."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": "short equity, half-cap; 50% trimmed at $114.99, remainder held on the tightened invalidation",
+      "entry_or_trigger": "entered 2026-07-13 @ $131.54; 50% trimmed 2026-07-24 @ $114.99 (+12.58% gross realized on that half)",
+      "invalidation": "TIGHTENED: close > $123.50 with 2-day confirmation (replaces the original 'RSI>45 AND close>$144.22'). Rationale: the original was an AND-conjunction set at entry and had become vestigial -- the price leg sat 25.4% away and ABOVE the $131.54 entry, so holding to it would have surrendered the entire +12.58% gain and turned the trade into a loss before any documented exit fired. $123.50 caps giveback near half the open gain. Reassess remainder no later than the 08-07 NFP boundary.",
+      "key_risks": [
+        "Maximally extended short: pct_52w_range 0.1%, RSI-14 27.4, -66.7% off the $345.72 52w high (Sept-2025 OpenAI-cloud spike, verified genuine not a data artifact) -- relief-bounce/short-squeeze tail is at its highest here",
+        "FOMC 07-29 + PCE 07-30 + NFP 08-07 inside h10 on FULLY_NEGATIVE GEX -- dealer hedging amplifies any dovish surprise",
+        "The 2026-07-18 audit found this lane's most recent forward window 0-for-9 / -5.3% excess (shorts run over in risk-on tape); historically still positive-excess, which is why this is a trim not a close",
+        "Options-flow breadth 33% bullish vs 72% green price breadth can unwind violently in either direction"
+      ],
+      "thesis": "52-week-range momentum short leg: ORCL near/at its 52w low continues to underperform SPY at h10. Working strongly (+12.58% gross, +4.31% short-excess today on a -4.21% day vs SPY +0.10%). Thesis intact and both original invalidation legs dormant -- but the position is now fully extended into a dense Tier-1 event cluster with no practical stop, so half is banked and the remainder gets a real profit-protection level.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "PLNT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.8,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "half",
+      "final_size": "half",
+      "tail_cap_applied": "No add (already at the appropriate half-cap tier; regime_cap 0.5 and the approaching event boundary both argue against upsizing). Hard pre-ER exit imposed.",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- s1_standdown FALSE; OI_FADE is not S1-gated and PULLBACK is regime-supportive for the short.",
+        "liquidity": "PASS -- $-ADV ~$87M (avg30 vol 1.63M sh x $53.48), clears the $50M floor 1.7x. NOTE: a ~$250M figure used mid-session was an arithmetic error, corrected here; the gate verdict is unchanged either way.",
+        "cluster": "PASS -- Consumer Cyclical vs ORCL Technology, different lanes, no >=0.70 cluster.",
+        "fundamentals": "CONFIRM (as of 07-23) -- 0 post-print PT raises (the named soft-invalidation remains unmet); the only fresh analyst action since 07-18 was a Deutsche Bank cut $61 -> $55 on 07-22, directionally supportive of the short.",
+        "event_risk": "-1 TIER -- own ER 2026-08-06 pre-market sits 1 trading day INSIDE h10. Sharpened from an open-ended 'exit before the print' to a concrete deadline.",
+        "tail_cap": "APPLIED -- hard exit by close 2026-08-05; do not hold through the print."
+      },
+      "fundamentals_verdict": "CONFIRM",
+      "structure": "short equity, half-cap",
+      "entry_or_trigger": "entered 2026-07-20 @ $55.20; close 2026-07-24 $53.48 = +3.12% gross",
+      "invalidation": "TIGHTENED (carried from 07-23): requires an actual NEGATIVE call_net print (calls genuinely closing), NOT a sub-zero net-of-puts wash. Today call_net +173 / put_net -7 = calls still gross-OPENING, NOT triggered. Secondary: a 2nd post-print PT raise (currently 0, unmet). Hard time-stop: close by 2026-08-05 regardless of signal state.",
+      "key_risks": [
+        "ER 2026-08-06 pre-market is 1 trading day inside h10 -- binary event risk if the exit deadline slips",
+        "5d build is heavily front-loaded (persistence 0.949: +24,376 of +25,697 landed on 07-20); the daily increments have decayed to +180, so the signal is aging even though it has not reversed",
+        "FOMC/PCE inside the holding window on short gamma"
+      ],
+      "thesis": "OI_FADE: heavy persistent 5-day net CALL open-interest build precedes forward underperformance vs SPY at h10 (hit 0.61 vs 0.41 base, +2.1% median, n=640 -- the most robust lane in the book). Working +3.12% gross, +1.48% short-excess today. Calls still gross-opening, so the crowd has not unwound.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "ALLE",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.8,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "skip",
+      "tail_cap_applied": "FUNDAMENTALS VETO overrides the lane's measured excess -- the score is multiplied by (1 - fundamental_contradiction) to 0. Additionally at the edge of the lane's sampled support: the n=640 prior was measured on a general population, NOT conditioned on 'one day after a +10% earnings surprise'.",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- s1_standdown FALSE; PULLBACK regime-supportive for an OI_FADE short.",
+        "liquidity": "PASS -- $-ADV $224M, price $153.36.",
+        "cluster": "PASS -- Industrials, no overlap with ORCL (Technology) or PLNT (Consumer Cyclical).",
+        "fundamentals": "VETO -- Q2 EPS $2.40 vs $2.2559 consensus (+6.39% surprise), revenue $1.15B +13% YoY, and management RAISED FY26 guidance (adj. EPS to $8.85-9.00, revenue outlook up). TWO post-print PT raises on 07-24: JPMorgan $150 -> $170 and Baird $175 -> $190, both 11-24% ABOVE the $153.36 close. The gap held (-0.78%) while the broad tape sold off = idiosyncratic strength, not beta. The call-OI build is not an unwarranted crowd chasing a move; it has a live, dated, sell-side-endorsed justification underneath it. Risk-sizer concurred.",
+        "event_risk": "PASS on its own calendar -- next ER 2026-10-22, well clear of h10. Macro cluster (FOMC/PCE/NFP) applies but is moot given the veto.",
+        "tail_cap": "APPLIED -- PEAD tail. Short into a freshly-established, held, positive-earnings-surprise gap runs against documented post-earnings announcement drift."
+      },
+      "fundamentals_verdict": "VETO",
+      "structure": null,
+      "entry_or_trigger": "NOT ENTERED -- vetoed at Phase D before sizing",
+      "invalidation": "n/a -- not entered. Re-examine only if the raised FY26 guidance is walked back, the post-print PT raises are reversed, or the +10.45% 07-23 gap fully fills WITHOUT the call-OI build unwinding.",
+      "key_risks": [
+        "Would have been a short into a raised-guidance beat confirmed by two same-day PT raises above spot -- the textbook fundamentals-veto case with polarity flipped from long-into-a-miss",
+        "Lane framed the build as a post-print chase, but it is actually 61% pre-print (+2,368 over 07-20..07-22) vs 39% post-print (+1,533) -- a weaker version of the SSNC discriminator than presented"
+      ],
+      "thesis": "OI_FADE ranked ALLE the single clean fresh short: 5d net call-OI +3,901 (call +3,998 / put +97), positive all five days, persistence_ratio 0.455 (organic, not a block artifact), relative build 2.30x its 30-day avg call OI, PCR 0.05, mid-range at 48.8% of its 52w band, no squeeze, ER clear. Independently reproduced from the raw panel. The lane's SSNC discriminator held up (SSNC's build stopped dead on its catalyst: +335/+3,070/+731/0/+1). But the fundamentals gate vetoed it -- the crowd has a real reason to be there.",
+      "realized_excess_pct": null
+    }
+  ],
+  "vol_book": [
+    {"symbol": "SPY", "lane": "vol_0dte", "sell_premium": true, "vol_state": "PARTICIPATE. Both 07-23 stand-aside gates released: VIX delta -0.12 (no spike trip, threshold +2.0) and front-IV/VIX ratio ~0.53 (no backwardation trip, threshold 1.25). GEX FULLY_NEGATIVE (-1.556B) sets WING WIDTH only, never direction.", "implied_move": null, "expected_range": 1.18, "net_expectancy": 0.175, "suggested_structure": "Wide iron condor, wings ~ +/-1.18% (short-gamma range). Net +0.175%/day open-entry (gross 0.275% less ~0.10% round-trip cost). CAPPED AT 1.0x -- lane proposed 1.5x, deliberately down-weighted: the 60-day sample contains NO vol-shock day (left tail unsampled), a 5-day lookback reclassifies to MID/1.0x, and this is the densest Tier-1 macro week of the quarter on short gamma. Re-run nightly; tonight's scalar is not durable through the FOMC/PCE cluster.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "QQQ", "lane": "vol_0dte", "sell_premium": true, "vol_state": "PARTICIPATE. Front-IV/VIX ratio normalized 1.44 (07-23, the gate that forced stand-aside) -> 0.94, no longer tripping. VIX delta -0.12, no spike trip. GEX FULLY_NEGATIVE (-1.753B, deepened) sets WING WIDTH only.", "implied_move": null, "expected_range": 1.95, "net_expectancy": 0.305, "suggested_structure": "Wide iron condor, wings ~ +/-1.95% (short-gamma range). Net +0.305%/day open-entry (gross 0.405% less ~0.10% round-trip). CAPPED AT 1.0x, same reasoning as SPY.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "CDNS", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier A (clean, no macro overlap). ER 2026-07-27. IV-rank 93.9. Backwardation CONFIRMED on a real listed weekly (07-31 exp): IV term collapses 83% -> 72% -> 58% past the event, front/far ratio 4.68x.", "implied_move": 8.9, "expected_range": null, "net_expectancy": null, "suggested_structure": "Defined-risk wide-wing iron fly, wings ~ +/-11-13%, small size, net-of-cost. DATA-QUALITY CAUTION: uw insights earnings-play reported implied_move_perc 0.66% -- an anomalous 0DTE-contaminated read. The 8.9% here is a manual straddle re-derivation from the nearest post-earnings expiry and should be treated as the floor.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "WHR", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier A (clean). ER 2026-07-27. IV-rank 93.0. PCR 2.98 (heavy put positioning = protective, read as second-moment not directional).", "implied_move": 14.3, "expected_range": null, "net_expectancy": null, "suggested_structure": "Defined-risk wide-wing iron fly / short strangle, wings ~ +/-18-19%, small size, net-of-cost. Large implied move + top-decile IV-rank = classic crush candidate.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "SWKS", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier A (clean). ER 2026-07-28. IV-rank 96.5. Panel carries monthly-only chain, so backwardation not independently confirmable; top-decile IV-rank alone supports the crush thesis.", "implied_move": 14.0, "expected_range": null, "net_expectancy": null, "suggested_structure": "Wide iron fly, wings ~ +/-18-20% (1.3x implied move), small size, net-of-cost.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "ECL", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier A (clean). ER 2026-07-28. IV-rank 95.4. Monthly-only chain caveat as above.", "implied_move": 5.9, "expected_range": null, "net_expectancy": null, "suggested_structure": "Defined-risk iron fly, wings ~ +/-8%, small size, net-of-cost.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "SIMO", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier B -- FOMC OVERLAP (ER 2026-07-29, same day as the FOMC statement). IV-rank 95.5. PCR 11.4, the largest single-name binary in the set. Monthly-only chain, backwardation not independently confirmable.", "implied_move": 22.9, "expected_range": null, "net_expectancy": null, "suggested_structure": "Widest structure in the book: wings >= +/-32-35% (>=1.5x the implied move, which is a FLOOR not a ceiling here), REDUCED size for compounded FOMC + earnings gap risk. Do not stack full size across multiple Tier-B names.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "FSLR", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier B -- PCE + AAPL/AMZN OVERLAP (ER 2026-07-30). IV-rank 100. Backwardation CONFIRMED on a real weekly (07-31): IV 94% -> 84% -> 80% collapsing past the event, front/far ratio 5.53x.", "implied_move": 10.3, "expected_range": null, "net_expectancy": null, "suggested_structure": "Defined-risk iron fly, wings ~ +/-16-18%, reduced size. DATA-QUALITY CAUTION: uw reported implied_move_perc 0.41% -- the same 0DTE-contaminated artifact as CDNS. The 10.3% is a manual straddle re-derivation and is a FLOOR given the PCE-day overlap.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "ALGM", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier B -- PCE + AAPL/AMZN OVERLAP (ER 2026-07-30). IV-rank 86.7. Monthly-only chain, backwardation not confirmable in panel.", "implied_move": 20.0, "expected_range": null, "net_expectancy": null, "suggested_structure": "Wide iron fly, wings ~ +/-28-30% (implied move treated as a FLOOR), reduced size.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "EME", "lane": "vol_earnings", "sell_premium": true, "vol_state": "Tier B -- PCE + AAPL/AMZN OVERLAP (ER 2026-07-30). IV-rank 82.2. Monthly-only chain, backwardation not confirmable in panel.", "implied_move": 9.9, "expected_range": null, "net_expectancy": null, "suggested_structure": "Defined-risk iron fly, wings ~ +/-14-16% (implied move treated as a FLOOR), reduced size.", "stand_aside_reason": null, "delta_neutral": true}
+  ],
+  "watchlist_write_back": [
+    "ORCL -- MOM_SHORT HELD, TRIMMED 50% @ $114.99 (+12.58% gross realized on that half). Remainder on TIGHTENED invalidation: close > $123.50, 2-day confirm. NO ADDS (lane tail cap). Reassess by the 08-07 NFP boundary. Fresh 52w low printed 07-24 ($114.75); pct_52w_range 0.1%, RSI-14 27.4 = maximum extension.",
+    "PLNT -- OI_FADE HELD, hold size, no add. Calls still gross-opening (call_net +173 today) so the tightened invalidation is NOT triggered. HARD EXIT: close by 2026-08-05, the last full session before the 08-06 pre-market ER. Next run: check for the first genuine negative call_net print and for any 2nd post-print PT raise.",
+    "ALLE -- OI_FADE WATCH ONLY. Fundamentals VETO (raised FY26 guidance + JPM $150->$170 and Baird $175->$190 post-print PT raises, both above the $153.36 close). Cleared every lane gate; the veto is the only thing stopping it. Re-examine only if guidance is walked back, the PT raises reverse, or the 07-23 gap fills WITHOUT the call-OI build unwinding.",
+    "FHN -- OI_FADE WATCH. The 07-17 block CONFIRMED rolled off; residual build is now genuinely organic (persistence 0.556, positive all 5 days) but oi_rel_build is only 0.061 vs ALLE's 2.30, and pct_52w 0.848 (near-highs). Downgrade reason SHIFTS from 'block artifact' to 'organic but sub-threshold relative magnitude + near-52w-high'.",
+    "FIG -- OI_FADE WATCH. Most persistent build in the panel (net_5d 71,681, persistence 0.499, positive every day) but DOUBLY blocked: squeeze (SF 33.16% / DTC 3.13) and ER 2026-08-05 inside h10. Re-check after the 08-05 print and if SI/DTC cool.",
+    "SSNC -- OI_FADE EXCLUDED (pre-emptive real-catalyst invalidation). Mechanically top-ranked (oi_rel_build 2.51) but the build was 99.98% pre-print and died the moment its catalyst landed (+335/+3,070/+731/0/+1); reported Q2 AH 07-23 and ran +10.35%. The clean counter-example that validates the ALLE-vs-SSNC discriminator.",
+    "MP, PSKY, UBER, ECHO, LBRDK -- MOM_SHORT WATCH, lane-capped (no new starters until a DURABLE-N>=30 forward-positive-excess re-validation via /calibration-audit). MP additionally carries ER 2026-08-06 inside h10. PSKY/LBRDK have soft media-telecom adjacency -- light note only, nothing sized.",
+    "QS -- MOM_SHORT DROPPED. Close $4.89, below the $5 liquidity floor, fail-closed (was the 07-23 cohort leader at $5.12).",
+    "MOM_LONG_BASKET -- basket/tail-only, NEVER per-name. ~53% Financial Services = correlation-cluster flag. regime_fit REDUCED in PULLBACK. NOTE: the lane's '60 -> 15 names' contraction claim is an artifact of its own query LIMIT 15, not a market fact -- treat the size delta as UNVERIFIED.",
+    "S2_ADVISORY (ED, TD, DLTR, PENG, PRU, GPN, CYTK, TECK, TFX, VNO, LQDA) -- advisory-only, long-tilt is a crosswind in PULLBACK. ED flagged for SIGNAL INSTABILITY: dark-pool buy-share flipped 35.5% (07-23) -> 92.9% (07-24) in one session. EXCLUDED for h5 earnings-gate leak: AOS/BAX/KKR/PBF (ER 07-30), CCJ (ER 07-31). Vetoed on fresh catalyst: EA (EU approval of $55B acquisition same-day), NBIX, WBS.",
+    "S4_ADVISORY (PLD, VIK, TTAN, XENE) -- advisory/half-cap only, h5. PLD cleanest (PCR 5.42, ER 10-21, $637M ADV; Q2 beat + raised guidance means the put-heaviness is hedging, not informed). EXCLUDED on informed-put risk: DOX (guidance tightened + CFO transition), NI (KeyCorp cut 07-22), WEN (guidance + PT cuts), KGS (Barclays PT cut) -- all four ALSO had ER inside h10 (08-05..08-07), a second earnings-gate leak. Carried JBL/LI/AMRZ fell out of the top-5% PCR cross-section.",
+    "VOL_EARNINGS_QUEUE -- Tier A clean: CDNS/WHR (07-27), SWKS/ECL (07-28). Tier B macro-overlap (implied move = FLOOR for wings, reduced size, do not stack): SIMO (07-29 FOMC), FSLR/ALGM/EME (07-30 PCE). DO NOT trust uw implied_move_perc for CDNS/FSLR -- 0DTE-contaminated (0.66%/0.41%); use the manual straddle re-derivations 8.9%/10.3%.",
+    "0DTE_VRP -- SPY and QQQ both PARTICIPATE, CAPPED AT 1.0x (lane proposed 1.5x, deliberately down-weighted for the unsampled left tail + the FOMC/PCE/NFP cluster on short gamma). Re-run nightly; not durable through the cluster.",
+    "LANE DEFECT LOG for /calibration-audit -- (1) earnings-gate boundary leak recurred in TWO lanes (S2 h5, S4 h10), same class as the 07-10 IBM leak; propose deriving the exclusion window from the lane's own horizon rather than a hardcoded date. (2) Stale-parquet regime fallback: the momentum lane computed ret5 -1.54%/ret10 -0.20%/'CHOP' off the 07-17-edge parquet and built an INVERTED 'relief-bounce' narrative; propose lanes read regime from the Phase A hand-off or fail loudly when the panel edge predates the trade date. (3) uw implied_move_perc 0DTE contamination (CDNS, FSLR); propose a sanity check vs the nearest post-event straddle. (4) Still un-formalized from 07-23: persistence_ratio >0.85 block screen (caught MWH 0.999 / YMM 0.997 / ALLY 1.25 tonight), SPAC/shell exclusion (caught CCXI), sub-60-td listing exclusion (caught SPCX).",
+    "DATA -- data/prices.parquet, returns.parquet and features.parquet ALL still end 2026-07-17 despite commit d784c8e claiming extension to 07-18; THE EXTENSION DID NOT LAND. Panel stale by 5 sessions. All metrics tonight from the fresh UW 2026-07-24 panel + live Yahoo chart-API closes. Corrected mid-session error: PLNT $-ADV is ~$87M, not ~$250M (clears the $50M floor either way)."
+  ],
+  "report_path": "analyses/scan/2026-07-24/report.md"
+}

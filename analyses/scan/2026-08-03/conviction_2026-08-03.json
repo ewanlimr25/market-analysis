@@ -1,0 +1,72 @@
+{
+  "conviction_date": "2026-08-03",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-03 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-03/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters across every lane, and the book is now FLAT -- the one carried position (PLNT) closed today on its pre-registered h10 time stop. MOM_LONG: basket mean +0.23% vs the +0.30% starter bar, a 7bp miss made more meaningful by a NEGATIVE median (-0.91%), i.e. the mean is tail-carried. MOM_SHORT: s1_standdown fired (leg a1, by 0.0139pp) AND the invariant-#6 watch-only cap applies -- doubly out. OI_FADE: fourth consecutive zero-starter session; all 15 candidates died on at least one independent gate. S2: 8 advisory names, all below starter on a regime headwind. S4: basket ~-0.4%, below starter; only JEF is viable and it still lacks a fundamentals verdict. The vol book is the only actionable output tonight.",
+    "net_book_new_starter_pct_exposure": "0 new starters; 0 open positions carried forward"
+  },
+  "held_position_reconciliation": {
+    "note": "PLNT reconciled BY HAND. scripts/held_book.py returned 'no open positions carried in that file' -- the line-31 CLOSED-tuple substring bug matched 'EXIT' inside the verdict HOLD_TO_BINDING_EXIT and filtered the live position out. Second occurrence of this bug. Since-entry excess computed directly vs SPY from the rebuilt truth set, NOT read off held_book.py's TODAY-only 'excess' column.",
+    "positions": [
+      {
+        "ticker": "PLNT",
+        "lane": "OI_FADE",
+        "direction": "short",
+        "entry_date": "2026-07-20",
+        "entry_price": 55.25,
+        "exit_date": "2026-08-03",
+        "exit_price": 56.23,
+        "gross_pnl_pct": -1.774,
+        "since_entry_short_excess_pct": 0.326,
+        "spy_same_window_pct": 2.099,
+        "verdict": "CLOSED_ON_TIME_STOP",
+        "action_taken": "Exited at the 2026-08-03 close. Binding h10 window 2026-07-21..2026-08-03 confirmed via scripts/_calendar.py hz_end().",
+        "rationale": "The h10 timer bound, as the 07-31 file anticipated. Pre-registered leg (b) 'first genuinely negative call_net' did NOT confirm -- today's net-OI printed +66 (call +72 / put +6) after Friday's lone -335 print, so the decay reversed rather than confirming. The $59.50 discretionary stop was never approached (max close over the entire hold $56.23), so it never became vestigial. Resolution is POSITIVE in the lane's scoring currency (+0.33% excess) despite a NEGATIVE gross (-1.77%) -- SPY ran +2.10% over the same window. Path was violent: +2.89% excess at the 07-22 peak, -3.40% at the 07-29 FOMC trough, +0.33% at the bell.",
+        "reentry_block": "PLNT reports 2026-08-06, INSIDE the next h10 window (08-04..08-18). Earnings-blocked for re-entry."
+      }
+    ]
+  },
+  "watch_only": {
+    "MOM_LONG": [
+      "BASKET_WATCH (32 names, 7bp below starter, median NEGATIVE): AMP, BAC, BNS, CR, CROX, DAL, DXCM, ETN, FCNCA, FITB, GE, GM, HIG, HON, ITW, JCI, JLL, KO, LYV, MMM, NEU, NUE, RS, SCHW, SHEL, SNOW, SWK, TGT, UBS, VLO, VSXY, WTW",
+      "121 of 162 earnings-passed names were fail-closed on the prices.parquet coverage gap -- basket composition is clean but NOT complete"
+    ],
+    "MOM_SHORT": [
+      "STOOD_DOWN (s1_standdown leg a1) -- GME: genuine fresh 52w low 18.545 set 2026-08-03, Yahoo-verified, liquidity $61.4M ADV, earnings 09-08 clear, no prior verdict. The lane excluded it as a 'false short' on an INVERTED reading of its own Yahoo check; it is kept out by the crash gate and the invariant-#6 cap, not by the lane's stated reason.",
+      "CLBK: earnings 10-19 + liquidity $75M clean, but DATA GAP -- absent from prices.parquet, correlation gate fail-closed"
+    ],
+    "OI_FADE": [
+      "AVTR (fundamentals VETO SUSTAINED, 12 prior mentions; build was organic and catalyst-LIVE -- killed only by the veto)",
+      "HXL (entire 5d build posted 08-03 alone, persistence 0.996 -- single-day block, not organic)",
+      "KBR (RESOLVED_PRE_PRINT: only 12.6% of build accrued on/after the 07-30 print; reconfirms the 2026-W31 adjudication)",
+      "INFY, DBX, APAM, LZM (mechanism fail, persistence > 0.85)",
+      "QGEN, SOLV, DBX, SHAZ, LZM (earnings inside h10)",
+      "HRI (fundamentals VETO sustained from 07-31)"
+    ],
+    "S2_dp_revert": [
+      "KO", "WELL", "GME", "RTX", "BNS", "ADSK", "EXE", "CTAS"
+    ],
+    "S4_pcr_fade": {
+      "viable_not_fired_needs_fundamentals_gate": ["JEF"],
+      "viable_not_fired": ["KNX", "EXE"],
+      "ivrank_tilt_h3_only": ["SMTC"],
+      "premium_already_harvested": ["CSGP"],
+      "blocked_unresolved_tail": ["KKR -- 07-24 h5 earnings block RESOLVED (reported 07-30), but the 2026-07-21/22 EQT/KKR/Advent takeover-rumor tail-block was never re-verified and STILL STANDS"],
+      "fail_closed_missing_from_prices_parquet_count": 34
+    }
+  },
+  "orchestrator_action_items": [
+    "FIX scripts/held_book.py line 31. CLOSED = (..., 'EXIT') is substring-matched at line 45, so HOLD_TO_BINDING_EXIT is filtered out as closed and the tool reports 'no open positions' on a live book. SECOND occurrence (first logged 07-31 in memory). One-word fix: exact-match the terminal verdicts. This is the highest-value fix outstanding -- it silently hides live positions.",
+    "ROOT CAUSE FOUND for the prices.parquet coverage gap: build_features.py builds its spine from the LIVE screener universe (2,462 tickers, nightly), while build_prices.py reads data/universe.json -- a STATIC 785-symbol list frozen 2026-06-28. Names that became liquid after June 28 can never enter prices.parquet. Coverage 783/2462 = 31.8%. Cost tonight: 121/162 MOM_LONG, 34/43 S4, 12/15 OI_FADE fail-closed. FIX: regenerate universe.json from the screener spine, then rebuild prices/returns/features and RE-RUN the regression gate (invariant #6 -- this shifts the harness baseline panel). Deliberately NOT done mid-scan. 6th consecutive session flagged.",
+    "scripts/earnings_gate.py line 64 checks only the UPPER bound (ned <= end, no lower bound), so a PAST earnings date is BLOCKED and mislabeled 'inside h10' (LZM blocked on a 07-29 print that had already happened). Fails closed, so safe. Blast radius NARROW: 130 past-dated of 3,685, but 114 report same-day (defensible) -- only 16 unambiguously wrong. DO NOT patch in isolation: retro_harness.py:63,76,138 carries the IDENTICAL one-sided bound and does not import this script, so fixing only the lane path makes live lanes more permissive than the instrument grading them. Route to /calibration-audit as a PAIRED fix + regression-gate re-run.",
+    "THIRD instance of a lane running a gate script and misreporting its output: the momentum lane excluded GME as a 'false short' when its own Yahoo check CONFIRMED a genuine fresh 52w low (18.545 set 08-03, pct_range 5.4%); the screener's stale week_52_low 19.93 sits ABOVE the 19.06 close, producing pct_52w_range -0.1065. The lane additionally mislabeled the out-of-range class as 'in-range-but-wrong'. Prior instances: 07-31 earnings gate ('0 dropped', actually 4/8 and 85/191) and the ROST prior_verdicts bug. Independent orchestrator re-runs remain MANDATORY.",
+    "POSITIVE CONTROL, worth recording: the OI_FADE lane's earnings and liquidity gate results were independently re-run and reproduced EXACTLY, name for name. Not every lane is misreporting.",
+    "scripts/zerodte_setup.py QQQ gamma-sign bug (logged 07-30) did NOT bite tonight -- script and CLI agreed on long-gamma for both SPY and QQQ, and the gex label matched its payload on both. Still unfixed; absence of symptom is not a fix.",
+    "near_dte_actual guard worked (both indices flagged at near_dte_actual=1), but note the non-obvious lesson: pulling the FULL iv-term-structure showed QQQ's near-term hump is GENUINE (dte1-4 ~25-27% vs dte7-32 belly 22.6-25%), so the 0DTE backwardation caution and the x0.25 size are real, not artifacts. The guard invalidates the 2-POINT RATIO, not the underlying condition -- always pull the full curve before dismissing a caution.",
+    "STILL OPEN from 07-31: reconcile the Phase C tier names against the envelope's sizing map. Phase C calls +0.3-1% 'MEDIUM' (reads as sizeable) while the sizing map reads '+0.3-1% -> starter', with half reserved for >=+1% sign-stable and a separate 'advisory lane -> watch' clause. Re-derived from scratch again tonight."
+  ],
+  "process_findings_summary": "Book is FLAT for the first time in this cycle -- PLNT closed on its h10 timer at +0.33% realized short excess (negative gross, positive excess: invariant #1 doing exactly its job). The binding gate tonight, s1_standdown, fired by 0.0139pp -- SPY closing $0.10 lower leaves it off -- but the margin is immaterial because MOM_SHORT was already watch-only capped and carries a negative baseline. Two infrastructure defects were newly root-caused (the frozen 2026-06-28 universe.json behind the 6-session prices.parquet coverage gap; the one-sided bound in earnings_gate.py, which is MIRRORED in retro_harness.py and must therefore be fixed as a pair). The held_book EXIT-substring bug hid a live position for the second time. And a lane misread its own gate output for the third time in the cycle -- caught, as before, only by an independent orchestrator re-run."
+}

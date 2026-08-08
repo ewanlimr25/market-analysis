@@ -1,0 +1,110 @@
+{
+  "conviction_date": "2026-07-21",
+  "purpose": "Top conviction (sized + near-the-line watch) names from the 2026-07-21 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-21/decision.json",
+  "book_state": {
+    "positions": 3,
+    "all_shorts": true,
+    "detail": "One NEW name clears a real size tonight: TECH (OI_FADE short, starter - discretionarily capped from the half-band by its overbought-entry tail). FIG and QGEN each carry a distinct, uncontainable tail (42.4% short-float squeeze; live M&A takeover rumor at +23% implied premium) and are held at WATCH per gate 6, not sized, despite otherwise-clean OI-fade signals. KHC and CFG are VETOed to DROP (strong bullish fundamentals contradictions, ROST-07-20 precedent). MOM_SHORT remains lane-capped to advisory/watch-only per the 2026-07-18 calibration audit (s1_standdown=FALSE tonight does NOT re-enable starter sizing). MOM_LONG is basket/tail-only, never a single name. S2/S4 stay advisory. Two positions carried forward from 2026-07-20 and reconciled tonight: ORCL HOLD (working), PLNT HOLD (build stalled, tighten watch).",
+    "net_book_new_starter_pct_exposure": "1 new starter short (TECH) + 2 carried held shorts (ORCL working +3.41% gross, PLNT ~flat)"
+  },
+  "held_position_reconciliation": {
+    "note": "Reconciled the 2 open shorts carried in analyses/scan/2026-07-20/conviction_2026-07-20.json against tonight's 2026-07-21 panel/live closes.",
+    "positions": [
+      {
+        "ticker": "ORCL",
+        "lane": "MOM_SHORT",
+        "direction": "short",
+        "entry_date": "2026-07-13",
+        "entry_price": 131.54,
+        "close_2026_07_21": 127.05,
+        "gross_pnl_pct": 3.41,
+        "verdict": "HOLD",
+        "rationale": "Short still working (+3.41% gross) despite a sharp +4.67% adverse move today on the broad tech bounce. Invalidation (RSI>45 AND close>$144.22) NOT triggered - close $127.05 is $17.17 (13.5%) below the price clause. ER 2026-09-08 outside horizon; no rating-action catalyst found (day reads as QQQ-beta bounce, not idiosyncratic reversal). Carried forward; the MOM_SHORT lane cap blocks NEW starters, not maintenance of an existing working position."
+      },
+      {
+        "ticker": "PLNT",
+        "lane": "OI_FADE",
+        "direction": "short",
+        "entry_date": "2026-07-20",
+        "entry_price": 55.2,
+        "close_2026_07_21": 55.08,
+        "gross_pnl_pct": 0.22,
+        "verdict": "HOLD",
+        "rationale": "Essentially flat (close ~$55.08 vs fill ~$55.2 - VERIFY actual fill, the $52.36 some agents used is the stale 07-17 truth-set close, not the entry). 5d net call-OI build STALLED (07-21 daily print collapsed to +750 after two big prints; rel 5d build still 0.79x) but NOT reversed - named invalidation not triggered. Fundamentals CAUTION unchanged: no 3rd post-print PT raise/upgrade (the hard invalidation trigger) found; a new securities class-action filing (07-21) is incremental short support; insider MSPR +33 is small-dollar/routine. HOLD, tighten watch, do not add."
+      }
+    ]
+  },
+  "names": [
+    {
+      "ticker": "TECH",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Cover on ANY of: (1) 5-day net call-OI build fully unwinds (5d-net crosses <=0), (2) close makes a NEW 52-week high, (3) RBC or another desk reverses the downgrade / issues a PT raise (re-run fundamentals-gate).",
+      "entry_date": null,
+      "entry_price": null,
+      "adverse_flow_exit_check": "NEW tonight, not yet entered. Last close $71.63, ~$586.6M 20d $-ADV. CONFIRM fundamentals (mixed earnings, insider selling MSPR -25, RBC downgrade, P/E 103 on -16% EPS growth), ER 08-11 outside h10. Capped to starter (not half) for the overbought-entry tail: RSI 74.3, -0.7% off 52w high. On next run: confirm the OI build persists and check whether TECH has made a new 52w high (would invalidate)."
+    }
+  ],
+  "watch_shortlist": [
+    {
+      "ticker": "FIG",
+      "lane": "OI_FADE",
+      "reason": "Cleanest 5-day OI-fade persistence in the pool, but 42.4% short float / 4.0 days-to-cover is an uncontainable squeeze tail per gate 6 - watch only. Re-check if SI/DTC cool materially or the squeeze-watch-list tag is removed."
+    },
+    {
+      "ticker": "QGEN",
+      "lane": "OI_FADE",
+      "reason": "Miss-streak genuinely corroborates the short and SI is low (3.2%, no squeeze offset), but a live EQT/KKR/Advent takeover rumor at +23% implied premium is a binary gap-up tail - watch only. Re-check once the rumor is confirmed dead or resolved."
+    },
+    {
+      "ticker": "KHC",
+      "lane": "OI_FADE",
+      "reason": "DROPPED (4/4 beat + insider buying + Disney-alliance headline = strong bullish fundamentals contradiction). Re-admit only if a forward fundamentals-gate re-check flips off VETO."
+    },
+    {
+      "ticker": "CFG",
+      "lane": "OI_FADE",
+      "reason": "DROPPED (4/4 beat + rev +62.7%/EPS +37% + 5-firm analyst PT-raise cluster = strong bullish fundamentals contradiction). Re-admit only if a forward fundamentals-gate re-check flips off VETO."
+    },
+    {
+      "ticker": "CNM",
+      "lane": "MOM_SHORT",
+      "reason": "Cleanest CONFIRM-quality MOM_SHORT candidate (0.94% below 52w-low, no earnings, clean liquidity); first in line for starter promotion once MOM_SHORT clears a DURABLE-N (>=30) forward-positive-excess re-validation via /calibration-audit."
+    },
+    {
+      "ticker": "AAPL",
+      "lane": "MOM_LONG",
+      "reason": "Representative of the 261-name MOM_LONG basket (regime_fit 0.70); basket/tail-only exposure, never sized as a single name. ER 07-30 sits inside h10 for this name specifically."
+    },
+    {
+      "ticker": "EXPE",
+      "lane": "S2_dp_revert",
+      "reason": "Validated (long-tilted) side of S2 dark-pool sell-side concentration; advisory watch only."
+    },
+    {
+      "ticker": "NYT",
+      "lane": "S4_pcr_fade",
+      "reason": "Cleanest high-PCR fade-long (PCR 28.9), no earnings in window; advisory watch only."
+    }
+  ],
+  "pending_fundamentals_verdicts": [
+    "MCD",
+    "PSKY",
+    "CPRT",
+    "LOPE (MOM_SHORT top-5, not spawned - lane-wide watch cap already floors them regardless)"
+  ],
+  "flags_for_orchestrator": [
+    "TECH is a new sized name tonight (starter). It was not among the names the fundamentals-gate ran overnight per the Phase B brief supplied - the brief already carries a CONFIRM verdict for TECH, so this is NOT a missing-verdict flag, just confirming the verdict was present before sizing (gate 4 requirement satisfied).",
+    "PLNT entry price used tonight is ~$55.2 (07-20 fill) pending confirmation of the ACTUAL fill price from the live book - the $52.36 figure some upstream agents referenced is the stale 07-17 truth-set close, not the entry. Verify against broker fill records before the gross_pnl_pct figure here is treated as authoritative.",
+    "TECH/QGEN are adjacent-sector (life-sci tools vs diagnostics) OI_FADE names. QGEN is watch-only tonight so no cluster collapse was needed, but if QGEN is ever promoted off watch alongside TECH being held, re-run the correlation-cluster gate before sizing both.",
+    "FIG's ER (2026-08-05) sits 1 session past the nominal h10 boundary from a 2026-07-21 or 2026-07-22 entry - flagged for horizon-slip-in monitoring if FIG is ever re-considered for sizing.",
+    "MOM_SHORT top-5 names beyond CNM (MCD, PSKY, CPRT, LOPE) never reached fundamentals-gate tonight - not a blocking issue since the lane-wide provisional cap already floors them at watch/advisory, but flag for completeness on the next run.",
+    "data/prices.parquet truth-set panel is stale through 2026-07-17 (does not yet cover 07-18 through 07-21); tonight's liquidity-floor (C12) checks for TECH/FIG/QGEN/ORCL/PLNT were computed from that 07-17-edge panel (20d $-ADV) cross-checked against tonight's live closes supplied in the Phase B brief - both agree on order of magnitude, but recommend extending the truth-set build (scripts/truthset/build_prices.py, currently modified on this branch) to close the gap.",
+    "Regime CHOP tonight, s1_standdown FALSE. Per the standing 07-18 policy, this does NOT re-enable MOM_SHORT starter sizing - confirmed no name in that lane was upsized past watch/advisory tonight."
+  ],
+  "regression_gate": "NOT TRIGGERED - no lane or threshold change made tonight; all sizing followed the 2026-07-18 calibration-audit rules (MOM_SHORT provisional advisory/watch-only cap, dip-bounce-standdown regime definition, S2/S4 advisory-only, Common-Stock/ADR universe hygiene) as given. If any of tonight's discretionary tail-cap calls (TECH capped to starter rather than half; FIG/QGEN floored to watch on tail grounds rather than merely -1 tiered) are to become STANDING lane rules rather than one-off Phase-D judgment calls, that is an offline maintenance change and must clear python3 scripts/retro_harness.py --all before adoption."
+}

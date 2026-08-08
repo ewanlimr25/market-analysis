@@ -1,0 +1,102 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-06",
+  "report_kind": "market-scan",
+  "regime": "UPTREND/REBOUND-THRUST",
+  "regime_context": {
+    "regime_label": "UPTREND/REBOUND-THRUST",
+    "ret5": 0.0362,
+    "ret10": 0.0412,
+    "breadth_pct_green": 40.16,
+    "directional_tradable": true,
+    "s1_standdown": true,
+    "vol_state": "VOL-ACCELERATION-PRONE. VIX 15.15 at a cycle low (LOW tercile, bounds 16.5/18.1), but dealers are net SHORT gamma in BOTH indices: SPY spot 768.85 vs zero-gamma flip 814.60 (-5.6%), QQQ spot 715.47 vs flip 749.31 (-4.5%). Aggregate GEX is POSITIVE in both (SPY +33.3M, QQQ +127.2M) -- per commit 5b3daec that sign drives RANGE/wing-width ONLY; SPOT-VS-FLIP drives the REGIME and the sell decision, and it says short gamma. VRP FAIR both names (SPY -0.0041, QQQ -0.0424). QQQ front-end IV 1.54x VIX = backwardation, an independent gap-risk flag. || S1_STANDDOWN MARGIN: ret5 +3.620% vs the +2.5% trigger = +1.12pp. Trajectory 08-03 +0.01pp -> 08-04 +1.61pp -> 08-05 +3.03pp (peak) -> 08-06 +1.12pp; ret5 fell 5.530% -> 3.620% overnight. The thrust is DECELERATING, not reversing -- dd15 is only -1.18%, so there is no pullback underneath it. ~1.1pp more decay ends the stand-down. || BREADTH DIVERGENCE: YES -- pct_green 40.16% (202 adv / 299 decl of 503) and flow-bullish 34.1% (2,141 of 6,281) on a FLAT tape (SPY -0.16%), net inflow concentrated almost entirely in Technology; `uw risk market-regime` reads TRANSITIONAL/reduce-size despite the mechanical UPTREND. || STREAK CORRECTION: the current REBOUND-THRUST stand-down run is FOUR sessions (08-03..08-06), NOT seven -- 07-20..07-31 were CHOP/PULLBACK with s1_standdown=False and broke continuity. SEVEN is the correct count for the ZERO-STARTER streak (07-29, 07-30, 07-31, 08-03, 08-04, 08-05, 08-06). Verified against analyses/scan/*/decision.json.",
+    "event_risk": [
+      {
+        "date": "2026-08-07",
+        "event": "NFP (July) -- Tier-1, ONE trading day out. Binds nothing tonight because nothing is open, but it sits inside any h5 or h10 window opened from here.",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-12",
+        "event": "CPI (July) -- Tier-1, inside any h5 or h10 window opened from here.",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-13",
+        "event": "PPI (July) -- Tier-1, back-to-back with CPI. Weekly jobless claims same day (routine). FOMC 09-15/16 is outside the window.",
+        "tier": 1
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": null,
+      "candidates": [],
+      "note": "final_size=none. horizon_validated=10, validated_excess=+0.0071. SEVENTH consecutive zero-starter session (07-29, 07-30, 07-31, 08-03, 08-04, 08-05, 08-06). TONIGHT IS WORSE THAN 08-05, NOT THE SAME: on 08-05 EXLS and UCTT cleared the entire mechanical stack and were blocked ONLY by the lane's Hard Rule #2 regime stand-down. Tonight NEITHER survives to the regime question -- the lane is back to a pure zero-mechanically-clean night. All 15 top-relative-build names die on an INDEPENDENT gate first. NINE fail the liquidity floor outright: HNI ($31.2M ADV), EYE ($40.5M), DLLL ($36.3M, also issue_type=ETF), LZM ($3.94 close), HSTM ($5.0M), TORO ($0.2M), LNSR ($0.2M), SLN ($6.1M, ADR), MYGN ($3.18 close). SIX survivors, each dead on its own gate: MRCY -- EARNINGS, reports 08-18 inside h10 (66.9% one-day build, but the news tape shows a legitimate PLTR partnership, not an M&A rumor, so it passes the new rumor screen and is moot anyway); HIG -- MECHANISM, persistence 1.902 and last call_net -31, the build is already unwinding (+11,567 on 08-04, then -5,310, then -157); HXL -- MECHANISM, persistence 0.992 with 99.2% of the build in one 08-03 block, third consecutive identical verdict; EWTX -- EARNINGS, reports 08-06 inside h10; WSC -- EARNINGS plus catalyst_split RESOLVED, only 3.4% of the gross build survived the print; CCXI -- SPAC/SHELL, Churchill Capital Corp XI, issue_type NULL so fail-closed, shell status independently confirmed. || CARRIED WATCH NAMES, BOTH DOWNGRADED (orchestrator re-ran oi_build.py; every figure reproduces exactly): EXLS is CUT, MECHANISM-INVALIDATED -- rel_build 1.344 -> 0.964 (below 1.0, out of the top-15), persistence 0.833 -> 1.09 (past the 0.85 fail threshold), last call_net -184 NEGATIVE = calls genuinely closing, the textbook 'OI build reverses' invalidation. UCTT is STILL MECHANICALLY CLEAN BUT DECAYED OUT OF THE COHORT -- rel_build 1.109 -> 0.982, persistence 0.591 -> 0.634, last call_net +795 POSITIVE; today's -237 net is PUTS OPENING (+1,032), not calls closing, so no invalidation fires, but it no longer ranks (tonight's #15 sits at 1.132). AZN's CUT stands on TWO independent grounds now: the BMS merger rumor DIED (denial 08-05, +6% on it) AND the mechanism is separately invalidated (persistence 1.017, last call_net -3,276). The M&A-rumor gate gap found on 08-05 is still unwritten into the standing 7-gate stack. || FORWARD-DECAY WATCH: no resolvable row tonight -- this was a gate-failure night, not an outcome night. Today sits inside the 08-03->08-07 maturation window for the first post-hygiene-fix h10 cohort; that window closes 08-07 and the /calibration-audit due 08-08 is the FIRST that can grade the current engine against the 2026-08-01 new-evidence cohort's -3.73% mean / hit-base -0.53 decay signal."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": ["APP", "XPEV", "WING"],
+      "note": "final_size=watch. horizon_validated=10, validated_excess=-0.0008 (NEGATIVE -- invariant #6's one recorded exception). Stood down on THREE independent grounds: (1) s1_standdown leg (a), margin +1.12pp; (2) the invariant-#6 watch-only cap for new starters; (3) the lane's own recorded baseline is negative, which is the binding read, not the +15.1pp hit-base. All three candidates are GENUINE near-52w-lows, ORCHESTRATOR-VERIFIED against the Yahoo chart API: APP close $335.67 / 52w low 332.19 set 2026-08-06 / pct_range 0.8% / off_high -55.0%; XPEV $11.68 / low 11.54 set 2026-08-06 / 0.8% / -58.6% (ADR); WING $116.62 / low 116.25 set 2026-08-06 / 0.2% / -66.3%. ALL THREE SET THEIR 52-WEEK LOW TODAY. PROCESS NOTE: unlike 2026-08-05 -- when the lane's reported closes were wrong on ALL THREE names and its 'Yahoo Verified' column was not Yahoo data at all -- tonight the lane's reads MATCHED the chart API to the cent. The verification defect did NOT recur. UW week_52_low was STALE on all three (each higher than the chart-API truth), so that field remains unusable for this lane and chart-API verification stays mandatory. 8 of 11 screener candidates (72.7%) fail-closed on the prices.parquet coverage gap."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": null,
+      "candidates": ["RTX", "RVMD", "CAKE", "AMP", "SCHW", "NEU", "BAC", "V", "HIG"],
+      "note": "final_size=watch. horizon_validated=10, validated_excess=+0.0023. Barred on THREE counts. (1) Basket excess +0.23% vs the +0.30% bar, median negative, tail-carried. (2) SECTOR CONCENTRATION ~38% Financial Services EXCEEDS the 1/3 cap (gate #7). (3) risk-sizer.md bars this lane from starter sizing until a DURABLE-N (>=30) forward window re-clears positive excess, re-enabled via a /calibration-audit recommendation and not ad hoc. Coverage: 49 of 199 candidates in prices.parquet; 150 FAIL-CLOSED (75.4%) on the coverage gap -- composition is clean but NOT complete. 7 of the top 10 by proximity printed their 52-week high TODAY. CROSS-LANE CONFLICT, NOTED AND NEVER NETTED: HIG appears here AND as an OI_FADE short candidate (cut on mechanism). VSXY, which the lane ranked #1, is EXCLUDED from this list: the lane flagged it as an 'inverse VIX ETF' that escaped the issue_type filter, but tonight's screener says Victoria's Secret & Co. with issue_type='Common Stock' -- the contamination claim is wrong in the opposite direction, and the lane's read of the name is unreliable either way. The basket cannot size regardless."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "short_gamma_fair_vrp",
+      "implied_move": 0.0088,
+      "expected_range": 0.0085,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "size_scalar=0.0. Dealers net SHORT gamma -- spot 768.85 BELOW the zero-gamma flip 814.60. A trend-acceleration regime this sleeve's unsampled left tail cannot survive; the validated backtest gates it out regardless of VIX level or aggregate GEX sign. GAMMA-SIGN DISCIPLINE HELD per commit 5b3daec: aggregate net GEX 0-45d is +433.4 (POSITIVE) and would read 'quiet/long-gamma' on the sign alone, but the aggregate sign drives RANGE and WING WIDTH only while SPOT-VS-FLIP drives the REGIME and the sell decision. VIX 15.15 sits in the LOW tercile (bounds 16.5/18.1). VRP -0.0041 = FAIR."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "short_gamma_backwardated",
+      "implied_move": 0.0147,
+      "expected_range": 0.0148,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "size_scalar=0.0. Same short-gamma stand-aside: spot 715.47 BELOW flip 749.31. Aggregate net GEX +1781.9 (positive -- range/wings only, not the regime). PLUS an independent flag: front-end IV / VIX = 1.54x = BACKWARDATION, an event/gap-risk signal that would cut size even if the gamma regime cleared. VRP -0.0424 = FAIR."
+    },
+    {
+      "symbol": "ENVX",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "no_certifiable_crush_candidate",
+      "implied_move": 0.065,
+      "expected_range": 0.033,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "THE EARNINGS BOOK IS EMPTY FOR A SECOND CONSECUTIVE SESSION. Not 'no candidates' -- 14 names screened (<=7 days to print, IV-rank >=80); 10 excluded on liquidity, with bullish+bearish premium in the tens or hundreds of dollars where the spread on a defined-risk fly dwarfs any crush edge (BYSI, MVO, CNTY, NSPR, BRAG, KMDA, EARN, MWH, MANE, SPRO). The four with real flow all fail: FLR (1 DTE, implied ~11.6% vs realized mean abs 9.5% -- but the realized distribution INCLUDES -27.0%, -15.2%, -13.6% and +15.6% in the last 12 quarters, so the rich IV is compensation for a genuine fat tail, not free premium); AAON (4 DTE, implied ~14.6% vs mean abs 8.6% with +31.5% and -22.9% prints in the last five quarters -- a binary that prices fair); SION (4 DTE, implied ~47.6% vs realized mean abs 6.3%, but only 6 quarters of history and thin flow $208K/$270K -- insufficient sample to trust and no spread data to certify net-of-cost). ENVX is carried as the symbol here because it is the CLOSEST to a textbook crush -- implied ~6.5% against a realized mean abs 3.3% with NO >13% print in 10 quarters -- but flow is modest ($175K/$119K) and there is no bid/ask source to certify the edge NET OF COST on a small-cap iron fly. Per Vilkov, an edge that exists only gross is not an edge. NOT SCORED; worth a chain check tomorrow. Note the reported ENVX 4.09x front-end ratio is a data artifact (deep-OTM strikes in a 104-contract Aug-07 expiry); at the earnings-spanning 15 DTE tenor it is 1.19x."
+    }
+  ],
+  "watchlist_write_back": ["UCTT", "APP", "XPEV", "WING", "ENVX"],
+  "report_path": "analyses/scan/2026-08-06/report.md"
+}

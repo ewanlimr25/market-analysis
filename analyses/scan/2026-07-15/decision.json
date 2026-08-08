@@ -1,0 +1,522 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-07-15",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP (uptrend-leaning/borderline)",
+    "ret5": 1.26,
+    "ret10": 1.08,
+    "vol_state": "VIX 15.67; SPY VRP FAIR (-0.023, iv30d 13.18 vs rv30 15.52, iv_rank 13.1); QQQ VRP PREMIUM_BUYING (-0.071, iv30d 23.12 vs rv30 30.21); SPY dealer gamma NEGATIVE, spot pinned ~0.1% below zero-gamma flip ~755 (two-way vol-expansion knife's-edge); QQQ GEX tool BROKEN (total_gex negative while label says POSITIVE; zero_gamma_level 300.35 vs spot 717.41 nonsensical; hand-reconstructed real flip ~720-722, spot just below it in negative-gamma territory)",
+    "breadth_pct_green": 51.09,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "FOMC statement + press conference",
+        "date": "2026-07-29",
+        "impact": "Tier-1, no SEP this meeting; lands exactly on the h10 window close"
+      },
+      {
+        "event": "Q2 earnings season inside h10 window (07-16 -> 07-29)",
+        "date": "2026-07-20/2026-07-29",
+        "impact": "BINDING constraint tonight: earnings fall inside the h10 window for DINO 07-28, ESI 07-29, TEL 07-22, PNR 07-28 - the event gate that stood down every quality new candidate"
+      },
+      {
+        "event": "CPI / PPI",
+        "date": "2026-07-14/2026-07-15",
+        "impact": "already resolved pre-scan, no longer forward risk"
+      }
+    ]
+  },
+  "calls": [
+    {
+      "ticker": "LNG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.4,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "starter",
+      "tail_cap_applied": "carry-forward held at entry size; never upsized on the strength of the move (+3.87% realized excess)",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS - $255.83, $633.1M 20d $-ADV",
+        "cluster": "PASS - no correlated cluster; note book is 3/4 OI_FADE shorts",
+        "fundamentals": "CAUTION -1 carried from 2026-07-14 (rev +20.75% YoY vs EPS -54.99% YoY; most recent quarter a -495.9% surprise miss masked by the beat_streak label); not re-gated - fundamentals is a veto channel only and cannot promote",
+        "event_risk": "PASS - earnings 2026-08-06 outside the h10 window (closes ~07-28). FOMC 07-29 just past window close",
+        "tail_cap": "starter ceiling - short into an active uptrend (fading-strength case); short float only 1.88% (1.71 days to cover) so no crowded-short squeeze fuel"
+      },
+      "fundamentals_verdict": "CAUTION",
+      "structure": null,
+      "entry_or_trigger": "entered 2026-07-14 @ $265.03 (SPY 751.83 conditional anchor)",
+      "invalidation": "Close breaks the 52w high $300.89 with follow-through, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "key_risks": [
+        "FIRST NEGATIVE net OI print tonight (-1,241) after 4 straight positive - early-warning; a SECOND consecutive negative next run confirms reversal and flags exit",
+        "Document conflict resolved by precedent: the adverse_flow_exit_check narrative says 'if the daily OI print turns negative, flag for exit', but the binding formal invalidation requires the 5d net build to FULLY unwind - it is +17,983, nowhere near unwound. The MAT precedent (single negative = early-warning needing confirmation) was VINDICATED tonight when MAT's -2,269 was followed by +4,129, proving single prints are noise. Applying a stricter rule to LNG than the one just proven correct on MAT would be inconsistent and would exit the book's best position on a demonstrated false alarm.",
+        "Short into an active uptrend - the fading-strength case where hard rule 2's up-biased-tape discipline binds hardest",
+        "Fundamentals genuinely SPLIT (rev +20.75% vs EPS -54.99%)"
+      ],
+      "thesis": "OI_FADE carry-forward: heavy 5-day net call-OI build precedes h10 underperformance. Signal decaying (ratio 0.289 from 0.317) but 5d net still +17,983.",
+      "realized_excess_pct": 3.87
+    },
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.81,
+      "excess_hit_minus_base": 9.5,
+      "excess_n": 273,
+      "regime_fit": 0.45,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "starter",
+      "tail_cap_applied": "held at unchanged starter; not upsized (never-upsize rule), not trimmed (no profit-taking rule exists and none was invented)",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE, MOM_SHORT unsuppressed",
+        "liquidity": "PASS - $132.49, $4.40B 20d $-ADV",
+        "cluster": "PASS - Technology is rotation-OUT (tailwind for the short)",
+        "fundamentals": "CONFIRM carried from 2026-07-14; not re-gated - veto channel only, cannot promote",
+        "event_risk": "PASS - no earnings inside the h10 window (closes ~07-27); FOMC 07-29 past window close",
+        "tail_cap": "starter ceiling - MOM_SHORT +0.81% maps to the +0.3-1% starter band, never HIGH"
+      },
+      "fundamentals_verdict": "CONFIRM",
+      "structure": null,
+      "entry_or_trigger": "entered 2026-07-13 @ $131.54 (SPY 749.17 conditional anchor)",
+      "invalidation": "RSI reclaims neutral (>45) with a close back above the prior consolidation range, or the BBB- downgrade narrative is reversed by a rating action/guidance upgrade.",
+      "key_risks": [
+        "CALIBRATION EVIDENCE: the 07-14 hold-note explicitly flagged give-back risk after ORCL realized +3.10% excess in ONE day (~3.8x the lane's entire h10 mean). It gave back ALL of it in one session (+3.10% -> +0.03%) on a $127.94 -> $132.49 bounce. The concern was correctly identified; front-loaded excess in this lane mean-reverts. Feed to /calibration-audit.",
+        "Invalidation tested tonight and fires on NEITHER clause: RSI14 = 30.41 (needs >45) AND close $132.49 (needs > $144.22 range high). Both must hold; neither does.",
+        "Sharp one-day bounce (+3.6%) shows the give-back is live"
+      ],
+      "thesis": "MOM_SHORT carry-forward: near-52w-low relative weakness, h10. BBB- downgrade narrative intact.",
+      "realized_excess_pct": 0.03
+    },
+    {
+      "ticker": "ICE",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.35,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "starter",
+      "tail_cap_applied": "held at unchanged starter; deteriorating but no invalidation clause met",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS - $139.84, $722.5M 20d $-ADV",
+        "cluster": "PASS - Financial Services is rotation-IN (headwind for the short, reflected in regime_fit 0.35)",
+        "fundamentals": "CAUTION -1 carried from 2026-07-14 (beat-streak + strong margins fight the short); not re-gated - veto channel only",
+        "event_risk": "PASS for now - earnings 07-30 outside the h10 window (closes ~07-27); re-check as the window rolls",
+        "tail_cap": "starter ceiling"
+      },
+      "fundamentals_verdict": "CAUTION",
+      "structure": null,
+      "entry_or_trigger": "entered 2026-07-13 @ $137.67 (SPY 749.17 conditional anchor)",
+      "invalidation": "Close back above the pre-build breakout level, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "key_risks": [
+        "SPEC DEFECT - ICE HAS NO FUNCTIONING EXIT. Clause 1 ('close back above the pre-build breakout level') is UNTESTABLE against ICE's actual path: ICE never fell below any level, rising monotonically from $122.91 (06-29) to $139.84 tonight. A 'close back above' condition can never fire on a name that never went below, no matter how wrong the short gets. Clause 2 ('5d net build fully unwinds') is not met (+5,037). So the position holds by the letter of a rule that cannot fire. Highest-priority fix in the queue; re-specifying is a rule change and MUST clear retro_harness.py --all first, so it does NOT ship tonight.",
+        "TWO CONSECUTIVE NEGATIVE net OI prints (07-14: -116, 07-15: -294) - the mechanism is decaying; ratio 0.177 down from 0.337",
+        "Excess turned adverse (-0.82% from +0.40%)",
+        "Financial Services rotation-IN is a live headwind"
+      ],
+      "thesis": "OI_FADE carry-forward. Mechanism materially decayed: entry print +4,461 -> -116 -> -294. 5d net +5,037 and falling.",
+      "realized_excess_pct": -0.82
+    },
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.5,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "starter",
+      "tail_cap_applied": "held at unchanged starter despite the worst excess in the book; no invalidation clause met and the pre-registered trigger did not confirm",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS - $13.86, $69.4M 20d $-ADV",
+        "cluster": "PASS - Consumer Cyclical is rotation-IN (headwind for the short, reflected in regime_fit 0.50)",
+        "fundamentals": "CONFIRM carried from 2026-07-14; not re-gated - veto channel only",
+        "event_risk": "PASS - no earnings inside the h10 window (closes ~07-24)",
+        "tail_cap": "starter ceiling"
+      },
+      "fundamentals_verdict": "CONFIRM",
+      "structure": null,
+      "entry_or_trigger": "entered 2026-07-10 @ $13.33 (SPY 754.95 conditional anchor)",
+      "invalidation": "Close > $16.50 (~52w-range midpoint reclaim), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "key_risks": [
+        "PRE-REGISTERED TRIGGER TESTED AND DID NOT CONFIRM. The 07-14 note pre-registered: 'if tomorrow's OI print is ALSO negative, treat that as confirmation of the reversal and flag for exit.' Tonight's net print is +4,129 (after 07-14's -2,269) - the build REASSERTED; 5d net +13,338. The trigger did not fire, so MAT holds. This is the pre-registered rule executing as written, not a discretionary rescue. It also proves single negative prints are noise - the precedent applied to LNG tonight.",
+        "WORST EXCESS IN THE BOOK: -3.99%, deteriorating from -2.96%. Invalidation ($16.50) is far away at $13.86, and the framework has no stop-loss rule beyond invalidation. This position can keep bleeding without triggering anything.",
+        "Consumer Cyclical rotation-IN is a live headwind",
+        "S4 lane independently flagged MAT as a LONG (PCR 34.1) - direct cross-lane contradiction with this short, but S4 correctly self-killed it as catalyst_informed (Goldman SELL downgrade drove the put-heaviness, so the puts are informed rather than hedging-overpricing). Not summed; noted per hard rule 2."
+      ],
+      "thesis": "OI_FADE carry-forward: 5-day net call-OI build reasserted (+4,129) after a one-day wobble. Signal live; price thesis not working.",
+      "realized_excess_pct": -3.99
+    },
+    {
+      "ticker": "DINO",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "DOWNGRADED starter -> watch on the event-risk gate",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS - $83.93, $208.8M 20d $-ADV",
+        "cluster": "NOTED - at 100% of 52w range DINO is simultaneously a MOM_LONG basket constituent (long) and an OI_FADE candidate (short): a genuine cross-lane contradiction. Not summed per hard rule 2; MOM_LONG median ~ 0 makes it weak evidence either way.",
+        "fundamentals": "NOT SPAWNED - deliberately. Phase D step 4 gates only names about to be sized; nothing is. Fundamentals is a veto channel only, never a promotion mechanism (research/80), so it could not rescue a watch-tier name - only cut it further. Spawning it could not have changed this disposition.",
+        "event_risk": "FAIL - earnings 2026-07-28 falls INSIDE the h10 window (07-16 -> 07-29), and FOMC 07-29 lands on the window close. This is the binding gate.",
+        "tail_cap": "Would stack four independent risks: (a) shorting a FRESH 52w high = the fading-strength case where hard rule 2 binds hardest; (b) earnings inside window; (c) FOMC on window close; (d) CHOP regime. The 07-14 precedent is decisive: LNG sized starter with only two such risks and its acceptability was argued explicitly on 'earnings 08-06 safely outside the h10 window'. DINO has strictly more risk than LNG had plus the one disqualifier LNG lacked -> consistency puts it below starter."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "5-day net call-OI build reverses (first negative daily print), or the fresh 52w-high breakout ($83.93) extends with strong follow-through without OI unwind.",
+      "key_risks": [
+        "STRONGEST SIGNAL OF THE NIGHT, STOOD DOWN ANYWAY on the calendar - net OI positive all 5 sessions and ACCELERATING (+3,099/+131/+2,778/+2,980/+29,751), 5d net +38,739, ratio 0.720. Textbook crowded call build into a breakout. Independently verified against the raw panel.",
+        "Verified at exactly 100% of 52w range (fresh 52w high $83.93) on live Yahoo",
+        "Re-evaluate after 07-28 earnings clears if the OI build survives the print"
+      ],
+      "thesis": "Cleanest OI_FADE mechanism in the cohort; disqualified purely on event risk, not signal quality.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "ESI",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "DOWNGRADED starter -> watch on the event-risk gate",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS - $39.07, $251.0M 20d $-ADV",
+        "cluster": "PASS",
+        "fundamentals": "NOT SPAWNED - not about to be sized; veto channel cannot promote",
+        "event_risk": "FAIL - earnings 2026-07-29 lands ON the h10 window close, stacked with FOMC 07-29",
+        "tail_cap": "n/a - cut at the event gate"
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "OI build unwinds, or close breaks above 52w high $49.25.",
+      "key_risks": [
+        "ratio 0.731, 4/5 days positive - a real signal, less single-day-concentrated than the excluded artifact names",
+        "Earnings 07-29 doubles up with FOMC 07-29 on the window close"
+      ],
+      "thesis": "Genuine OI_FADE signal; stood down on the same calendar gate as DINO.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "TEL",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.25,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "watch",
+      "final_size": "watch",
+      "tail_cap_applied": "cut at the event gate",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS - $200.99, $465.7M 20d $-ADV",
+        "cluster": "NOTED - TEL is simultaneously an OI_FADE short candidate and a vol_earnings IV-crush name. Different lanes, not summed; its 07-22 earnings is exactly why the directional short is gated.",
+        "fundamentals": "NOT SPAWNED - not about to be sized",
+        "event_risk": "FAIL - earnings 2026-07-22 falls squarely INSIDE the h10 window",
+        "tail_cap": "n/a - cut at the event gate"
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "OI build unwinds, or close breaks toward 52w high $252.56.",
+      "key_risks": [
+        "Signal front-loaded and decaying (5,093 on 07-09 -> 74 today), not accelerating - weaker than DINO independent of the event gate"
+      ],
+      "thesis": "Decaying OI_FADE signal plus earnings inside window; watch only.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "AGEN",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "watch",
+      "final_size": "watch",
+      "tail_cap_applied": "watch-tier - liquidity knife's-edge + binary-catalyst tail",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS BY ~1% - close $5.01 vs the $5.00 floor; $50.7M vs the $50M ADV floor. Both fail-closed floors clear by roughly 1%, i.e. a knife's-edge pass, not a comfortable one. (Panel OI file quotes $4.96 intraday; screener and live Yahoo both $5.01.)",
+        "cluster": "PASS",
+        "fundamentals": "NOT SPAWNED - not about to be sized",
+        "event_risk": "PASS - earnings 2026-08-10 outside the h10 window",
+        "tail_cap": "watch - binary-catalyst biotech, $211M mkt cap, 81 employees, prior +82%/-17% round-trip on binary news (flagged 07-14)"
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "OI build unwinds, or any binary biotech catalyst move given the round-trip history.",
+      "key_risks": [
+        "One of only two names tonight with a clean earnings calendar - and it is disqualified on quality instead. The event-clean names are quality-contaminated; the quality names are event-contaminated. That symmetry is why the book adds nothing tonight.",
+        "ratio 1.884 is high but the name sits at both liquidity floors"
+      ],
+      "thesis": "Clean calendar, unacceptable tail and liquidity profile.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "WSC",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.25,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "watch",
+      "final_size": "watch",
+      "tail_cap_applied": "watch - third consecutive downgrade",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE",
+        "liquidity": "PASS BY ~6% - $27.25, $53.1M 20d $-ADV vs the $50M floor; thin practical exit liquidity",
+        "cluster": "PASS - Industrials is rotation-OUT (tailwind for the short)",
+        "fundamentals": "NOT SPAWNED - not about to be sized. CONFIRM was carried on 07-14 (4/4 EPS misses, rev -4.12% YoY, unprofitable) but fundamentals confirmation is a veto channel, never a promotion mechanism (research/80), and cannot lift this off watch.",
+        "event_risk": "PASS - earnings 07-30, one trading day past the h10 window close (thinnest calendar margin in the cohort)",
+        "tail_cap": "watch - short float 10.73%, 7.6 days to cover = MODERATE-HIGH squeeze fuel, exactly the momentum-crash/squeeze tail this gate stack exists to cap"
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "OI build unwinds (already decelerating), or close breaks toward 52w high $31.88.",
+      "key_risks": [
+        "SIGNAL DECELERATING: 7,500 (07-13) -> 1,198 (07-14) -> 662 (07-15). The mechanism is fading, not building.",
+        "Third consecutive scan at watch (07-13, 07-14, 07-15) on the same unresolved profile"
+      ],
+      "thesis": "Clean-ish calendar but decelerating signal, squeeze fuel, and thin ADV margin.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "PNR",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.81,
+      "excess_hit_minus_base": 9.5,
+      "excess_n": 273,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": "mom_short_ind_20260715",
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "DOWNGRADED starter -> watch on the event-risk gate",
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown FALSE, MOM_SHORT unsuppressed",
+        "liquidity": "PASS - $64.33, $147.8M 20d $-ADV",
+        "cluster": "IND cluster (CPRT/ORLY/CNM) tagged HEADWIND on Industrials rotation-OUT",
+        "fundamentals": "NOT SPAWNED - not about to be sized",
+        "event_risk": "FAIL - earnings 2026-07-28 falls INSIDE the h10 window",
+        "tail_cap": "MOM_SHORT +0.81% maps to the starter band; an event-gated starter lands at watch"
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "Close reclaims the 52w-range midpoint, or the relative-weakness structure resolves upward.",
+      "key_risks": [
+        "Independently verified at EXACTLY 0.0% of 52w range ($64.33 = the 52w low) on live Yahoo - a clean near-low name. The momentum lane's own quoted figure ('$69.93, -8.01% from low') was STALE and wrong; the name qualifies on the live read, not on the lane's number.",
+        "Earnings 07-28 inside window is the binding cut"
+      ],
+      "thesis": "Genuine near-52w-low MOM_SHORT candidate, cut on the calendar.",
+      "realized_excess_pct": null
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "FAIR (iv30d 13.18% vs rv30 15.52%, iv_rank 13.1 - vol is CHEAP, not rich)",
+      "implied_move": 0.68,
+      "expected_range": 0.78,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "HARD STAND-ASIDE. scripts/zerodte_setup.py returned GO_PREMIUM_SELL_INTRADAY and was OVERRIDDEN on the live read: that verdict is built only from VIX-tercile + GEX-regime and has NO VRP input at all. VRP is FAIR and iv_rank 13.1 - not a premium-selling setup by definition. Dealer gamma NEGATIVE with spot ~0.1-0.3% below the zero-gamma flip (~755) = genuine two-way vol-expansion knife's-edge, not the quiet long-gamma case the wing-sizing backtest assumes; that backtest contains no vol-shock day and does not condition on flip-proximity.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "PREMIUM_BUYING (iv30d 23.12% vs rv30 30.21% - realized running ABOVE implied)",
+      "implied_move": 1.41,
+      "expected_range": 1.89,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "HARD STAND-ASIDE. Inverted VRP - selling premium here sells CHEAP vol relative to what is actually printing, fighting the lane's own measured edge. Front-end backwardation confirmed two independent ways (front/far ratio 1.091; 0DTE IV 31.2% vs 30d 24.4%), hitting the lane's explicit stand-aside gate. GEX TOOL CONFIRMED BROKEN: total_gex is negative (-354,621,492) while the tool's own regime label says POSITIVE - internally contradictory; zero_gamma_level 300.35 vs spot 717.41 is nonsensical. Hand-reconstructing per-strike cumulative GEX puts the real local flip at ~720-722, i.e. spot 717.41 sits just BELOW it in negative-gamma territory - the same knife's-edge as SPY, reinforcing rather than offsetting this stand-aside.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "NFLX",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 100, BACKWARDATION 2.96x",
+      "implied_move": 7.6,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wings set OUTSIDE the implied move with real room; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated per-name net-of-cost backtest exists in this repo. RESEARCH/20 §2.1 and RESEARCH/30 §3.1 validate the MECHANISM only, not a net-of-transaction-cost number. Per the permanent-advisory rule this is quoted as directionally-positive-in-mechanism, never a sized net-expectancy figure. Earnings 07-16 postmkt; deepest chain in the cluster (27k contracts, $3.68B ADV).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ABT",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 100, BACKWARDATION 2.08x",
+      "implied_move": 4.4,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest in repo. Earnings 07-16 premkt, $1.20B ADV.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "NOW",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 100, front-end near-flat (1.035); broader curve BACKWARDATION",
+      "implied_move": 3.3,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. Front-end only near-flat, weakest term-structure richness of the cluster. Earnings 07-22 postmkt.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "TXN",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 90.3, BACKWARDATION 1.86x",
+      "implied_move": 3.5,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. Earnings 07-22 postmkt, $3.00B ADV.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "TEL",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 96.5, BACKWARDATION 1.41x",
+      "implied_move": 3.2,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. NOTE: TEL is also an OI_FADE directional short candidate (stood down). Different lanes, never summed - and its 07-22 earnings is precisely why the directional short was event-gated.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "CCI",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 96.4, BACKWARDATION 1.54x",
+      "implied_move": 2.0,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. Earnings 07-22 postmkt.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "PM",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 89.7, BACKWARDATION 1.28x",
+      "implied_move": 1.9,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap - widen fills for chain depth",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. Thin chain (~275 contracts) despite $988M equity ADV; smallest richness of the cluster.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "CB",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 83.8, BACKWARDATION 1.48x",
+      "implied_move": 1.6,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. Earnings 07-21 postmkt, smallest implied move in the cluster - likely marginal net-of-cost.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "STLD",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 89.8, BACKWARDATION 1.46x",
+      "implied_move": 3.2,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. Earnings 07-20 postmkt.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "DPZ",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "iv_rank 89.0, BACKWARDATION 1.51x",
+      "implied_move": 2.7,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "defined-risk iron fly, wide wings; half-cap",
+      "stand_aside_reason": "ADVISORY ONLY - no calibrated net-of-cost backtest. Earnings 07-20 premkt.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "LNG", "ORCL", "ICE", "MAT",
+    "DINO", "ESI", "TEL", "AGEN", "WSC", "PNR"
+  ],
+  "report_path": "analyses/scan/2026-07-15/report.md"
+}

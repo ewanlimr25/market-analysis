@@ -1,0 +1,613 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-07-30",
+ "report_kind": "market-scan",
+ "regime": "CHOP",
+ "regime_context": {
+  "regime_label": "CHOP",
+  "ret5": 0.0048,
+  "ret10": -0.012,
+  "vol_state": "dealer-short-gamma both indices (SPY GEX -$366.9M FULLY_NEGATIVE; QQQ NEGATIVE, spot 683.77 vs zero-gamma 729.4) = vol-EXPANSION conditioning. VIX 17.09, -17.3% on the day -- the 07-29 spike to 20.66 fully round-tripped in one session. VRP FAIR both indices (SPY +0.0126, QQQ -0.0057): nothing rich to sell. Front-end backwardation SPY 1.296x / QQQ 1.445x. NOT a direction.",
+  "breadth_pct_green": 39.17,
+  "directional_tradable": true,
+  "s1_standdown": false,
+  "event_risk": [
+   {
+    "date": "2026-08-03",
+    "event": "PLTR earnings",
+    "tier": 2
+   },
+   {
+    "date": "2026-08-04",
+    "event": "AMD earnings (AMC)",
+    "tier": 2
+   },
+   {
+    "date": "2026-08-07",
+    "event": "Employment Situation / NFP",
+    "tier": 1
+   },
+   {
+    "date": "2026-08-11",
+    "event": "SMCI earnings",
+    "tier": 2
+   },
+   {
+    "date": "2026-08-12",
+    "event": "CPI (July 2026)",
+    "tier": 1
+   },
+   {
+    "note": "BREADTH DIVERGENCE: SPY closed +1.68% on only 39.17% green (197 adv / 304 dec), uw bullish_pct 35.7%, trend CHOPPY/TRANSITIONAL. Today's bounce was narrow and mega-cap/Tech-led, NOT breadth-confirmed. QQQ +3.30% on the day but still -1.22% ret5 / -3.17% ret10 -- the AI-capex repricing leg has not round-tripped."
+   },
+   {
+    "note": "GATE-1 DISSENT, RAISED BY risk-sizer AND DECLINED BY THE ORCHESTRATOR. risk-sizer argued the tape SHAPE is a textbook V-rebound (VIX -17.3% one-day unwind, narrow breadth-divergent bounce off a fresh low) and asked to treat s1_standdown as FIRED for the relative-weakness/MOM_SHORT lane despite the mechanical FALSE. DECLINED: scripts/regime_check.py is the authoritative gate the retro harness scores against, and hand-flipping the recorded flag would corrupt the exact field /calibration-audit uses to grade whether the crash gate works. The flag stands at FALSE as measured. The qualitative caution is recorded and REAL -- Phase A raised it independently -- but it changes nothing operationally tonight, because MOM_SHORT is already unsized for a separate and binding reason (CLAUDE.md invariant #6 watch-only cap for new starters). If this shape recurs, codify a proper up-thrust/rebound detector via /calibration-audit rather than re-litigating it ad hoc each night."
+   }
+  ]
+ },
+ "calls": [
+  {
+   "ticker": "PLNT",
+   "lane": "OI_FADE",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": 0.007,
+   "excess_hit_minus_base": 0.18,
+   "excess_n": 906,
+   "regime_fit": 0.5,
+   "tier": "MEDIUM",
+   "cluster_id": null,
+   "pre_size": "half",
+   "final_size": "half",
+   "tail_cap_applied": null,
+   "gate_verdicts": {
+    "regime_crash": "PASS -- s1_standdown FALSE as measured. OI_FADE is a flow-mechanism lane, not a relative-weakness lane, so the gate-1 dissent raised on MOM_SHORT does not reach it in any case.",
+    "liquidity": "PASS -- $55.98 close, 20d $-ADV $97.3M via scripts/liquidity.py (clears the $5 / $50M floor)",
+    "cluster": "PASS -- sole open position, no cluster exists",
+    "fundamentals": "NA -- held position, no fresh gate run required absent a new catalyst; the 07-29 CAUTION stands. Re-run if PLNT-specific news lands before 08-03.",
+    "event_risk": "PASS -- PLNT reports 2026-08-06, THREE trading days AFTER the binding 2026-08-03 exit; the exit lands clear of the print. Neither NFP (08-07) nor CPI (08-12) falls inside the remaining 2-session window.",
+    "tail_cap": "N/A -- OI_FADE is not in the gate-6 tail-capped lane list"
+   },
+   "fundamentals_verdict": "NA",
+   "structure": null,
+   "entry_or_trigger": "live since 2026-07-20 @ $55.20, half size",
+   "invalidation": "EARLIEST of: (a) 2026-08-03 close -- BINDING h10, admits NO drift, 2 sessions left (07-31, 08-03); (b) first genuinely NEGATIVE call_net print -- NOT triggered, tonight prints call +233 / put +42 / net +191, calls still net-OPENING; (c) close > $59.50 with 1-day confirm -- ACTIVE, price $55.98 is 6.29% away. Leg (c) was tested against PLNT's own realized 2-day move distribution: only 2 of 133 windows (~1.5%) cleared +6.29%. Low-probability but NOT arithmetically unreachable, so it is a real backstop, NOT vestigial -- kept unchanged. Not tightened further: with 2 sessions left and the signal still confirming, a tighter stop adds whipsaw risk without shortening a time-to-resolution the h10 exit already caps.",
+   "key_risks": [
+    "Low rel_build (0.028) is trailing-5d-window DECAY, not an unwind -- total call OI is still elevated ~76.7K vs a ~58K baseline, i.e. the crowd's calls remain open",
+    "V-rebound tape shape raises generic squeeze risk on any open short",
+    "Since-entry excess is negative (-1.47%); the position has not worked in aggregate even though today was strongly positive"
+   ],
+   "thesis": "OI_FADE short on a heavy 5-day net call-OI build. Since-entry SHORT excess -1.47% (gross -1.41%, price $55.20 -> $55.98). TODAY's excess +2.05% (PLNT -0.37% vs SPY +1.68%). Computed by the orchestrator, NOT read off held_book.py, whose 'gross' is since-entry while its 'excess' is TODAY-only -- two different horizons printed side by side. HOLD to the binding exit.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "AVTR",
+   "lane": "OI_FADE",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": 0.007,
+   "excess_hit_minus_base": 0.18,
+   "excess_n": 906,
+   "regime_fit": 0.3,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": null,
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS -- $13.86, $166.4M 20d $-ADV",
+    "cluster": "PASS",
+    "fundamentals": "VETO -- Q2 beat +8.58% with FY2026 guidance RAISED, and FIVE same-day sell-side PT raises on 07-30 (Wells Fargo $14->$16 OW, Stifel $8->$15, Evercore $10.5->$14, Morgan Stanley $10->$14, RBC $9->$14) with zero cuts. Insider MSPR +33.33 (buying).",
+    "event_risk": "n/a -- not sized",
+    "tail_cap": "n/a -- not sized"
+   },
+   "fundamentals_verdict": "VETO",
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Re-admit to the OI_FADE universe only if a forward fundamentals re-check flips the veto: the analyst tape turning (no further PT raises/upgrades, or fresh cuts) AND the guidance picture deteriorating. The mechanical OI signal was the cleanest of the night -- this is a pure gate-4 kill.",
+   "key_risks": [
+    "ret5 +22.12% / ret10 +23.09%, RSI 75.68 -- the name just re-rated hard off its 07-29 print; shorting this is shorting a fundamentals-backed move, the ROST (07-20) / ALLE (07-24) corroborated-bullish-conviction precedent",
+    "Catalyst-split LIVE_BUILD (49.7% of the 10d net accrued AFTER the print) cuts BOTH ways: it proves the build is not resolved pre-print, but it also means the flow is chasing a CONFIRMED catalyst rather than front-running an unknown one -- conviction, not crowding",
+    "The 2026-W29 objection (single-day block print, persistence ~1.0) IS resolved -- tonight's persistence is 0.47, genuinely organic multi-day accretion. The veto rests on fundamentals, not on the old mechanism complaint",
+    "Genuine soft spot not dismissed: ttm revenue -1.99% YoY, net margin -8.42%, ROE -9.59%. Legacy unprofitability is real -- but it is trailing, known information, while the fresh 07-29/07-30 information is unambiguously bullish"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "HRI",
+   "lane": "OI_FADE",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": 0.007,
+   "excess_hit_minus_base": 0.18,
+   "excess_n": 906,
+   "regime_fit": 0.3,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": null,
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS -- $145.92, $81.9M 20d $-ADV",
+    "cluster": "PASS",
+    "fundamentals": "VETO (CARRIED AND REINFORCED from 2026-07-29). The recorded re-admit condition -- 'analyst tape turns: no further PT raises/upgrades, or fresh cuts' -- is explicitly NOT MET. On 07-29, the session after the print, KeyBanc RAISED $165->$185 (Overweight) and BNP Paribas RAISED $160->$165. Two fresh raises, zero cuts. The tape turned MORE bullish, not less.",
+    "event_risk": "n/a -- not sized",
+    "tail_cap": "n/a -- not sized"
+   },
+   "fundamentals_verdict": "VETO",
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Re-admit condition UNCHANGED and still open: the analyst tape must turn (no further PT raises/upgrades, or fresh cuts) AND the guidance picture must deteriorate. Checked tonight against the last 1-2 sessions specifically, per the recorded condition -- not a restatement of last night's veto.",
+   "key_risks": [
+    "Q2 EPS $1.43 vs $0.73 est (+94.7% surprise), revenue +20.2% YoY, guidance RAISED -- fundamentals actively contradict the crowding-short thesis",
+    "ret5 -10.62% -- an entry here shorts a completed collapse with a bounce tail; the lane's validated edge is measured on the general population of heavy-call-build names, NOT on names that have already dumped double digits",
+    "Insider MSPR +23.89 (buying); the two negative months are trivial single-share-count sales (-150, -144 shares), i.e. noise not distribution",
+    "Counter-consideration recorded for honesty: PE ~99x and D/E 4.18 are genuinely stretched, and the -14.6% unwind off the 07-28 intraday high reads as a valuation reset. That is a reason the SHORT could still work -- it is simply not enough to overturn a gate-4 veto whose bar is 'do the fundamentals contradict the thesis', and they do"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "OLLI",
+   "lane": "OI_FADE",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": 0.007,
+   "excess_hit_minus_base": 0.18,
+   "excess_n": 906,
+   "regime_fit": 0.4,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": null,
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS -- $72.74, $165.9M 20d $-ADV",
+    "cluster": "PASS",
+    "fundamentals": "NOT RUN -- and correctly so. The name fails the lane's own MECHANISM test upstream of gate 4, and this repo runs fundamentals-gate only on names about to be sized. Must be gated before any future sizing.",
+    "event_risk": "n/a -- not sized (earnings 08-27, outside h10)",
+    "tail_cap": "n/a -- not sized"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Re-check 07-31: if the build PERSISTS into a second session it becomes a genuine multi-day accretion and re-enters the universe; if it does not, it was a one-session print and stays out.",
+   "key_risks": [
+    "persistence 0.974 -- essentially the ENTIRE +6,850 build (+6,672) landed in ONE session, today. That is a block print, not the multi-day crowd accretion OI_FADE's +0.70% edge is measured on",
+    "The single session in question was a dealer-short-gamma, VIX-crush bounce day -- a same-day mega-block is at least as consistent with systematic/dealer hedging flow as with organic crowd positioning",
+    "ret5 +11.50%"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "INFY",
+   "lane": "OI_FADE",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": 0.007,
+   "excess_hit_minus_base": 0.18,
+   "excess_n": 906,
+   "regime_fit": 0.4,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": null,
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS -- $11.95, $319.2M 20d $-ADV. issue_type ADR: not a fund wrapper, so not excludable by the ETP rule, but flagged as a distinction from common stock.",
+    "cluster": "PASS",
+    "fundamentals": "NOT RUN -- fails the lane mechanism test upstream of gate 4; same reasoning as OLLI. Must be gated before any future sizing.",
+    "event_risk": "n/a -- not sized (next print 10/15, outside h10)",
+    "tail_cap": "n/a -- not sized"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Re-check 07-31 for build persistence, same test as OLLI.",
+   "key_risks": [
+    "persistence 0.993 -- a ~108K-contract near-total single-session block, not a 5-day organic build",
+    "Catalyst-split reads LIVE_BUILD (build continued and accelerated after the 07-23 print, so it is NOT the SSNC resolved-pre-print failure mode) -- the objection is purely the single-day persistence, and that alone is disqualifying for this lane",
+    "ret1 -5.16% against ret5 +12.00% -- conflicting short-term signal"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "SNPS",
+   "lane": "MOM_SHORT",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": -0.0003,
+   "excess_hit_minus_base": 0.206,
+   "excess_n": null,
+   "regime_fit": 0.1,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "CLAUDE.md invariant #6 -- MOM_SHORT is a KNOWN-negative lane (-0.03% mean) held at watch-only for new starters. This is the binding constraint tonight, independent of the declined gate-1 dissent.",
+   "gate_verdicts": {
+    "regime_crash": "PASS as measured (s1_standdown FALSE). risk-sizer asked to override this to FIRED on V-rebound shape; the orchestrator DECLINED the override to keep the calibration record honest -- see regime_context.event_risk. Moot either way: the invariant-#6 cap already holds this at watch.",
+    "liquidity": "PASS -- $372.33, $708.9M 20d $-ADV",
+    "cluster": "PASS -- max pairwise correlation 0.15 across the measurable MOM_SHORT set, nothing near the 0.70 collapse threshold",
+    "fundamentals": "NOT REACHED -- watch-only capped before gate 4",
+    "event_risk": "n/a -- not sized. Informational: a real h10 MOM_SHORT window from here would span NFP (08-07) and possibly CPI (08-12).",
+    "tail_cap": "APPLIED -- watch-only cap, see tail_cap_applied"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Watch-only.",
+   "key_risks": [
+    "pct_52w_range 0.0222, RSI 30.6, ret1 -0.36% / ret2 -2.99% / ret5 -0.32% -- not itself squeeze-extended, but the lane's negative mean is binding regardless"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "WSO",
+   "lane": "MOM_SHORT",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": -0.0003,
+   "excess_hit_minus_base": 0.206,
+   "excess_n": null,
+   "regime_fit": 0.1,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "CLAUDE.md invariant #6 watch-only cap for new starters",
+   "gate_verdicts": {
+    "regime_crash": "PASS as measured; see SNPS note on the declined gate-1 dissent",
+    "liquidity": "PASS -- $310.73, $137.6M 20d $-ADV",
+    "cluster": "PASS -- max pairwise 0.15",
+    "fundamentals": "NOT REACHED -- watch-only capped before gate 4",
+    "event_risk": "n/a -- not sized",
+    "tail_cap": "APPLIED -- watch-only cap"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Watch-only.",
+   "key_risks": [
+    "pct_52w_range 0.0232, RSI 22.2, ret2 -15.45% / ret5 -13.65% -- deeply oversold; this is precisely the profile that generates the lane's fat squeeze losses"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "LHX",
+   "lane": "MOM_SHORT",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": -0.0003,
+   "excess_hit_minus_base": 0.206,
+   "excess_n": null,
+   "regime_fit": 0.1,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "CLAUDE.md invariant #6 watch-only cap for new starters",
+   "gate_verdicts": {
+    "regime_crash": "PASS as measured; see SNPS note",
+    "liquidity": "PASS -- $271.90, $347.7M 20d $-ADV",
+    "cluster": "PASS -- not in the truth-set price panel so no numeric correlation available; qualitatively aerospace/defense, distinct from the rest of the set",
+    "fundamentals": "NOT REACHED -- watch-only capped before gate 4",
+    "event_risk": "n/a -- not sized",
+    "tail_cap": "APPLIED -- watch-only cap"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Watch-only.",
+   "key_risks": [
+    "pct_52w_range 0.0415",
+    "DATA GAP: absent from data/prices.parquet, so gate-3 correlation could not be computed numerically -- the same silent-failure class flagged for HRI/PLNT on 07-29 and HOG on 07-28"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "VICI",
+   "lane": "MOM_SHORT",
+   "direction": "short",
+   "horizon_validated": 10,
+   "validated_excess": -0.0003,
+   "excess_hit_minus_base": 0.206,
+   "excess_n": null,
+   "regime_fit": 0.1,
+   "tier": "WATCH",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "CLAUDE.md invariant #6 watch-only cap for new starters",
+   "gate_verdicts": {
+    "regime_crash": "PASS as measured; see SNPS note",
+    "liquidity": "PASS -- $26.31, $230.8M 20d $-ADV",
+    "cluster": "PASS -- not in the truth-set price panel; qualitatively a gaming REIT, distinct from the rest of the set",
+    "fundamentals": "NOT REACHED -- watch-only capped before gate 4",
+    "event_risk": "n/a -- not sized",
+    "tail_cap": "APPLIED -- watch-only cap"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Watch-only.",
+   "key_risks": [
+    "pct_52w_range 0.0604",
+    "DATA GAP: absent from data/prices.parquet, gate-3 correlation not numerically computable"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "PLD",
+   "lane": "S2_dp_revert",
+   "direction": "long",
+   "horizon_validated": 5,
+   "validated_excess": 0.0006,
+   "excess_hit_minus_base": null,
+   "excess_n": null,
+   "regime_fit": 0.5,
+   "tier": "ADVISORY",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "Lane prior +0.06% is barely above zero -- advisory-only, never a sized starter",
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS",
+    "cluster": "PASS",
+    "fundamentals": "n/a -- advisory, not sized",
+    "event_risk": "PASS -- earnings-gated on the trading-day window",
+    "tail_cap": "APPLIED -- advisory-only"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Advisory tag only.",
+   "key_risks": [
+    "$257.5M DP premium, 96.8% one-sided, buy_skew 1.0 -- but the lane's own read is that one-sided concentration is a BINARY EVENT GATE with IC ~= 0, not a ranking signal; do not read the largest print as the best candidate"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "FCX",
+   "lane": "S2_dp_revert",
+   "direction": "long",
+   "horizon_validated": 5,
+   "validated_excess": 0.0006,
+   "excess_hit_minus_base": null,
+   "excess_n": null,
+   "regime_fit": 0.5,
+   "tier": "ADVISORY",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "Advisory-only",
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS",
+    "cluster": "PASS",
+    "fundamentals": "n/a -- advisory, not sized",
+    "event_risk": "PASS -- earnings-gated",
+    "tail_cap": "APPLIED -- advisory-only"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Advisory tag only.",
+   "key_risks": [
+    "$256.5M DP premium, 92.1% one-sided"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "QTWO",
+   "lane": "S4_pcr_fade",
+   "direction": "long",
+   "horizon_validated": 10,
+   "validated_excess": 0.0044,
+   "excess_hit_minus_base": null,
+   "excess_n": null,
+   "regime_fit": 0.5,
+   "tier": "ADVISORY",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "Advisory size only; half-cap, no auto-full (invariant #4)",
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS",
+    "cluster": "PASS",
+    "fundamentals": "n/a -- advisory, not sized",
+    "event_risk": "PASS on the forward gate -- but see key_risks, it reported 07-29 AH",
+    "tail_cap": "APPLIED -- advisory-only"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Advisory tag only.",
+   "key_risks": [
+    "Highest PCR in the cohort at 147.0 and assessed LIVE (elevated on 07-30 itself, not stale fear left over from the 07-29 VIX spike)",
+    "Reported 07-29 AH, opened strong 07-30 then REVERSED intraday (-2.2% on the day) -- a post-print reversal pattern that muddies the contrarian read"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "RGEN",
+   "lane": "S4_pcr_fade",
+   "direction": "long",
+   "horizon_validated": 10,
+   "validated_excess": 0.0044,
+   "excess_hit_minus_base": null,
+   "excess_n": null,
+   "regime_fit": 0.5,
+   "tier": "ADVISORY",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "Advisory size only",
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS",
+    "cluster": "PASS",
+    "fundamentals": "n/a -- advisory, not sized",
+    "event_risk": "PASS -- earnings-gated on the trading-day window",
+    "tail_cap": "APPLIED -- advisory-only"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Advisory tag only.",
+   "key_risks": [
+    "PCR 82.2, LIVE",
+    "ivrank_chg_5d -25.1 -- hedging premium already partly harvested, so the entry point may have passed even though the crowding tag is live"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "JEF",
+   "lane": "S4_pcr_fade",
+   "direction": "long",
+   "horizon_validated": 10,
+   "validated_excess": 0.0044,
+   "excess_hit_minus_base": null,
+   "excess_n": null,
+   "regime_fit": 0.5,
+   "tier": "ADVISORY",
+   "cluster_id": null,
+   "pre_size": null,
+   "final_size": "watch",
+   "tail_cap_applied": "Advisory size only",
+   "gate_verdicts": {
+    "regime_crash": "PASS",
+    "liquidity": "PASS",
+    "cluster": "PASS",
+    "fundamentals": "n/a -- advisory, not sized",
+    "event_risk": "PASS -- earnings-gated",
+    "tail_cap": "APPLIED -- advisory-only"
+   },
+   "fundamentals_verdict": null,
+   "structure": null,
+   "entry_or_trigger": null,
+   "invalidation": "Not sized. Advisory tag only.",
+   "key_risks": [
+    "PCR 81.3, LIVE"
+   ],
+   "thesis": null,
+   "realized_excess_pct": null
+  }
+ ],
+ "vol_book": [
+  {
+   "symbol": "LDOS",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "rich_vs_realized -- implied 8.5% vs realized avg 1.7% / max 6.2% (n=7). Implied clears even the WORST historical print with room.",
+   "implied_move": 0.085,
+   "expected_range": 0.062,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly, 08/21 monthly (~22 DTE), earnings 08-04. Wings set at/beyond the 6.2% realized-MAX print, never at the implied move. ATM relative bid/ask ~16-24% on this monthly chain -- a genuine single-name cost, and no measured cost model exists for this sleeve yet, so net_expectancy is left NULL rather than fabricated. Edge survives a generous haircut on the raw +6.9pp.",
+   "stand_aside_reason": null,
+   "delta_neutral": true
+  },
+  {
+   "symbol": "TRMB",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "rich_vs_realized -- implied 8.6% vs realized avg 2.4% / max 5.4% (n=8). Best option liquidity of the group (OI 21.6k, ~5.5k opt/day).",
+   "implied_move": 0.086,
+   "expected_range": 0.054,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly, 08/21 monthly, earnings 08-05. Wings beyond the 5.4% realized-max. Raw edge +6.2pp; net_expectancy NULL for the same reason as LDOS -- no measured cost constant for single-name monthlies.",
+   "stand_aside_reason": null,
+   "delta_neutral": true
+  },
+  {
+   "symbol": "TTMI",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "rich_vs_realized -- implied 19.7% vs realized avg 7.9% / max 16.6% (n=8). Largest raw edge of the three clean names (+11.8pp) but thin daily option volume (~900/day).",
+   "implied_move": 0.197,
+   "expected_range": 0.166,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly, 08/21 monthly, earnings 08-05, REDUCED SIZE for chain thinness. Wings beyond the 16.6% realized-max. Note the equity clears the C12 $-ADV floor at $304M -- the concern here is option-chain depth, which C12 does not cover.",
+   "stand_aside_reason": null,
+   "delta_neutral": true
+  },
+  {
+   "symbol": "UCTT",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": "rich_on_average_but_fat_tail_already_breached -- implied 22.3% vs realized avg 10.3%, but realized MAX 28.2% EXCEEDS today's implied move",
+   "implied_move": 0.223,
+   "expected_range": 0.282,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "EXCLUDED despite the largest headline edge (+12.0pp). Hard rule 'size for the unsampled left tail' is exactly what this name's OWN history says: a 28.2% print already blew through a smaller implied move once in 7 samples (~14% of the time). The headline edge is an average that the tail has already falsified.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "SPY",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "backwardated_short_gamma -- front-end near/far IV ratio 1.296x (BACKWARDATION), GEX -$366.9M FULLY_NEGATIVE",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": 0.00146,
+   "suggested_structure": null,
+   "stand_aside_reason": "STOOD DOWN despite a mechanically POSITIVE net backtest (gross +0.246%/day -> net +0.146%/day after 0.10% assumed round-trip, 90% open-win). The lane script returned GO_PREMIUM_SELL_INTRADAY and was overridden: front-end backwardation + dealer-short-gamma + a fresh post-VIX-spike whiplash session (20.66 -> 17.09 in ONE session) is precisely the unsampled-left-tail combination the tail cap exists to catch. The 60-day trailing sample that produced those averages contains no analog for a ~21% one-day VIX round-trip -- the module's own disclosed caveat.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "QQQ",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "backwardated_short_gamma -- front-end near/far IV ratio 1.445x (BACKWARDATION); spot 683.77 sits well BELOW the 729.4 zero-gamma level, i.e. inside the negative-gamma zone",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": 0.00276,
+   "suggested_structure": null,
+   "stand_aside_reason": "STOOD DOWN, same reasoning as SPY (gross +0.376%/day -> net +0.276%/day). SECOND, INDEPENDENT REASON: scripts/zerodte_setup.py MISCLASSIFIED QQQ as long-gamma -- its recommend() path sums net gamma over 0-45DTE instead of applying the spot-vs-zero-gamma-level convention the CLI 'gex' command uses, so it picked the quiet/mean-reverting branch. A real bug; do not trust that script's QQQ verdict until fixed. Logged as a maintenance item, NOT patched tonight (this was an advisory scan, not a lane change, and a code edit would trip the regression gate).",
+   "delta_neutral": true
+  }
+ ],
+ "watchlist_write_back": [
+  "PLNT",
+  "AVTR",
+  "HRI",
+  "OLLI",
+  "INFY",
+  "SNPS",
+  "WSO",
+  "PLD",
+  "FCX",
+  "QTWO",
+  "RGEN",
+  "JEF"
+ ],
+ "report_path": "analyses/scan/2026-07-30/report.md",
+ "lane_status": [
+  {
+   "lane": "MOM_LONG",
+   "disposition": "BASKET_WATCH",
+   "direction": "long",
+   "regime_fit": 0.6,
+   "note": "[migrated from calls[] by audit 2026-08-01 -- was synthetic ticker BASKET_NEAR_52W_HIGH] Basket-only by construction -- never a per-name HIGH call (CLAUDE.md lane table) Not sized. Watch-only BY THE RUBRIC, not by discretion: +0.18% mean sits BELOW the +0.3% MEDIUM tier threshold, and the median is -1.06% (the lane's edge is tail-driven, so a basket held at watch loses nothing but the tail).",
+   "candidates": []
+  }
+ ]
+}

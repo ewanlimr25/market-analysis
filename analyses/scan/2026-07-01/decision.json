@@ -1,0 +1,199 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-07-01",
+ "report_kind": "market-scan",
+ "regime": "CHOP/REBOUND-THRUST",
+ "regime_context": {
+  "regime_label": "CHOP/REBOUND-THRUST (live path-aware Yahoo SPY; truth-set parquet stale at 2026-06-26 -> harness --date NOT authoritative). uw market-regime: TRANSITIONAL, half sizes, 'iron condors in range' (that vol heuristic is OVERRIDDEN by negative VRP + short-gamma below).",
+  "ret5": 0.0171,
+  "ret10": -0.0061,
+  "vol_state": "VIX 16.59 (-11% on the week, VVIX 89). VRP NEGATIVE both indices (SPY IV30 13.9 < RV 15.4, vrp -0.015; QQQ IV 24.6 < RV 28.9, vrp -0.043) -> premium-selling NOT compensated. SPY dealer GEX NEGATIVE near spot (short-gamma -> moves AMPLIFIED, trend-following, NOT range-bound). Front-end IV term FLAT (0.986). 1y 25d skew TAIL_HEDGING (1.54). NOT a direction.",
+  "breadth_pct_green": 0.371,
+  "directional_tradable": false,
+  "s1_standdown": true,
+  "event_risk": [
+   {"event": "June NFP / jobs report", "date": "2026-07-02", "tier": 1, "note": "holiday-shifted to Thu 08:30 ET (likely early close Thu); INSIDE every horizon"},
+   {"event": "US market HOLIDAY (Independence Day observed)", "date": "2026-07-03", "tier": 1, "note": "NYSE CLOSED; NFP gap cannot be managed over the 3-day weekend; thin liquidity"},
+   {"event": "PENG earnings", "date": "2026-07-07", "tier": 2, "note": "only earnings inside a swing horizon; small-cap, 23.7% implied move"},
+   {"event": "CPI + Q2 bank-earnings begin (JNJ/ASML/CAG 07-15)", "date": "2026-07-14", "tier": 1, "note": "at/just past the h10 edge"}
+  ]
+ },
+ "vol_book": [
+  {"symbol": "SPY/QQQ-0DTE", "lane": "vol_0dte", "sell_premium": false, "vol_state": "VRP NEGATIVE (SPY vrp -0.015, QQQ -0.043) + SPY short-gamma (GEX negative near spot)", "implied_move": null, "expected_range": null, "net_expectancy": null, "suggested_structure": null, "stand_aside_reason": "STAND DOWN. Premium-selling is ACTIVELY ADVERSE (not merely un-edged): negative VRP means you collect less than realized moves before cost, and short-gamma amplifies/trends rather than ranges -> breaks the condor assumption. NFP Thu 07-02 + closed Fri 07-03 add an unmanageable 3-day gap. The uw 'iron condors in range' tag is overridden.", "delta_neutral": true},
+  {"symbol": "PENG", "lane": "vol_earnings", "sell_premium": false, "vol_state": "iv_rank 98, iv30d 1.61 (very rich, small-cap)", "implied_move": 0.233, "expected_range": null, "net_expectancy": null, "suggested_structure": "IF ever taken: defined-risk MINIMAL only, into 07-07 PM.", "stand_aside_reason": "Only earnings inside a horizon, but 23.7% implied move + small-cap gap into a thin holiday week does not clear the net-of-cost bar. Stand aside.", "delta_neutral": true},
+  {"symbol": "PEP", "lane": "vol_earnings", "sell_premium": false, "vol_state": "iv_rank 75, iv30d 0.275 (liquid mega-cap)", "implied_move": 0.011, "expected_range": null, "net_expectancy": null, "suggested_structure": null, "stand_aside_reason": "Tiny 1.1% implied move -> no premium to harvest net-of-cost (07-09 AM). Stand aside.", "delta_neutral": true},
+  {"symbol": "AZZ", "lane": "vol_earnings", "sell_premium": false, "vol_state": "iv_rank 91, iv30d 0.539 (mid-cap)", "implied_move": 0.076, "expected_range": null, "net_expectancy": null, "suggested_structure": null, "stand_aside_reason": "Mid-cap 07-08 PM; pre-season lull + holiday-thinned liquidity -> below the net-of-cost bar. Stand aside.", "delta_neutral": true}
+ ],
+ "watchlist_write_back": ["NVDA", "AMZN", "GOOGL", "MSFT", "AAPL", "PLTR", "NFLX", "CG", "BABA", "CNC", "HUM", "GH", "BKNG", "MRNA", "CEG", "PENG"],
+ "report_path": "analyses/scan/2026-07-01/report.md",
+ "calls": [
+  {
+   "ticker": "NVDA", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 0.35, "tier": "WATCH", "cluster_id": "oi_nvda_single",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "watch",
+   "gate_verdicts": {
+    "regime_crash": "OI-fade not s1-gated, BUT this is the ONE idiosyncratic sliver, not the cluster. pct52 ~0.54 (16% off 52w-high) -> a laggard with crowded calls, not a near-low squeeze.",
+    "liquidity": "pass ($-ADV ~$32.2B; px $197.58)",
+    "cluster": "isolated NVDA-only; MUST be expressed standalone (defined-risk long puts) NOT inside the mega-cap cluster (which is QQQ-beta -- see AMZN entry).",
+    "fundamentals": "CONFIRM short: insider MSPR pinned -100 all year (-2.7M sh June); AI-neocloud froth cracking (Nebius -17%, SMCI down). No catalyst vetoes the fade.",
+    "event_risk": "next ER 2026-08-26 (outside h10) BUT NFP Thu 07-02 + closed Fri 07-03 = unmanageable 3-day gap -> NO ENTRY into the print/weekend.",
+    "tail_cap": "watch. IF ever taken: token quarter (<=0.2x half-cap), defined-risk long puts ONLY (negative VRP makes convexity cheap; never short stock/gamma), post-NFP Mon 07-06 earliest."
+   },
+   "fundamentals_verdict": "CONFIRM",
+   "structure": "defined-risk long puts / put-spread only (never short stock or short gamma)",
+   "entry_or_trigger": "no entry today; post-NFP Mon 2026-07-06 earliest, only as an isolated idiosyncratic name",
+   "invalidation": "insider buying / real AI-capex catalyst breakout; call-OI build reverses",
+   "thesis": "The single defensible standalone OI-fade sliver: largest absolute call-OI builder (70,951) sitting 16% off its 52w-high with fundamentals CONFIRM. But it is still net-long tech beta and event-blocked this week -> WATCH, not sized.",
+   "key_risks": ["NFP-Thursday + closed-Friday gap", "tech-beta squeeze on a rebound-thrust", "short-gamma amplification"],
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "AMZN", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 0.2, "tier": "WATCH", "cluster_id": "oi_megacap_qqqbeta",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "watch",
+   "gate_verdicts": {
+    "regime_crash": "OI-fade not s1-gated, but REFUTED as sizeable today: on mega-cap-HEAVY days (>=6 mega-caps in the top-15 = today's exact composition) in-panel short-excess was NEGATIVE (~-0.0043). The lane's +2.1%/hit-0.61 robustness came from DISPERSED days, not this corner.",
+    "liquidity": "pass ($-ADV ~$15.1B; px $241.70)",
+    "cluster": "mega-cap-tech {NVDA,AMZN,MSFT,AAPL,GOOGL,PLTR,NFLX} collapse to ONE position by corr>=0.70 gate -> a levered short-QQQ (short-leg-only basket corr -0.64 with SPY fwd; +4.2% down days / -1.3% UP days). Beta-in-disguise, NOT the cross-sectional edge. Represented once via AMZN.",
+    "fundamentals": "NA (watch -- not sized)",
+    "event_risk": "NFLX ER 07-16 is INSIDE h10 for the cluster form (lane self-invalidation); NFP gap. -> watch.",
+    "tail_cap": "watch. The REAL edge is beta-NEUTRAL long-low-OI / short-high-OI dispersion (within-mega-cap rank-IC -0.178, t=-6.7); the naked high-OI leg is not it."
+   },
+   "fundamentals_verdict": "NA",
+   "structure": "only ever a beta-neutral long-short spread; never the naked cluster short",
+   "entry_or_trigger": "no entry; watch the dispersion factor, re-check post-NFP",
+   "invalidation": "cluster is a QQQ-beta short after a -1.5% QQQ day; do not size in any form",
+   "thesis": "Cluster representative held to WATCH to DOCUMENT that raw oi_net_5d on mega-caps is structural size (positive build ~40/44 days -> zero conditional timing info), which degenerates the lane into QQQ-beta on mega-cap-heavy days. This is exactly the additive-confluence/beta failure mode the redesign forbids.",
+   "key_risks": ["QQQ-beta squeeze", "NFLX earnings inside h10", "NFP gap"],
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "CG", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 0.2, "tier": "WATCH", "cluster_id": "oi_cg_single",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "watch",
+   "gate_verdicts": {
+    "regime_crash": "no_op (OI-fade not s1-gated).",
+    "liquidity": "pass ($-ADV ~$200M; px $42.33)",
+    "cluster": "single (alt-asset-manager).",
+    "fundamentals": "CAUTION: 5d call build = 4.24x its own 30d-avg call OI (the single most EXTREME relative build) at pct52 ~0.09 (near 52w LOW) with M&A headlines ('Carlyle puts Very Group up for sale ~£2bn') -> classic catalyst/takeover speculation. You do NOT fade a takeover blindly.",
+    "event_risk": "next ER 2026-08-04 (outside h10); the live risk is M&A/catalyst gap, not earnings.",
+    "tail_cap": "watch (catalyst/gap tail). Do not fade."
+   },
+   "fundamentals_verdict": "CAUTION",
+   "structure": null,
+   "entry_or_trigger": "no entry; needs a news gate confirming no catalyst before it is ever a fade",
+   "invalidation": "confirmed M&A/catalyst behind the build (then this is NOT a fade) / build reverses with no news",
+   "thesis": "The only genuinely extreme RELATIVE call-OI build in the liquid universe, but near-52w-low + near-pure-call + live M&A headline = event speculation, held to WATCH pending a news gate. Same disposition as 06-30.",
+   "key_risks": ["M&A/takeover gap up", "near-52w-low squeeze"],
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "CEG", "lane": "MOM_SHORT", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0081, "excess_hit_minus_base": 0.095, "excess_n": 273,
+   "regime_fit": 0.0, "tier": "STOOD_DOWN", "cluster_id": "mom_short_cohort",
+   "pre_size": "skip", "final_size": "skip", "tail_cap_applied": null,
+   "gate_verdicts": {
+    "regime_crash": "LIVE s1_standdown = TRUE (ret5 +1.71%, drawdown15 -3.32%: the 06-26 dip -> +2.4% V-rebound -> mild fade is the exact momentum-crash/V-rebound shape) -> ALL S1 shorts suppressed.",
+    "liquidity": "pass ($-ADV ~$1.05B)",
+    "cluster": "representative of the stood-down near-52w-low cohort (CEG/T/ACM/NOG/OLED/GPI/BCE/RAM/STWD -- a defensive/rate-sensitive cluster; TIPS ETFs STIP/TIP/SCHP are pct52 artifacts, excluded).",
+    "fundamentals": "NA -- stood down",
+    "event_risk": "next ER 2026-08-06 (outside h10); moot -- leg suppressed",
+    "tail_cap": "n/a -- stood down"
+   },
+   "fundamentals_verdict": "NA",
+   "structure": null,
+   "entry_or_trigger": "n/a -- S1 short leg suppressed on the live V-rebound squeeze guard",
+   "invalidation": "n/a",
+   "thesis": "Cohort representative for the suppressed near-52w-low short leg; momentum-crash guard active on the post-dip snapback.",
+   "key_risks": ["V-rebound squeeze (the reason it is stood down)"],
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "CNC", "lane": "MOM_LONG", "direction": "long", "horizon_validated": 10,
+   "validated_excess": 0.0235, "excess_hit_minus_base": -0.093, "excess_n": 344,
+   "regime_fit": 0.3, "tier": "WATCH", "cluster_id": "mom_long_healthcare_basket",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "basket",
+   "gate_verdicts": {
+    "regime_crash": "no_op (long leg not s1-gated).",
+    "liquidity": "pass ($-ADV ~$391M; px $68.35; fresh 52w-high breakout, prox 1.027).",
+    "cluster": "near-52w-high basket is HEALTHCARE-HEAVY (7/20: CNC/HUM/GH/DVA/ACHC/OSCR/ADPT) -> effectively ONE correlated position by the corr gate; tail-capture diversification the edge requires is broken.",
+    "fundamentals": "CONFIRM long: RBC upgrade ('worst of 2025 behind'), favorable managed-care utilization, Jan-2026 insider buying (+2.07M sh). Healthcare is the actual inflow sector today (+$24M).",
+    "event_risk": "next ER 2026-07-28 (just beyond h10, but a weekly hold bumps it); NFP inside h10.",
+    "tail_cap": "basket (tail-driven, hit BELOW base 0.50<0.59, median ~0; never sized per-name)."
+   },
+   "fundamentals_verdict": "CONFIRM",
+   "structure": "basket only, never per-name; small if ever",
+   "entry_or_trigger": "no entry in this regime; the CNC/HUM subset is the only post-holiday token candidate IF the tape turns trending/broad",
+   "invalidation": "basket loses its 52w-high breakouts / sharp risk-off reversal / breadth stays narrow",
+   "thesis": "Real factor (research/70 provisional-strong, George-Hwang, |t|>=7, regime-A-stable) but the h10 tail needs a trending broad tape; today is CHOP/REBOUND-THRUST + narrow 37% breadth + tech rolling over -> the tail does not fire. WATCH. Fundamentally the cleanest subset (CNC/HUM).",
+   "key_risks": ["tail fails to fire in choppy narrow tape", "healthcare-cluster concentration", "NFP gap"],
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "HUM", "lane": "MOM_LONG", "direction": "long", "horizon_validated": 10,
+   "validated_excess": 0.0235, "excess_hit_minus_base": -0.093, "excess_n": 344,
+   "regime_fit": 0.3, "tier": "WATCH", "cluster_id": "mom_long_healthcare_basket",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "basket",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass ($-ADV ~$629M; px $409.42; breakout prox 1.027).",
+    "cluster": "clustered w/ CNC (healthcare momentum) -> exposure taken once via the basket, not summed.",
+    "fundamentals": "CONFIRM long: favorable managed-care utilization trends (Morgan Stanley), consistent insider buying (MSPR positive).",
+    "event_risk": "next ER 2026-07-29 (just beyond h10); NFP inside h10.",
+    "tail_cap": "basket"
+   },
+   "fundamentals_verdict": "CONFIRM",
+   "structure": "basket only",
+   "entry_or_trigger": "no entry; part of the CNC/HUM fundamentally-confirmed subset watched post-holiday",
+   "invalidation": "loses 52w-high breakout / managed-care utilization thesis breaks",
+   "thesis": "Healthcare-momentum basket member with fundamentals CONFIRM; noted as evidence-type diversification with CNC, never summed.",
+   "key_risks": ["same healthcare cluster as CNC", "tail-driven basket", "NFP gap"],
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "BKNG", "lane": "S2_dp_revert", "direction": "long", "horizon_validated": 5,
+   "validated_excess": 0.0047, "excess_hit_minus_base": 0.015, "excess_n": 336,
+   "regime_fit": 0.5, "tier": "ADVISORY", "cluster_id": "s2_revert",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "cut on news/earnings",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass (px $182.64; large-cap travel).",
+    "cluster": "S2 advisory cohort; BKNG DP BUY-heavy extreme (~90% of $296M directional prem). Buy-side names (BKNG/MRNA/WING/YUM) are the cleaner long-revert set vs sell-side JPM/CSCO.",
+    "fundamentals": "NA (advisory)",
+    "event_risk": "next ER 2026-08-04 -- clear of h5",
+    "tail_cap": "cut on news/earnings"
+   },
+   "fundamentals_verdict": "NA",
+   "structure": null,
+   "entry_or_trigger": "advisory only; not sized",
+   "invalidation": "concentration not repeated next session / news emerges to explain the one-sided prints",
+   "thesis": "Clean extreme one-sided DP dollar concentration (BUY-heavy) with no near catalyst; small reversion-long tag, advisory only (lane measured +0.47%, below the sizing bar).",
+   "key_risks": ["one-sided prints may be informed", "measured excess below sizing bar"],
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "DLR", "lane": "S4_pcr_fade", "direction": "long", "horizon_validated": 5,
+   "validated_excess": 0.0071, "excess_hit_minus_base": -0.015, "excess_n": 331,
+   "regime_fit": 0.4, "tier": "ADVISORY", "cluster_id": "s4_pcr",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "advisory",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass (px $176.32; data-center REIT, liquid single name -- most of the high-PCR set is thin ETFs/artifacts, e.g. EWA/XPO PCR values are call-volume artifacts).",
+    "cluster": "S4 advisory cohort -- never sized; put-heavy crowd (PCR >= x-section p95 2.97).",
+    "fundamentals": "NA",
+    "event_risk": "clear of h5",
+    "tail_cap": "advisory"
+   },
+   "fundamentals_verdict": "NA",
+   "structure": null,
+   "entry_or_trigger": "advisory only; not sized",
+   "invalidation": "put-heavy crowd turns out informed (gap down on news)",
+   "thesis": "Cleanest liquid high-PCR put-heavy single name (the ETF/thin names are PCR artifacts); advisory LONG fade only, never sized. The mirror (short call-heavy crowd) measured negative and is not fired.",
+   "key_risks": ["put-heavy crowd may be informed", "advisory-only lane"],
+   "realized_excess_pct": null
+  }
+ ]
+}

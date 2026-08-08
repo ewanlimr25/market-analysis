@@ -1,0 +1,72 @@
+{
+  "conviction_date": "2026-07-16",
+  "purpose": "Top conviction (sized) names from the 2026-07-16 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-16/decision.json",
+  "metric_note": "CRITICAL FOR THE NEXT RUN: the validated factor `oi_net_5d` is NET CALL-MINUS-PUT OI change, NOT call-only. Reconciled 2026-07-14/15 against the raw panel after a call-only read produced sign-flipped daily prints. All OI figures below are NET. Use `SUM(CASE WHEN <call> THEN oi_diff_plain WHEN <put> THEN -oi_diff_plain END)` per day.",
+  "names": [
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "RSI reclaims neutral (>45) with a close back above the prior consolidation range ($144.22), or the BBB- downgrade narrative is reversed by a rating action/guidance upgrade.",
+      "entry_date": "2026-07-13",
+      "entry_price": 131.54,
+      "adverse_flow_exit_check": "HELD unchanged at starter, DOWNGRADED to no-add/tightened-monitoring on a FRESH fundamentals CAUTION tonight (was CONFIRM on 07-14/07-15). $124.21 vs $131.54 entry -- new 52w low, RSI14 17.6, excess ~+5.78% (large, front-loaded -- per the 07-15 calibration note this lane has already shown a violent give-back after a similarly sharp one-day move; watch for mean-reversion). Invalidation tested: RSI>45 AND close>$144.22, 0-of-2 clauses met, does NOT fire. Fundamentals-gate CAUTION rationale: short remains catalyst-corroborated (AI-capex/credit-risk, BBB- downgrade) so not vetoed, but RSI 17.6 carries genuine bounce risk -- gate's -1 tier haircut applied (no add, tightened monitoring), physical position held unchanged (no partial-trim mechanism in this framework). FOMC 2026-07-29 now falls inside the rolling h10 monitoring window measured from tonight (no hard time-stop, so the position rides through the print) -- re-check as 07-29 approaches. Technology sector distinct from ICE/MAT, no cluster overlap."
+    },
+    {
+      "ticker": "ICE",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close back above the pre-build breakout level, or the 5-day net call-OI build fully unwinds without downside follow-through. KNOWN SPEC DEFECT (flagged 07-15, not yet fixed -- any fix requires retro_harness.py --all to pass first): clause 1 is untestable on ICE's monotonic-up path; clause 2 is the only clause that can practically fire.",
+      "entry_date": "2026-07-13",
+      "entry_price": 137.67,
+      "adverse_flow_exit_check": "HELD unchanged at starter, no add. $141.76 vs $137.67 entry -- fresh 52w high, excess ~-2.76% (deteriorating). 5d net call-OI build stalled flat (~+5,023), not reversing -- clause 2 not met. Fundamentals CAUTION carried (beat-streak + strong margins fight the short), not re-gated tonight. FOMC 2026-07-29 falls inside the rolling h10 window from tonight; own-name earnings 2026-07-30 sits right at the window edge -- re-check both as they approach. Financial Services sector distinct from ORCL/MAT, no cluster overlap. On next run: if the 5d net finally goes non-positive, clause 2 fires cleanly -- exit."
+    },
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $16.50 (~52w-range midpoint reclaim), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-10",
+      "entry_price": 13.33,
+      "adverse_flow_exit_check": "HELD unchanged at starter, ELEVATED RISK -- the position most likely to invalidate on the next print. $14.65 vs $13.33 entry -- WORST excess in the book (~-10.46%, sharply deteriorating), on a +5.7% single-day pop that closed roughly a third of the remaining gap to the $16.50 invalidation in one session. 5d net call-OI build REASSERTED (+9,525) -- signal still live even as price moves hard against the position. Fundamentals CONFIRM carried, not re-gated. FOMC 2026-07-29 falls inside the rolling h10 window from tonight. Consumer Cyclical sector -- shares sector with tonight's vetoed ROST candidate (no double-exposure since ROST is watch-only; re-check cluster if ROST's veto is ever lifted). STANDING CONCERN, repeated from 07-15: no stop-loss rule exists beyond the $16.50 invalidation -- this position can keep bleeding without triggering anything short of that level. On next run: watch the $16.50 level closely given today's acceleration toward it."
+    }
+  ],
+  "exited_tonight": [
+    {
+      "ticker": "LNG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "entry_date": "2026-07-14",
+      "entry_price": 265.03,
+      "exit_date": "2026-07-16",
+      "exit_price": 259.0,
+      "realized_excess_pct": 2.13,
+      "exit_reason": "PRE-REGISTERED TRIGGER FIRED: second consecutive negative net-OI print (07-15: -1,241, then 07-16: -9,912, a full call-unwind); trailing-5d net swung +17,983 -> -2,038 (the build itself inverted sign). This executes the rule written in advance on 07-15 ('if the next print is ALSO negative, that is confirmation -- flag for exit'), not a discretionary override. Closed as a WINNER on signal breakdown, not a loss -- clean mechanism-driven exit. Do not re-enter without a fresh, unrelated OI-build signal."
+    }
+  ],
+  "no_new_entries_note": "ZERO new directional entries tonight. ROST (OI_FADE short candidate) was the only name that reached fundamentals-gate for a fresh sizing decision and was VETOED (beat streak +14.47%, insider MSPR +35.5, Zacks #1 Strong Buy, rising estimates -- the call-OI build is corroborated bullish conviction, not crowding). MOM_SHORT fresh candidates (OKLO, SMR, XE, INIO) were low-quality (deeply oversold/volatile nuclear-reversal names, high bounce risk; INIO has earnings inside h10) and held to watch-only. MOM_LONG basket (242 names, tail-driven, marginal in CHOP) noted but never sized per-name by design. S4 PCR-fade longs (KEYS, COKE, KGS, NTNX) and S2 liquidity-reversion longs (PSA, TPR, MET) are advisory/conditioning-only, watch tier, not ranked by size. Vol book: INTC/NOW earnings IV-crush watch-and-confirm (6-7d lead, not fire-now); SPY 0DTE marginal GO half-size; QQQ 0DTE hard stand-aside (inverted VRP).",
+  "book_state": {
+    "positions": 3,
+    "all_shorts": true,
+    "lane_concentration": "2 of 3 are OI_FADE (ICE, MAT), 1 MOM_SHORT (ORCL) -- LNG's exit tonight reduced OI_FADE concentration from 3/4 to 2/3 of the book. Sectors are distinct (Technology/Financial Services/Consumer Cyclical) -- no correlation-cluster collapse required.",
+    "net_book_excess_pct": -2.48,
+    "detail": "ORCL +5.78%, ICE -2.76%, MAT -10.46% across three starter positions (LNG exited at +2.13%, no longer in the live book)."
+  },
+  "event_risk_note": "FOMC 2026-07-29 (Tier-1 macro) now falls inside the rolling h10 monitoring window measured from tonight's scan (2026-07-16 -> ~2026-07-30). None of the three held shorts carry a hard time-stop, so all three remain exposed through the print regardless of their original entry-anchored h10 resolution date. No incremental tier cut was applied to ICE or MAT tonight for this alone (gates are not additively stacked); ORCL's downgrade tonight is driven by its FRESH fundamentals CAUTION, with the FOMC exposure logged as a compounding monitoring flag, not a separate cut. Re-underwrite all three as 07-29 approaches, especially MAT given how close it now sits to its $16.50 invalidation.",
+  "proposed_rule_fixes_not_shipped": [
+    "ICE-class invalidation spec: 'close back above X' is untestable on a monotonically-rising path (repeated flag from 07-15, still not fixed). Invalidations need at least one clause that can fire on the path actually realized. Must clear retro_harness.py --all before shipping.",
+    "No stop-loss rule exists beyond the formal invalidation level for OI_FADE shorts -- MAT is now the second consecutive scan where this gap is the binding practical risk (position can bleed indefinitely below invalidation with no mechanical trigger).",
+    "The h10 event-risk window for HELD positions is ambiguous between 'anchored at original entry' vs 'rolling from tonight's scan date.' Tonight used the rolling-from-scan-date reading (consistent with Phase A's framing of FOMC as inside window 'from 2026-07-16'), which is more conservative and appropriate for positions with no hard time-stop, but this convention should be pinned explicitly rather than inferred nightly."
+  ],
+  "regression_gate": "NOT TRIGGERED -- no lane or threshold change shipped tonight. All findings above are logged as proposed fixes only, gated on python3 scripts/retro_harness.py --all before shipping."
+}

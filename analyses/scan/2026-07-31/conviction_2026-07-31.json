@@ -1,0 +1,95 @@
+{
+ "conviction_date": "2026-07-31",
+ "purpose": "Top conviction (held + near-the-line watch) names from the 2026-07-31 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+ "source_decision_envelope": "analyses/scan/2026-07-31/decision.json",
+ "book_state": {
+  "positions": 1,
+  "all_shorts": true,
+  "detail": "ZERO new starters, across every lane. OI_FADE: third consecutive session with zero clean starters, both live-mechanism candidates (AVTR, HRI) VETO-SUSTAINED on fundamentals tonight. MOM_SHORT: watch-only capped for new starters per CLAUDE.md invariant #6, regardless of the clean CLBK/CRH/LII/PATK mechanism set. MOM_LONG: basket mean +0.18% below the +0.3% starter threshold. S2: +0.06% mean, far below starter, advisory only. S4: the one real sizing question tonight -- landed ADVISORY/WATCH, not half-cap and not starter, despite +0.44% mean nominally sitting inside the Phase-C 'MEDIUM' magnitude band. Reasoning: (1) the binding sizing map's explicit 'advisory lane -> watch' clause overrides magnitude alone when the lane's own confidence is tagged LOW-MOD, consistent with 07-30 precedent; (2) even setting confidence aside, +0.44% maps to STARTER at most under this envelope's sizing law, never half -- half requires >=+1% sign-stable; (3) NFP (Tier-1) sits inside the h5 window boundary, which would force a -1 tier on any h5 S4 trade if ever elevated to starter, converging on watch anyway; (4) 13 of 19 S4 candidates (led by the top-ranked PUMP) are absent from data/prices.parquet and fail-closed on the correlation-cluster gate; (5) of the 6 data-clean names, 3 (VMC, EQIX, SWKS) are premium-already-harvested (ivrank_chg_5d < -25); only JEF, DKS, DPZ are simultaneously data-clean, not harvested, and liquidity-clean -- and even those lack a fundamentals-gate verdict, now flagged to the orchestrator to spawn.",
+  "net_book_new_starter_pct_exposure": "0 new starters; 1 carried held short (PLNT, half size, unchanged) with a HOLD-to-Monday-close verdict"
+ },
+ "held_position_reconciliation": {
+  "note": "PLNT reconciled against tonight's rebuilt truth-set (data/prices.parquet through 2026-07-31) and the fresh UW 07-31 OI panel. Since-entry excess computed directly vs SPY, not read off held_book.py's TODAY-only 'excess' column.",
+  "positions": [
+   {
+    "ticker": "PLNT",
+    "lane": "OI_FADE",
+    "direction": "short",
+    "entry_date": "2026-07-20",
+    "entry_price": 55.2,
+    "close_2026_07_31": 55.91,
+    "gross_pnl_pct": -1.29,
+    "since_entry_short_excess_pct": -0.53,
+    "verdict": "HOLD_TO_BINDING_EXIT",
+    "action_taken": "No change. Hold current half size to the binding h10 exit.",
+    "hard_exit_deadline": "2026-08-03 close (Monday). 2026-07-31 is a FRIDAY, so exactly ONE trading session remains; 2026-08-01 is a Saturday and is not a session.",
+    "rationale": "Pre-registered leg (b) 'first genuinely negative call_net' NOT strictly triggered (call_net +20, still nominally positive) but decaying: puts +355 vs calls +20 opened, net OI printed -335, the first negative net-OI print of the hold. Signal decaying, not confirmed -- do not exit early on an unconfirmed pre-registered trigger, that is a discretionary override the framework disfavors. Discretionary stop $59.50 is 6.42% away and remains LIVE, not vestigial: the vestigial-invalidation exception applies to a position that has run >10% IN ITS FAVOR, and this one hasn't (gross -1.29%, adverse to the short). Earnings 08-06 falls three sessions after the binding exit -- clean. Verdict: let the h10 timer bind Monday close; if leg (b) confirms intraday Monday, it resolves on the same session as the time-stop anyway."
+   }
+  ]
+ },
+ "watch_only": {
+  "OI_FADE": [
+   "AVTR (fundamentals VETO sustained)",
+   "HRI (fundamentals VETO sustained, worsening -- +2.89% bounce print)",
+   "INFY (mechanism fail, persistence 0.984)"
+  ],
+  "MOM_SHORT": [
+   "CRH (clean: earnings 11-04, liquidity $369.3M ADV)",
+   "LII (clean: earnings 10-28, liquidity $215.9M ADV)",
+   "CLBK (clean on earnings 10-19 + liquidity $73.8M, but DATA GAP: absent from prices.parquet, correlation gate fail-closed)",
+   "PATK (clean on earnings 10-29 + liquidity $62.1M, but DATA GAP: absent from prices.parquet, correlation gate fail-closed)",
+   "EARNINGS-BLOCKED by the orchestrator's corrected gate (the lane wrongly reported these as passing): ECHO 08-03, PEG 08-04, FIGR 08-13, QXO 08-13"
+  ],
+  "MOM_LONG": [
+   "basket, 106/191 pass h10 earnings gate, below starter threshold"
+  ],
+  "S2_dp_revert": [
+   "WFC",
+   "VZ",
+   "ITW",
+   "CMS",
+   "TD",
+   "CRH",
+   "RY",
+   "TRP",
+   "BNS",
+   "TSCO"
+  ],
+  "S4_pcr_fade": {
+   "data_clean_not_harvested_needs_fundamentals_gate": [
+    "JEF",
+    "DKS",
+    "DPZ"
+   ],
+   "data_clean_but_premium_harvested": [
+    "VMC",
+    "EQIX",
+    "SWKS"
+   ],
+   "fail_closed_missing_from_prices_parquet": [
+    "PUMP",
+    "TENB",
+    "VIK",
+    "ESI",
+    "LBRT",
+    "HUBB",
+    "CSX",
+    "EIX",
+    "AGNC",
+    "GFI",
+    "KMX",
+    "NSC",
+    "GDDY"
+   ]
+  }
+ },
+ "orchestrator_action_items": [
+  "DECLINED: risk-sizer asked me to spawn fundamentals-gate on JEF/DKS/DPZ. NOT spawned. Phase D rule 4 gates only names ABOUT TO BE SIZED; S4 resolved to advisory/watch, so gating them would contradict the same discipline that correctly left OLLI ungated on 07-30. Recorded as an explicit adjudication, not an omission. If S4 is ever elevated to starter these three need the gate FIRST.",
+  "FIX data/prices.parquet coverage (783 tickers) vs data/features.parquet (2,460). 13/19 S4 names and 2/4 clean MOM_SHORT names are silently uncheckable on the correlation gate. 5th consecutive session (07-28 HOG, 07-29 HRI/PLNT, 07-30 LHX/VICI, 07-31 the S4 majority) and the FIRST to touch a live sizing candidate. The gate returns nothing rather than erroring -- it must fail loudly.",
+  "FIX the momentum lane's earnings gate. It reported '0 dropped' tonight; independent re-run shows 4/8 MOM_SHORT (ECHO, PEG, FIGR, QXO) and 85/191 MOM_LONG names report inside h10. PEG and QXO were ALREADY earnings-blocked on 07-30, so the lane regressed on names it had previously excluded. Same class as the ROST prior_verdicts bug: the lane runs the script then misreports the result. NOTE the prior_verdicts half IS now genuinely fixed (37 blocked dropped, ROST absent, zero ETP leakage).",
+  "ADD a near_dte_actual guard wherever front-end-iv-ratio is read. Tonight it showed backwardation (SPY 1.61 / QQQ 1.70) with near_dte_actual=0 -- today's EXPIRING 0DTE contract vs the 30-day, an artifact, while the genuine forward curve was in contango. This casts doubt on the 07-30 0DTE stand-down, which cited 'front-end backwardation (1.296x/1.445x)' as 1 of its 3 conditions. Cannot retroactively verify that night's near_dte_actual, so this is a flag for /calibration-audit, NOT a claim the 07-30 call was wrong.",
+  "RECONCILE the Phase C tier names against the envelope's sizing map. Phase C calls +0.3-1% 'MEDIUM' (reads as sizeable) while the sizing map reads '+0.3-1% -> starter' with half reserved for >=+1% sign-stable, plus a separate 'advisory lane -> watch' clause. Overlapping language for different things; it was re-derived from scratch tonight and will be again unless the spec is fixed.",
+  "scripts/zerodte_setup.py QQQ gamma-sign bug (logged 07-30) did NOT bite tonight -- script and CLI agreed on QQQ negative. Still unfixed; absence of symptom is not a fix."
+ ],
+ "process_findings_summary": "Two independent measuring-instrument failures surfaced tonight, both caught by orchestrator re-runs rather than by the lanes themselves: the momentum lane's earnings gate (misreported 0 dropped; actually 4/8 and 85/191) and the prices.parquet correlation-gate coverage gap (13/19 S4 names uncheckable, fail-closed). Neither changed a live position -- nothing was sized -- but the parquet gap landed on the ONE lane that was a live sizing candidate, so it has stopped being moot. Verify lane-reported gate results independently; that is now twice-proven necessary."
+}

@@ -1,0 +1,277 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-06-30",
+ "report_kind": "market-scan",
+ "regime": "UPTREND_RESUMPTION",
+ "regime_context": {
+  "regime_label": "UPTREND_RESUMPTION / TRANSITIONAL (live path-aware; harness --date 2026-06-30 falls back to the stale 06-26 regime because data/*.parquet max at 2026-06-26 -- NOT authoritative)",
+  "ret5": 0.018,
+  "ret10": -0.0107,
+  "vol_state": "VIX 16.45 (-6.8% today, ret5 -15.6%, -36% off 90d high 25.78, near 90d low 15.32, below both MAs); front-end flipped BACKWARDATION->CONTANGO (0.903); SPY GEX still NEGATIVE but spot 746.55 RIGHT AT the ZGL flip (749.07, gap 0.34% vs 3.2% yesterday) -> short-gamma yet on the cusp of stabilizing; 1y 25d skew TAIL_HEDGING (1.44). Rapidly normalizing toward complacency. NOT a direction.",
+  "breadth_pct_green": 0.38,
+  "directional_tradable": true,
+  "s1_standdown": true,
+  "event_risk": [
+   {"event": "ISM Manufacturing", "date": "2026-07-01", "tier": 2, "note": ""},
+   {"event": "June NFP / jobs report", "date": "2026-07-02", "tier": 1, "note": "moved up from Fri due to holiday; inside all horizons"},
+   {"event": "US market HOLIDAY (Independence Day observed)", "date": "2026-07-03", "tier": 1, "note": "shortened week, thin liquidity"},
+   {"event": "CPI + Q2 bank earnings begin (JNJ/MS/BNY 07-15)", "date": "2026-07-14", "tier": 1, "note": "at/just past h10 edge"}
+  ]
+ },
+ "vol_book": [
+  {"symbol": "FDS", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 88, iv30d 0.676 (rich)", "implied_move": 0.099, "expected_range": null, "net_expectancy": null, "suggested_structure": "Richest near-dated large-cap IV; delta-neutral iron condor into 07-01 AM print, harvest crush if realized < 9.9% implied. NET-OF-COST, size small.", "stand_aside_reason": null, "delta_neutral": true},
+  {"symbol": "GIS", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 85, iv30d 0.413", "implied_move": 0.061, "expected_range": null, "net_expectancy": null, "suggested_structure": "Liquid consumer-defensive; delta-neutral condor into 07-01 AM print, net-of-cost.", "stand_aside_reason": null, "delta_neutral": true},
+  {"symbol": "PENG", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 97 (richest), iv30d 1.637 (small-cap)", "implied_move": 0.237, "expected_range": null, "net_expectancy": null, "suggested_structure": "Very rich IV but 23.7% implied move + small-cap gap risk -> size MINIMAL, defined-risk only, into 07-07 PM.", "stand_aside_reason": null, "delta_neutral": true},
+  {"symbol": "AZZ", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 87, iv30d 0.515", "implied_move": 0.075, "expected_range": null, "net_expectancy": null, "suggested_structure": "Defined-risk condor into 07-08 PM, net-of-cost; mid-cap, size small.", "stand_aside_reason": null, "delta_neutral": true},
+  {"symbol": "PEP", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 84, iv30d 0.285 (most liquid mega-cap)", "implied_move": 0.013, "expected_range": null, "net_expectancy": null, "suggested_structure": "Liquid mega-cap, tiny 1.3% implied move -> tight defined-risk condor into 07-09 AM, net-of-cost.", "stand_aside_reason": null, "delta_neutral": true},
+  {"symbol": "JNJ", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 83, iv30d 0.264 (very liquid)", "implied_move": 0.015, "expected_range": null, "net_expectancy": null, "suggested_structure": "Post-holiday mega-cap; tight condor into 07-15 AM, net-of-cost. Q2 season kickoff.", "stand_aside_reason": null, "delta_neutral": true},
+  {"symbol": "BNY", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 79, iv30d 0.358", "implied_move": 0.052, "expected_range": null, "net_expectancy": null, "suggested_structure": "Q2 bank-earnings kickoff; delta-neutral condor into 07-15 AM, net-of-cost.", "stand_aside_reason": null, "delta_neutral": true},
+  {"symbol": "SPY/QQQ-0DTE", "lane": "vol_0dte", "sell_premium": false, "vol_state": "SPY GEX still NEGATIVE (spot 746.55 < ZGL 749.07) + NFP 07-02 + Jul-3 holiday thin tape", "implied_move": null, "expected_range": null, "net_expectancy": null, "suggested_structure": null, "stand_aside_reason": "0DTE-VRP premium-selling LESS safe net-of-cost under negative gamma: realized can spike and dealer hedging amplifies; NFP 07-02 + Jul-3 thin holiday tape add gap risk. STAND ASIDE this week. NOTE: spot is right at the ZGL flip -- a close above ~749 flips dealer gamma positive (stabilizing) and would re-open 0DTE-VRP, but not yet.", "delta_neutral": true}
+ ],
+ "watchlist_write_back": ["WEN", "TSLA", "AMZN", "NVDA", "GOOGL", "META", "MSTR", "CG", "ASTS", "COST", "XOM", "SHW", "FDS", "GIS", "PEP", "JNJ"],
+ "report_path": "analyses/scan/2026-06-30/report.md",
+ "calls": [
+  {
+   "ticker": "WEN", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 1.0, "tier": "MEDIUM", "cluster_id": "oi_wen_single",
+   "pre_size": "starter", "final_size": "starter", "tail_cap_applied": "starter",
+   "gate_verdicts": {
+    "regime_crash": "OI-fade not s1-gated; mid-low pct52 (0.37) -> NOT a V-rebound squeeze candidate; half-cap regime",
+    "liquidity": "pass ($-ADV ~$235M >= $50M floor; px $8.29 >= $5)",
+    "cluster": "single (small-cap restaurant/consumer; sector-diversifies the tech-heavy book)",
+    "fundamentals": "CAUTION: weakening QSR franchise -> tactical fade, do not oversize",
+    "event_risk": "next ER 2026-08-14 -- outside h10",
+    "tail_cap": "starter (small-cap, thinner name -> squeeze/short-squeeze tail)"
+   },
+   "fundamentals_verdict": "CAUTION",
+   "invalidation": "call-OI build (5d +290k, ~1.1x 30d-avg call OI) reverses / breaks out on catalyst",
+   "thesis": "Cleanest GENUINE crowded-call extreme in the liquid universe: 5d call-OI build = 1.13x its own 30d-avg call OI (vs ~0.12-0.16x for the mega-caps), at a non-squeeze mid-low pct52 with no near catalyst.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "TSLA", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 1.0, "tier": "MEDIUM", "cluster_id": "oi_tsla_single",
+   "pre_size": "starter", "final_size": "starter", "tail_cap_applied": "starter",
+   "gate_verdicts": {
+    "regime_crash": "OI-fade not s1-gated; mid-UPPER pct52 (0.63) -> not a near-low squeeze; fading strength on a 2-day rip is a favorable entry",
+    "liquidity": "pass ($-ADV ~$20B; px $421)",
+    "cluster": "single (auto / Musk-reflexive; independent of mega-cap tech & internet clusters)",
+    "fundamentals": "CAUTION: high-multiple reflexive name -> tactical fade only",
+    "event_risk": "next ER 2026-07-22 -- outside h10",
+    "tail_cap": "starter (reflexive squeeze tail on a risk-on tape)"
+   },
+   "fundamentals_verdict": "CAUTION",
+   "invalidation": "5d call-OI build (+605k, net +115k) reverses / rip extends through resistance",
+   "thesis": "Heavy call-dominated 5d build in a highly liquid single at mid-upper 52w range; h10 relative-underperformance fade, sector-independent.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "AMZN", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 1.0, "tier": "MEDIUM", "cluster_id": "oi_megacap_internet",
+   "pre_size": "starter", "final_size": "starter", "tail_cap_applied": "starter",
+   "gate_verdicts": {
+    "regime_crash": "OI-fade not s1-gated; mid pct52 (0.51); tech-led rebound -> fade for h10 RELATIVE underperformance, not an outright directional short -> starter/half",
+    "liquidity": "pass ($-ADV ~$14.9B; px $238)",
+    "cluster": "mega-cap-internet cluster (AMZN/GOOGL/META) -> sized ONCE via AMZN (representative)",
+    "fundamentals": "CAUTION: dominant franchise -> tactical OI-fade, do not oversize",
+    "event_risk": "next ER 2026-07-30 -- outside h10",
+    "tail_cap": "starter (mega-cap-tech squeeze tail on a tech-led rebound)"
+   },
+   "fundamentals_verdict": "CAUTION",
+   "invalidation": "5d call-OI build (+409k, net +233k) reverses / tech leadership broadens the rebound",
+   "thesis": "Cleanest mid-range call-dominated build among the mega-cap-internet cluster; taken once as the cluster representative. Pairs with the near-52w-high semis basket for a roughly tech-neutral RV posture.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "NVDA", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 0.6, "tier": "WATCH", "cluster_id": "oi_megacap_semi",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "watch",
+   "gate_verdicts": {
+    "regime_crash": "heaviest ABSOLUTE 5d call build (1.02M) but it is THE rebound leader on a tech-led up day -> fresh short times poorly -> WATCH",
+    "liquidity": "pass ($-ADV ~$32.6B)",
+    "cluster": "mega-cap-semi cluster (NVDA/AVGO) -> watch; correlated with the internet cluster on tech-led days",
+    "fundamentals": "NA (watch)",
+    "event_risk": "next ER 2026-08-26 -- outside h10",
+    "tail_cap": "watch (leader-squeeze tail)"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "rebound leadership rotates away from semis (then revisit as short)",
+   "thesis": "Biggest absolute call build but low relative-to-base (0.12x) and it is leading the tape -> deferred to watch on the V-rebound overlay.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "GOOGL", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 1.0, "tier": "WATCH", "cluster_id": "oi_megacap_internet",
+   "pre_size": "watch", "final_size": "watch",
+   "gate_verdicts": {
+    "regime_crash": "no_op", "liquidity": "pass",
+    "cluster": "clustered w/ AMZN (mega-cap-internet) -> exposure taken once via AMZN; 5d build +237k",
+    "fundamentals": "NA", "event_risk": "ER 2026-07-22 -- outside h10", "tail_cap": "n/a"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "part of mega-cap-internet OI-fade basket; taken once via AMZN",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "META", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 1.0, "tier": "WATCH", "cluster_id": "oi_megacap_internet",
+   "pre_size": "watch", "final_size": "watch",
+   "gate_verdicts": {
+    "regime_crash": "no_op", "liquidity": "pass",
+    "cluster": "clustered w/ AMZN (mega-cap-internet) -> exposure taken once via AMZN; 5d build +234k, net +168k",
+    "fundamentals": "NA", "event_risk": "ER 2026-07-29 -- outside h10", "tail_cap": "n/a"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "part of mega-cap-internet OI-fade basket; taken once via AMZN",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "MSTR", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 0.4, "tier": "WATCH", "cluster_id": "oi_crypto",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "watch",
+   "gate_verdicts": {
+    "regime_crash": "LIVE V-rebound overlay: pct52 ~0.01 (at 52w low) + bitcoin-reflexive -> squeeze tail on a confirmed-rebound day -> DEFERRED",
+    "liquidity": "pass ($-ADV ~$2.4B)",
+    "cluster": "crypto-proxy cluster (MSTR/MARA/BMNR) -> watch, not sized into the bounce",
+    "fundamentals": "CAUTION: bitcoin-reflexive",
+    "event_risk": "next ER 2026-07-30 -- outside h10",
+    "tail_cap": "watch (squeeze tail)"
+   },
+   "fundamentals_verdict": "CAUTION",
+   "invalidation": "OI build reverses / BTC rolls over (then revisit as short)",
+   "thesis": "Heavy call build but near 52w-low + reflexive crypto -> exactly the V-rebound squeeze the overlay defers.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "CG", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 0.4, "tier": "WATCH", "cluster_id": "oi_cg_single",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "watch",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass ($-ADV ~$172M; px $42)",
+    "cluster": "single (financial / alt-asset-manager)",
+    "fundamentals": "NEEDS NEWS GATE: 5d call build = 4.6x its 30d-avg call OI + PCR 0.045 (near-pure calls) at pct52 ~0.08 (near 52w low) -> classic M&A/catalyst-speculation pattern, which you do NOT fade blindly. Route to fundamentals-gate/news check before sizing.",
+    "event_risk": "next ER 2026-08-04 -- outside h10",
+    "tail_cap": "watch (catalyst/gap tail)"
+   },
+   "fundamentals_verdict": "CAUTION",
+   "invalidation": "confirmed catalyst/M&A behind the call build (then this is NOT a fade) / build reverses with no news",
+   "thesis": "Single most extreme RELATIVE call-OI build in the universe (+458% vs 30d avg, near-pure calls) -- but near-52w-low + that profile screams event speculation. Held to WATCH pending a news gate; do not fade a takeover.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "ASTS", "lane": "OI_FADE", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0088, "excess_hit_minus_base": 0.205, "excess_n": 640,
+   "regime_fit": 0.6, "tier": "WATCH", "cluster_id": "oi_asts_single",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "watch",
+   "gate_verdicts": {
+    "regime_crash": "mid pct52 (0.54) so not a near-low squeeze, BUT high-flyer space/satellite name -> squeezes hard on risk-on -> WATCH not sized",
+    "liquidity": "pass ($-ADV ~$2.2B)",
+    "cluster": "single (space/satellite high-flyer)",
+    "fundamentals": "NA (watch)",
+    "event_risk": "next ER 2026-08-10 -- outside h10",
+    "tail_cap": "watch (high-flyer squeeze tail)"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "call build (0.23x 30d, net +124k) reverses / risk-on melt-up continues",
+   "thesis": "Higher relative call build (0.23x) than the mega-caps at a mid-range pct52, but a volatile high-flyer -> watch/optional-starter rather than a clean fade.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "CME", "lane": "MOM_SHORT", "direction": "short", "horizon_validated": 10,
+   "validated_excess": 0.0081, "excess_hit_minus_base": 0.095, "excess_n": 273,
+   "regime_fit": 0.0, "tier": "STOOD_DOWN", "cluster_id": "mom_short_cohort",
+   "pre_size": "skip", "final_size": "skip", "tail_cap_applied": null,
+   "gate_verdicts": {
+    "regime_crash": "LIVE s1_standdown = TRUE (day-2 of a confirmed V-rebound, SPY ret5 +1.8% / QQQ +3.2%, VIX -15.6% 5d) -> ALL S1 shorts suppressed",
+    "liquidity": "pass",
+    "cluster": "genuine near-52w-low cohort (CME/ICE/T/TMUS/BSX/AMT/NKE...) -> entire leg stood down. NOTE: cohort partly polluted by split-artifact pct52 (NFLX/BKNG/ISRG/INTU/KLAC have unadjusted 52w-highs); CME/ICE/T/TMUS/BSX/AMT are genuine.",
+    "fundamentals": "NA", "event_risk": "next ER 2026-07-22", "tail_cap": "n/a -- stood down"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "n/a -- S1 short leg suppressed on live V-rebound squeeze guard",
+   "thesis": "Representative of the stood-down genuine near-52w-low cohort; momentum-crash guard active and strengthening on day-2 of the snapback.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "AMD", "lane": "MOM_LONG", "direction": "long", "horizon_validated": 10,
+   "validated_excess": 0.0235, "excess_hit_minus_base": -0.093, "excess_n": 344,
+   "regime_fit": 0.5, "tier": "WATCH", "cluster_id": "mom_long_semis_basket",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "basket",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass",
+    "cluster": "near-52w-high basket, HEAVILY semis (AMD/AMAT/LRCX/GLW/ALAB/TER/SNDK/INTC/PANW) + a few industrials/healthcare (CAT/GEV/LLY/UNH) -- one semis cluster",
+    "fundamentals": "NA",
+    "event_risk": "ER cluster early-Aug (outside h10)",
+    "tail_cap": "basket (tail-driven; long leg never sized per-name)"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "basket loses its 52w-high breakouts / sharp risk-off reversal",
+   "thesis": "Near-52w-high basket, tail-driven (median ~0); WATCH/basket only into a WEAK-breadth (38%) narrow rebound, never per-name. Long this basket + short crowded-call mega-caps ~ tech-neutral RV.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "COST", "lane": "S2_dp_revert", "direction": "long", "horizon_validated": 5,
+   "validated_excess": 0.0047, "excess_hit_minus_base": 0.015, "excess_n": 336,
+   "regime_fit": 0.6, "tier": "ADVISORY", "cluster_id": "s2_revert",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "cut on news/earnings",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass ($-ADV ~$2.4B)",
+    "cluster": "S2 advisory cohort; COST DP SELL-heavy extreme (buy_frac 0.093 on $484M directional prem)",
+    "fundamentals": "NA",
+    "event_risk": "next ER 2026-09-24 -- clear of h5",
+    "tail_cap": "cut on news/earnings"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "concentration not repeated next session / news emerges to explain the one-sided prints",
+   "thesis": "Largest, cleanest extreme one-sided DP dollar concentration (SELL-heavy) with no near catalyst, mid-low pct52 -> small reversion-long tag (long-tilted edge), advisory only.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "XOM", "lane": "S2_dp_revert", "direction": "long", "horizon_validated": 5,
+   "validated_excess": 0.0047, "excess_hit_minus_base": 0.015, "excess_n": 336,
+   "regime_fit": 0.5, "tier": "ADVISORY", "cluster_id": "s2_revert",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "cut on news/earnings",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass ($-ADV ~$2.4B)",
+    "cluster": "S2 advisory cohort; XOM DP BUY-heavy extreme (buy_frac 0.940 on $330M directional prem); energy diversifies",
+    "fundamentals": "NA",
+    "event_risk": "next ER 2026-08-07 -- clear of h5",
+    "tail_cap": "cut on news/earnings"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "concentration not repeated / crude gaps",
+   "thesis": "Clean extreme one-sided DP concentration in a liquid energy name; advisory reversion tag, sector-diversifying vs the tech-heavy watch list.",
+   "realized_excess_pct": null
+  },
+  {
+   "ticker": "SHW", "lane": "S4_pcr_fade", "direction": "long", "horizon_validated": 5,
+   "validated_excess": 0.0071, "excess_hit_minus_base": -0.015, "excess_n": 331,
+   "regime_fit": 0.5, "tier": "ADVISORY", "cluster_id": "s4_pcr",
+   "pre_size": "watch", "final_size": "watch", "tail_cap_applied": "advisory",
+   "gate_verdicts": {
+    "regime_crash": "no_op",
+    "liquidity": "pass ($-ADV ~$998M -- most liquid of the high-PCR set)",
+    "cluster": "S4 advisory cohort -- never sized; PCR 8.1 put-heavy, mid pct52 (0.61)",
+    "fundamentals": "NA",
+    "event_risk": "next ER 2026-07-28 -- clear of h5-10",
+    "tail_cap": "advisory"
+   },
+   "fundamentals_verdict": "NA",
+   "invalidation": "put-heavy crowd turns out informed (gap down on news)",
+   "thesis": "Cleanest liquid high-PCR put-heavy crowd (mid-range 52w, ER clear); advisory LONG fade only, never sized. Mirror (short call-heavy crowd) measured negative and is not fired.",
+   "realized_excess_pct": null
+  }
+ ]
+}

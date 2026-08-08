@@ -1,0 +1,62 @@
+{
+  "conviction_date": "2026-07-09",
+  "purpose": "Top conviction (sized) names from the 2026-07-09 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-09/decision.json",
+  "names": [
+    {
+      "ticker": "UDR",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "half",
+      "cluster_id": "oi_fade_reit_cluster_0709",
+      "invalidation": "Close > $42.00, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-09",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. Also re-check whether cluster partner EQR has cleared its fundamentals verdict -- if so, re-evaluate as a collapsed REIT-pair position."
+    },
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "half",
+      "cluster_id": null,
+      "invalidation": "Close > $16.50 (~52w-range midpoint reclaim), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-09",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "NKTR",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "half",
+      "cluster_id": null,
+      "invalidation": "Close > $85, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-09",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "FROG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $105, or the 5-day net call-OI build fully unwinds without downside follow-through, or another earnings beat confirms the growth story over the flow signal.",
+      "entry_date": "2026-07-09",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. CAUTION fundamentals name -- re-check for further fundamentals deterioration or improvement."
+    },
+    {
+      "ticker": "MARA",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $16.50, or the TX-power catalyst headline escalates.",
+      "entry_date": "2026-07-09",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. EXTREME tail-cap name (beta 5.38, live bullish catalyst) -- re-check the TX power-deal news thread specifically before any hold-through; defined-risk structure only, never naked short."
+    }
+  ]
+}

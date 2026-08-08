@@ -1,0 +1,161 @@
+{
+  "conviction_date": "2026-07-07",
+  "purpose": "Top conviction (sized) names from the 2026-07-07 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-07/decision.json",
+  "names": [
+    {
+      "ticker": "CG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "half",
+      "cluster_id": null,
+      "invalidation": "Reclaims the $46-48 supply zone on a real catalyst, or the 5d net call-OI build fully unwinds without downside follow-through into CPI/PPI.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "SHOO",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "half",
+      "cluster_id": null,
+      "invalidation": "Reclaims prior supply zone or breaks out above the 52w-high level, or oi_net_5d unwinds without downside follow-through.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "RSI",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Reclaims the $46-48-equivalent supply zone, or oi_net_5d flips negative, or a genuine breakout follow-through above today's 52w high.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "CGNX",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Reclaims supply / breaks the 52w-high level, or oi_net_5d flips negative, or the beat-and-raise catalyst stack drives a genuine breakout.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "DLO",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Reclaims supply, or oi_net_5d flips negative, or 20d $-ADV meaningfully improves/deteriorates (recheck liquidity before any add).",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "PRMB",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Reclaims supply, or oi_net_5d flips negative, or insider-buying pattern breaks/reverses.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "UNM",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Reclaims supply, or oi_net_5d flips negative, or the $3.8B de-risk deal re-rates the name further before entry.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "NRG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Reclaims supply, or oi_net_5d flips negative, or insider buying cools / AI-power narrative breaks.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "NNE",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Reclaims near-52w-low structure, or the underlying hit-base thesis breaks (price stabilizes/reverses off the low).",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "SPGI",
+      "lane": "S2_dp_revert",
+      "direction": "long",
+      "horizon_validated": 5,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Same-day news/catalyst invalidates the reversion mechanism, or the one-sided DP concentration unwinds without the expected 3-5d reversal follow-through.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "ENB",
+      "lane": "S2_dp_revert",
+      "direction": "long",
+      "horizon_validated": 5,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Same-day news/catalyst invalidates the reversion mechanism, or the one-sided DP concentration unwinds without the expected 3-5d reversal follow-through.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "TPR",
+      "lane": "S2_dp_revert",
+      "direction": "long",
+      "horizon_validated": 5,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Same-day news/catalyst invalidates the reversion mechanism, or the one-sided DP concentration unwinds without the expected 3-5d reversal follow-through.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "MSCI",
+      "lane": "S2_dp_revert",
+      "direction": "long",
+      "horizon_validated": 5,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Same-day news/catalyst invalidates the reversion mechanism, or the one-sided DP concentration unwinds without the expected 3-5d reversal follow-through.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "BNS",
+      "lane": "S2_dp_revert",
+      "direction": "long",
+      "horizon_validated": 5,
+      "final_size": "starter",
+      "cluster_id": "s2_canadian_bank_cluster_0707",
+      "invalidation": "Same-day news/catalyst invalidates the reversion mechanism, or the one-sided DP concentration unwinds without the expected 3-5d reversal follow-through.",
+      "entry_date": "2026-07-07",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    }
+  ]
+}

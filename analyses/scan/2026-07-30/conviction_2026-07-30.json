@@ -1,0 +1,145 @@
+{
+  "conviction_date": "2026-07-30",
+  "purpose": "Phase-D gate-stack sizing on a CHOP tape that bounced hard but narrowly off the 07-29 AI-capex low. ZERO new starters for the second consecutive session: the two names that cleared every mechanical OI_FADE gate (AVTR, the cleanest OI signal of the night; HRI, carried from 07-29) were BOTH VETOED at gate 4 on the ROST/ALLE corroborated-bullish-conviction pattern. One held short (PLNT) carried at unchanged half size with 2 sessions to a BINDING h10 exit. Two OI_FADE names (OLLI, INFY) held at watch on a lane-MECHANISM failure (single-session block builds) pending a 07-31 persistence re-check. Persisted for the next run's held-position reconciliation.",
+  "source_decision_envelope": "analyses/scan/2026-07-30/decision.json",
+  "book_state": {
+    "positions": 1,
+    "all_shorts": true,
+    "detail": "Regime CHOP (ret5 +0.480%, ret10 -1.200%, dd15 -2.830%), s1_standdown FALSE as measured. The tape ROUND-TRIPPED this week: SPY was -2.400%/-3.360% (ret5/ret10) on 07-29 and closed +1.68% on 07-30; VIX 20.66 -> 17.09 (-17.3%), a full one-session unwind of the spike. But the bounce is NARROW, not breadth-confirmed: pct_green only 39.17% (197 adv / 304 dec), uw bullish_pct 35.7%, trend CHOPPY/TRANSITIONAL, and QQQ (+3.30% on the day) is still -1.22% ret5 / -3.17% ret10, i.e. the AI-capex repricing leg has NOT round-tripped. GEX remains dealer-short-gamma on BOTH indices (SPY -$366.9M FULLY_NEGATIVE; QQQ NEGATIVE, spot 683.77 vs zero-gamma 729.4) = vol-EXPANSION conditioning even as VIX fell. VRP FAIR on both, so nothing rich to sell. Book action: PLNT HELD at unchanged half size, pre-registered exit rule NOT triggered (07-30 print call +233 / put +42 = net +191, calls still net-OPENING), discretionary stop $59.50 kept live and UNCHANGED after an explicit vestigial-test. Two vetoes (AVTR, HRI), two mechanism-watches (OLLI, INFY).",
+    "net_book_new_starter_pct_exposure": "0 new starters; 1 carried held short (PLNT, unchanged half size); 2 dropped candidates (AVTR + HRI, fundamentals VETO, never entered); 2 carried watches (OLLI, INFY, not sized)"
+  },
+  "held_position_reconciliation": {
+    "note": "Reconciled against the 2026-07-30 truth-set close (data/prices.parquet, rebuilt tonight through 07-30 after preflight failed exit-1 on a stale 07-29 panel) + tonight's UW OI panel (scripts/oi_build.py) + scripts/liquidity.py + scripts/earnings_gate.py + scripts/prior_verdicts.py. MEASUREMENT NOTE, REPEATED FROM 07-29 BECAUSE IT STILL BITES: scripts/held_book.py prints 'gross -1.41%' (SINCE ENTRY) directly beside 'excess +2.05%' (TODAY ONLY) -- two different horizons on adjacent lines. The since-entry SHORT EXCESS was computed separately by the orchestrator and is -1.47%. Do not read held_book.py's excess column as a since-entry figure.",
+    "positions": [
+      {
+        "ticker": "PLNT",
+        "lane": "OI_FADE",
+        "direction": "short",
+        "status": "LIVE",
+        "entry_date": "2026-07-20",
+        "entry_price": 55.2,
+        "close_2026_07_30": 55.98,
+        "gross_pct_since_entry": -1.41,
+        "short_excess_pct_since_entry": -1.47,
+        "short_excess_pct_today": 2.05,
+        "verdict": "HOLD",
+        "sessions_remaining_to_binding_exit": 2,
+        "remaining_sessions": ["2026-07-31", "2026-08-03"],
+        "size": "half (unchanged, no add, no trim)",
+        "fundamentals_verdict": "NA -- held position, no fresh gate run required absent a new catalyst; the 07-29 CAUTION stands. Re-run if PLNT-specific news lands before 08-03.",
+        "signal_state": {
+          "oi_net_5d": 1646,
+          "call_5d": 2062,
+          "put_5d": 416,
+          "rel_build": 0.028,
+          "persistence_ratio": 0.714,
+          "last_call_net": 233,
+          "last_put_net": 42,
+          "daily_call_series_5d": [173, 118, 1197, 341, 233],
+          "read": "Calls still net-OPENING every session of the window -- exit leg (b) NOT triggered. The low rel_build (0.028) is TRAILING-WINDOW DECAY, not an unwind: the entry-week spike (rel_build 0.775 as of 07-20) has rolled out of the trailing 5-day window, while total call OI has HELD elevated at ~76.7K vs a ~58K pre-build baseline. The crowd's calls remain open."
+        },
+        "invalidation_live": "EARLIEST of: (a) 2026-08-03 close -- BINDING h10, admits NO drift; (b) first genuinely NEGATIVE call_net print -- NOT triggered tonight; (c) close > $59.50 with 1-day confirm -- ACTIVE, 6.29% away.",
+        "vestigial_test": {
+          "verdict": "NOT VESTIGIAL -- stop kept live and UNCHANGED",
+          "reasoning": "Tested rather than asserted, per the standing vestigial-invalidation precedent. Over the full 133-window panel of PLNT 2-day returns, only 2 (~1.5%) cleared the +6.29% move needed to reach $59.50. That is a low-probability tail but NOT arithmetically unreachable -- and PLNT has printed a ~+5.5% single day inside this very holding period. The vestigial precedent describes a WINNING position that has run so far its old stop can no longer bind before target; this is the opposite geometry (position modestly underwater, stop on the further-adverse side). Deliberately NOT tightened further: with 2 sessions left and the signal still confirming, a tighter stop adds whipsaw risk without shortening a time-to-resolution the h10 exit already caps."
+        },
+        "event_risk_check": "CLEAN. PLNT reports 2026-08-06, which is THREE trading days AFTER the binding 2026-08-03 exit -- the exit lands clear of the print. Neither NFP (08-07) nor CPI (08-12) falls inside the remaining 2-session window. NOTE for a hypothetical FRESH entry (irrelevant to this open position): a new h10 window opened 07-30 WOULD capture the 08-06 print, so a same-ticker fresh start would be earnings-blocked tonight even though the held position is clean.",
+        "action_taken": "Hold current half size, no add, no trim. Discretionary stop UNCHANGED at $59.50 with the 1-day confirm carried from 07-29. Pre-registered exit rule untouched."
+      }
+    ]
+  },
+  "vetoed_not_entered": [
+    {
+      "ticker": "AVTR",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "fundamentals_verdict": "VETO",
+      "mechanical_signal": "CLEANEST OF THE NIGHT -- oi_net_5d +101,124 (call +104,191 / put +3,067), rel_build 2.713, persistence 0.47 (organic multi-day), $-ADV $166.4M, price $13.86, next earnings 2026-11-04 (clear of h10), catalyst_split LIVE_BUILD (49.7% of the 10d net accrued AFTER the 07-29 print).",
+      "veto_evidence": "Q2 beat +8.58% with FY2026 guidance RAISED; FIVE separate same-day PT raises on 07-30 (Wells Fargo $14->$16 OW, Stifel $8->$15, Evercore $10.5->$14, Morgan Stanley $10->$14, RBC $9->$14) with zero cuts/downgrades; insider MSPR +33.33 (buying). Price ret5 +22.12% / ret10 +23.09%, RSI 75.68.",
+      "prior_verdict_resolved": "The 2026-W29 cut ('single-day block print, persistence ~1.0') IS genuinely resolved -- tonight's persistence is 0.47, real organic accretion. The veto rests on FUNDAMENTALS, not on the superseded mechanism complaint. Stated explicitly because prior_verdicts.py flagged AVTR as carrying a blocking verdict and the repo rule is: do not re-score a blocked name without stating what changed.",
+      "re_admit_condition": "Analyst tape turning (no further PT raises/upgrades, or fresh cuts) AND the guidance picture deteriorating.",
+      "counter_consideration": "ttm revenue -1.99% YoY, net margin -8.42%, ROE -9.59% -- legacy unprofitability is real and unresolved. Recorded, but it is TRAILING information; the fresh 07-29/07-30 information is unambiguously bullish."
+    },
+    {
+      "ticker": "HRI",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "fundamentals_verdict": "VETO (carried from 2026-07-29 and REINFORCED)",
+      "mechanical_signal": "oi_net_5d +6,830 (call +6,905 / put +75), rel_build 1.57, persistence 0.554 (organic), $-ADV $81.9M, price $145.92, next earnings 2026-10-27 (clear of h10), catalyst_split LIVE_BUILD (42.7% accrued after the 07-28 print).",
+      "veto_evidence": "The recorded 07-29 re-admit condition -- 'the analyst tape turning (no further PT raises/upgrades, or fresh cuts)' -- is explicitly NOT MET. Checked the last 1-2 sessions specifically rather than restating last night's veto: on 07-29, the session AFTER the print, KeyBanc RAISED PT $165->$185 (Overweight) and BNP Paribas RAISED $160->$165. Two fresh raises, zero cuts. Q2 EPS $1.43 vs $0.73 est (+94.7%), revenue +20.2% YoY, guidance raised. Insider MSPR +23.89 (buying).",
+      "additional_disqualifier": "ret5 -10.62% (and -14.6% off the 07-28 intraday high) -- an entry would short a COMPLETED collapse with a bounce tail. The lane's validated edge is measured on the general population of heavy-call-build names, not on names already down double digits.",
+      "re_admit_condition": "UNCHANGED and still open: analyst tape turns AND guidance deteriorates.",
+      "counter_consideration": "PE ~99x and D/E 4.18 are genuinely stretched, and the -14.6% unwind reads as a valuation-multiple reset happening DESPITE two same-week PT raises. That is a real reason the short could still work -- recorded for fairness, but not enough to overturn a gate whose bar is 'do the fundamentals contradict the thesis'."
+    }
+  ],
+  "watch_carried": [
+    {
+      "ticker": "OLLI",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "status": "WATCH -- not sized, lane MECHANISM failure",
+      "signal": "oi_net_5d +6,850, rel_build 0.956, persistence 0.974 -- essentially the ENTIRE build (+6,672 of +6,850) landed in ONE session, today. $-ADV $165.9M, price $72.74, earnings 08-27 (clear), ret5 +11.50%.",
+      "why_not_sized": "Fails the lane's own multi-day-accretion mechanism, which is upstream of gate 4. A same-day mega-block on a dealer-short-gamma, VIX-crush bounce day is at least as consistent with systematic/dealer hedging flow as with organic crowd positioning. NO fundamentals-gate verdict exists -- correctly, since this repo gates only names about to be sized.",
+      "next_action": "Re-check 07-31: if the build PERSISTS into a second session it becomes genuine multi-day accretion and re-enters the universe. MUST be fundamentals-gated before any sizing."
+    },
+    {
+      "ticker": "INFY",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "status": "WATCH -- not sized, lane MECHANISM failure",
+      "signal": "oi_net_5d +108,569 (call +115,240 / put +6,671), rel_build 2.046, persistence 0.993 -- a ~108K-contract near-total single-session block. $-ADV $319.2M, price $11.95, issue_type ADR, next print 10/15 (clear), ret1 -5.16% / ret5 +12.00%.",
+      "why_not_sized": "Same single-session-block disqualifier as OLLI. Note catalyst_split reads LIVE_BUILD (the build continued and ACCELERATED after the 07-23 print), so this is NOT the SSNC resolved-pre-print failure mode -- the objection is purely persistence. ADR flagged as distinct from common stock, though not excludable by the ETP rule.",
+      "next_action": "Re-check 07-31 for build persistence, same test as OLLI. MUST be fundamentals-gated before any sizing."
+    }
+  ],
+  "process_findings": [
+    {
+      "finding": "GATE-1 DISSENT RAISED BY risk-sizer AND DECLINED BY THE ORCHESTRATOR",
+      "detail": "risk-sizer argued the tape SHAPE is a textbook V-rebound (VIX -17.3% one-session unwind, narrow breadth-divergent bounce off a fresh low) and asked to treat s1_standdown as FIRED for the relative-weakness/MOM_SHORT lane despite the mechanical FALSE, downgrading those names from watch to skip.",
+      "adjudication": "DECLINED. scripts/regime_check.py is the authoritative gate the retro harness scores against, and hand-flipping the recorded flag would corrupt the exact field /calibration-audit uses to grade whether the crash gate works. The flag is recorded at FALSE as measured. The qualitative caution is REAL -- Phase A raised it independently -- and is recorded in the envelope, but it changes nothing operationally because MOM_SHORT is already unsized under the separate and binding CLAUDE.md invariant #6 watch-only cap.",
+      "recommendation": "If this tape shape recurs, codify a proper up-thrust/rebound detector through /calibration-audit rather than re-litigating a mechanical gate ad hoc each night."
+    },
+    {
+      "finding": "MOM_LONG LANE BUG -- SECOND CONSECUTIVE NIGHT, UNFIXED",
+      "detail": "The momentum lane again returned ROST inside its own near-52w-high basket. ROST carries a standing fundamentals VETO/DROP from 2026-07-20. The lane still does not run scripts/prior_verdicts.py against its own output -- the identical miss flagged on 07-29.",
+      "recommendation": "Excluded by the orchestrator both nights. Worth a maintenance ticket on the lane itself: it should self-check its basket against prior_verdicts.py."
+    },
+    {
+      "finding": "scripts/zerodte_setup.py MISCLASSIFIES QQQ GAMMA SIGN",
+      "detail": "Its recommend() path sums net gamma over 0-45DTE instead of applying the spot-vs-zero-gamma-level convention the CLI 'gex' command uses, so it labelled QQQ long-gamma and picked the quiet/mean-reverting branch -- while the CLI reads NEGATIVE (spot 683.77 vs zero-gamma 729.4). A real bug. Do not trust that script's QQQ verdict until fixed.",
+      "recommendation": "Logged, NOT patched tonight: a code edit mid-scan would require re-running the regression gate. Fix offline, then run python3 scripts/retro_harness.py --all."
+    },
+    {
+      "finding": "PREFLIGHT CAUGHT A STALE TRUTH SET (exit 1) BEFORE ANY LANE RAN",
+      "detail": "prices/returns/features parquets ended 2026-07-29, one session behind the trade date -- the exact condition that produced an INVERTED regime read on 2026-07-24. All three were rebuilt through 07-30 and preflight re-run clean (exit 0) BEFORE Phase A. No lane read a stale panel tonight.",
+      "recommendation": "Working as designed. Keep running preflight first, without exception."
+    },
+    {
+      "finding": "EARNINGS-CRUSH SCREEN: HIGH IV-RANK IS A LEVEL, NOT AN EDGE",
+      "detail": "Most of the IV-rank >= 80 earnings list was IV-CHEAP versus each name's OWN realized post-print history (TWLO 2.7% implied vs 13.5% realized; AKAM 2.8% vs 14.9%; DBX 1.4% vs 6.5%; AMD 3.5% vs 9.1%; PLTR 2.2% vs 12.4%; SMCI 3.7% vs 14.2%). Only 4 of ~30 screened names were genuinely rich.",
+      "recommendation": "Worth a scripts/earnings_crush_screen.py helper that ranks implied-vs-own-realized rather than IV rank, consistent with how every other lane helper was built from a real failure."
+    }
+  ],
+  "vol_book_carried": {
+    "earnings_crush_live": [
+      {"symbol": "LDOS", "earnings": "2026-08-04", "implied_move": 0.085, "realized_avg": 0.017, "realized_max": 0.062, "structure": "defined-risk iron fly, 08/21 monthly, wings beyond the 6.2% realized-max", "status": "SELL VOL"},
+      {"symbol": "TRMB", "earnings": "2026-08-05", "implied_move": 0.086, "realized_avg": 0.024, "realized_max": 0.054, "structure": "defined-risk iron fly, 08/21 monthly, wings beyond the 5.4% realized-max", "status": "SELL VOL -- best chain liquidity of the group"},
+      {"symbol": "TTMI", "earnings": "2026-08-05", "implied_move": 0.197, "realized_avg": 0.079, "realized_max": 0.166, "structure": "defined-risk iron fly, 08/21 monthly, REDUCED SIZE for chain thinness (~900 opt/day)", "status": "SELL VOL, reduced"}
+    ],
+    "excluded": [
+      {"symbol": "UCTT", "reason": "Worst historical print 28.2% EXCEEDS today's 22.3% implied move -- the left tail has already falsified the headline +12.0pp average edge. Size near zero."}
+    ],
+    "zerodte_stood_down": "SPY and QQQ both. Mechanically positive net backtest (SPY net +0.146%/day, QQQ net +0.276%/day) OVERRIDDEN: front-end backwardation on both (1.296x / 1.445x) + dealer-short-gamma on both + a fresh ~21% one-session VIX round-trip is the unsampled-left-tail combination the tail cap exists to catch. The 60-day sample behind those averages contains no analog for such a day.",
+    "note": "net_expectancy deliberately left NULL on all earnings-crush entries: ATM relative spreads run ~16-24% on these single-name monthlies and no MEASURED cost constant exists for this sleeve. A fabricated net figure would violate the net-of-cost discipline it pretends to satisfy."
+  },
+  "advisory_not_sized": {
+    "MOM_SHORT_watch": ["SNPS", "WSO", "LHX", "VICI"],
+    "MOM_SHORT_earnings_blocked": ["BLDR", "QXO", "PEG"],
+    "MOM_LONG_basket": "108 names, near-52w-high, watch-only BY THE RUBRIC (+0.18% mean is below the +0.3% MEDIUM threshold; median -1.06%, tail-driven). ROST EXCLUDED by the orchestrator on its standing 07-20 veto.",
+    "S2_top": ["PLD", "FCX", "DHI", "CFG"],
+    "S2_earnings_vetoed": ["ITW", "PNC", "CBRE", "GFL", "ACGL"],
+    "S4_top_live_pcr": ["QTWO", "RGEN", "JEF", "BSP", "OSK", "CMS"],
+    "S4_caution": "11 names show ivrank_chg_5d < -25 -- hedging premium already partly harvested, so the entry point may have passed even where the crowding tag reads live. QTWO specifically reported 07-29 AH and REVERSED intraday on 07-30 (-2.2%).",
+    "data_gap": "LHX and VICI are absent from data/prices.parquet, so gate-3 correlation could not be computed numerically for them -- the same silent-failure class flagged for HRI/PLNT on 07-29 and HOG on 07-28. Moot while unsized; will fail SILENTLY the first night two such names both clear gate 4."
+  }
+}

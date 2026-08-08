@@ -1,0 +1,99 @@
+{
+  "trade_date": "2026-07-24",
+  "regime": "PULLBACK",
+  "direction": "long",
+  "lane": "S4_pcr_fade",
+  "validated_excess": "+0.71%",
+  "regime_fit": "advisory_only",
+  "num_candidates": 8,
+  "candidates": [
+    {
+      "ticker": "DOX",
+      "pcr": 68.19,
+      "pcr_percentile": 99.9,
+      "close": 52.1,
+      "dollar_adv_m": 81.8,
+      "earnings_date": "2026-08-05",
+      "iv_rank": 65.8692,
+      "option_volume_total": 1107,
+      "catalyst_status": "UNVERIFIED"
+    },
+    {
+      "ticker": "NI",
+      "pcr": 57.74,
+      "pcr_percentile": 99.8,
+      "close": 46.68,
+      "dollar_adv_m": 236.1,
+      "earnings_date": "2026-08-05",
+      "iv_rank": 59.7943,
+      "option_volume_total": 2056,
+      "catalyst_status": "UNVERIFIED"
+    },
+    {
+      "ticker": "VIK",
+      "pcr": 16.96,
+      "pcr_percentile": 98.8,
+      "close": 100.71,
+      "dollar_adv_m": 222.6,
+      "earnings_date": "2026-08-18",
+      "iv_rank": 53.1407,
+      "option_volume_total": 3987,
+      "catalyst_status": "UNVERIFIED"
+    },
+    {
+      "ticker": "TTAN",
+      "pcr": 12.67,
+      "pcr_percentile": 98.3,
+      "close": 70.48,
+      "dollar_adv_m": 130.8,
+      "earnings_date": "2026-09-03",
+      "iv_rank": 62.1613,
+      "option_volume_total": 2078,
+      "catalyst_status": "UNVERIFIED"
+    },
+    {
+      "ticker": "WEN",
+      "pcr": 12.32,
+      "pcr_percentile": 98.1,
+      "close": 6.99,
+      "dollar_adv_m": 219.2,
+      "earnings_date": "2026-08-07",
+      "iv_rank": 24.595,
+      "option_volume_total": 178528,
+      "catalyst_status": "UNVERIFIED"
+    },
+    {
+      "ticker": "XENE",
+      "pcr": 12.27,
+      "pcr_percentile": 98.0,
+      "close": 65.42,
+      "dollar_adv_m": 118.2,
+      "earnings_date": "2026-08-10",
+      "iv_rank": 17.1301,
+      "option_volume_total": 2734,
+      "catalyst_status": "UNVERIFIED"
+    },
+    {
+      "ticker": "KGS",
+      "pcr": 5.48,
+      "pcr_percentile": 95.2,
+      "close": 59.08,
+      "dollar_adv_m": 112.4,
+      "earnings_date": "2026-08-06",
+      "iv_rank": 87.4973,
+      "option_volume_total": 4204,
+      "catalyst_status": "UNVERIFIED"
+    },
+    {
+      "ticker": "PLD",
+      "pcr": 5.42,
+      "pcr_percentile": 95.1,
+      "close": 147.63,
+      "dollar_adv_m": 637.2,
+      "earnings_date": "2026-10-21",
+      "iv_rank": 15.1803,
+      "option_volume_total": 1895,
+      "catalyst_status": "UNVERIFIED"
+    }
+  ]
+}

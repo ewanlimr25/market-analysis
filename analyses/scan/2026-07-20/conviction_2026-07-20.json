@@ -1,0 +1,107 @@
+{
+  "conviction_date": "2026-07-20",
+  "purpose": "Top conviction (sized + near-the-line watch) names from the 2026-07-20 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-20/decision.json",
+  "book_state": {
+    "positions": 1,
+    "all_shorts": true,
+    "detail": "Thin night by design: ROST VETOed to DROP, FIG/DINO squeeze- and event-capped to WATCH, and the entire MOM_SHORT lane (including the one CONFIRM name, CPRI) is provisionally capped to advisory/watch-only per the 2026-07-18 calibration audit pending a DURABLE-N (>=30) forward revalidation. PLNT is the only NEW name clearing a real (starter) size tonight. Separately, 3 positions were held open from the 2026-07-17 conviction file and reconciled tonight (see held_position_reconciliation): ORCL HOLD (winning), ICE EXIT, MAT CUT.",
+    "net_book_new_starter_pct_exposure": "1 new starter short (PLNT) + 1 carried held short (ORCL, working)"
+  },
+  "held_position_reconciliation": {
+    "note": "Reconciled the 3 open shorts carried in analyses/scan/2026-07-17/conviction_2026-07-17.json against tonight's 2026-07-20 panel (prices from stock-screener-2026-07-20.parquet; 5d net call-minus-put OI build recomputed from chain-oi-changes-2026-07-{14,15,16,17,20}.parquet). Resolves the reconciliation gap risk-sizer flagged.",
+    "positions": [
+      {
+        "ticker": "ORCL", "lane": "MOM_SHORT", "direction": "short",
+        "entry_date": "2026-07-13", "entry_price": 131.54, "close_2026_07_20": 121.38,
+        "gross_pnl_pct": 7.73,
+        "verdict": "HOLD",
+        "rationale": "Short working (+7.7% gross; -3.98% on the day). Invalidation (RSI>45 AND close>$144.22) far off at $121.38. Next ER 2026-09-08 = outside horizon, no event risk. Also now carries a huge +261.6k 5d net call-OI build (double-confirmed short via OI_FADE), though as a mega-cap QQQ-beta name that OI tag is not independently scored. Carried forward as an open held position; MOM_SHORT new-starter cap does not force an exit of a working existing position."
+      },
+      {
+        "ticker": "ICE", "lane": "OI_FADE", "direction": "short",
+        "entry_date": "2026-07-13", "entry_price": 137.67, "close_2026_07_20": 141.57,
+        "gross_pnl_pct": -2.83,
+        "verdict": "EXIT",
+        "rationale": "Underwater (-2.8% gross; +1.37% on the day, grinding to new relative highs). The crowded-call build that justified the OI_FADE short has substantially UNWOUND without price follow-through: 5d net build now only +1,388, and daily prints were -116/-294/+28/-142 over 07-14->07-17 (net -524) before a single fresh +1,912 on 07-20 - i.e. the mean-reversion catalyst dissipated. Decisively: ICE reports earnings 2026-07-30, INSIDE any horizon - holding an OI-fade short through a binary print is exactly the S2/IBM earnings-gate lesson from the 2026-07-18 audit. Recommend COVER."
+      },
+      {
+        "ticker": "MAT", "lane": "OI_FADE", "direction": "short",
+        "entry_date": "2026-07-10", "entry_price": 13.33, "close_2026_07_20": 14.14,
+        "gross_pnl_pct": -6.08,
+        "verdict": "CUT/TRIM",
+        "rationale": "Underwater (-6.1% gross). Neither invalidation clause STRICTLY triggered (close $14.14 < $16.50 stop; 5d net build still +9,186 so not 'fully unwound'), but the build is decelerating and today's print flipped negative (-349) - the pinned MAT-decay precedent (oi-fade-megacap-beta-trap memory). Position is a losing half-cap starter on a fading signal with next ER 2026-08-04 (just outside h10). Disciplined call: cut/trim on decay rather than ride to the $16.50 stop another ~17% away."
+      }
+    ]
+  },
+  "names": [
+    {
+      "ticker": "PLNT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Cover on ANY of: (1) 5-day net call-OI build fully unwinds (5d-net crosses <=0), (2) close reclaims and sustains above the pre-build breakout level, (3) a third consecutive post-print PT raise / fresh Buy upgrade (re-run fundamentals-gate if so).",
+      "entry_date": null,
+      "entry_price": null,
+      "adverse_flow_exit_check": "NEW tonight, not yet entered. Last truth-set close $52.36 (2026-07-17), ~$88.3M 20d $-ADV (thinnest liquidity cushion of tonight's OI_FADE survivors). Fundamentals CAUTION is more corroborating (beat-and-lower guidance) than contradicting, but carries squeeze risk from two post-print PT raises. On next run: confirm the 5d net call-OI build is still persistent before/at entry; watch for a 3rd PT raise which would warrant a fresh fundamentals-gate re-check."
+    },
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "status": "HELD_CARRIED_FORWARD",
+      "invalidation": "RSI reclaims neutral (>45) AND close > $144.22 (both required), or the AI-capex/credit-risk short narrative is reversed by a rating action / guidance upgrade.",
+      "entry_date": "2026-07-13",
+      "entry_price": 131.54,
+      "adverse_flow_exit_check": "HELD short, working (+7.7% gross at $121.38, -3.98% on 2026-07-20). Invalidation $144.22 far above. Next ER 2026-09-08 (outside horizon). Now double-confirmed by a +261.6k 5d net call-OI build (OI_FADE tag, but mega-cap QQQ-beta so not independently scored). HOLD; next run re-check adverse flow (a rating-action/guidance-upgrade catalyst or a break back >$144.22)."
+    }
+  ],
+  "watch_shortlist": [
+    {
+      "ticker": "FIG",
+      "lane": "OI_FADE",
+      "reason": "Cleanest OI-fade persistence in the pool but named on a public squeeze-watch list; re-check for squeeze cooling or insider-selling escalation."
+    },
+    {
+      "ticker": "DINO",
+      "lane": "OI_FADE",
+      "reason": "Double-downgraded (fundamentals CAUTION + earnings 07-28 inside h10); re-check after the print or if a defined-risk-through-print structure is proposed."
+    },
+    {
+      "ticker": "ROST",
+      "lane": "OI_FADE",
+      "reason": "DROPPED (strong bullish fundamentals contradiction). Re-admit only if a forward fundamentals-gate re-check flips the verdict off VETO."
+    },
+    {
+      "ticker": "CPRI",
+      "lane": "MOM_SHORT",
+      "reason": "Cleanest CONFIRM short in the scan; first candidate for starter promotion if/when MOM_SHORT clears a DURABLE-N (>=30) forward-positive-excess re-validation via /calibration-audit."
+    },
+    {
+      "ticker": "QXO",
+      "lane": "MOM_SHORT",
+      "reason": "Industrials-cluster representative (QXO/CNM/KTOS/CPRT/ESAB/ECHO/HONA, sized once); CAUTION squeeze risk on top of the lane-wide cap."
+    },
+    {
+      "ticker": "CRNX",
+      "lane": "OI_FADE",
+      "reason": "Cross-lane conflict (MOM_LONG tag vs OI_FADE tag) - explicitly no-conviction; re-check if one of the two tags drops off next scan."
+    }
+  ],
+  "pending_fundamentals_verdicts": [
+    "CNM", "HONA", "ORCL", "GPOR", "PEP", "LOW", "EQPT", "KTOS", "CPRT", "ESAB", "ECHO", "MCD", "STWD"
+  ],
+  "flags_for_orchestrator": [
+    "13 MOM_SHORT basket names above never reached fundamentals-gate tonight (only ROST/FIG/PLNT/DINO/QXO/CPRI were spawned). Per gate 4, held at watch pending a verdict - not a blocking issue since the lane-wide provisional cap already floors them at watch, but flag for completeness on the next run.",
+    "RESOLVED by orchestrator: the 3 held shorts from analyses/scan/2026-07-17/conviction_2026-07-17.json (ORCL/ICE/MAT) were reconciled against tonight's panel - see held_position_reconciliation. Outcome: ORCL HOLD (working +7.7%, carried forward in names[]), ICE EXIT (build unwound + earnings 07-30 inside window), MAT CUT/TRIM (underwater, signal decaying). If the live book differs from the 07-17 conviction file, verify actual fills before acting on these.",
+    "CPRI, CRNX, BNY, CL, SPG were not found in the local data/prices.parquet truth-set panel slice checked tonight (FIG/ROST/PLNT/DINO/QXO/VST/SHOP were found and used for liquidity-gate reference numbers). Task brief states liquidity was cleared upstream for all named candidates, so this did not block sizing tonight, but flag as a truth-set panel coverage gap for the data team.",
+    "schemas/decision_envelope.v2.schema.json does NOT define a lane_status[] property (additionalProperties: false at the top level) - only schemas/weekly_review.schema.json got that field in 06b97eb. Per-lane dispositions (MOM_LONG basket-only/not promoted, S4 empty) are therefore carried in calls[] tier=WATCH/DROP entries and this file's prose, not a separate array. Recommend mirroring the 06b97eb migration onto the v2 schema (ticker regex + lane_status[]) so daily scans get the same clean split weekly already has.",
+    "OI_FADE regime_fit (0.5) used tonight is an ESTIMATE, not an explicit figure from tonight's Phase A/B brief (unlike MOM_SHORT's explicit 0.40 and S2's explicit 0.7x discount). Flag for the regime-classifier/oi-flow-fade agents to confirm or supply a computed per-name regime_fit next time."
+  ],
+  "regression_gate": "NOT TRIGGERED - no lane or threshold change made tonight; all sizing followed the 2026-07-18 calibration-audit-applied rules (MOM_SHORT provisional cap, dip-bounce-standdown extension, S2/S4 h-window earnings veto, Common-Stock/ADR universe hygiene) as given."
+}

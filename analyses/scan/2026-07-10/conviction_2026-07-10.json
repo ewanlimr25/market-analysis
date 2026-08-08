@@ -1,0 +1,29 @@
+{
+  "conviction_date": "2026-07-10",
+  "purpose": "Top conviction (sized) names from the 2026-07-10 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-10/decision.json",
+  "names": [
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $16.50 (~52w-range midpoint reclaim), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-10",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. Sized at starter (not the lane's half ceiling) because Consumer Cyclical is a live sector-inflow destination this week -- re-check whether that sector rotation has intensified (upsize risk to the short) or faded (re-evaluate for promotion toward half) before the next hold-through decision. Goldman Sell downgrade / PT cuts were the CONFIRM basis -- re-check for any reversal (upgrade, guidance raise) that would flip fundamentals toward CAUTION/VETO."
+    },
+    {
+      "ticker": "OLED",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $88.00 (clears the CAUTION-flagged insider-buying zone), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-10",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit. CAUTION fundamentals name (insider MSPR +74.7 buying into the short) -- re-check for further insider buying escalation or a Form 4 cluster that would argue for VETO, versus fading insider activity that would support holding at starter."
+    }
+  ]
+}

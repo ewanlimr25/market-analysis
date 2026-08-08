@@ -1,0 +1,266 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-07-22",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP; VIX 16.64, contango/calm (VIX9D 14.88 < VIX 16.64 < VIX3M 19.54); SPY & QQQ short-gamma (vol-amplifying, 2nd-moment only). 2026-07-21's broad tech bounce stalled but did not reverse (QQQ -0.51%, SPY -0.12% today after +1.86%/+0.83% yesterday). Defensive/energy rotation under the surface (XLE +4.8%/+6.5% 5d/10d leads; XLC/XLY lag). Neither mean-reversion standdown condition is firing; s1_standdown FALSE. Standing 2026-07-18 policy: MOM_SHORT remains advisory/watch-only for NEW starters regardless of s1_standdown state -- confirmed PEGA is NOT promoted to starter tonight despite being the cleanest MOM_SHORT candidate (-9.32% below 52w low).",
+    "ret5": -0.98,
+    "ret10": 0.27,
+    "vol_state": "SPY & QQQ short-gamma (vol-amplifying, 2nd-moment conditioner only, never a direction); VIX 16.64 contango/calm; index VRP FAIR (SPY +0.0001, QQQ -0.0323) -- no index premium-selling edge tonight.",
+    "breadth_pct_green": 48.91,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "FOMC statement + press conference",
+        "date": "2026-07-29",
+        "impact": "Tier-1 macro; inside h10 for any short opened 2026-07-22 (window runs through ~08-05). Event-risk gate (#5) applies -1 tier. Binds hardest on FHN, a rate-sensitive regional bank -- the single most relevant macro catalyst for that name."
+      },
+      {
+        "event": "PCE (June data)",
+        "date": "2026-07-30",
+        "impact": "Tier-1 macro, compounds the FOMC-week event-loading for any short opened this session; same FHN rate sensitivity."
+      },
+      {
+        "event": "INTC / TMO / SAP earnings",
+        "date": "2026-07-23",
+        "impact": "Vol-book IV-crush admits, IV-rank 98+, backwardation confirmed -- cleanest premium-sale candidates tonight (non-directional, net-of-cost)."
+      },
+      {
+        "event": "MSFT earnings (AMC)",
+        "date": "2026-07-29",
+        "impact": "Same day as FOMC -- vol-book admit but thin (2.4% implied)/wide-wings, flagged for FOMC overlap, re-confirm 1-2 sessions pre-print."
+      }
+    ]
+  },
+  "vol_book": [
+    {
+      "symbol": "INTC",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "earnings 2026-07-23, IV-rank 98.9, 10.6% implied move, backwardation confirmed (front/far 1.43)",
+      "implied_move": 10.6,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "Defined-risk wide-wing iron fly / short strangle, net-of-cost, small size -- cleanest IV-crush admit tonight (liquid, tight weekly spreads)",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "TMO",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "earnings 2026-07-23, IV-rank 98.7, 5.0% implied move, backwardation confirmed (front/far 2.41)",
+      "implied_move": 5.0,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "Defined-risk wide-wing iron fly, net-of-cost, small size -- clean but thinner edge (smaller implied move)",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "SAP",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "earnings 2026-07-23, IV-rank 100, 7.1% implied move, backwardation confirmed (front/far 2.44)",
+      "implied_move": 7.1,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "Defined-risk wide-wing iron fly, net-of-cost, small size -- ADR, verify live bid/ask spread before sizing",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "MSFT",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "earnings 2026-07-29 (AMC, FOMC day), IV-rank 98.3, 2.4% implied move, backwardation confirmed",
+      "implied_move": 2.4,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "Very wide iron fly, small size, net-of-cost -- thin edge; size for cost drag, not the headline number",
+      "stand_aside_reason": "Prints same day as FOMC 07-29 -- macro vol could swamp the earnings-specific IV crush; re-verify closer to print before sizing.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "index VRP FAIR (+0.0001), LOW VIX tercile",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "Flat SPY VRP + LOW VIX tercile = thinnest edge in the sample; gross win-rate looks fine but no defensible net-of-cost edge. Stand aside.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "index VRP negative (-0.0323), front-end IV 1.58x VIX (backwardation)",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "Negative QQQ VRP with front-end backwardation left-tail gate tripped -- codified stand-aside. Stand aside.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "FHN",
+    "ORCL",
+    "PLNT",
+    "PEGA",
+    "TEL",
+    "PVH",
+    "GPC",
+    "FIG",
+    "QGEN",
+    "NTNX",
+    "EMN",
+    "TD",
+    "FORM",
+    "JBL",
+    "MOM_LONG_BASKET(76 names, rotated tech->financials JPM/BAC/GS/RY/TD, regime_fit 0.70, zero ER in h10, basket/tail-only, never per-name)"
+  ],
+  "report_path": "analyses/scan/2026-07-22/report.md",
+  "calls": [
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.81,
+      "excess_hit_minus_base": 9.5,
+      "excess_n": null,
+      "regime_fit": 0.55,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "half",
+      "final_size": "half",
+      "tail_cap_applied": "N/A for maintenance -- the lane's provisional advisory/watch-only cap (2026-07-18 audit) blocks NEW starters only; this position predates the cap (entered 07-13) and is a working hold, not being resized.",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- s1_standdown FALSE; CHOP does not trigger the crash zero-out; MOM_SHORT lane cap does not touch existing holds.",
+        "liquidity": "PASS -- close $125.84, ~$4.97B 20d $-ADV (verified live via data/prices.parquet), far clear of the C12 floor.",
+        "cluster": "PASS -- Technology sector; 60-day realized corr vs PLNT -0.015, vs TECH -0.020 (computed from data/prices.parquet) -- no cluster.",
+        "fundamentals": "NA -- no change reported tonight; last verdict at entry stands.",
+        "event_risk": "PASS -- next ER 2026-09-08, well outside h10; FOMC/PCE are broad-tape vol only for this name, not a name-specific binary.",
+        "tail_cap": "PASS -- RSI14 ~35.1, close $125.84 vs invalidation (RSI>45 AND close>$144.22) -- not close to triggering."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": "Continuing hold since 2026-07-13 entry ($131.54). No new entry/trigger tonight -- maintenance only.",
+      "invalidation": "Cover on RSI14>45 AND close>$144.22 (currently RSI~35.1, close $125.84 -- NOT triggered).",
+      "key_risks": [
+        "FOMC 07-29 / PCE 07-30 broad macro vol could whipsaw the tech tape even without a name-specific catalyst.",
+        "Lane provisionally capped for NEW starters -- this hold cannot be added to under current policy."
+      ],
+      "thesis": "Near-52w-low MOM_SHORT, held since 07-13, working +4.33% gross / +0.83% today's short-excess (ORCL -0.95% vs SPY -0.12%). No gate change tonight -- HOLD.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "PLNT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.80,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "half",
+      "final_size": "half",
+      "tail_cap_applied": "None fired -- RSI 56.4 neutral, no breakout/squeeze tail; OI build decelerating (weakest of window, +395 today) but not reversed. Hold at current size, do not add given the CAUTION verdict.",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- CHOP in-regime for OI_FADE (regime_fit 0.80).",
+        "liquidity": "PASS -- close $54.05, ~$89.5M 20d $-ADV (verified live), clears $50M floor.",
+        "cluster": "PASS -- Consumer Cyclical; 60-day realized corr vs ORCL -0.015, vs TECH -0.156 (computed) -- no cluster.",
+        "fundamentals": "CAUTION(-1) -- 4/4 beat vs a lowered bar, one PT raise (Canaccord $80->$82, reads as 2nd-not-yet-confirmed-3rd) is a soft contradiction; but NEW securities class-action (07-21) and dollar-trivial insider buying keep the short thesis net-supported. Hold, do not add.",
+        "event_risk": "PASS (monitor) -- ER 2026-08-05 sits ~2 sessions past the ~08-03 h10 boundary from the 07-20 entry -- outside window but close; re-check if still open into ER week.",
+        "tail_cap": "PASS -- RSI 56.4, no squeeze/breakout signature; monitor OI deceleration closely, one more PT raise = named soft-invalidation."
+      },
+      "fundamentals_verdict": "CAUTION",
+      "structure": null,
+      "entry_or_trigger": "Continuing hold since 2026-07-20 entry ($55.20). No new entry/trigger tonight -- maintenance only, watch tightened given CAUTION.",
+      "invalidation": "Cover on 5d net-call-OI build reversing to a negative print (hard trigger -- NOT fired, still +395 today, decelerating only) OR a 2nd confirmed analyst PT raise beyond the 07-20 Canaccord move (soft trigger, monitor closely).",
+      "key_risks": [
+        "OI build decelerating (weakest print of the window) -- thesis softening, not yet reversed.",
+        "One PT raise away from the named soft-invalidation trigger.",
+        "ER 08-05 sits close to (just past) the h10 boundary -- reassess event-risk gate next session if still open."
+      ],
+      "thesis": "OI_FADE short, working +2.08% gross. Fundamentals CAUTION is a real but not-yet-fired soft risk; class-action + still-net-building OI keep the thesis intact. HOLD, no add.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "TECH",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.80,
+      "tier": "DROP",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "skip",
+      "tail_cap_applied": "CUT driver: the OI signal that justified this entry has decayed to rel 0.419 (alternating daily sign, today -295) -- no longer qualifies for the fresh cohort that scored it on 07-21. This is now a short with no live catalyst sitting $0.38 (98.7% of 52w range) below its own named hard-invalidation (new 52w high). Thesis is dead independent of whether the price stop technically fires; proactively closing a breakeven position rather than waiting to get mechanically stopped out on a coinflip green day.",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- not the cut driver.",
+        "liquidity": "PASS -- close $71.78, ~$582.0M 20d $-ADV (verified live) -- not the cut driver.",
+        "cluster": "PASS -- Healthcare/life-sci; not the cut driver.",
+        "fundamentals": "CONFIRM(0) -- no RBC-downgrade reversal, insider selling continues (MSPR -25), mixed earnings; fundamentals unchanged and NOT the cut driver.",
+        "event_risk": "PASS -- ER 08-05 (UW panel) / 08-11 (Finnhub), both outside h10 from the 07-21 entry -- not the cut driver.",
+        "tail_cap": "DROP -- decaying thesis (OI rel 0.419, no longer cohort-qualifying) COMPOUNDED with one green day from a new 52w high (named hard invalidation). This is the cut driver."
+      },
+      "fundamentals_verdict": "CONFIRM",
+      "structure": null,
+      "entry_or_trigger": "CLOSE / COVER at next session open (2026-07-23) -- proactive cut, not waiting for the 52w-high stop to fire.",
+      "invalidation": "Named hard trigger was close > $72.16 (new 52w high) -- NOT technically fired (close $71.78, $0.38 below) but the entry catalyst (fresh 5d call-OI build) has independently decayed; closing now rather than risking a coinflip stop-out.",
+      "key_risks": [
+        "Position being closed -- residual risk only the overnight gap into the 07-23 cover.",
+        "If re-entered later, requires a fresh cohort-qualifying OI build (rel back above the fresh-cohort threshold), not a resumption of this thesis."
+      ],
+      "thesis": "OI_FADE starter entered 07-21 on the cleanest CONFIRM in that night's pool; the fresh call-OI build that justified it has since decayed and alternated sign, while price sits one tick from the named stop. CUT -- proactive, thesis-driven, not waiting on the price trigger.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "FHN",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 2.07,
+      "excess_hit_minus_base": 20.0,
+      "excess_n": 640,
+      "regime_fit": 0.80,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "CAUTION(-1) alone already drops the pre-gate starter tier to watch (no intermediate tier exists). Event-risk(-1, FOMC 07-29 + PCE 07-30 inside h10 for a rate-sensitive regional bank) and the tail cap (87.6% of 52w range -- the same near-highs breakout pattern that decayed TECH's thesis) both independently reinforce the same direction with zero contradicting evidence. Floored to WATCH, not sized.",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- CHOP in-regime for OI_FADE (regime_fit 0.80), no crash zero-out.",
+        "liquidity": "PASS -- close $25.72, $146.0M 20d $-ADV (independently re-verified live via tonight's Stock Screener parquet, matches Phase B exactly).",
+        "cluster": "PASS (qualitative) -- Financial Services regional bank, no sector/thematic overlap with held Technology/Consumer-Cyclical/Healthcare shorts. NOTE: FHN is outside the truth-set panel (data/prices.parquet has no history) so a quantitative 60-day correlation could not be computed -- flagged as a data gap, non-material tonight since FHN is not being sized.",
+        "fundamentals": "CAUTION(-1) -- 4/4 beat streak, rev +64%/EPS +34% YoY is genuine bullish momentum CONTRADICTING the short thesis, even though analysts are cutting targets (JPM $28.5->$27, Evercore $27->$26) with flat insider signal.",
+        "event_risk": "CAUTION(-1) -- FOMC 2026-07-29 AND PCE 2026-07-30 both sit inside h10 from a 07-22 entry; FHN is a rate-sensitive regional bank -- genuine two-sided binary macro risk on the single most relevant catalyst for this name.",
+        "tail_cap": "WATCH -- 87.6% of 52w range (close $25.72 vs 52w high $26.56) is a near-highs breakout tail, the identical pattern that already decayed TECH's thesis; OI build is cleanest in tonight's panel (2.63x base) but sits on top of genuine fundamental strength -- asymmetric squeeze/breakout risk."
+      },
+      "fundamentals_verdict": "CAUTION",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "Not sized. Re-score after FOMC (07-29) / PCE (07-30) resolve AND fundamentals move off CAUTION (target cuts stop) AND/OR pct-of-52w-range retreats from the 87.6% breakout zone. If the OI build extends through event week without reversal and fundamentals firm, re-evaluate for starter under lane cap math.",
+      "key_risks": [
+        "FOMC 07-29 + PCE 07-30 inside h10 -- two-sided binary event risk specific to a rate-sensitive name.",
+        "4/4 EPS beat + 64% revenue growth is genuine bullish momentum directly contradicting the fade thesis.",
+        "87.6% of 52w range -- breakout/squeeze tail, same pattern that already cost TECH its thesis.",
+        "Lane mean (+0.88%) is well below the lane median (+2.07%), a right-skew gap that argues for caution on the base case."
+      ],
+      "thesis": "Cleanest 5d net-call-OI build in tonight's panel (2.63x base, no squeeze/M&A tail) but three independent red flags (fundamentals CAUTION, FOMC+PCE event risk, near-highs breakout tail) all point the same direction with nothing contradicting -- floored to WATCH, not a new starter.",
+      "realized_excess_pct": null
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "conviction_date": "2026-08-05",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-05 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-05/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters for a SIXTH consecutive session and the book stays FLAT for a third. The vol book is EMPTY too, which is new -- for the previous five sessions it was the only actionable output. What changed tonight: OI_FADE stopped failing on MECHANISM. EXLS and UCTT cleared the entire mandatory gate stack (orchestrator-re-verified, not taken on the lane's word) and are blocked ONLY by the lane's Hard Rule #2 regime stand-down on a REBOUND-THRUST. Under CHOP or PULLBACK either would be a legitimate starter. Everything else is out for the same structural reasons as prior sessions: MOM_LONG on the +0.23% vs +0.30% bar AND the risk-sizer DURABLE-N bar; MOM_SHORT triply out (s1_standdown +3.03pp margin, invariant-#6 watch-only cap, negative baseline); S2 and S4 are ADVISORY lanes that never size regardless of measured excess.",
+    "net_book_new_starter_pct_exposure": "0 new starters; 0 open positions carried forward"
+  },
+  "held_position_reconciliation": {
+    "note": "Reconciled with scripts/held_book.py --prior analyses/scan/2026-08-04/conviction_2026-08-04.json on the fix/held-book-verdict-matching branch. Tool reported 'read 0 position(s): 0 open, 0 closed'. Per the standing rule never to trust a bare empty result, the prior file was opened and inspected directly: its held_position_reconciliation.positions array is genuinely [] because PLNT closed 2026-08-03 on its pre-registered h10 time stop. The empty result is REAL, not the EXIT-substring bug -- and that bug is fixed on this branch with 27 passing tests (tests/test_held_book_verdicts.py). SPY -0.20% on the day. Nothing required hand-reconciliation.",
+    "positions": []
+  },
+  "watch_only": {
+    "OI_FADE": [
+      "EXLS -- MECHANICALLY CLEAN, REGIME-BLOCKED. $33.68, $88.8M 20d $-ADV, reports 2026-10-27 (clear of h10), rel_build 1.344, persistence 0.833, catalyst LIVE (91.2% of the 5d build accrued after the 07-28 print), issue_type Common Stock. Blocked only by Hard Rule #2 (REBOUND-THRUST stand-down). Carries long_caution: still a top relative-build name, so not a long candidate either. RE-CHECK NEXT SESSION -- if the regime leaves REBOUND-THRUST this is a live starter candidate.",
+      "UCTT -- MECHANICALLY CLEAN, REGIME-BLOCKED. $80.20, $125.7M 20d $-ADV, reports 2026-10-27, rel_build 1.109, persistence 0.591 (cleanly organic), catalyst LIVE (36.1% post the 08-03 print), issue_type Common Stock. Same Hard Rule #2 block, same long_caution. RE-CHECK NEXT SESSION.",
+      "AZN -- CUT, NEW FAILURE MODE. Passed liquidity ($161.50, $604M ADV), earnings (next print 11-05) and catalyst_split (LIVE). Killed because 81% of the 5-day call-OI build (+21,964 of +27,148) posted on 08-04, the same day as Bristol-Myers deal-talk headlines -- then -7.7% on the report and +6% today on a denial. Binary M&A-headline risk driving the OI, not organic crowded conviction. Cut under the merger-arb gate's spirit (pre-announcement rumor, not a signed deal). THE STANDING 7-GATE CHECKLIST DOES NOT CATCH THIS CLASS -- candidate for a new gate.",
+      "FORWARD-DECAY WATCH UNCHANGED: the 2026-08-01 audit's new-evidence cohort ran -3.73% with hit-base -0.53. Tonight adds no resolvable row (nothing sized). The real test is the post-fix h10 cohort maturing 08-03 -> 08-07, i.e. THIS WEEK, and it is the first cohort that grades the current engine rather than the pre-fix one."
+    ],
+    "MOM_SHORT": [
+      "STOOD_DOWN (s1_standdown leg a, +3.03pp margin -- the most decisive firing of this streak; 1.61pp on 08-04, 0.0139pp on 08-03).",
+      "FLUT -- GENUINE near-52w-low, orchestrator Yahoo-verified: close $92.91, 52w low 89.71 set 2026-08-05, pct_52w_range 1.4%, off_high -70.4%.",
+      "XPEV -- GENUINE near-52w-low, orchestrator Yahoo-verified: close $11.75, 52w low 11.725 set 2026-08-05, pct_52w_range 0.1%, off_high -58.4%.",
+      "CCI -- VERIFIED FALSE SHORT, CUT. The lane returned it as a verified near-low; the chart API reads close $73.84 with a 52w low of 69.72, pct_52w_range 11.2%, far outside the lane's <=2% criterion. IMPORTANT PROCESS DEFECT: the lane's reported closes were wrong for ALL THREE names (CCI $30.18, FLUT $18.65, XPEV $20.13 vs actual $73.84, $92.91, $11.75), so its 'Yahoo Verified' column was not Yahoo data at all. Two of the three classifications happened to be right anyway. The verification step needs hardening -- treat this lane's 52w claims as unverified until it does.",
+      "4 further names fail-closed on the prices.parquet coverage gap."
+    ],
+    "MOM_LONG": [
+      "BASKET_WATCH (78 names, +0.23% vs the +0.30% bar, median NEGATIVE -0.91%, tail-carried). Top by proximity to 52w-high: ETN, JCI, NUE, SWK, PH, ITW. Sector max 23.1% Industrials, inside the 1/3 cap.",
+      "207 of 285 raw candidates (73%) FAIL-CLOSED on the prices.parquet coverage gap -- basket composition is clean but NOT complete. Root cause unchanged: build_prices.py reads a universe.json frozen at 785 symbols (783 written tonight) while build_features uses the live screener spine (2,466).",
+      "SECOND, INDEPENDENT BAR: risk-sizer.md bars this lane from starter sizing until a DURABLE-N (>=30) forward window re-clears positive excess, re-enabled via a /calibration-audit recommendation, not ad hoc."
+    ],
+    "S2_dp_revert": [
+      "ADVISORY_WATCH (55 names) -- advisory lane never sizes regardless of measured excess. Largest DP prints: VZ ($580.4M, oneside 0.9031), NXPI ($406.5M), ABT ($341.9M), TER ($297.6M), TFC ($194.9M).",
+      "Lane-coherence note for a future session: S2 is LONG-tilted, but roughly 25 of the 55 names carry NEGATIVE dp_buy_skew (sell-side concentration). A sell-side one-sided print is not the long-tilted reversion setup the lane validated; the watch list conflates the two. Worth splitting next time.",
+      "Liquidity claim SPOT-CHECKED and CORRECT: the lane reported 0/99 failures against the $50M floor, which looked implausible, but TAL ($12.09/$56.5M), NWL ($6.17/$65.2M), DNTH, SPHR and GTES all genuinely pass."
+    ],
+    "S4_pcr_fade": [
+      "ADVISORY_WATCH (57 names) -- advisory lane never sizes. Highest PCR: HGV (417.0), ITRI (332.4), XPO (103.2), EXR (90.7), TYL (39.0).",
+      "Still the ONLY lane positive FORWARD as well as historically (+0.51% hist, n=370). That does not change the advisory clause.",
+      "Secondary ivrank_chg_5d rising-IV h3 tilt cohort (n=12, advisory, do NOT stack onto PCR scores): A, ACGL, ADC, BOX, ELS, EXR, FRT, LBRT, LFUS, TENB, TRP, VTR.",
+      "9 names cleared S4 gates but carry blocking verdicts from other lanes -- cross-check before any engagement: A, BPOP, CLBK, IR, LII, NBIX, OLLI, WAB, WBS."
+    ],
+    "VOL_BOOK": [
+      "EMPTY -- all three candidates stand aside. SPY 0DTE: dealers short gamma + FAIR gross VRP (+0.09pp) = no edge to pay for the acceleration tail. QQQ 0DTE: long gamma but NEGATIVE VRP (-3.67pp, IV underpricing realized) + NFP two days out. YELP earnings: real backwardation signal (front 76.9% vs back 63.4%, ratio 1.212, 11.07% implied move into an 08-06 print) but CUT on the fail-closed liquidity floor -- $24.7M 20d $-ADV vs the $50M floor, 192 contracts front-month OI.",
+      "uw earnings-play iv_rank returned a CONSTANT 100 across all 10 names tonight -- the field is non-discriminating and unusable as a richness filter. Fall back to term structure. ZTS, LEG, CECO, SGI all showed ratio 1.0 (no confirming spread) and were not actioned."
+    ]
+  },
+  "orchestrator_action_items": [
+    "FIX scripts/zerodte_setup.py -- the gamma-sign bug BIT tonight for the first time in four sessions. It emitted SPY as GO_PREMIUM_SELL_INTRADAY labelled 'long-gamma: quieter, mean-reverting' while the CLI read NEGATIVE/short-gamma. The three prior sessions logged 'script and CLI agreed, bug did not bite'; absence of symptom was not a fix, and it has now produced a live premium-sell recommendation into a short-gamma tape. It sums 0-45DTE net gamma instead of comparing spot against the zero-gamma LEVEL.",
+    "HARDEN the momentum lane's 52-week verification -- it reported closes for CCI/FLUT/XPEV that match no chart-API read and labelled them 'Yahoo Verified'. CCI was a false short (11.2% of range) that only the orchestrator's independent re-check caught.",
+    "CONSIDER a deal-speculation / M&A-rumor gate for OI_FADE. AZN passed all seven existing gates including catalyst_split, and was only cut by reading the news tape by hand.",
+    "prices.parquet coverage gap remains the largest single source of dropped candidates (211 names tonight, 73% of MOM_LONG). Root cause is the frozen universe.json in build_prices.py, so rebuilding does not fix it.",
+    "CHECK whether issue_type alone is sufficient hygiene for the harness universe -- SPCX (classified Common Stock) is a space/SPAC thematic vehicle and is the largest positive contributor in the MOM_SHORT increment rows (+0.0654, +0.0906)."
+  ],
+  "process_findings_summary": "Regression gate GREEN and PROVED rather than assumed. retro_harness --all on the rebuilt 81-day panel shows all five lanes below baseline, which reads as simultaneous five-lane decay; it is not. Isolation check (a) was stronger than usual: retro_harness.py, _regime.py and _calendar.py are BYTE-IDENTICAL to baseline commit 374b20d, and HEAD de91fe9 touched only markdown, CLAUDE.md and the schema -- no Python. Isolation check (b): rows matured at the 07-31 edge reproduce all five lanes and all five n's EXACTLY (+0.0023 / -0.0008 / +0.0071 / +0.0021 / +0.0051; n=483/317/979/523/370). The 109-row increment is ONE clustered event, not 109 independent observations -- its base-rate column reads 1.00 for every long lane and 0.00 for every short lane, meaning the conditional benchmark was up on essentially every resolution window in it. That is the same rip that set s1_standdown tonight. Artifacts: analyses/audit/2026-08-05/harness_split.{py,out}. Truth-set parquets were STALE at 08-04 on the first preflight and were rebuilt (prices/returns/features) before any lane ran; the second preflight exited clean."
+}

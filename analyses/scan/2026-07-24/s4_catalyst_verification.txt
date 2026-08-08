@@ -1,0 +1,225 @@
+================================================================================
+S4 SENTIMENT-CONTRARIAN LANE FINAL REPORT — 2026-07-24
+================================================================================
+
+TRADE DATE: 2026-07-24
+REGIME: PULLBACK (risk-off; SPY +0.10%, QQQ -1.12%, VIX 18.58 contango)
+DIRECTION: LONG (fade put-heavy crowd only — short call-heavy measured NEGATIVE)
+LANE CONFIDENCE: ADVISORY ONLY / HALF-CAP (per 2026-07-18 calibration rules)
+VALIDATED EXCESS: +0.71% mean (sign-stable h5, h10, all regimes)
+
+================================================================================
+SCREENING RESULTS
+================================================================================
+
+UNIVERSE FLOW:
+  Start:               6,289 tickers (full screener panel)
+  → Universe hygiene:  3,684 (exclude ETFs, leveraged ETPs, SPACs)
+  → Liquidity gate:    1,503 (price >= $5, 30d $-ADV >= $50M)
+  → Earnings gate:     992 (no ER through ~2026-08-07)
+  → Top 5% PCR:        45 put-heavy names
+  → Option liq floor:  8 (call+put >= 1000)
+
+FINAL CANDIDATES: 8 names cleared all hard gates
+
+================================================================================
+INDIVIDUAL CATALYST VERIFICATION (CRITICAL)
+================================================================================
+
+1. DOX (Amdocs) — PCR 68.19, 99.9th percentile
+   Catalyst Status: INFORMED-PUT RISK (EXCLUDE)
+   ER Date: 2026-08-05 (edge of h10 boundary, ER in ~12 days)
+   Catalyst: Q2 2026 beat expectations but tightened FY26 guidance to narrower range
+             (2%-4% revenue growth, 5%-7% EPS growth). Narrower guidance interpreted
+             as conservative stance/latent concern. CFO transition announced (Tal
+             Rosenfeld in, Tamar Rapaport-Dagim retiring). Recent AI initiatives
+             (GenAI-native AOS platform launch) offset by tighter guidance outlook.
+   Verdict: Put-heaviness likely INFORMED by cautious guidance + leadership change.
+            DO NOT FIRE.
+
+2. NI (NiSource, Utility) — PCR 57.74, 99.8th percentile
+   Catalyst Status: INFORMED-PUT RISK (EXCLUDE)
+   ER Date: 2026-08-05 (ER in ~12 days)
+   Catalyst: **KeyCorp cut earnings estimates on 2026-07-22** (2 days before trade
+             date). Downgrade: EPS $0.14 (down from $0.17 prior estimate). Q2 EPS
+             forecast lowered. Dividend +7.1% but earnings headwind dominates.
+   Verdict: Put spike coincides with recent analyst downgrade. INFORMED PUT RISK.
+            DO NOT FIRE.
+
+3. VIK (Viking Holdings, Cruise) — PCR 16.96, 98.8th percentile
+   Catalyst Status: CLEAN (no informed-put evidence)
+   ER Date: 2026-08-18 (ER in ~25 days)
+   Catalyst: Positive — Viking Mira float-out construction milestone on 07-31,
+             advanced bookings +13% YoY to $6.0B, analyst coverage upgraded (25
+             analysts, avg PT $101.22, +22% upward revision in 3mo). Strong cash
+             position ($3.8B + $1.0B undrawn credit). No negative catalysts.
+   Verdict: PUT-HEAVINESS LIKELY HEDGING/INSURANCE, NOT INFORMED. **CANDIDATE VALID.**
+
+4. TTAN (ServiceTitan, SaaS) — PCR 12.67, 98.3th percentile
+   Catalyst Status: CLEAN (no negative catalyst)
+   ER Date: 2026-09-03 (ER in ~41 days)
+   Catalyst: Neutral-to-positive. Q2 guidance: revenue $284-286M (in-line), FY27
+             guidance $1,130-1,140M (solid growth). Conduit Tech acquisition deal
+             (Sept 2025 announced, close expected Q3 FY26 = Sept 2026 timeframe).
+             No earnings disappointment or analyst cut.
+   Verdict: PCR elevation not explained by known negative catalyst. **CANDIDATE VALID.**
+
+5. WEN (Wendy's, QSR) — PCR 12.32, 98.1st percentile
+   Catalyst Status: INFORMED-PUT RISK (EXCLUDE)
+   ER Date: 2026-08-07 (ER in ~14 days, AT BOUNDARY of h10 exclusion)
+   Catalyst: **WEAK EARNINGS GUIDANCE & ANALYST DOWNGRADE.** Recent Street research
+             bearish: multiple analysts cut price targets, citing execution &
+             growth risks tied to Q4 results and FY26 guidance. CFO transition:
+             Steve Cirulis appointed 06-23 (replacing Ken Cook). Retail trader
+             hype earlier (short-squeeze narrative in early July, +21% premarket)
+             but undercut by fundamentals. Analyst consensus "Hold", avg PT $7.78.
+   Verdict: Put-heaviness INFORMED by weak guidance + leadership transition.
+            DO NOT FIRE.
+
+6. XENE (Xenon Pharma, Biotech) — PCR 12.27, 98.0th percentile
+   Catalyst Status: CLEAN (clinical trial updates neutral to positive)
+   ER Date: 2026-08-10 (ER in ~17 days)
+   Catalyst: Late-stage epilepsy/MDD/bipolar depression trials advancing. KV7
+             potassium channel opener azetukalner in Phase 3. Company presented at
+             Goldman Sachs 45th Annual Global Healthcare Conference (early July).
+             Recent 30-day return +32.28%, 1-day pullback −2.87% (profit-taking).
+             No negative news, no analyst downgrades noted.
+   Verdict: PCR elevation may reflect pre-clinical-event hedging (trial risk).
+            Neutral/hedging, not informed downside. **CANDIDATE VALID.**
+
+7. KGS (Kodiak Gas Services, Energy) — PCR 5.48, 95.2nd percentile
+   Catalyst Status: INFORMED-PUT RISK (CAUTION)
+   ER Date: 2026-08-06 (ER in ~13 days, near h10 boundary)
+   Catalyst: **Barclays downgrade on 2026-07-08:** price target cut from $76 to
+             $72 (still "Buy" rating). Multi-year gas turbine order win (07-08) +
+             Baker Hughes. Q1 beat: record adjusted EBITDA $190.1M (+7% YoY),
+             revenue +4.9% to $345.8M. However, PT cut suggests caution.
+   Verdict: Put-heavy may reflect post-downgrade hedging or skepticism on PT
+            outlook. Flag as CAUTION — downgrade is recent (07-08) but PT still
+            "Buy". Monitor invalidation carefully. **MARGINAL CANDIDATE.**
+
+8. PLD (Prologis, REIT) — PCR 5.42, 95.1st percentile
+   Catalyst Status: CLEAN (POSITIVE NEWS, HEDGING-DRIVEN PCR)
+   ER Date: 2026-10-21 (ER in ~89 days, well clear)
+   Catalyst: **Q2 BEAT & RAISED GUIDANCE.** EPS $1.63 vs est. $0.80 (+$0.83).
+             Core FFO $1.63 vs $1.46. Raised 2026 net earnings guidance from
+             $3.80-4.05 to $4.40-4.55. Raised Core FFO guidance to $6.22-6.30
+             from $6.07-6.23. Record leasing (67M sq ft), 95.5% occupancy.
+             Stock +4.63% on guidance, +16.28% YTD. Analyst sentiment positive.
+   Verdict: PUT-HEAVINESS IS **OVERPRICED INSURANCE/HEDGING**, not informed puts.
+            Pure variance-premium underpricing. **CANDIDATE VALID — STRONGEST SIGNAL.**
+
+================================================================================
+CATALYST SUMMARY
+================================================================================
+
+EXCLUDE (Informed-Put Risk — Fade Fails):
+  • DOX   — Cautious guidance + CFO transition
+  • NI    — Recent analyst downgrade (KeyCorp, 07-22)
+  • WEN   — Weak guidance + analyst cuts + CFO transition
+
+MARGINAL (Recent Analyst Action — Caution):
+  • KGS   — Barclays PT cut (07-08), still "Buy" but skeptical
+
+VALID (Hedging/Insurance-Driven or Clean):
+  • VIK   — Positive news, strong bookings, analyst upgrades
+  • TTAN  — Neutral catalysts, solid guidance
+  • XENE  — Clinical trial progress, hedging-driven
+  • PLD   — POSITIVE NEWS (beat + raised guidance), pure hedging signal
+
+================================================================================
+SCORED S4 CANDIDATES (ADVISORY ONLY, HALF-CAP)
+================================================================================
+
+Rank | Ticker | PCR     | %-ile | $-ADV   | ER Date   | IV-Rank | Validity      | Notes
+-----|--------|---------|-------|---------|-----------|---------|---------------|----------
+1.   | PLD    | 5.42    | 95.1% | $637.2M | 2026-10-21| 15.18   | VALID ✓      | Beat + raised guidance; purest hedging signal
+2.   | VIK    | 16.96   | 98.8% | $222.6M | 2026-08-18| 53.14   | VALID ✓      | Strong bookings; analyst upgrades
+3.   | TTAN   | 12.67   | 98.3% | $130.8M | 2026-09-03| 62.16   | VALID ✓      | Solid guidance; acquisition on track
+4.   | XENE   | 12.27   | 98.0% | $118.2M | 2026-08-10| 17.13   | VALID ✓      | Late-stage trial progress; hedging
+
+EXCLUDE (Informed-Put Risk):
+   | DOX    | 68.19   | 99.9% | $81.8M  | 2026-08-05| 65.87   | EXCLUDE ✗    | Cautious guidance + CFO transition
+   | NI     | 57.74   | 99.8% | $236.1M | 2026-08-05| 59.79   | EXCLUDE ✗    | Recent analyst downgrade (KeyCorp 07-22)
+   | WEN    | 12.32   | 98.1% | $219.2M | 2026-08-07| 24.60   | EXCLUDE ✗    | Weak guidance + analyst cuts
+   | KGS    | 5.48    | 95.2% | $112.4M | 2026-08-06| 87.50   | MARGINAL ⚠   | Barclays PT cut; monitor closely
+
+================================================================================
+IV-RANK SECONDARY TILT (h3 horizon, advisory overlay)
+================================================================================
+
+The 5-day IV-rank change (ivrank_chg_5d) is the only factor sign-stable across
+ALL three market regimes (rank-IC t=+5.2 per research/70). Rising IV-rank over
+the past 5 days signals modest outperformance over the next ~3 days.
+
+IV-Rank Change Check (from screener data):
+  Names with rising IV-rank over 5d are candidates for a separate h3 tilt.
+  However, direct 5d IV-rank change data not available in today's panel export.
+  
+  Proxy signal from IV-Rank levels & regime:
+  - High IV-rank (recent spikes): DOX 65.87, NI 59.79, KGS 87.50 (highest)
+  - Moderate IV-rank: TTAN 62.16, VIK 53.14
+  - Low IV-rank: XENE 17.13, PLD 15.18 (lowest)
+  
+  In PULLBACK regime with rising volatility (VIX +12.4% to 18.70), names with
+  rising IV-rank should outperform. Among valid candidates:
+  - TTAN (IV-rank 62.16) and VIK (53.14) show elevated IV-rank, consistent
+    with rising-IV tilt.
+  
+  NOTE: Named from 07-23 as "cleanest" was JBL (IV-rank rising +1.9d),
+  but JBL dropped out of top-5% today, so no h3 overlay sized.
+
+================================================================================
+VERDICT & SIZING
+================================================================================
+
+**Trade Date: 2026-07-24**
+
+Directional Edge: S4 LONG (put-heavy fade)
+Confidence: ADVISORY ONLY / HALF-CAP
+Regime: PULLBACK (risk-off headwind)
+
+**Recommend:**
+  1. **Fire 4 valid candidates (advisory/half-cap sizing):**
+     - PLD (strongest signal: beat+raised guidance)
+     - VIK (clean catalyst, analyst upgrades)
+     - TTAN (solid guidance, neutral catalysts)
+     - XENE (trial progress, hedging-driven PCR)
+
+  2. **Exclude 4 names with informed-put risk:**
+     - DOX (cautious guidance)
+     - NI (recent analyst cut)
+     - WEN (weak guidance + analyst cuts)
+     - KGS (Barclays downgrade)
+
+**Position Sizing:**
+  Per 2026-07-18 calibration rules: half-cap only.
+  Never fire full size on S4 — excess is in mean, not win-rate.
+  Right-skew distribution; modal outcome is small loss, tail-driven by outperformance.
+
+**Invalidation Triggers:**
+  - Put-heavy turns out informed (gap down on news) → CUT
+  - IV-rank rolls back (volatility crush into earnings) → CUT
+  - Close < entry more than 2% → SL
+
+**IV-Rank Tilt (h3 overlay):**
+  No h3 ivrank_tilt sized today (carried name JBL dropped from top-5%).
+  Monitor for rising IV-rank names separately on next scan.
+
+================================================================================
+OUTPUT
+================================================================================
+
+S4 Screen JSON saved to:
+  /Users/ewan/Development/market-analysis/analyses/scan/2026-07-24/s4_screen.json
+
+Final candidate list (advisory/half-cap):
+  1. PLD  - $147.63 | PCR 5.42 | $637.2M ADV | ER 10-21 | Valid
+  2. VIK  - $100.71 | PCR 16.96 | $222.6M ADV | ER 08-18 | Valid
+  3. TTAN - $70.48 | PCR 12.67 | $130.8M ADV | ER 09-03 | Valid
+  4. XENE - $65.42 | PCR 12.27 | $118.2M ADV | ER 08-10 | Valid
+
+Regime fit: PULLBACK conditions favor hedging-unwind fade.
+Next review: 2026-07-25 EOD scan.
+
+================================================================================

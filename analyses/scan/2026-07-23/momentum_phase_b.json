@@ -1,0 +1,354 @@
+{
+  "trade_date": "2026-07-23",
+  "phase": "Phase B \u2014 Momentum Lane",
+  "regime_context": {
+    "regime_type": "PULLBACK",
+    "spy_ret5": "-1.67%",
+    "spy_ret10": "-1.80%",
+    "vol_regime": "short-gamma/vol-expansion",
+    "s1_standdown": false,
+    "directional_tradable": true,
+    "phase_a_cohort_size": 354,
+    "phase_a_near_highs": 246,
+    "phase_a_near_lows": 133
+  },
+  "screener_filters": {
+    "total_universe": 6279,
+    "after_universe_hygiene": 1503,
+    "after_liquidity_floor": 1503,
+    "after_no_earnings_h10": 464
+  },
+  "mom_short": {
+    "cohort_size": 14,
+    "filter": "close <= 1.02 \u00d7 week_52_low",
+    "top_10": [
+      {
+        "rank": 1,
+        "ticker": "QS",
+        "close": 5.115,
+        "week_52_low": 5.645,
+        "pct_below_low": -9.388839681133732,
+        "adv_20d_dollar": 123873146.02928573,
+        "sector": "Consumer Cyclical",
+        "issue_type": "Common Stock",
+        "er_date": "2026-10-28"
+      },
+      {
+        "rank": 2,
+        "ticker": "ROL",
+        "close": 39.44,
+        "week_52_low": 41.5,
+        "pct_below_low": -4.9638554216867465,
+        "adv_20d_dollar": 193114616.99047616,
+        "sector": "Consumer Cyclical",
+        "issue_type": "Common Stock",
+        "er_date": "2026-11-04"
+      },
+      {
+        "rank": 3,
+        "ticker": "ISRG",
+        "close": 332.02,
+        "week_52_low": 340.61,
+        "pct_below_low": -2.5219459205543138,
+        "adv_20d_dollar": 1218506775.4104762,
+        "sector": "Healthcare",
+        "issue_type": "Common Stock",
+        "er_date": "2026-10-20"
+      },
+      {
+        "rank": 4,
+        "ticker": "AZO",
+        "close": 2923.5,
+        "week_52_low": 2928.11,
+        "pct_below_low": -0.1574394404581847,
+        "adv_20d_dollar": 1118014058.142857,
+        "sector": "Consumer Cyclical",
+        "issue_type": "Common Stock",
+        "er_date": "2026-09-22"
+      },
+      {
+        "rank": 5,
+        "ticker": "ORCL",
+        "close": 120.04,
+        "week_52_low": 120.03,
+        "pct_below_low": 0.008331250520710043,
+        "adv_20d_dollar": 4729157889.247619,
+        "sector": "Technology",
+        "issue_type": "Common Stock",
+        "er_date": "2026-09-08"
+      },
+      {
+        "rank": 6,
+        "ticker": "LOW",
+        "close": 201.92,
+        "week_52_low": 201.88,
+        "pct_below_low": 0.019813750743002956,
+        "adv_20d_dollar": 598644012.2819047,
+        "sector": "Consumer Cyclical",
+        "issue_type": "Common Stock",
+        "er_date": "2026-08-19"
+      },
+      {
+        "rank": 7,
+        "ticker": "PEP",
+        "close": 134.95,
+        "week_52_low": 133.95,
+        "pct_below_low": 0.746547219111604,
+        "adv_20d_dollar": 1268236830.7642856,
+        "sector": "Consumer Defensive",
+        "issue_type": "Common Stock",
+        "er_date": "2026-10-08"
+      },
+      {
+        "rank": 8,
+        "ticker": "HDB",
+        "close": 23.13,
+        "week_52_low": 22.91,
+        "pct_below_low": 0.9602793539938759,
+        "adv_20d_dollar": 196944260.92714283,
+        "sector": "Financial Services",
+        "issue_type": "ADR",
+        "er_date": "2026-10-16"
+      },
+      {
+        "rank": 9,
+        "ticker": "IBM",
+        "close": 206.65,
+        "week_52_low": 204.44,
+        "pct_below_low": 1.0810017609078404,
+        "adv_20d_dollar": 2759842446.1738095,
+        "sector": "Technology",
+        "issue_type": "Common Stock",
+        "er_date": "2026-10-28"
+      },
+      {
+        "rank": 10,
+        "ticker": "CCI",
+        "close": 74.57,
+        "week_52_low": 73.75,
+        "pct_below_low": 1.1118644067796613,
+        "adv_20d_dollar": 314969185.01238096,
+        "sector": "Real Estate",
+        "issue_type": "Common Stock",
+        "er_date": "2026-10-28"
+      }
+    ]
+  },
+  "mom_long": {
+    "cohort_size": 60,
+    "filter": "close >= 0.95 \u00d7 week_52_high",
+    "sector_breakdown": {
+      "Financial Services": 30,
+      "Industrials": 9,
+      "Healthcare": 8,
+      "Consumer Cyclical": 4,
+      "Real Estate": 4,
+      "Consumer Defensive": 2,
+      "Energy": 1,
+      "Communication Services": 1,
+      "Utilities": 1
+    },
+    "top_20": [
+      {
+        "rank": 1,
+        "ticker": "FBRX",
+        "close": 59.7,
+        "week_52_high": 56.84,
+        "pct_below_high": 5.031667839549603,
+        "adv_20d_dollar": 57867531.24285714,
+        "sector": "Healthcare",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 2,
+        "ticker": "OII",
+        "close": 48.02,
+        "week_52_high": 45.91,
+        "pct_below_high": 4.595948595077348,
+        "adv_20d_dollar": 55367659.10666667,
+        "sector": "Energy",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 3,
+        "ticker": "CSX",
+        "close": 52.81,
+        "week_52_high": 51.285,
+        "pct_below_high": 2.973579019206407,
+        "adv_20d_dollar": 648273656.4238096,
+        "sector": "Industrials",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 4,
+        "ticker": "WAB",
+        "close": 297.99,
+        "week_52_high": 295.41,
+        "pct_below_high": 0.8733624454148492,
+        "adv_20d_dollar": 284882356.44,
+        "sector": "Industrials",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 5,
+        "ticker": "TRV",
+        "close": 376.37,
+        "week_52_high": 374.0,
+        "pct_below_high": 0.6336898395721935,
+        "adv_20d_dollar": 769247211.83,
+        "sector": "Financial Services",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 6,
+        "ticker": "APGE",
+        "close": 134.26,
+        "week_52_high": 134.4,
+        "pct_below_high": -0.10416666666668295,
+        "adv_20d_dollar": 394225675.24666667,
+        "sector": "Healthcare",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 7,
+        "ticker": "URI",
+        "close": 1139.71,
+        "week_52_high": 1143.69,
+        "pct_below_high": -0.3479963976252276,
+        "adv_20d_dollar": 528933549.63428575,
+        "sector": "Industrials",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 8,
+        "ticker": "JPM",
+        "close": 349.9,
+        "week_52_high": 351.24,
+        "pct_below_high": -0.3815055232889275,
+        "adv_20d_dollar": 3580673824.619047,
+        "sector": "Financial Services",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 9,
+        "ticker": "AIT",
+        "close": 344.08,
+        "week_52_high": 345.48,
+        "pct_below_high": -0.40523329859906143,
+        "adv_20d_dollar": 104798182.3847619,
+        "sector": "Industrials",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 10,
+        "ticker": "LQDA",
+        "close": 89.03,
+        "week_52_high": 89.51,
+        "pct_below_high": -0.5362529326332299,
+        "adv_20d_dollar": 148592269.7852381,
+        "sector": "Healthcare",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 11,
+        "ticker": "ATAI",
+        "close": 7.17,
+        "week_52_high": 7.22,
+        "pct_below_high": -0.6925207756232621,
+        "adv_20d_dollar": 154399835.69714287,
+        "sector": "Healthcare",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 12,
+        "ticker": "BAC",
+        "close": 61.28,
+        "week_52_high": 62.115,
+        "pct_below_high": -1.3442807695403736,
+        "adv_20d_dollar": 2157968015.6495237,
+        "sector": "Financial Services",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 13,
+        "ticker": "MSM",
+        "close": 125.83,
+        "week_52_high": 127.55,
+        "pct_below_high": -1.3484907879263042,
+        "adv_20d_dollar": 114316812.65190476,
+        "sector": "Industrials",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 14,
+        "ticker": "HOMB",
+        "close": 30.73,
+        "week_52_high": 31.18,
+        "pct_below_high": -1.4432328415651008,
+        "adv_20d_dollar": 70569434.38,
+        "sector": "Financial Services",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 15,
+        "ticker": "TXNM",
+        "close": 58.3,
+        "week_52_high": 59.53,
+        "pct_below_high": -2.066185116747865,
+        "adv_20d_dollar": 94504844.13333333,
+        "sector": "Utilities",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 16,
+        "ticker": "BNY",
+        "close": 160.11,
+        "week_52_high": 163.77,
+        "pct_below_high": -2.2348415460707094,
+        "adv_20d_dollar": 752061433.6800001,
+        "sector": "Financial Services",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 17,
+        "ticker": "USB",
+        "close": 63.33,
+        "week_52_high": 64.84,
+        "pct_below_high": -2.3288093769278317,
+        "adv_20d_dollar": 580970131.4914286,
+        "sector": "Financial Services",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 18,
+        "ticker": "KFY",
+        "close": 77.84,
+        "week_52_high": 79.97,
+        "pct_below_high": -2.66349881205451,
+        "adv_20d_dollar": 51813332.346666664,
+        "sector": "Industrials",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 19,
+        "ticker": "SPG",
+        "close": 225.2,
+        "week_52_high": 231.525,
+        "pct_below_high": -2.731886405355799,
+        "adv_20d_dollar": 498839318.9333333,
+        "sector": "Real Estate",
+        "issue_type": "Common Stock"
+      },
+      {
+        "rank": 20,
+        "ticker": "PNC",
+        "close": 249.26,
+        "week_52_high": 256.49,
+        "pct_below_high": -2.818823345939425,
+        "adv_20d_dollar": 567292923.0361905,
+        "sector": "Financial Services",
+        "issue_type": "Common Stock"
+      }
+    ]
+  }
+}

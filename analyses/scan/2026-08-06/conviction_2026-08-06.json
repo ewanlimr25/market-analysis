@@ -1,0 +1,86 @@
+{
+  "conviction_date": "2026-08-06",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-06 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-06/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters for a SEVENTH consecutive session (07-29, 07-30, 07-31, 08-03, 08-04, 08-05, 08-06); the book stays FLAT for a FOURTH. The vol book is EMPTY for a SECOND consecutive session. WHAT CHANGED TONIGHT, AND IT IS A STEP BACKWARD: on 08-05 the OI_FADE lane had two names (EXLS, UCTT) that cleared the entire mandatory gate stack and were blocked ONLY by the lane's Hard Rule #2 regime stand-down -- the first regime-blocked rather than mechanism-blocked session of the streak. Tonight NEITHER survives to the regime question. EXLS is outright mechanism-invalidated (last call_net went NEGATIVE) and UCTT has diluted out of the selection cohort. So the lane has reverted to a pure zero-mechanically-clean night, which is the 07-29..08-04 pattern, not the 08-05 one. Everything else is out for the same structural reasons as prior sessions: MOM_LONG on the +0.23% vs +0.30% bar AND a 38% Financial-Services sector concentration breaching the 1/3 cap AND the risk-sizer DURABLE-N bar; MOM_SHORT triply out (s1_standdown +1.12pp margin, invariant-#6 watch-only cap, negative -0.0008 baseline); S2 and S4 are ADVISORY lanes that never size regardless of measured excess.",
+    "net_book_new_starter_pct_exposure": "0 new starters; 0 open positions carried forward"
+  },
+  "held_position_reconciliation": {
+    "note": "Reconciled with `python3 scripts/held_book.py --prior analyses/scan/2026-08-05/conviction_2026-08-05.json`. Tool reported 'read 0 position(s): 0 open, 0 closed' with SPY -0.16% on the day. Per the standing rule never to trust a bare empty result, the prior file was opened and inspected directly: its held_position_reconciliation.positions array is genuinely [] because PLNT closed 2026-08-03 on its pre-registered h10 time stop and nothing has been opened since. The empty result is REAL, not the EXIT-substring bug. Nothing required hand-reconciliation.",
+    "positions": []
+  },
+  "regime": {
+    "label": "UPTREND/REBOUND-THRUST",
+    "ret5": "+3.620%",
+    "ret10": "+4.120%",
+    "dd15": "-1.180%",
+    "s1_standdown": true,
+    "standdown_margin_pp": 1.12,
+    "note": "MARGIN IS DECAYING FAST -- watch this tomorrow. Trajectory: 08-03 +0.01pp -> 08-04 +1.61pp -> 08-05 +3.03pp (peak) -> 08-06 +1.12pp. ret5 fell 5.530% -> 3.620% overnight, a -1.91pp drop in one session. Roughly 1.1pp more decay (a couple of flat-to-down sessions) ends the stand-down and re-opens MOM_SHORT from the regime side -- though the invariant-#6 watch-only cap and the negative baseline would still bind it. This is a STALLING thrust, not a reversal: dd15 is only -1.18%, so there is no pullback underneath it yet. STREAK CORRECTION for the record: the REBOUND-THRUST run is FOUR sessions (08-03..08-06), not seven -- 07-20..07-31 were CHOP/PULLBACK with s1_standdown=False. Seven is the ZERO-STARTER streak.",
+    "breadth_divergence": "YES -- pct_green 40.16% and flow-bullish 34.1% on a FLAT tape, net inflow almost entirely Technology. `uw risk market-regime` reads TRANSITIONAL/reduce-size despite the mechanical UPTREND."
+  },
+  "watch_only": {
+    "OI_FADE": [
+      "UCTT -- THE ONLY NAME STILL WORTH CARRYING. Still mechanically clean by the invalidation test but DECAYED OUT of the selection cohort: rel_build 1.109 -> 0.982 (now below 1.0), persistence 0.591 -> 0.634, last call_net +795 POSITIVE. Today's -237 net day is PUTS OPENING (+1,032), NOT calls closing, so no invalidation trigger fires -- that distinction is the whole reason it survives where EXLS did not. catalyst_split still LIVE (35.9% post the 08-03 print, essentially unchanged from 36.1%). $80.20-area, ~$125.7M 20d $-ADV, reports 2026-10-27 (clear of h10), issue_type Common Stock. RE-CHECK NEXT SESSION: if rel_build re-inflates back above the cohort cutoff AND the regime leaves REBOUND-THRUST, this is a live starter candidate. If last call_net goes negative, it is dead like EXLS.",
+      "EXLS -- CUT, DOWNGRADED FROM 'MECHANICALLY CLEAN, REGIME-BLOCKED'. rel_build 1.344 -> 0.964 (out of the top-15 entirely), persistence 0.833 -> 1.09 (past the 0.85 fail threshold), and last call_net -184 NEGATIVE = calls genuinely closing. That is the lane's textbook 'OI build reverses' invalidation. Do NOT re-propose without a fresh organic build. Orchestrator re-ran oi_build.py independently; every figure reproduced exactly.",
+      "AZN -- CUT STANDS, now on TWO independent grounds. The BMS merger rumor DIED (denial 08-05, AZN +6% on it), AND the mechanism is separately invalidated (persistence 1.017, last call_net -3,276, consistent with the position unwinding post-denial). THE M&A-RUMOR GATE GAP FOUND ON 08-05 IS STILL UNWRITTEN INTO THE STANDING 7-GATE STACK -- the checklist does not catch a rumor-driven single-day build. Tonight the lane DID run the screen manually as instructed (MRCY's 66.9% single-day build was checked and cleared as a legitimate PLTR partnership, not a rumor), which is the right behavior, but it is instruction-dependent, not codified.",
+      "MECHANISM-DEAD, DO NOT RE-PROPOSE WITHOUT A STATE CHANGE: HIG (persistence 1.902, last call_net -31, build actively unwinding), HXL (persistence 0.992, one 08-03 block, THIRD consecutive identical verdict), WSC (catalyst_split RESOLVED, only 3.4% of gross build survived the print), CCXI (SPAC/shell, Churchill Capital Corp XI, issue_type NULL -> fail-closed).",
+      "FORWARD-DECAY WATCH -- THIS IS THE WEEK. Today sits inside the 08-03->08-07 maturation window for the first post-hygiene-fix h10 cohort. That window closes 08-07. The /calibration-audit DUE 2026-08-08 is the FIRST that can grade the current engine rather than the pre-fix one, and it is the real test of the 2026-08-01 new-evidence cohort's -3.73% mean / hit-base -0.53 decay signal. Tonight adds no resolvable row -- it was a gate-failure night, not an outcome night."
+    ],
+    "MOM_SHORT": [
+      "STOOD_DOWN on three independent grounds (s1_standdown +1.12pp margin; invariant-#6 watch-only cap; the lane's own NEGATIVE -0.0008 baseline).",
+      "APP -- GENUINE near-52w-low, orchestrator Yahoo-verified: close $335.67, 52w low 332.19 set 2026-08-06, pct_52w_range 0.8%, off_high -55.0%.",
+      "XPEV -- GENUINE near-52w-low, orchestrator Yahoo-verified: close $11.68, 52w low 11.54 set 2026-08-06, pct_52w_range 0.8%, off_high -58.6%. ADR. (Carried over from 08-05, where it verified at $11.75/11.725 -- still making new lows.)",
+      "WING -- GENUINE near-52w-low, orchestrator Yahoo-verified: close $116.62, 52w low 116.25 set 2026-08-06, pct_52w_range 0.2%, off_high -66.3%.",
+      "ALL THREE SET THEIR 52-WEEK LOW TODAY -- the cohort is making new lows, not sitting on old ones.",
+      "PROCESS WIN, RECORD IT: the 08-05 verification defect DID NOT RECUR. Last session the lane's reported closes were wrong on all three names and its 'Yahoo Verified' column was not Yahoo data at all (CCI was an outright false short). Tonight the lane's reads matched the chart API to the cent on all three. The hardening instruction worked; keep issuing it.",
+      "UW week_52_low was STALE on all three (each higher than the chart-API truth). The field remains unusable for this lane -- chart-API verification stays mandatory.",
+      "8 of 11 screener candidates (72.7%) fail-closed on the prices.parquet coverage gap."
+    ],
+    "MOM_LONG": [
+      "BASKET_WATCH -- barred on THREE counts, not one. (1) +0.23% vs the +0.30% bar, median negative, tail-carried. (2) SECTOR CONCENTRATION ~38% Financial Services, which BREACHES the 1/3 cap (gate #7) -- this is new tonight and is an independent block. (3) risk-sizer.md DURABLE-N (>=30) bar, re-enabled only via a /calibration-audit recommendation.",
+      "Top by proximity to 52w-high: RTX, RVMD, CAKE, AMP, SCHW, NEU, BAC, V, HIG. 7 of the top 10 printed their 52w high TODAY.",
+      "CROSS-LANE CONFLICT, NOTED AND NEVER NETTED: HIG is simultaneously a MOM_LONG proximity name and an OI_FADE short candidate (cut on mechanism).",
+      "150 of 199 raw candidates (75.4%) FAIL-CLOSED on the prices.parquet coverage gap -- basket composition is clean but NOT complete. Root cause unchanged: build_prices.py reads a universe.json frozen at 785 symbols (783 written tonight) while build_features.py uses the live screener spine (2,468).",
+      "VSXY -- LANE FALSE ALARM, corrected by the orchestrator. The lane ranked it #1 and simultaneously flagged it as an 'inverse VIX ETF' that escaped the issue_type filter. Tonight's screener says Victoria's Secret & Co., issue_type='Common Stock'. It is NOT an ETP; the contamination claim is wrong in the OPPOSITE direction from the usual failure mode. Excluded from the carried list anyway because the lane's read of the name is unreliable."
+    ],
+    "S2_dp_revert": [
+      "ADVISORY_WATCH -- advisory lane never sizes regardless of measured excess (risk-sizer.md sizing map ends '... or advisory lane -> watch').",
+      "THE LANE-COHERENCE FIX REQUESTED ON 08-05 WAS DELIVERED. Output is now split by dp_buy_skew sign instead of conflating the two setups: (a) POSITIVE dp_buy_skew = 53 names, the VALIDATED long-tilted reversion setup; (b) NEGATIVE dp_buy_skew = 30 names, sell-side concentration, a DIFFERENT and UNVALIDATED microstructure setup, listed separately and never blended. Keep this split permanently.",
+      "Group (a) largest: RTX ($458.6M DP notional, 90.5% one-sided), TJX ($447.3M, 91.9%), CMCSA ($315.2M, 95.4%), ICE ($306.2M, 94.0%), REGN ($293.3M, 97.1%).",
+      "Pipeline: 192 DP candidates -> 102 after ETP exclusion (90 removed) -> 92 after earnings h5 (10 blocked: BCE, CWST, ED, KRMN, PAYO, RGA, RLAY, SLF same-day; HRB 08-11; SPG 08-10) -> 83 after liquidity (9 failed, all sub-$50M ADV: AHCO, CERT, CSIQ, CSTL, CXW, FLO, FUL, NHP, PBA)."
+    ],
+    "S4_pcr_fade": [
+      "ADVISORY_WATCH -- advisory lane never sizes.",
+      "LANE ERROR FOUND AND CORRECTED BY THE ORCHESTRATOR, COHORT 23 -> 18. The lane reported 'ETP exclusion (issue_type in Common Stock, ADR) -- All pass -- no ETF contamination'. That is FALSE. Five of its 23 names carry issue_type='ETF' in tonight's screener, which had labeled them CORRECTLY -- the lane's own filter leaked them. STRIPPED: HYG (iShares iBoxx HY Corp Bond), IYR (iShares US Real Estate), MDY (SPDR S&P MidCap 400), ITB (iShares US Home Construction), AIQ (Global X AI & Technology). This is the SAME recurring defect as the 2026-07-29 MOM_SHORT leak -- lanes roll their own ETF filter instead of using the clean issue_type field. It has now bitten in two different lanes; worth a codified shared helper.",
+      "Corrected cohort (18 h5 / 17 h10), highest genuine PCR: NWG 193.3 (ADR, 26 calls / 5,025 puts), RCI 71.0 (thin call denom, 19 -- flagged), SAIC 64.9, ARCB 33.2, WHR 23.4 (42,487 put OI), BSP 21.7 (ADR), TXT 14.0, ELAN 13.8, XEL 13.8, ALL 12.9, CME 8.4, COKE 8.0, EXE 7.1, ARE 6.7, FORM 6.5, VIK 6.3, MSCI 6.2, SCCO 6.1.",
+      "VIK fails h10 only (reports 2026-08-19, inside the h10 window) -- h5 eligible.",
+      "PCR denominator sanity check was RUN as instructed and came back clean: no thin-call artifacts of the HGV-417 / ITRI-332 class that dominated the 08-05 list. Min call_volume 19 (RCI), flagged.",
+      "prior_verdicts.py: no hard blocking vetoes. ARE carries a prior MOM_SHORT 08-05 stand-down (context only, different lane and direction -- do not net).",
+      "Secondary ivrank_chg_5d rising-IV h3 tilt cohort, SEPARATE and advisory, do NOT stack onto PCR scores: DFTX, IAG, FLR, CCXI, PL, EIX, ROAD, WSC, GLNG, EQX.",
+      "Still the ONLY lane positive FORWARD as well as historically (+0.51% hist, n=370). Does not change the advisory clause."
+    ],
+    "VOL_BOOK": [
+      "EMPTY for a SECOND consecutive session -- both stacks checked, neither clears net-of-cost.",
+      "0DTE-VRP: STAND ASIDE both SPY and QQQ, sell_premium=false, size_scalar=0.0. Dealers net SHORT gamma in both (SPY spot 768.85 vs flip 814.60; QQQ 715.47 vs flip 749.31). GAMMA-SIGN DISCIPLINE HELD per commit 5b3daec -- SPY's aggregate net GEX is POSITIVE (+433.4) and would read 'quiet' on the sign alone, but the aggregate sign drives RANGE/WING-WIDTH only while SPOT-VS-FLIP drives the REGIME and the sell decision. QQQ additionally backwardated (front-end IV 1.54x VIX).",
+      "Earnings IV-crush: 14 screened, no certifiable candidate. FLR and AAON have the liquidity but their rich IV is compensation for GENUINE fat tails (FLR: -27.0/-15.2/-13.6/+15.6% prints in 12 quarters; AAON: +31.5%, -22.9% in five). SION and ENVX fail on data completeness. ENVX is the closest to a textbook crush (implied ~6.5% vs realized mean abs 3.3%, no >13% print in 10 quarters) -- CARRIED AS A CHAIN-CHECK ITEM FOR 08-07, not scored, because there is no bid/ask source to certify the edge net of cost on a small-cap iron fly."
+    ]
+  },
+  "data_quality_carry_forward": [
+    "prices.parquet COVERAGE GAP -- UNFIXED and the single largest recurring defect. build_prices.py reads a universe.json frozen at 785 symbols (783 written tonight) while build_features.py uses the live screener spine (2,468). Cost tonight: 150/199 MOM_LONG (75.4%) and 8/11 MOM_SHORT (72.7%) fail-closed. Rebuilding does NOT fix it -- the frozen universe.json is the root cause.",
+    "ETF LEAKAGE IS NOW A TWO-LANE PATTERN. S4 leaked 5 ETFs tonight while reporting zero contamination; MOM_SHORT leaked 4 on 2026-07-29. The screener's issue_type field is clean and correct in both cases -- the lanes are not using it. A shared, codified ETP-exclusion helper would close this class.",
+    "earnings_gate.py ONE-SIDED BOUND -- the window check compares ned.isoformat() <= end with no lower-bound check. Both affected names tonight (EWTX, WSC) were fail-closed BLOCKED either way, so nothing turned on it, but it should be fixed. NOTE per the standing rule: any fix must patch BOTH the lane script AND retro_harness.py, which re-implements the gates inline and imports nothing.",
+    "EWTX next_earnings_date POSSIBLY STALE -- labeled 08-06, but the stock gapped +16.5% on 08-04 (38.38 -> 44.70) then went flat, a pattern more consistent with a clinical readout than an earnings print.",
+    "UW week_52_low STALE on all three MOM_SHORT names. Chart-API verification stays mandatory for this lane.",
+    "TRUTH SET WAS REBUILT TONIGHT before any lane ran. Preflight initially flagged all three parquets one session stale (ending 08-05); prices/returns/features were rebuilt to 2026-08-06 and preflight re-run clean. No lane read a stale panel."
+  ],
+  "next_actions": [
+    "2026-08-07: re-check UCTT (rel_build re-inflation vs last call_net going negative) and the s1_standdown margin, which is decaying ~1.1pp from release. NFP lands 08-07.",
+    "2026-08-08: /calibration-audit IS DUE and is the FIRST cycle that can grade the post-hygiene-fix engine. The 08-03->08-07 h10 cohort matures 08-07. This is the real test of OI_FADE's -3.73% forward-decay signal.",
+    "Codify the M&A/rumor gate into the OI_FADE 7-gate stack -- it has been run manually by instruction for two sessions now and caught nothing tonight only because MRCY's single-day build was legitimate.",
+    "Codify a shared ETP-exclusion helper on issue_type -- the leak has now appeared in two separate lanes."
+  ]
+}

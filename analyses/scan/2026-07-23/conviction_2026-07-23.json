@@ -1,0 +1,116 @@
+{
+  "conviction_date": "2026-07-23",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-07-23 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-23/decision.json",
+  "book_state": {
+    "positions": 2,
+    "all_shorts": true,
+    "detail": "ZERO new starters tonight -- the modal 'no fresh directional edge that clears the gate stack; maintain held book' output. Regime shifted CHOP -> PULLBACK (SPY ret5 -1.67%/ret10 -1.80%, below 20/50-SMA) on a risk-off tech-down day (TSLA -14.5%, GOOGL capex guide). s1_standdown FALSE. The workhorse OI_FADE lane found NO fresh short clearing all gates (every top build fails earnings-in-h10, near-52w-high, squeeze, SPAC/shell, or single-day-block-artifact). MOM_SHORT stays lane-capped (new leader QS unsized; PEGA recovered and dropped out). Two working held shorts carried and reconciled: ORCL HOLD (+8.74% gross, +3.37% short-excess today), PLNT HOLD (+1.76% gross, fund. CONFIRM, no add, close before 08-06 ER). TECH CUT confirmed (covered 07-23 open $71.80, -0.24% gross, dropped from book). FHN carried WATCH but signal-quality DOWNGRADED (block artifact). S2/S4/vol-book all advisory only.",
+    "net_book_new_starter_pct_exposure": "0 new starters; 2 carried held shorts (ORCL working +8.74% gross, PLNT working +1.76% gross); 1 confirmed cut (TECH, covered 07-23 open -0.24% gross)"
+  },
+  "held_position_reconciliation": {
+    "note": "Reconciled the held book carried in analyses/scan/2026-07-22/conviction_2026-07-22.json against tonight's 2026-07-23 live Yahoo chart-API closes (path-aware) + the fresh UW 2026-07-23 OI panel + a targeted fundamentals-gate on PLNT.",
+    "positions": [
+      {
+        "ticker": "ORCL",
+        "lane": "MOM_SHORT",
+        "direction": "short",
+        "entry_date": "2026-07-13",
+        "entry_price": 131.54,
+        "close_2026_07_23": 120.04,
+        "gross_pnl_pct": 8.74,
+        "today_short_excess_pct": 3.37,
+        "verdict": "HOLD",
+        "rationale": "Short working strongly: +8.74% gross (was +4.33% on 07-22). ORCL fell -4.61% on the risk-off day vs SPY -1.24% = +3.37% short-excess today. Now sitting essentially AT its 52w-low (+0.008% above). Invalidation (RSI>45 AND close>$144.22) nowhere close -- price clause $18+ away, RSI low/falling. ER ~09-08 outside horizon. MOM_SHORT lane cap blocks NEW starters only, not maintenance of this pre-cap (07-13) working position. HOLD. Watch item: at fresh lows, relief-bounce risk rises -- monitor the RSI leg if the tech tape reverses."
+      },
+      {
+        "ticker": "PLNT",
+        "lane": "OI_FADE",
+        "direction": "short",
+        "entry_date": "2026-07-20",
+        "entry_price": 55.2,
+        "close_2026_07_23": 54.23,
+        "gross_pnl_pct": 1.76,
+        "today_short_excess_pct": -1.57,
+        "verdict": "HOLD",
+        "rationale": "Working +1.76% gross (was +2.08% on 07-22; PLNT +0.33% while SPY -1.24% = -1.57% adverse short-excess today -- held up on the down day). 5d net-call-OI trajectory +20219,+24376,+750,+395,-4: the -4 print (07-23) is a STALL/WASH (call +179 / put +183), NOT a call unwind -- calls are still gross-OPENING, a genuine reversal would show negative call_net. Hard-invalidation NOT fired. Fundamentals-gate CONFIRM: 0 additional post-print PT raises (named soft-invalidation UNMET); only fresh analyst action since 07-18 was a Deutsche Bank CUT ($61->$55, 07-22), directionally supportive of the short; no upgrade, no bullish catalyst. HOLD, no add. TWO refinements applied: (1) invalidation TIGHTENED to require an actual negative call_net print (calls closing), not a sub-zero net-of-puts wash; (2) ER confirmed 2026-08-06 pre-market = the h10 boundary from tonight -> standing plan to TRIM/CLOSE before the print rather than hold through it."
+      },
+      {
+        "ticker": "TECH",
+        "lane": "OI_FADE",
+        "direction": "short",
+        "entry_date": "2026-07-21",
+        "entry_price": 71.63,
+        "cover_date": "2026-07-23",
+        "cover_price": 71.8,
+        "gross_pnl_pct": -0.24,
+        "verdict": "CUT_CONFIRMED",
+        "rationale": "The 07-22-scheduled proactive cover executed at the 2026-07-23 open ($71.80). Gross -0.24% (breakeven). No green-day stop-out fired (close 07-23 $71.77, still below the $72.16 new-52w-high invalidation) -- the dead-signal cut was executed cleanly ahead of the coinflip. DROPPED from the held book. Do NOT re-reconcile TECH as an open position next run unless a fresh cohort-qualifying ORGANIC OI build re-admits it (ER-date discrepancy still logged: UW 08-05 vs Finnhub 08-11 -- reconcile against IR calendar before any re-entry)."
+      }
+    ]
+  },
+  "names": [],
+  "watch_shortlist": [
+    {
+      "ticker": "FHN",
+      "lane": "OI_FADE",
+      "reason": "Carried WATCH, now SIGNAL-QUALITY DOWNGRADED. The build that put it on watch (2.54-2.63x base) is 97.7% a single 07-17 print = two isolated institutional block trades (100,000-lot Jan-2027 $31 call + 99,863-lot Nov-2026 $27 call, opened from 0). That block ROLLS OFF the trailing-5d window at the 07-24 refresh, collapsing the relative build toward zero unless organic building continues. Today added only +2,984 distributed (real but modest re-acceleration, not a reversal). Still floored by fundamentals CAUTION (4/4 beat, rev +64%/EPS +34%) + FOMC 07-29/PCE 07-30 event risk (rate-sensitive bank) + 85% near-highs breakout tail. Re-score ONLY after the block rolls off AND organic building persists through event week AND fundamentals firm off CAUTION AND/OR it retreats from the breakout zone. FHN outside the truth-set panel -- no quantitative corr history."
+    },
+    {
+      "ticker": "QS",
+      "lane": "MOM_SHORT",
+      "reason": "New cleanest MOM_SHORT promotion candidate (-9.39% below 52w low, close $5.12, Consumer Cyclical), replacing PEGA (which recovered above the 1.02x threshold and dropped out). First in line for starter promotion once MOM_SHORT clears a DURABLE-N>=30 forward-positive-excess re-validation via /calibration-audit. Lane cap keeps it watch-only regardless of s1_standdown=FALSE. NOTE: low nominal price ($5.12) near the $5 liquidity floor -- verify $-ADV and borrow before any future promotion."
+    },
+    {
+      "ticker": "FIG",
+      "lane": "OI_FADE",
+      "reason": "Still the most persistent OI build in the panel (daily 93413/24374/35765/6919/996, decelerating but no reversal) but now DOUBLY blocked: 42.4% SF / 3.99 DTC uncontainable squeeze tail AND ER now 08-05, inside a fresh h10 window from a 07-23 entry. Watch only. Re-check if SI/DTC cool materially AND after the 08-05 ER resolves."
+    },
+    {
+      "ticker": "JBL",
+      "lane": "S4_pcr_fade",
+      "reason": "Cleanest high-PCR fade-long (PCR 19.81 vs cohort, ER 09-24 safe, $458.6M ADV highest in cohort, IV-rank rising +1.9 advisory h3 tilt). Positive backdrop (Q2 beat, FY26 raised), no informed-put risk. Advisory watch only (half-cap). Carried leader from 07-22."
+    },
+    {
+      "ticker": "LI",
+      "lane": "S4_pcr_fade",
+      "reason": "S4 alternate: PCR 24.03, ER 08-27 safe, $50.4M ADV (cohort floor -- thin), positive catalysts (L6 SUV launch, strong delivery, 07-20 buyback), IV-rank rising. Advisory watch only."
+    },
+    {
+      "ticker": "JPM",
+      "lane": "S2_dp_revert",
+      "reason": "Tightest clean one-sided DP concentration tonight (95.0% BUY, $1.84B DP dollar, $3.58B ADV, ER 10-13 safe, no news gate). Validated long-tilted S2 side but regime_fit REDUCED (PULLBACK is a crosswind for the long read). Advisory watch only. NOTE: overlaps the MOM_LONG financials cluster -- correlation flag if ever expressed alongside the basket."
+    },
+    {
+      "ticker": "KMI",
+      "lane": "S2_dp_revert",
+      "reason": "S2 SELL-side alternate (92.5% SELL, $226M DP, ER 10-28 safe). Sell-side concentration may benefit from the PULLBACK regime, but a 07-22 Q2 earnings-guidance announcement is a possible informed-trade tell -- monitor for veto. Advisory watch only."
+    },
+    {
+      "ticker": "MOM_LONG_BASKET",
+      "lane": "MOM_LONG",
+      "reason": "60-name near-52w-high basket (contracted from 76 as the PULLBACK pulled names off all-time highs), now ~50% Financial Services (30/60 -- tag for the correlation-cluster gate). regime_fit REDUCED in PULLBACK. Zero ER in h10. Basket/tail-only exposure, NEVER sized as a single name."
+    },
+    {
+      "ticker": "VOL_EARNINGS_QUEUE",
+      "lane": "vol_earnings",
+      "reason": "Non-directional IV-crush SELL-VOL shortlist for the coming week (all IV-rank 96-100, backwardation, wide defined-risk wings, net-of-cost): CDNS/WHR (07-27), SWKS/ECL (07-28), SIMO (07-29, FOMC overlap -> wider wings), FSLR/ALGM/EME (07-30, PCE overlap -> wider wings). Advisory, delta-neutral, 0 directional points."
+    }
+  ],
+  "pending_fundamentals_verdicts": [
+    "No new names sized -> no new fundamentals-gate spawns pending. PLNT held-position check completed this session (CONFIRM, 0 PT raises).",
+    "FHN fundamentals CAUTION carried (not re-run tonight -- unsized); re-run only if/when the block rolls off and organic building re-qualifies it for promotion consideration.",
+    "S2/S4 advisory names (JPM/KMI/JBL/LI) -- not fundamentals-gated; advisory watch, no sizing pending."
+  ],
+  "flags_for_orchestrator": [
+    "ZERO new starters tonight -- modal 'no fresh directional edge clearing the gate stack; maintain held book' output. Correct and common.",
+    "TECH CUT confirmed executed (covered 07-23 open $71.80, -0.24% gross). It is DROPPED from the held book -- do NOT re-reconcile it as an open position next run unless a fresh cohort-qualifying ORGANIC OI build re-admits it.",
+    "PLNT: two refinements applied -- (1) invalidation TIGHTENED to require an actual negative call_net print (calls closing), not a net-of-puts wash (the 07-23 -4 was a put-driven crossing, not a call unwind); (2) ER 2026-08-06 sits on the h10 boundary -> TRIM/CLOSE before the print. Next run: check for the first genuine negative call_net print and for any 2nd/3rd post-print PT raise; either fires the cut.",
+    "ORCL now at fresh 52w-lows and working +8.74% gross. Watch the RSI>45 leg of its invalidation if the tech tape reverses off this pullback (price clause $144.22 remains far off).",
+    "FHN signal-quality DOWNGRADE is the key OI_FADE finding: its headline build was a 97.7% single-day institutional block about to roll off 07-24. Re-verify persistence on ORGANIC (non-block) flow only before any promotion -- the prior nights' 'cleanest build' characterization overstated it.",
+    "PROPOSED OI_FADE lane-hardening (NOT applied tonight -- log for /calibration-audit): (a) persistence_ratio = max_day/sum_5d, flag/block anything >~0.85 (stale single-day block roll-off, caught FHN/YMM/CNM/PRMB tonight); (b) exclude SPAC/blank-check shells alongside ETFs (caught CCXI = Churchill Capital XI); (c) exclude sub-60-trading-day listings on the absolute floor, not just relative (caught CBRS = Cerebras, IPO 2026-05-14). These did NOT change tonight's zero-starter outcome (every affected name was already blocked on other gates) -- so no regression-gate run was required, but they should be formalized deliberately (with a retro_harness --all run) rather than applied ad-hoc in a scan.",
+    "Regime CHOP -> PULLBACK. VIX popped +12.4% to 18.70 but term structure stayed in contango (not stress). 0DTE stand-aside both indices (rising-VIX left-tail gate). If VIX keeps rising / term structure inverts, next session may cross into RISK_OFF -- re-classify.",
+    "data/prices.parquet truth-set panel remains stale through 2026-07-17 (does not cover 07-18..07-23). Tonight's OI/liquidity/52w/price metrics were computed from the FRESH UW 2026-07-23 panel + live Yahoo closes, not the stale parquet. scripts/truthset/build_prices.py is mid-extension on this branch (chore/extend-truthset-panel) to close the gap -- finishing it would restore the quantitative correlation-cluster gate for out-of-panel names like FHN."
+  ],
+  "regression_gate": "NOT TRIGGERED -- no lane or threshold change applied tonight. All sizing followed the standing 2026-07-18 calibration-audit rules (MOM_SHORT provisional advisory/watch-only cap, S2/S4 advisory-only, excess-as-currency, no additive confluence, universe hygiene). The PLNT invalidation tightening and FHN signal-quality downgrade are per-name Phase-D judgment calls, not standing lane rules. The three proposed OI_FADE artifact screens are logged propose-only for /calibration-audit and did not alter tonight's outcome -- no python3 scripts/retro_harness.py --all run required this session."
+}

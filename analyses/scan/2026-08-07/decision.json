@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-07",
+  "report_kind": "market-scan",
+  "regime": "UPTREND/REBOUND-THRUST",
+  "regime_context": {
+    "regime_label": "UPTREND/REBOUND-THRUST",
+    "ret5": 0.0351,
+    "ret10": 0.0465,
+    "breadth_pct_green": 63.82,
+    "directional_tradable": true,
+    "s1_standdown": true,
+    "vol_state": "LONG-GAMMA REGIME CHANGE vs 08-05/08-06 (both were short-gamma). VIX 14.90, a FRESH CYCLE LOW (LOW tercile, cuts 16.35/18.43). SPY GEX +$1.85B, spot 772.84 vs flip 772.36 = +0.06% ABOVE flip (long gamma, razor-thin cushion -- roughly a 0.5pt give-back flips it short). QQQ GEX +$853M, spot 722.39 vs flip 721.08 = +0.18% above flip (long gamma). The 0DTE-VRP mechanical gate is GREEN for the first time in 3 sessions (sell_premium=true structurally, size_scalar 0.5 both names) but the LOW-VIX-tercile CONDITIONAL expectancy is NET NEGATIVE for both SPY (-0.059% gross -> ~-0.16% net) and QQQ (+0.016% gross -> ~-0.08% net) once costs are applied -- see vol_book, STAND DOWN on economics not mechanics; the full-sample net-positive VRP headline is carried entirely by the MID/HIGH VIX buckets. || S1_STANDDOWN MARGIN: ret5 +3.510% vs the +2.5% trigger = +1.01pp. Trajectory 08-05 +3.03pp -> 08-06 +1.12pp -> 08-07 +1.01pp, i.e. -0.11pp today vs -1.91pp the prior session -- decay has FLATTENED, not reversed; dd15 -1.28% shows no pullback underneath the thrust yet. This is the up-thrust/rebound leg of the standdown rule (fires in both mean-reversion regimes per the gate stack), so it zeroes relative-weakness shorts AND is the OI_FADE lane's own Hard Rule #2 trigger tonight. || BREADTH-VS-FLOW DIVERGENCE FLAGGED: 321 adv / 180 decl, pct_green 63.82% (green tape), but options-flow bullish only 37.7% -- flow is not confirming the breadth. Soft qualitative caution layered on top of MOM_LONG, not a formal gate.",
+    "event_risk": [
+      {
+        "date": "2026-08-12",
+        "event": "CPI (July) -- Tier-1, inside any h5/h10 window opened tonight.",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-13",
+        "event": "PPI (July) -- Tier-1, back-to-back with CPI, inside any h5/h10 window opened tonight.",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-19",
+        "event": "FOMC minutes -- Tier-2, inside the h10 window opened tonight (day 8 of 10 trading days: 08-10,11,12,13,14,17,18,19,20,21).",
+        "tier": 2
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": ["USFD", "UTHR"],
+      "note": "final_size=none. horizon_validated=10, validated_excess=+0.0071 (re-baselined 2026-08-01; standing forward-decay watch -- the 2026-08-01 new-evidence cohort ran -3.73%, and the post-fix h10 cohort matures 08-03->08-07, closing TODAY; the 08-08 /calibration-audit is the live test). REGIME-BLOCKED, not mechanism-blocked: USFD and UTHR both cleared the ENTIRE mechanical stack (rel_build 2.42/1.31, persistence 1.074/1.031, earnings clear 11-05/11-04, catalyst_split LIVE 94.5%/67.2% post-print) and are liquidity-verified via scripts/liquidity.py against the 2026-08-07 screener panel: USFD close $108.88, $-ADV $276.8M PASS; UTHR close $538.84, $-ADV $240.9M PASS -- both figures reproduce the lane's reported numbers exactly, issue_type Common Stock on both. Both are blocked SOLELY by the lane's own Hard Rule #2 (stand down on a regime-classifier strong-rebound-thrust flag), which fires because s1_standdown=true tonight under UPTREND/REBOUND-THRUST -- the up-thrust/rebound leg the standdown rule is explicitly written for. Fundamentals on file for the record (moot while regime-blocked): USFD CAUTION (Q2 beat + guide raise + 3 same-day PT hikes partially JUSTIFIES the OI build, would cost -1 tier); UTHR CONFIRM (Q2 Tyvaso miss, stock -7.5% on the print, insider MSPR -31.76 selling 19/20 months, fundamentals SUPPORT the fade, would cost 0 tier). Correlation gate 3 INCOMPLETE, FAIL-CLOSED: USFD is ABSENT from data/prices.parquet (frozen 785-name universe per the prices-parquet-coverage-gap memory) -- the USFD-UTHR pair could not be computed. Do not treat the silence as a pass; if the standdown ever lifts, verify UTHR's correlation exposure via a non-parquet source before sizing both together. NXPI cleared every scripted gate but was cut UPSTREAM by the lane itself on the M&A/single-day-news check (live unresolved Ambarella acquisition talk + 98.6% single-day build) -- MECHANISM-blocked before reaching the regime question, never handed to Phase D."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": ["TTD"],
+      "note": "final_size=watch. horizon_validated=10, validated_excess=-0.0008 (NEGATIVE baseline, invariant #6's one recorded exception). TTD ($13.80, 2.2% of 52w range, liquidity PASS $247.2M ADV via scripts/liquidity.py, Common Stock) is TRIPLY blocked: (1) REGIME -- s1_standdown=true zeroes relative-weakness shorts tonight, and UPTREND/REBOUND-THRUST is exactly the up-thrust/rebound leg the gate is written for (margin +1.01pp over the +2.5% trigger, decay flattening 08-05 +3.03pp -> 08-06 +1.12pp -> 08-07 +1.01pp); (2) invariant-#6's structural PROVISIONAL watch-only cap on ALL new MOM_SHORT starters pending a DURABLE-N(>=30) forward-positive window -- the 07-18 audit's first matured forward window ran 0-for-9, -5.3% excess; (3) the lane's own recorded baseline is negative, the binding read even though hit-rate is up. POST excluded upstream on a prior VETO on file; PLTD excluded upstream as an inverse leveraged ETP (issue_type filter worked correctly here) -- neither reached Phase D."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": null,
+      "candidates": ["ABNB", "NTRA", "FIVN"],
+      "note": "final_size=watch. horizon_validated=10, validated_excess=+0.0023 mean, MEDIAN NEGATIVE, tail-driven, n=483. Barred on THREE independent counts, none of them regime (this is an in-regime long lane in an uptrend): (1) TIER MATH -- +0.23% sits BELOW the sizing map's +0.30% starter bar; the Phase C read is CONFIRMED correct on its own, this basket cannot clear even a starter tier on excess alone. (2) TAIL CAP -- basket-only, never per-name HIGH; the negative median on top of the mean shortfall is the binding distributional read, not the headline mean. (3) DURABLE-N -- a 3-name basket is thin against the lane's separate DURABLE-N bar, re-enabled only via a /calibration-audit recommendation. Sector cap (gate #7) ITSELF passes clean: ABNB Consumer Cyclical / NTRA Healthcare / FIVN Technology, no sector >33%. Correlation gate 3: ABNB-NTRA computed at corr=0.55 (data/prices.parquet adjclose daily returns, 2026-05-01->08-07, n=68 trading days) -- below the 0.70 cluster threshold, no collapse. FIVN is ABSENT from data/prices.parquet (frozen 785-name universe) -- FAIL-CLOSED per the coverage-gap memory: FIVN's correlation to ABNB/NTRA is UNVERIFIED, not confirmed-independent. Moot tonight since the whole basket is watch-only regardless; flag for any future promotion. Fundamentals: ABNB CAUTION (-1, real beat/raise but insider MSPR -70.98 selling 17/20 months into a 42.6x P/E at a fresh high); NTRA CAUTION (-1, real beat/raise but insider MSPR -61.28 and net margin -9.05%, still unprofitable); FIVN CONFIRM (0, beat+raise+S&P SmallCap 600 inclusion, insider neutral, caveat GAAP EPS guide cut and index-flow-assisted). Event risk: CPI 08-12 and PPI 08-13 both land inside this h10 window -> an ADDITIONAL -1 tier if this basket is ever sized (ABNB/NTRA stack to -2 total, FIVN to -1) -- moot while watch-only. Breadth-vs-flow divergence (63.82% green tape, 37.7% bullish flow) is a soft qualitative caution layered on top, not a formal gate."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "long_gamma_low_vix_net_negative",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.0016,
+      "suggested_structure": null,
+      "stand_aside_reason": "Mechanical 0DTE-VRP gate is GREEN for the first time in 3 sessions (sell_premium=true structurally, size_scalar 0.5, dealers LONG gamma: spot 772.84 vs flip 772.36 = +0.06% above flip -- a regime CHANGE vs 08-05/08-06 short gamma). BUT conditioned on tonight's LOW VIX tercile (14.90, cuts 16.35/18.43), the tail-cap directive to size for the unsampled left tail and quote NET OF COST flips this: SPY's LOW-VIX-tercile expectancy is -0.059% gross -> ~-0.16% NET -- the full-sample net-positive VRP headline is carried entirely by MID/HIGH VIX buckets, not this one. SPY's +0.06% cushion above flip is razor-thin; roughly a 0.5-point give-back flips dealers back to short gamma intraday, exactly the unsampled left tail this cap exists for. STAND DOWN on economics, not mechanics."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "long_gamma_low_vix_net_negative",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.0008,
+      "suggested_structure": null,
+      "stand_aside_reason": "Same mechanical GREEN (dealers long gamma, spot 722.39 vs flip 721.08 = +0.18% cushion), same LOW-VIX-tercile override: QQQ's expectancy is +0.016% gross -> ~-0.08% NET once costs are applied -- gross-positive, net-negative, precisely the class of trade the net-of-cost tail-cap discipline exists to catch. STAND DOWN on economics."
+    },
+    {
+      "symbol": "ENVX",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "rejected_fat_tail_not_crush",
+      "implied_move": 0.199,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "REJECTED at the contract level: implied ~19.9% against an underlying already realizing ~93-102% annualized with a chronically fat tail -- rich IV is compensation for a genuine tail, not a crush edge. Orchestrator-corroborated after the fact: ENVX ran +14.9% over the next 5 trading days and +19.0% over 10. No position."
+    },
+    {
+      "symbol": "TRMB",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "delta_neutral": true,
+      "vol_state": "unverified_pending_deep_dive",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "Flagged by the lane but NOT deep-dived at the contract level before this Phase D run. Same discipline as a missing fundamentals verdict: hold at watch rather than size on an incomplete read. Flagged back for the next vol-book pass; not sized tonight."
+    }
+  ],
+  "watchlist_write_back": ["USFD", "UTHR", "TTD", "ABNB", "NTRA", "FIVN", "TRMB"],
+  "report_path": "analyses/scan/2026-08-07/report.md"
+}

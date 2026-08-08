@@ -1,0 +1,197 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-04",
+  "report_kind": "market-scan",
+  "regime": "UPTREND/REBOUND-THRUST",
+  "regime_context": {
+    "regime_label": "UPTREND/REBOUND-THRUST",
+    "ret5": 0.0411,
+    "ret10": 0.0308,
+    "breadth_pct_green": 71.37,
+    "directional_tradable": true,
+    "s1_standdown": true,
+    "vol_state": "VOL-SUPPRESSION. Dealers net long gamma on both index proxies: SPY total_gex +$1.104B, spot 772.17 vs zero-gamma 767.91; QQQ total_gex +$623.7M, spot 724.09 vs zero-gamma 711.88. VIX ~16.5 (~48th pct). Script and CLI agreed on the gamma sign for BOTH symbols and the orchestrator re-verified independently via `uw options-structure gex --symbol {SPY,QQQ}` -- the zerodte_setup.py sign bug did not bite (THIRD consecutive session of agreement; still unfixed, absence of symptom is not a fix). CAVEAT the lane did not raise: the index-level 30-DAY VRP reads FAIR (-0.002), i.e. IV essentially tracks realized. That is a different and longer measure than the 0DTE VRP and the two can legitimately disagree, but conviction on the index premium-selling book should be read down accordingly and they must NOT be quoted as agreement. dd15 -2.520% (regime_check.py, no schema field for it). s1_standdown fired DECISIVELY on leg (a1): ret5 +4.110% vs the +2.5% trigger, a 1.61pp margin -- versus 0.0139pp on 2026-08-03, so no knife-edge this time. The 2026-08-01 audit measured this guard at real N for the first time: 100 suppressed name-days, mean -1.73%, median -1.99%, hit 0.36, p=0.010 [DURABLE]; day-clustered 15 guard-days mean -1.86%, p=0.070. The guard SAVES money.",
+    "event_risk": [
+      {
+        "date": "2026-08-12",
+        "event": "CPI (July) -- Tier-1. Lands INSIDE an h10 window opened today (h10 ends 2026-08-19 via _calendar.hz_end) and on the FINAL DAY of an h5 window (ends 2026-08-12). Nothing directional is open, so this binds only the vol book -- specifically the no-weekly 17DTE earnings names (CACI, BCO, SGI) whose 2026-08-21 expiry straddles it.",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-13",
+        "event": "PPI (July) -- Tier-1. Also inside the h10 window and also straddled by the 17DTE earnings expiries. The first SIX sessions from today are macro-clear.",
+        "tier": 1
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": null,
+      "candidates": [
+        "SWK",
+        "JCI",
+        "NEU",
+        "ETN",
+        "NUE"
+      ],
+      "note": "final_size=watch. horizon_validated=10, validated_excess=+0.0023. 49-name basket (top 5 by proximity to 52w-high listed in candidates), regime-appropriate and mechanically clean, but out on TWO INDEPENDENT bars. (1) Lane excess +0.23% is below the +0.30% starter bar, and the median is NEGATIVE (-0.91%) -- the mean is tail-carried, so the basket is the only honest expression. (2) risk-sizer.md bars MOM_LONG from starter sizing OUTRIGHT until a DURABLE-N (>=30) forward window re-clears positive excess, to be re-enabled 'via a /calibration-audit recommendation, not ad hoc'. Either bar alone is sufficient. Sector concentration max 24.5% (Industrials), inside the 1/3 cap of gate #7. Funnel: 184 screened -> 49 present in prices.parquet -> 135 FAIL-CLOSED on the coverage gap. LANE MISREPORT: the lane returned 'Sized: 49 names' and gave forward excess as 'not yet resolved', which is not a starter-bar test at all; it is wrong on both grounds above."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "GME",
+        "CLBK"
+      ],
+      "note": "final_size=watch. horizon_validated=10, validated_excess=-0.0008. TRIPLY out: (a) s1_standdown fired decisively (ret5 +4.110% vs +2.5%, 1.61pp margin); (b) invariant-#6 watch-only cap for new starters; (c) baseline excess is NEGATIVE, the ONE recorded exception to 'no lane negative-excess'. CLBK -- VERIFIED FALSE SHORT, correctly excluded by the lane: screener week_52_low $10.60 vs Yahoo $6.2091, true pct_range 81.9% not the screener's 0.9%; its week_52_high is ALSO wrong ($25.83 vs $11.7409), so the row is doubly broken. GME -- SEPARATE LANE MISS: a genuine near-52w-low the lane's screen did not return at all. Yahoo and the screener now AGREE (low 18.545 set 2026-08-03, close 19.21, pct_52w_range 6.96%, in-range and correct), so this is not the stale-field failure mode -- the lane simply dropped it. No live consequence because the lane is stood down, but GME belongs on the watch list and did appear there on 08-03. 101 of 2,870 liquid common stocks still carry an out-of-range pct_52w_range on the trade-date panel."
+    },
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.3,
+      "cluster_id": null,
+      "candidates": [],
+      "note": "final_size=watch (no candidate survived). horizon_validated=10, validated_excess=+0.0071. FIFTH consecutive zero-starter session (07-29, 07-30, 07-31, 08-03, 08-04). All 15 top-relative-build candidates die on at least one INDEPENDENT gate: 9 mechanism/persistence>0.85 (HNI 0.999, HXL 0.993, HIG 0.988, INFY 0.984, LZM 0.983, AZN 0.950, EXLS 0.869, plus MRCY 1.260 and APAM 1.068 which exceed 1.0, i.e. prior days were net NEGATIVE); 3 earnings-in-window (SOLV 08-05, MRCY 08-18, LZM); 3 ETP by screener issue_type (MTUM, SPCU, DIG); 6 liquidity (HNI $29.8M ADV, APAM $39.9M, MYGN $3.17 close, LZM $3.74 close, SPCU $14.4M, DIG $2.6M); 1 sustained fundamentals VETO (AVTR, 16 prior mentions, build organic at persistence 0.427 and catalyst-live -- killed ONLY by the veto). ORCHESTRATOR RE-RAN EVERY GATE AND REPRODUCED THE LANE EXACTLY, name for name -- second consecutive honest report from this lane, worth recording alongside the failures. Shorting a decisive V-rebound thrust is a live headwind on top of the mechanics. Contributes ZERO new rows to the maturing 08-03..08-07 post-fix h10 cohort that is the real test of the Cohort-B decay signal (-3.73% mean, hit-base -0.53)."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": true,
+      "delta_neutral": true,
+      "implied_move": 0.0089,
+      "expected_range": 0.0083,
+      "net_expectancy": 0.00123,
+      "vol_state": "GO_PREMIUM_SELL_INTRADAY, size multiplier x0.5 (LOW vol_state). Long gamma CONFIRMED TWO WAYS: zerodte_setup.py reads long-gamma/LOW, and `uw options-structure gex --symbol SPY` reads regime POSITIVE with spot 772.17 above zero-gamma 767.91 -- orchestrator re-verified the CLI leg independently. Gross open-entry mean 0.223%/day -> NET 0.123%/day after a 0.1% round-trip cost assumption. Front-end dte0 25.0% -> dte1 16.0% -> belly 13.0-13.3% at dte6-7 is ORDINARY same-day 0DTE pinning, not a genuine event hump; front_iv/VIX ratio 0.97 sits below the 1.25 caution gate. No VIX-spike stand-aside. Left tail remains UNSAMPLED -- advisory only.",
+      "suggested_structure": "defined-risk iron fly / short straddle centred ~772.3, wings ~ +/-0.83%",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": true,
+      "delta_neutral": true,
+      "implied_move": 0.0183,
+      "expected_range": 0.0145,
+      "net_expectancy": 0.00241,
+      "vol_state": "GO_PREMIUM_SELL_INTRADAY, size multiplier x0.25 (LOW vol_state, then HALVED again for the front-end hump). Long gamma CONFIRMED TWO WAYS: script long-gamma/LOW, and CLI regime POSITIVE with spot 724.09 above zero-gamma 711.88 -- orchestrator re-verified. Gross 0.341%/day -> NET 0.241%/day. CAUTION flagged: 0DTE IV is 1.76x VIX. Per the 08-03 lesson the FULL curve was pulled and the near-week hump is GENUINE, not a 2-point-ratio artifact -- dte1 30.8% -> dte2-3 ~28.0% -> trough dte6-7 ~22.8-23.0% -> RE-RISING to 24.2-25.1% by dte8-10. The caution and the x0.25 size are real conditions, not guard artifacts. Left tail UNSAMPLED -- advisory only.",
+      "suggested_structure": "defined-risk iron fly centred ~722.25, wings ~ +/-1.45%",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "CACI",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "delta_neutral": true,
+      "implied_move": 0.0819,
+      "vol_state": "DTE 1, BACKWARDATION. Historical realized move mean 0.68% (n=8, max 2.5%) -- implied is ~12x the mean, the widest ratio in the book. NO WEEKLY: the nearest listed expiry is 17DTE (2026-08-21).",
+      "suggested_structure": "defined-risk iron fly at the 17DTE expiry, wings WIDE",
+      "stand_aside_reason": "TRADEABLE but ORCHESTRATOR FLAG NOT RAISED BY THE LANE: the 17DTE expiry straddles the print PLUS both CPI (08-12) and PPI (08-13) and carries 12 extra decay days. That is unhedged Tier-1 macro stacked on the earnings binary -- a materially different trade from the weekly-expiry names. Size for that or wait."
+    },
+    {
+      "symbol": "TTMI",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "delta_neutral": true,
+      "implied_move": 0.1871,
+      "vol_state": "DTE 1, BACKWARDATION, weeklies available (dte3). Historical realized move mean 3.19% (n=7, max 10.6%) -- implied ~6x the mean and still ~2x the fattest historical print.",
+      "suggested_structure": "defined-risk iron fly, wings WIDE for the single 10.6% tail",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "DBX",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "delta_neutral": true,
+      "implied_move": 0.0592,
+      "vol_state": "DTE 2, BACKWARDATION, weeklies available. Historical realized move mean 1.05% (n=8, max 2.4%) -- implied is >2x the WORST print in two years. Cleanest risk/reward in the book. NOTE: DBX also sits on the OI_FADE prior-exclusion list; that is a DIRECTIONAL exclusion and does not bear on a delta-neutral vol trade.",
+      "suggested_structure": "defined-risk iron fly, wide wings",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "COHR",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "delta_neutral": true,
+      "implied_move": 0.0854,
+      "vol_state": "DTE 8, BACKWARDATION, weeklies available. Historical realized move mean 4.12% (n=8, max 7.9%) -- implied clears the historical MAX by a real margin.",
+      "suggested_structure": "defined-risk iron fly, wide wings",
+      "stand_aside_reason": "Tradeable, but at DTE 8 the print lands ~2026-08-14, AFTER CPI (08-12) and PPI (08-13). Confirm the chosen expiry does not carry unwanted macro on the way in."
+    },
+    {
+      "symbol": "TLN",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "delta_neutral": true,
+      "implied_move": 0.076,
+      "vol_state": "DTE 1, BACKWARDATION, weeklies available. Historical realized move mean 1.88% (n=8, max 6.0%).",
+      "suggested_structure": "defined-risk iron fly, REDUCED size",
+      "stand_aside_reason": "Size down: the LAST print (6.0%) nearly matched implied, i.e. realized moves are closing the gap. Power/AI-datacenter theme name -- the historical sample may not reflect the current regime."
+    },
+    {
+      "symbol": "BCO",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "implied_move": 0.0865,
+      "vol_state": "DTE 1, BACKWARDATION. Historical realized move mean 5.15% (n=8, max 12.8%). NO WEEKLY -- nearest expiry 17DTE.",
+      "suggested_structure": "extra-wide wings, reduced size, if traded at all",
+      "stand_aside_reason": "MARGINAL -- implied is only ~0.7 sigma over the mean and sits BELOW the fattest historical tail (12.8%). The 17DTE expiry additionally straddles CPI and PPI."
+    },
+    {
+      "symbol": "SGI",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "implied_move": 0.0983,
+      "vol_state": "DTE 2, BACKWARDATION. Historical realized move mean 5.41% (n=8, max 11.8%). NO WEEKLY -- nearest expiry 17DTE.",
+      "suggested_structure": "extra-wide wings, reduced size, if traded at all",
+      "stand_aside_reason": "MARGINAL -- the historical tail (11.8%) nearly matches implied (9.83%). The 17DTE expiry additionally straddles CPI and PPI."
+    },
+    {
+      "symbol": "COR",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "implied_move": 0.0688,
+      "vol_state": "DTE 1, BACKWARDATION. Historical realized move mean 6.02% (n=7) with a 17.4% MAX. NO WEEKLY -- nearest expiry 17DTE.",
+      "suggested_structure": null,
+      "stand_aside_reason": "PASS -- implied is roughly in line with the mean but the tail is FAT (one 17.4% blowup print) and no near-dated defined-risk instrument exists. The binary's tail is not priced enough to structure comfortably at 17DTE."
+    },
+    {
+      "symbol": "IRM",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "implied_move": 0.0565,
+      "vol_state": "DTE 1, BACKWARDATION (front-end-iv-ratio 2.25x), weeklies available. Historical realized move mean 6.14% (n=7, max 9.0%), with the last TWO prints at 7.3% and 9.0%.",
+      "suggested_structure": null,
+      "stand_aside_reason": "PASS -- implied move (5.65%) is UNDER the historical mean (6.14%) and the two most recent prints BOTH exceeded implied. The crush thesis is inverted; there is no edge to sell here."
+    }
+  ],
+  "watchlist_write_back": [
+    "VERDICT: ZERO directional starters across all five lanes; book was FLAT coming in (PLNT closed 2026-08-03 on its h10 time stop at +0.33% realized short excess) and stays FLAT. calls[] is deliberately EMPTY rather than carrying watch/basket placeholders -- per the 2026-08-01 audit proposal #4 (applied at de91fe9), synthetic basket and watch entries belong in lane_status[], where they cannot land as INCONCLUSIVE in a future audit. The vol book is the only actionable output, for the fifth consecutive session.",
+    "SIZING-MAP CONFLICT CLOSED (open since 2026-07-31, re-derived from scratch on four separate nights). risk-sizer.md:45 reads: validated excess >= +1% & sign-stable -> half (HIGH never auto-fulls); +0.3-1% -> starter; '< +0.3% OR ADVISORY LANE -> watch'. The trailing clause is the one that kept being dropped. An advisory lane NEVER sizes regardless of measured excess -- which is why S4 at +0.51% historical AND +1.16% forward is watch, not starter. It is not a bar S4 narrowly misses; it is structurally out. S2 is likewise advisory. Phase C's 'MEDIUM = +0.3-1%' label describes MEASURED EDGE, not an entitlement to size.",
+    "LANE_STATUS[S2_dp_revert] (no schema slot -- lane_status.lane admits only MOM_SHORT/MOM_LONG/OI_FADE, so this advisory lane is recorded here): disposition=ADVISORY_WATCH direction=long regime_fit=0.3 candidates=GDS,BNS,LYB,SWK,AMP,SPGI,LPLA,CORZ,CAKE,TT. final_size=watch. horizon_validated=5, validated_excess=+0.0021. 10 mechanically clean names, ALL re-verified by the orchestrator on the TRADE-DATE panel (earnings h5, liquidity, issue_type). Out on the sizing map's 'advisory lane -> watch' clause regardless of measured excess. UPTREND/REBOUND-THRUST is a documented headwind for a mean-reversion long: on 08-03 all 8 candidates landed below starter on exactly this. 35 of 45 FAIL-CLOSED on the prices.parquet coverage gap. GDS reports 2026-08-13 -- clear of h5 by a SINGLE session, would be BLOCKED at h10. LANE HYGIENE DEFECTS: (a) it read issue_type from stock-screener-2026-07-23.parquet, a STALE panel, on an 08-04 scan -- re-run on the trade-date panel showed no ETP leaked and the outcome is unchanged, but the input was wrong; (b) it reported CAKE 'clean' while prior_verdicts.py returns a prior blocking verdict (2026-W31), which is a MOM_LONG basket note rather than an S2 veto, so no practical effect -- but the gate result does not reproduce.",
+    "LANE_STATUS[S4_pcr_fade] (no schema slot -- lane_status.lane admits only MOM_SHORT/MOM_LONG/OI_FADE, so this advisory lane is recorded here): disposition=ADVISORY_WATCH direction=long regime_fit=1.0 candidates=ICLR,LYV,NVS,TCOM. final_size=watch. horizon_validated=5, validated_excess=+0.0051. 4 viable names (PCR: ICLR 61.97, LYV 10.52, NVS 7.62, TCOM 6.82), all re-verified clean on earnings (h5) and liquidity by the orchestrator. NVS additionally carries the h3 ivrank_chg_5d tilt (+6.86) -- ORTHOGONAL evidence, noted, NEVER summed (invariant #2). 9 of 15 fail-closed on coverage. This is the ONLY lane positive FORWARD (+1.16% mean, hit-base +0.26, DURABLE) as well as historically (+0.51%), and it is fully regime-appropriate -- yet it does NOT size, because retro_harness.py tags the lane structurally size:'advisory' and the sizing map reads '< +0.3% OR ADVISORY LANE -> watch'. POOL NOTE: the lane used the full >=p95 cohort (40 names at a 3.07 cutoff) where retro_harness truncates at LIMIT 15; both are defensible readings of 'top 5% PCR' and NVS/TCOM are legitimately above p95, but the +0.51% prior was measured on the LIMIT-15 definition, so transferring it to names outside that pool is a prior-transfer stretch. LANE MISREPORT: it justified the no-size call with a '+0.7% starter bar' that exists NOWHERE in the repo -- right answer, invented reasoning, which would have failed on a different night. No fundamentals-gate was spawned because no name reached the sizing stage (the gate is specified to run on 'only the names about to be sized').",
+    "MOM_LONG basket (49, WATCH, h10 closes 2026-08-19): sector max 24.5% Industrials, inside the 1/3 cap; 135 names fail-closed on the prices.parquet coverage gap. Top by proximity: SWK, JCI, NEU, ETN, NUE. Barred from starter sizing until a /calibration-audit re-enable, INDEPENDENT of the +0.23% vs +0.30% miss.",
+    "MOM_SHORT (STOOD_DOWN): GME -- genuine near-52w-low, Yahoo and screener AGREE (low 18.545 set 08-03, close 19.21, pct_52w_range 6.96%). Kept out by the crash gate and the invariant-#6 cap, NOT by any data defect. The lane failed to return it at all; re-check next session.",
+    "MOM_SHORT (EXCLUDED, verified false short): CLBK -- screener week_52_low $10.60 vs Yahoo $6.2091 AND week_52_high $25.83 vs $11.7409; true pct_range 81.9%. Do not re-propose without a fresh Yahoo verification.",
+    "OI_FADE prior-exclusion set carried forward: AVTR (fundamentals VETO, 16 mentions), HXL, INFY, DBX, APAM, LZM, SOLV, SSNC, ALLE, KBR, HRI. PLNT remains EARNINGS-BLOCKED for re-entry (reports 2026-08-06, inside the 08-04..08-19 h10 window).",
+    "KKR still blocked by the unresolved 2026-07-21/22 EQT/KKR/Advent takeover-rumor tail-block. Its 07-24 h5 earnings block HAS resolved (reported 07-30), but the tail-block was never re-verified and still stands.",
+    "WRITE-BACK CONFIRMATION: persisted to analyses/scan/2026-08-04/conviction_2026-08-04.json. Book is FLAT with zero open positions and zero new starters, so the write-back carries watch/exclusion state only -- there is nothing to reconcile as a held position next session.",
+    "ORCHESTRATOR ACTION ITEMS (9) are recorded in analyses/scan/2026-08-04/conviction_2026-08-04.json under orchestrator_action_items -- the envelope schema closes the top level, so they live with the conviction file as in prior sessions. Headline items: prices.parquet coverage gap now SEVENTH consecutive session; earnings_gate.py one-sided-bound bug bit again (LZM, past-dated print); FIFTH lane misreport of the cycle (momentum); next /calibration-audit DUE 2026-08-08 with the post-fix h10 cohort maturing 08-03..08-07.",
+    "SCHEMA GAP for /calibration-audit: decision_envelope.v2 restricts lane_status.lane to ['MOM_SHORT','MOM_LONG','OI_FADE'], so the two ADVISORY lanes (S2_dp_revert, S4_pcr_fade) have no structured slot and must be recorded as free-text write-back strings. On a night like tonight, where every lane is watch and the advisory lanes carry the only regime-appropriate names, that pushes real content out of the queryable part of the envelope. Propose extending the enum."
+  ],
+  "report_path": "analyses/scan/2026-08-04/report.md"
+}

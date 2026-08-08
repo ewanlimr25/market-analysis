@@ -1,0 +1,112 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-03",
+  "report_kind": "market-scan",
+  "regime": "UPTREND/REBOUND-THRUST",
+  "regime_context": {
+    "regime_label": "UPTREND/REBOUND-THRUST",
+    "ret5": 0.0251,
+    "ret10": 0.021,
+    "vol_state": "Long-gamma but FRAGILE on both indices: SPY total_gex +$1.286B, spot 757.93 vs zero-gamma 756.06 (+0.25% above flip); QQQ total_gex +$774.4M, spot 700.19 vs zero-gamma 699.22 (+0.14% above flip). VIX 15.86, VIX/VIX3M 0.838 steep contango. GEX label/payload agreed on both symbols tonight (last week's FULLY_NEGATIVE mislabel not reproduced).",
+    "breadth_pct_green": 67.59,
+    "directional_tradable": true,
+    "s1_standdown": true,
+    "event_risk": [
+      {"date": "2026-08-04", "event": "JOLTS", "tier": 2},
+      {"date": "2026-08-05", "event": "ISM Services PMI", "tier": 2},
+      {"date": "2026-08-07", "event": "Nonfarm Payrolls (July)", "tier": 1},
+      {"date": "2026-08-12", "event": "CPI (July)", "tier": 1},
+      {"date": "2026-08-13", "event": "PPI (July)", "tier": 1}
+    ]
+  },
+  "calls": [
+    {
+      "ticker": "PLNT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0071,
+      "excess_hit_minus_base": 0.15,
+      "excess_n": 979,
+      "regime_fit": 0.5,
+      "tier": "MEDIUM",
+      "cluster_id": null,
+      "pre_size": "half",
+      "final_size": "skip",
+      "tail_cap_applied": null,
+      "gate_verdicts": {
+        "regime_crash": "N/A -- position CLOSED today on its pre-registered h10 time stop; no forward exposure to gate.",
+        "liquidity": "PASS -- $56.23 close, 20d $-ADV clears the C12 floor.",
+        "cluster": "PASS -- sole open position for the whole hold; no cluster existed.",
+        "fundamentals": "NA -- closing a held position, no fresh gate required.",
+        "event_risk": "PASS -- PLNT reports 2026-08-06, THREE sessions after the binding exit. Clean exit ahead of the print.",
+        "tail_cap": "N/A -- OI_FADE is not in the gate-6 tail-capped lane list."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": "entered 2026-07-20 @ $55.25 (panel close; the 07-31 file recorded $55.20), half size",
+      "invalidation": "RESOLVED -- binding h10 time stop reached. Window 2026-07-21..2026-08-03 confirmed via scripts/_calendar.py hz_end(). Pre-registered leg (b) 'first genuinely negative call_net' did NOT confirm: today's net-OI printed +66 (call +72 / put +6) after Friday's single -335. Discretionary $59.50 stop never approached (max close over the hold $56.23). Exited on the timer, as designed.",
+      "key_risks": [],
+      "thesis": "OI_FADE short. Entry 07-20 @ $55.25, exit 08-03 @ $56.23. Gross -1.77%; SPY +2.10% over the same window; SINCE-ENTRY SHORT EXCESS +0.33%. A positive-excess resolution in the lane's own scoring currency despite a negative gross P&L -- exactly the distinction invariant #1 exists to preserve. Path was violent: +2.89% excess at its 07-22 peak, -3.40% at the 07-29 FOMC trough, recovered to +0.33% at the bell.",
+      "realized_excess_pct": 0.326
+    },
+    {
+      "ticker": "GME",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": -0.0008,
+      "excess_hit_minus_base": 0.151,
+      "excess_n": 317,
+      "regime_fit": 0.0,
+      "tier": "STOOD_DOWN",
+      "cluster_id": null,
+      "pre_size": "watch",
+      "final_size": "skip",
+      "tail_cap_applied": "s1_standdown -- all MOM_SHORT starters stand down",
+      "gate_verdicts": {
+        "regime_crash": "FAIL -- s1_standdown TRUE. regime_fit driven to 0. All S1 shorts stand down.",
+        "liquidity": "PASS -- $19.06 close, 20d $-ADV $61.4M (scripts/liquidity.py).",
+        "cluster": "PASS -- present in prices.parquet, no cluster peer.",
+        "fundamentals": "NA -- not a sizing candidate; gate deliberately not spawned.",
+        "event_risk": "PASS -- reports 2026-09-08, clear of h10 (ends 2026-08-18).",
+        "tail_cap": "WATCH-ONLY cap for new MOM_SHORT starters per CLAUDE.md invariant #6, independent of the standdown."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "Not entered. Stood down on s1_standdown; would additionally be capped watch-only as a new MOM_SHORT starter.",
+      "key_risks": [
+        "The momentum lane EXCLUDED this name as a 'false short' on a failed Yahoo 52w verification. That inference is INVERTED: Yahoo shows a genuine fresh 52-week low of 18.545 set 2026-08-03 (pct_range 5.4%). The screener's week_52_low is stale at 19.93 -- ABOVE the 19.06 close -- which is what drove pct_52w_range to -0.1065. The verification CONFIRMED the candidate rather than refuting it.",
+        "Recorded for the audit trail only. No live consequence: the standdown and the invariant-#6 watch-only cap both bind regardless, and MOM_SHORT's baseline excess is negative."
+      ],
+      "thesis": "Genuine near-52w-low name (Yahoo-verified), correctly kept out of the book by the crash gate rather than by the lane's stated reason.",
+      "realized_excess_pct": null
+    }
+  ],
+  "vol_book": [
+    {"symbol": "TWLO", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 96.7, ER 2026-08-06, genuine backwardation 4d 173.2% -> 11d 117.7% -> 18d 95.7% (near_dte_actual=4, NOT guarded)", "implied_move": 0.121, "expected_range": null, "net_expectancy": null, "suggested_structure": "defined-risk iron fly / short strangle centred ~196.59, wings WIDE (beyond the raw implied move), sized for the binary's two-sided tail", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "TTMI", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 97.6, ER 2026-08-05, 18d 127.4% -> 46d 112.2% -> 74d 104.7%", "implied_move": 0.185, "expected_range": null, "net_expectancy": null, "suggested_structure": "defined-risk iron fly centred ~121.21, wide wings", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "ONTO", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 96.8, ER 2026-08-06, 18d 112.5% -> 46d 109.1% -> 137d 100.2%", "implied_move": 0.177, "expected_range": null, "net_expectancy": null, "suggested_structure": "defined-risk iron fly centred ~268.49, wide wings", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "MKSI", "lane": "vol_earnings", "sell_premium": true, "vol_state": "iv_rank 96.1, ER 2026-08-05, 18d 104.2% -> 46d 91.5% -> 74d 91.4%", "implied_move": 0.157, "expected_range": null, "net_expectancy": null, "suggested_structure": "defined-risk iron fly centred ~309.98, wide wings", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "SPY", "lane": "vol_0dte", "sell_premium": true, "vol_state": "LOW; long-gamma but fragile (+0.25% above flip). n=60 backtest, open-entry win 90.0%", "implied_move": 0.0063, "expected_range": 0.008, "net_expectancy": 0.00139, "suggested_structure": "iron fly / short straddle centred 758.0, wings ~+/-0.8%, size x0.5. Enter at/after the open once the gap resolves; NEVER carry overnight.", "stand_aside_reason": null, "delta_neutral": true},
+    {"symbol": "QQQ", "lane": "vol_0dte", "sell_premium": true, "vol_state": "LOW; long-gamma but fragile (+0.14% above flip). Overnight leg is a LOSER (-0.085%/day) -- intraday only", "implied_move": 0.0139, "expected_range": 0.0141, "net_expectancy": 0.00269, "suggested_structure": "iron fly / short straddle centred 700.43, wings ~+/-1.41%, size x0.25 (half of SPY's already-half size) on a GENUINE front-end backwardation caution -- verified against the full iv-term-structure curve (dte1-4 ~25-27% vs dte7-32 belly 22.6-25%), NOT the guarded 2-point ratio", "stand_aside_reason": null, "delta_neutral": true}
+  ],
+  "lane_status": [
+    {"lane": "MOM_LONG", "disposition": "BASKET_WATCH", "direction": "long", "regime_fit": 1.0, "note": "Basket mechanically clean and regime-appropriate, but measured excess +0.23% falls 7bp SHORT of the +0.30% starter bar -- and the lane's median is NEGATIVE (-0.91%), so the mean is tail-carried. No call. Funnel: 457 near-high -> 253 post-ETP -> 162 post-earnings-gate -> 41 present in prices.parquet -> 32 after prior verdicts. Sector concentration 28.1% Industrials / 28.1% Financials, both inside the 1/3 cap. All 32 verified present in prices.parquet by the orchestrator.", "candidates": ["AMP","BAC","BNS","CR","CROX","DAL","DXCM","ETN","FCNCA","FITB","GE","GM","HIG","HON","ITW","JCI","JLL","KO","LYV","MMM","NEU","NUE","RS","SCHW","SHEL","SNOW","SWK","TGT","UBS","VLO","VSXY","WTW"], "cluster_id": null},
+    {"lane": "MOM_SHORT", "disposition": "STOOD_DOWN", "direction": "short", "regime_fit": 0.0, "note": "s1_standdown TRUE -- fired on leg (a1) ret5 +2.5139% > +2.5% by 0.0139pp, i.e. SPY closing $0.10 lower would have left the gate off. Leg (a2) did NOT fire (dd15 -1.700% does not clear the -2.0% requirement); leg (b) inapplicable. The rule is pre-registered and binds regardless of margin. Independent of the standdown, MOM_SHORT is watch-only capped for new starters (invariant #6) and its baseline excess is negative, so the knife-edge has NO live consequence tonight. Of 5 screened, 2 passed earnings (CLBK, GME); CLBK fail-closed (absent from prices.parquet), GME correctly kept out by the gate though the lane's stated reason was inverted.", "candidates": ["GME","CLBK"], "cluster_id": null},
+    {"lane": "OI_FADE", "disposition": "NO_NAME_CLEARED", "direction": "short", "regime_fit": 0.3, "note": "FOURTH consecutive zero-starter session (07-29, 07-30, 07-31, 08-03). All 15 top-relative-build candidates die on at least one independent gate: 5 earnings-in-window, 5 single-day-block mechanism failures (persistence > 0.85), 5 liquidity, 4 ETP, 1 sustained fundamentals VETO (AVTR), 1 resolved-pre-print (KBR, reconfirming the 2026-W31 weekly adjudication). Orchestrator independently re-ran the earnings and liquidity gates and reproduced the lane's numbers EXACTLY -- this lane reported honestly tonight. Shorting a V-rebound thrust is a live headwind: regime_fit held well below the 0.35 used in 2026-W31.", "candidates": ["QGEN","SOLV","AVTR","LZM","INFY","DBX","MTUM","DIG","APAM","SPCU","MYGN","HXL","KBR","SHAZ","BRUN"], "cluster_id": null}
+  ],
+  "watchlist_write_back": [
+    "S2 advisory (8, all earnings/liquidity/ETP/coverage clean, all BELOW starter on a regime headwind; h5 window closes 2026-08-11): KO, WELL, GME, RTX, BNS, ADSK, EXE, CTAS",
+    "S4 viable-but-not-fired: JEF (cleanest, still lacks a fundamentals verdict), KNX, EXE, SMTC (ivrank_chg_5d h3 tilt only)",
+    "S4 premium-already-harvested (ivrank_chg_5d < -20), do not re-enter as fresh: CSGP",
+    "S4 KKR -- 07-24 h5 earnings block has RESOLVED (reported 07-30), but the separate 2026-07-21/22 EQT/KKR/Advent takeover-rumor tail-block was never re-verified and still stands. Re-verify rumor status before any re-admit.",
+    "OI_FADE long_caution (crowded-call cohort; any lane proposing a LONG into these is fighting the OI_FADE signal): AVTR, HXL strongest; also QGEN, SOLV, INFY, DBX, KBR, SHAZ, BRUN, APAM, MYGN",
+    "OI_FADE sustained fundamentals VETO, do not re-propose as clean: AVTR, HRI",
+    "OI_FADE mechanism-fail (persistence > 0.85 = single-day block, not organic accretion): INFY, HXL, DBX, APAM, LZM",
+    "PLNT -- CLOSED 2026-08-03 on the h10 time stop, +0.33% realized short excess. Reports 2026-08-06, so it is earnings-blocked for any re-entry in the next h10 window.",
+    "MOM_LONG basket (32) held as BASKET_WATCH, 7bp below the starter bar"
+  ],
+  "report_path": "analyses/scan/2026-08-03/report.md"
+}

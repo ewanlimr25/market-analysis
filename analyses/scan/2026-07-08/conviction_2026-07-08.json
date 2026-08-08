@@ -1,0 +1,51 @@
+{
+  "conviction_date": "2026-07-08",
+  "purpose": "Top conviction (sized) names from the 2026-07-08 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-08/decision.json",
+  "names": [
+    {
+      "ticker": "UDR",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "half",
+      "cluster_id": null,
+      "invalidation": "Close > $42.00, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-08",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "AROC",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $42.23, or the 5-day build decays further and flips negative without downside follow-through.",
+      "entry_date": "2026-07-08",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "PG",
+      "lane": "S2_dp_revert",
+      "direction": "long",
+      "horizon_validated": 5,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Same-day news/catalyst invalidates the reversion mechanism, or the one-sided DP concentration unwinds without the expected 3-5d reversal follow-through.",
+      "entry_date": "2026-07-08",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    },
+    {
+      "ticker": "IBM",
+      "lane": "S2_dp_revert",
+      "direction": "long",
+      "horizon_validated": 5,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Same-day news/catalyst invalidates the reversion mechanism, or the one-sided DP concentration unwinds without the expected 3-5d reversal follow-through; re-check ahead of IBM's 7/22 earnings before any hold-through.",
+      "entry_date": "2026-07-08",
+      "adverse_flow_exit_check": "On next run, re-check dark-pool/OI/sweep flow for a reversal against this position's direction; if adverse flow confirms the invalidation condition, flag for exit."
+    }
+  ]
+}

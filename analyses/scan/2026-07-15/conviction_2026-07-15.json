@@ -1,0 +1,69 @@
+{
+  "conviction_date": "2026-07-15",
+  "purpose": "Top conviction (sized) names from the 2026-07-15 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-15/decision.json",
+  "metric_note": "CRITICAL FOR THE NEXT RUN: the validated factor `oi_net_5d` is NET CALL-MINUS-PUT OI change, NOT call-only. This was reconciled tonight against the raw panel after a call-only read produced sign-flipped daily prints (ICE +222/+317 call-only vs -116/-294 net; LNG +386 vs -1,241; MAT -44 vs -2,269). All OI figures below are NET. Use `SUM(CASE WHEN <call> THEN oi_diff_plain WHEN <put> THEN -oi_diff_plain END)` per day.",
+  "names": [
+    {
+      "ticker": "LNG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close breaks the 52w high $300.89 with follow-through, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-14",
+      "adverse_flow_exit_check": "CARRY-FORWARD, held unchanged at starter. $255.83 vs $265.03 entry, SPY 751.83->754.81 -- excess +3.87%, the BEST position in the book. Invalidation NOT hit. **PRE-REGISTERED TRIGGER FOR THE NEXT RUN: tonight printed the FIRST NEGATIVE net OI print (-1,241) after 4 straight positive days. If the next print is ALSO negative, that is confirmation of the reversal -- flag for exit.** Tonight's hold was decided as follows and the reasoning must be understood before overriding it: LNG's adverse_flow_exit_check narrative said 'if the daily OI print turns negative, flag for exit', but its BINDING formal invalidation requires the 5d net build to FULLY unwind -- it is +17,983, nowhere near unwound. The conflict was resolved by the MAT precedent, which was VINDICATED tonight: MAT's own first negative (-2,269 on 07-14) was explicitly held as 'early-warning only, not a trigger', and tonight MAT printed +4,129 -- proving single negative prints are NOISE. Applying a stricter single-print rule to LNG than the one just proven correct on MAT would be inconsistent and would exit the book's best position on a demonstrated false alarm. 5d net decaying: ratio 0.289 from 0.317. Also re-check: this remains a SHORT INTO AN ACTIVE UPTREND (the fading-strength case), which is why it can never exceed the lane's starter/half ceiling; fundamentals remain SPLIT (rev +20.75% YoY vs EPS -54.99% YoY, most recent quarter a -495.9% surprise miss masked by the beat_streak label); earnings 08-06 stays outside the h10 window (closes ~07-28) -- re-check as the window rolls."
+    },
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "RSI reclaims neutral (>45) with a close back above the prior consolidation range, or the BBB- downgrade narrative is reversed by a rating action/guidance upgrade.",
+      "entry_date": "2026-07-13",
+      "adverse_flow_exit_check": "CARRY-FORWARD, held unchanged at starter. $132.49 vs $131.54 entry -- excess +0.03%. **THE 07-14 GIVE-BACK CONCERN WAS CORRECT AND IS NOW CALIBRATION EVIDENCE:** the 07-14 hold-note explicitly flagged give-back risk after ORCL realized +3.10% excess in ONE day (~3.8x the lane's entire +0.81% h10 mean). It gave back ALL of it in a single session (+3.10% -> +0.03%) on a $127.94 -> $132.49 bounce (+3.6%). Front-loaded excess in this lane mean-reverts -- feed this to /calibration-audit as a resolved data point. Invalidation TESTED tonight and fires on NEITHER clause: RSI14 = 30.41 (needs >45) AND close $132.49 (needs > $144.22 prior-consolidation high). Both clauses must hold; neither does, so the position holds at unchanged starter -- not upsized (never-upsize rule), not trimmed (no profit-taking rule exists and none was invented). On next run: keep monitoring the RSI>45 + range-reclaim pair and any BBB- ratings reversal. Technology is rotation-OUT = tailwind for this short."
+    },
+    {
+      "ticker": "ICE",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close back above the pre-build breakout level, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-13",
+      "adverse_flow_exit_check": "CARRY-FORWARD, held at starter BY THE LETTER OF A RULE THAT CANNOT FIRE. $139.84 vs $137.67 entry -- excess -0.82% (turned adverse from +0.40%). **SPEC DEFECT, HIGHEST-PRIORITY FIX IN THE QUEUE: ICE HAS NO FUNCTIONING EXIT.** Clause 1 ('close back above the pre-build breakout level') is UNTESTABLE against ICE's actual path -- ICE never fell below any level, rising monotonically from $122.91 (06-29) to $139.84 tonight. A 'close back above' condition can never fire on a name that never went below, no matter how wrong the short gets. Clause 2 ('5d net build fully unwinds') is not met: 5d net +5,037, still positive. So neither clause can or does trigger while the position deteriorates. Re-specifying the invalidation is a RULE CHANGE and MUST clear `python3 scripts/retro_harness.py --all` before shipping -- it was deliberately NOT shipped tonight. **Mechanism is materially decaying: TWO CONSECUTIVE NEGATIVE net prints (07-14: -116, 07-15: -294) after the +4,461 entry print; ratio 0.177 down from 0.337.** On next run, if the 5d net finally goes non-positive, clause 2 fires cleanly -- exit. Financial Services is rotation-IN = live headwind. Fundamentals CAUTION carried (beat-streak + strong margins fight the short); earnings 07-30 still outside the h10 window (closes ~07-27) -- re-check as the window rolls."
+    },
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $16.50 (~52w-range midpoint reclaim), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-10",
+      "adverse_flow_exit_check": "CARRY-FORWARD, held unchanged at starter. $13.86 vs $13.33 entry, SPY 754.95->754.81 -- excess -3.99%, the WORST in the book, deteriorating from -2.96%. **THE PRE-REGISTERED EXIT TRIGGER WAS TESTED TONIGHT AND DID NOT CONFIRM.** The 07-14 note pre-registered: 'if tomorrow's OI print is ALSO negative, treat that as confirmation of the reversal and flag for exit.' Tonight's NET print is +4,129 (after 07-14's -2,269) -- the build REASSERTED; 5d net +13,338, ratio 0.699. The trigger did not fire, so MAT holds. This is the pre-registered rule executing exactly as written, NOT a discretionary rescue -- and it simultaneously established that single negative prints are noise, the precedent applied to LNG tonight. **STANDING CONCERN for the next run: at -3.99% and with invalidation ($16.50) far above spot ($13.86), this position can keep bleeding indefinitely without triggering anything -- the framework has no stop-loss rule beyond invalidation, and none was invented here. Flagging that structural gap, not acting on it.** Consumer Cyclical is rotation-IN = live headwind. Cross-lane note: the S4 lane independently flagged MAT as a LONG (PCR 34.1), directly contradicting this short; S4 correctly self-killed it as `catalyst_informed` (Goldman SELL downgrade + Roth/Citi target cuts drove the put-heaviness, so the puts are informed rather than hedging-overpricing). Not summed, per hard rule 2."
+    }
+  ],
+  "no_new_entries_note": "ZERO new directional entries tonight. Not for lack of signal -- DINO produced the cleanest OI_FADE mechanism of the night (net OI positive all 5 sessions and ACCELERATING, +29,751 today, 5d net +38,739, ratio 0.720, at a fresh 52w high). It was stood down purely on the event gate: earnings 07-28 falls INSIDE the h10 window (07-16 -> 07-29) and FOMC 07-29 lands on the window close. Same gate cut ESI (ER 07-29), TEL (ER 07-22) and PNR (ER 07-28). The only two names with clean calendars were the two lowest-quality names in the cohort -- AGEN (both liquidity floors pass by only ~1%: $5.01 vs $5.00, $50.7M vs $50M; binary-catalyst biotech with prior round-trip history) and WSC (signal DECELERATING 7,500->1,198->662, squeeze float 10.73%/7.6 days, ADV 6% over floor, third consecutive watch). The quality names are event-contaminated and the event-clean names are quality-contaminated -- that symmetry, not signal absence, is why the book adds nothing. STRUCTURAL: mid-July cannot support a clean h10 directional book, because the window necessarily straddles Q2 earnings season and FOMC 07-29. Re-evaluate DINO after 07-28 if the OI build survives the print.",
+  "book_state": {
+    "positions": 4,
+    "all_shorts": true,
+    "lane_concentration": "3 of 4 are OI_FADE - a single-lane, single-direction book. If the OI_FADE mechanism is regime-impaired in this grind-up tape, all four correlate. No new short was added tonight, which incidentally caps that exposure.",
+    "net_book_excess_pct": -0.23,
+    "detail": "LNG +3.87%, ORCL +0.03%, ICE -0.82%, MAT -3.99% across four starter positions"
+  },
+  "proposed_rule_fixes_not_shipped": [
+    "S2 buy/sell classifier counts MIDPOINT prints as buy-side, manufacturing a 90%+ 'one-sided' read out of directionally-null volume (ADBE headline '90.1% buy-side' is really 3.2% strict-buy and 92.6% at-mid). Require price >= nbbo_ask for 'buy' and add an at_mid_share exclusion. Would cut tonight's 56 candidates to 15. Same artifact family as the JPST tiny-base trap.",
+    "ICE-class invalidation spec: 'close back above X' is untestable on a monotonically-rising path. Invalidations need at least one clause that can fire on the path actually realized.",
+    "S4 news gate ticker->company resolution must be verified against a primary source: the lane called SLAB 'Broadcom' and attached Broadcom's EU-antitrust / Apple $30B chip-deal news to it. SLAB is Silicon Laboratories Inc.; Broadcom is AVGO.",
+    "OI_FADE single-day-print concentration floor (max single-day |build| / |5d net| >= ~85%) is STILL unpinned - third consecutive scan caught only by lane judgment.",
+    "Stale-regime fallback: momentum and sentiment-contrarian BOTH emitted identical wrong figures (ret5d -2.38%, ret10d -1.19% vs the live +1.26% / +1.08%), and both carried stale 52w levels (PNR quoted $69.93 vs actual $64.33; DAVE $419.86 vs actual $438.19). The helper should fail loudly past the truth-set edge instead of silently returning stale values.",
+    "QQQ GEX tool is internally contradictory: total_gex negative (-354,621,492) while the regime label reads POSITIVE, and zero_gamma_level 300.35 vs spot 717.41 is nonsensical. Real flip hand-reconstructs to ~720-722. Do not read the label without reconstructing."
+  ],
+  "regression_gate": "NOT TRIGGERED - no lane or threshold change shipped tonight. Every defect found was logged as a proposed fix only. Any of the fixes above must clear `python3 scripts/retro_harness.py --all` with no lane negative-excess before shipping."
+}

@@ -1,0 +1,52 @@
+{
+  "conviction_date": "2026-07-14",
+  "purpose": "Top conviction (sized) names from the 2026-07-14 market-scan, persisted for the next run's adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-07-14/decision.json",
+  "names": [
+    {
+      "ticker": "MAT",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close > $16.50 (~52w-range midpoint reclaim), or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-10",
+      "adverse_flow_exit_check": "CARRY-FORWARD, not re-sized on 2026-07-14. Now ~$13.67 vs $13.33 entry, SPY 754.95->751.83 -- excess -2.96% (adverse). Invalidation NOT hit. IMPORTANT: today's OI print was the FIRST NEGATIVE daily delta (-2,269) after 4 straight positive days -- 5d sum still +10,867 (ratio 0.593), price still pinned at 9.7% of 52w range, so treated as early-warning only, not a trigger. On next run: if tomorrow's OI print is ALSO negative, or the 5d ratio drops meaningfully further, treat that as confirmation of the reversal and flag for exit -- two consecutive negative daily prints would materially change the read. Also re-check whether the Consumer Cyclical rotation-OUT tailwind (why this stays capped at starter, not half) has intensified or faded."
+    },
+    {
+      "ticker": "ICE",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close back above the pre-build breakout level, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-13",
+      "adverse_flow_exit_check": "Now ~$137.61 vs $137.67 entry -- excess +0.40%. OI build decaying but intact (ratio 0.285 from 0.337; today -116 after 07-13's +4,461). On next run, re-check dark-pool/OI/sweep flow for a reversal; if adverse flow confirms the invalidation condition, flag for exit. CAUTION fundamentals (beat-streak + strong margins fight the short) -- re-check whether the beat-streak has extended (argues for VETO) or insider selling has escalated (argues for CONFIRM, though never above the lane's half ceiling). Earnings 07-30 remains outside this position's h10 window (closes ~07-27) for now -- re-check as the window rolls forward."
+    },
+    {
+      "ticker": "ORCL",
+      "lane": "MOM_SHORT",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "RSI reclaims neutral (>45) with a close back above the prior consolidation range, or the BBB- downgrade narrative is reversed by a rating action/guidance upgrade.",
+      "entry_date": "2026-07-13",
+      "adverse_flow_exit_check": "Now ~$127.94 vs $131.54 entry -- excess +3.10% in ONE trading day, ~3.8x the MOM_SHORT lane's entire +0.81% mean h10 excess. Reasoned decision tonight: HOLD at unchanged starter size, NOT upsized (never-upsize rule), NOT trimmed (no profit-taking rule exists in the framework and none was invented). The lane's mean excess is a full-holding-period figure, not a per-day accrual rate -- realizing 3.8x it on day 1 informs give-back/mean-reversion risk over the remaining window, not remaining expected value. On next run: monitor the stated invalidation closely (RSI>45 + range reclaim, or ratings reversal) given the elevated give-back risk from such a fast, large move; re-check whether the BBB- narrative has extended (new rating actions) or the move has partially reversed."
+    },
+    {
+      "ticker": "LNG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "final_size": "starter",
+      "cluster_id": null,
+      "invalidation": "Close breaks the 52w high $300.89 with follow-through, or the 5-day net call-OI build fully unwinds without downside follow-through.",
+      "entry_date": "2026-07-14",
+      "adverse_flow_exit_check": "NEW starter short entered 2026-07-14 at $265.03 (SPY 751.83 as the conditional benchmark anchor). Sized on the OI_FADE lane prior (+2.07% median excess, hit 0.61 vs 0.41, n=640, h10) with fundamentals CAUTION -1 applied. Rationale: cleanest OI persistence in tonight's cohort -- positive all 5 days and ACCELERATING into the trade date (+4,896 on 07-13, +4,058 on 07-14), base 62,123 / 5d build 19,664, ratio 0.317; short float only 1.88% (1.71 days to cover) so there is no crowded-short squeeze fuel working against it; earnings 2026-08-06 sits safely outside the h10 window (closes ~07-28). PRIMARY RISK, re-check every run: this is a SHORT INTO AN ACTIVE UPTREND (69% of 52w range, RSI 69.07, price grinding to new highs) -- exactly the 'fading strength' case where hard rule 2's up-biased-tape discipline binds hardest, which is why it is starter and can never go above the lane's half ceiling. On next run: if the daily OI print turns negative, or price closes above $300.89 with follow-through, flag for exit. Fundamentals are genuinely SPLIT (rev +20.75% YoY vs EPS -54.99% YoY, and the most recent reported quarter was a -495.9% surprise miss that the 'beat_streak' classifier label masks) -- re-check whether the next data point resolves that split toward or against the short.",
+      "entry_note_conviction_fix": "Added by the orchestrator after Phase D. The sizer initially omitted LNG on the reasoning that a new name should only join conviction on the FOLLOWING run; that is contradicted by the 07-13 precedent, where ICE and ORCL both carry entry_date 2026-07-13 and were persisted the same night they were sized. Newly sized names must be persisted immediately or the next run performs no adverse-flow exit check on them."
+    }
+  ]
+}
