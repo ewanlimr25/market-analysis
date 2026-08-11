@@ -1,0 +1,161 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-10",
+  "report_kind": "market-scan",
+  "regime": "UPTREND",
+  "regime_context": {
+    "regime_label": "UPTREND",
+    "ret5": 0.0203,
+    "ret10": 0.0459,
+    "breadth_pct_green": 45.7,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "vol_state": "dd15 -1.300%. s1_standdown FALSE tonight -- the momentum-crash/rebound guard was LIVE all five sessions 08-03->08-07 (thrust peaked ret5 +5.53% on 08-05) and expired only today as ret5 decayed +5.53% -> +3.51% -> +2.03%. The guard lifting is NOT a green light: VIX 15.46 (LOW tercile), normal contango (VIX9D 12.77 < VIX 15.46 < VIX3M 18.98). SPY dealer gamma NEGATIVE with spot 772.87 pinned at the 773.02 zero-gamma flip -- whipsaw risk at this level, the opposite gamma sign from the 08-05/08-06 long-gamma window. Breadth DIVERGENCE: pct_green 45.7% and options-flow bullish only 34.9% under an UPTREND label -- flow is not confirming the tape. Sector rotation OUT of Technology (-$279.9M), INTO Financials/Healthcare/Energy -- Healthcare inflow is a soft HEADWIND for the one short candidate tonight (COO, Healthcare), reflected in its regime_fit.",
+    "event_risk": [
+      {
+        "date": "2026-08-12",
+        "event": "CPI (July) -- Tier-1, lands on day 2 of any h10 window opened tonight (08-11 entry).",
+        "tier": 1
+      },
+      {
+        "date": "2026-08-13",
+        "event": "PPI (July) -- Tier-1, back-to-back with CPI, day 3 of any h10 window opened tonight.",
+        "tier": 1
+      }
+    ]
+  },
+  "calls": [
+    {
+      "ticker": "COO",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0055,
+      "excess_hit_minus_base": 0.17,
+      "excess_n": 1102,
+      "regime_fit": 0.35,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": null,
+      "gate_verdicts": {
+        "regime_crash": "PASS (mechanical) -- s1_standdown FALSE tonight (UPTREND, directional_tradable=TRUE); OI_FADE is a flow-mechanism lane, not S1/relative-weakness-gated, so the standdown clause would not reach it even if it were live. Out-of-regime half-cap ceiling (invariant #4 / P0.6) is not the binding constraint -- COO's tier-implied size (starter, pre-fundamentals) already sits below the half ceiling. Soft context, not a formal gate: SPY dealer gamma NEGATIVE pinned at the zero-gamma flip (whipsaw risk) and Healthcare is tonight's rotation-IN sector -- a headwind for a Healthcare short, reflected in regime_fit 0.35 rather than a gate verdict.",
+        "liquidity": "PASS -- verified directly via `python3 scripts/liquidity.py --tickers COO --date 2026-08-10`: close $76.32, 20d $-ADV $148.5M. Clears both the $5 price floor and the $50M ADV floor by ~3x. Reproduces the candidate's reported figure exactly -- no hand-multiplication (the PLNT $250M-vs-$87M failure mode this gate exists to catch).",
+        "cluster": "PASS -- COO is the sole directional candidate reaching Phase D tonight; the held book is flat (0 positions, confirmed via scripts/held_book.py against the 08-07 prior). No cluster exists to collapse.",
+        "fundamentals": "CAUTION, tier_adjustment -1. Verified triad: EPS beat streak 4/4 and insider MSPR +40.33 (net buying) both CONTRADICT the short; EPS growth -42.61% YoY on a 63x trailing P/E, plus UBS initiating Neutral at a $75 PT BELOW the $76.32 spot, both CONFIRM it. Short float 4.08%, days-to-cover 2.82 -- no squeeze risk fighting the entry, so the CAUTION is a valuation/growth-mismatch read, not a crowded-short warning.",
+        "event_risk": "CAUTION -- CPI (08-12) and PPI (08-13), both Tier-1, land on days 2-3 of the h10 window opened by an 08-11 entry (window closes ~08-24). Reinforces the WATCH outcome already driven by the fundamentals -1; would have mandated its own -1 tier had COO otherwise cleared to starter. Own-name earnings 2026-09-09 is clear of the entire window.",
+        "tail_cap": "N/A -- OI_FADE is not in the gate-6 NEW tail-capped lane list (only MOM_SHORT/S2-long/vol-short carry a defined cap tonight). Standing forward-validation caveat carried from CLAUDE.md, informational only: the lane's decay signal is still unresolved (17 open h10 rows maturing 08-10->08-21; the prior -3.73% new-evidence flag reversed to +1.99%/hit-base +0.67 on only 9 units / 3 exit-days, ANECDOTE-level N) -- not durable either direction, not an additional sizing cap tonight."
+      },
+      "fundamentals_verdict": "CAUTION",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "Watch-only tonight; no live entry. Reference level if ever promoted: close back above ~$80.50 (recent-high reclaim / short-covering) or a pre-announcement/analyst upgrade reversing the UBS Neutral thesis invalidates the fade. Re-run the full gate stack before any promotion -- do not upgrade above what MEDIUM-tier excess implies even if fundamentals later clears to NA/CONFIRM.",
+      "key_risks": [
+        "Fundamentals CONTRADICTS the short on two of three legs (4/4 EPS beat streak, insider net buying MSPR +40.33) -- the CAUTION is a valuation-mismatch read, not a clean confirm",
+        "CPI 08-12 / PPI 08-13 both land inside the first 3 sessions of any h10 window opened this week",
+        "Healthcare is tonight's sector rotation-IN target -- a headwind for a Healthcare short",
+        "63x trailing P/E on a name with a 4/4 beat streak raises squeeze-on-good-news risk despite low (4.08%) short interest",
+        "COO's own validated_excess (+0.55% mean) sits in the MEDIUM band, not HIGH -- this was never going to size above starter even before the fundamentals downgrade"
+      ],
+      "thesis": "OI_FADE short: 5d net call-OI build +4,619 (call +4,615/put -4), rel_build 1.029, persistence 0.549, genuinely multi-day (verified dailies +148/+2,534/+1,002/+13/+18/+1,052 across 08-03->08-10). Mechanical stack clean (liquidity PASS, earnings clear, catalyst_split shows no earnings inside the build window, prior_verdicts clean, Common Stock). Lane validated_excess +0.55% mean / +0.91% median, hit 0.55 vs base 0.38, n=1102 places this at MEDIUM tier (starter pre-adjustment); fundamentals CAUTION drops it one tier to WATCH. Not sized -- carried to the watchlist.",
+      "realized_excess_pct": null
+    }
+  ],
+  "lane_status": [
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.5,
+      "cluster_id": null,
+      "candidates": [],
+      "note": "final_size=none (never sizes). 240-name near-52w-high basket, best sector Financial Services 70 names (29.2% of basket, within the 1/3 sector cap). Lane validated_excess -1.12% mean, n=1081 tonight -- this is the CLAUDE.md-documented WATCH/BASKET-ONLY lane (full-universe refresh turned it outright negative, corroborating the forward BH(0.10)-negative read; 0 of 52 resolved forward calls have ever sized). Confirmed and carried per this run's instruction not to re-adjudicate advisory lanes; no per-name gate re-run tonight since individual candidate tickers/liquidity/fundamentals were not handed down to Phase D."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.4,
+      "cluster_id": null,
+      "candidates": ["PEG", "AMRZ", "CMS", "VICI", "GME", "AGCO", "RBA"],
+      "note": "final_size=watch (all names). 7 Yahoo-verified near-52w-low names (POST and GPI dropped upstream on split/adjustment artifacts). s1_standdown=FALSE tonight, so this is the FIRST session in a while the lane is watch-capped by invariant #6's standing PROVISIONAL cap alone, not by the regime/crash gate -- the 08-08 baseline is a NEGATIVE -1.26% mean, n=805, hit-base only +0.031 (invariant #6's exception to 'no lane negative-excess'). No new starter sizing regardless of regime state until a DURABLE-N(>=30) forward window clears positive excess via /calibration-audit. Correlation note carried, not resolved: PEG and CMS are both Utilities -- flag for collapse to one position if this lane's cap is ever lifted; moot tonight since the whole basket is watch-only."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "gamma_short_low_vix_net_negative",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.00119,
+      "suggested_structure": null,
+      "stand_aside_reason": "STAND ASIDE. Dealer gamma SHORT with spot 772.87 pinned at the 773.02 zero-gamma flip -- the razor-thin proximity itself is the tail risk (a small move either way flips the regime intraday). Conditioned on tonight's LOW VIX tercile (15.46), gross mean is -0.019% -> net -0.119% once the 0.1% round-trip cost is charged. The pooled full-sample headline (+0.26%) is a MID/HIGH-VIX artifact; tonight's conditional bucket is negative net of cost."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "delta_neutral": true,
+      "vol_state": "gamma_sources_disagree_low_vix_net_negative",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.00057,
+      "suggested_structure": null,
+      "stand_aside_reason": "STAND ASIDE. Gamma sources disagree tonight -- treated fail-closed rather than resolved to a side. LOW-VIX-tercile gross mean +0.043% -> net -0.057% once the 0.1% round-trip cost is charged: gross-positive, net-negative, precisely the class of trade the net-of-cost tail-cap discipline exists to catch."
+      },
+    {
+      "symbol": "CSCO",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "delta_neutral": true,
+      "vol_state": "advisory_no_backtested_harness",
+      "implied_move": 0.0681,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "ADVISORY ONLY, never sized (no backtested harness for this book in this repo). Print 08-12, IV rank 90.6, backwardation 2.06x, deep liquidity -- a genuine crush candidate on paper. Prints ON CPI day, so single-name IV will not fully revert to a quiet baseline post-print; argues for wider wings and lower size than the raw implied move suggests, not for skipping it."
+    },
+    {
+      "symbol": "CAVA",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "delta_neutral": true,
+      "vol_state": "advisory_no_backtested_harness",
+      "implied_move": 0.1103,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "ADVISORY ONLY, never sized. Print 08-11, IV rank 85.9, backwardation 2.03x. PPI (08-13) falls inside its post-print exit window -- IV will not fully revert to a quiet baseline; wider wings / lower size than the raw implied move suggests."
+    },
+    {
+      "symbol": "CAH",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "delta_neutral": true,
+      "vol_state": "advisory_no_backtested_harness",
+      "implied_move": 0.0569,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "ADVISORY ONLY, never sized. Print 08-11, IV rank 81.3, backwardation 2.14x. PPI (08-13) falls inside its post-print exit window -- same wider-wings caveat as CAVA."
+    },
+    {
+      "symbol": "ENVX",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "delta_neutral": true,
+      "vol_state": "advisory_no_backtested_harness_thin_book",
+      "implied_move": 0.1494,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "ADVISORY ONLY, never sized. Print 08-12 (same day as CPI). Sub-$5, thin book, noisy term-structure calc -- skip or fractional size only if pursued at all. IV 14.94% against a name this repo's 08-07 vol-book pass already found to be chronically fat-tailed (ENVX ran +14.9%/+19.0% over the next 5/10 sessions on the last print examined), so the rich IV historically has been paid-for tail, not free premium."
+    }
+  ],
+  "watchlist_write_back": ["COO", "PEG", "AMRZ", "CMS", "VICI", "GME", "AGCO", "RBA", "CSCO", "CAVA", "CAH", "ENVX"],
+  "report_path": "analyses/scan/2026-08-10/report.md"
+}

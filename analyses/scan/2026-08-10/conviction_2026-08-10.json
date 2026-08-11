@@ -1,0 +1,59 @@
+{
+  "conviction_date": "2026-08-10",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-10 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-10/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters for a NINTH consecutive session (07-29 through 08-10); the book stays FLAT for a SIXTH. The vol book is EMPTY -- 0DTE-VRP stands aside on net-of-cost economics (SPY gamma short + pinned at flip, QQQ gamma sources disagree), earnings IV-crush book is advisory-only (no backtested harness). Directionally: exactly ONE candidate reached Phase D tonight -- COO (OI_FADE short) -- and it cleared the entire mechanical stack (liquidity, earnings-clear, catalyst_split, correlation trivial as sole candidate) but sized to WATCH, not starter: lane-level validated_excess +0.55% mean sits in the MEDIUM/starter band on its own, but fundamentals-gate CAUTION (-1 tier, genuine split verdict -- EPS beat streak + insider buying contradict the short, but -42.61% YoY EPS growth on 63x P/E + a below-spot UBS PT confirm it) drops it to WATCH before the CPI(08-12)/PPI(08-13)-in-window event-risk gate even has to bind independently. Two OI_FADE candidates were killed upstream before reaching Phase D: EWTX (catalyst_split boundary defect -- build actually died at its own print, genuine post-print continuation only 4.6% of total) and AVT (fundamentals-gate full VETO). MOM_LONG stays basket-only/never-sizes (-1.12% mean, n=1081, the CLAUDE.md WATCH lane). MOM_SHORT (7 names) is watch-capped for the first time in a while by the STANDING invariant #6 provisional rule alone, not tonight's regime -- s1_standdown is FALSE tonight. S2 and S4 are advisory lanes that never size regardless of measured excess.",
+    "net_book_new_starter_pct_exposure": "0 new starters; 0 open positions carried forward"
+  },
+  "held_position_reconciliation": {
+    "note": "Prior file analyses/scan/2026-08-07/conviction_2026-08-07.json has held_position_reconciliation.positions = [] and book_state.positions = 0. Re-verified tonight via `python3 scripts/held_book.py --prior analyses/scan/2026-08-07/conviction_2026-08-07.json`: 'read 0 position(s): 0 open, 0 closed -- no open positions carried in that file.' Genuinely flat, not the held_book EXIT-substring bug. Nothing to reconcile tonight; 0 open positions carried forward.",
+    "positions": []
+  },
+  "regime": {
+    "label": "UPTREND",
+    "ret5": "+2.030%",
+    "ret10": "+4.590%",
+    "dd15": "-1.300%",
+    "s1_standdown": false,
+    "note": "The crash/rebound guard was LIVE all five sessions 08-03->08-07 (thrust peaked ret5 +5.53% on 08-05) and expired only today as ret5 decayed +5.53% -> +3.51% -> +2.03%. The guard lifting is NOT a green light -- it means the thrust stopped accelerating, not that the tape reversed. VIX 15.46 (LOW tercile), normal contango. SPY dealer gamma NEGATIVE, spot 772.87 pinned at the 773.02 zero-gamma flip -- whipsaw risk, opposite sign from the 08-05/08-06 long-gamma window.",
+    "breadth_divergence": "YES -- pct_green 45.7% but options-flow bullish only 34.9% under an UPTREND label. Sector rotation OUT of Technology, INTO Financials/Healthcare/Energy -- Healthcare inflow is a soft headwind for COO (Healthcare short)."
+  },
+  "watch_only": {
+    "OI_FADE": [
+      "COO -- $76.32, 20d $-ADV $148.5M (scripts/liquidity.py PASS, Common Stock). 5d net call-OI build +4,619 (call +4,615/put -4), rel_build 1.029, persistence 0.549, verified multi-day dailies +148/+2,534/+1,002/+13/+18/+1,052 (08-03->08-10). Earnings 2026-09-09 clear of the h10 window. Lane validated_excess +0.55% mean/+0.91% median, hit 0.55 vs base 0.38, n=1102 -- MEDIUM/starter band on its own. WATCH-ONLY tonight on fundamentals CAUTION (-1 tier): EPS beat streak 4/4 + insider MSPR +40.33 net buying contradict the short; EPS growth -42.61% YoY on 63x trailing P/E + UBS Neutral $75 PT below spot confirm it. Short float 4.08%/2.82 days-to-cover -- no squeeze risk. CPI 08-12/PPI 08-13 both land inside the h10 window as a second, independently-sufficient reason for watch. RE-CHECK: if fundamentals ever clears to NA/CONFIRM, this reopens as a starter-tier candidate on mechanics alone -- COO is the strongest OI_FADE name on file right now other than the fundamentals split.",
+      "EWTX -- CUT upstream on a catalyst_split.py boundary defect (see data_quality_carry_forward). Build died at its own 08-06 print; genuine post-print continuation is only 387 of 8,490 total build (4.6%). Do not resurrect without a manual pre/post catalyst split.",
+      "AVT -- VETOED by fundamentals-gate (full triad against the short: 4/4 accelerating beats, revenue +24.5% YoY, EPS +46.1% YoY, insider MSPR +52.37, Truist PT raised to $110 = +13% above spot, -2.6% off its 52w high). Do not resurrect absent a material change.",
+      "FORWARD-DECAY WATCH (standing, unchanged tonight) -- 17 open OI_FADE h10 rows mature 08-10->08-21. The most recent read reversed the 08-01 decay flag to +1.99%/hit-base +0.67 but on only 9 units/3 exit-days -- ANECDOTE-level N, not durable either direction."
+    ],
+    "MOM_SHORT": [
+      "7 Yahoo-verified names: PEG, AMRZ, CMS, VICI, GME, AGCO, RBA (POST, GPI dropped on split/adjustment artifacts). WATCH-CAPPED tonight by the STANDING invariant #6 provisional rule alone -- s1_standdown is FALSE, the first time in a while this lane's watch status is not regime-driven. Lane baseline -1.26% mean, n=805, hit-base only +0.031 (the one recorded negative-excess exception). No new starter until a DURABLE-N(>=30) forward-positive window clears via /calibration-audit.",
+      "Correlation flag, unresolved: PEG and CMS both Utilities -- collapse to one position if the cap is ever lifted. Moot tonight."
+    ],
+    "MOM_LONG": [
+      "BASKET_WATCH -- 240-name basket, best sector Financial Services (70 names, 29.2%, within the 1/3 cap). Lane -1.12% mean, n=1081. Never sizes per CLAUDE.md (full-universe refresh turned it negative; 0 of 52 resolved forward calls ever sized). Individual tickers not handed down for per-name gate re-run tonight; confirmed and carried, not re-adjudicated."
+    ],
+    "S2_dp_revert": [
+      "ADVISORY_WATCH -- 48 clean survivors, advisory lane never sizes regardless of measured excess. Lane +0.07% mean, n=1138, hit-base -0.058 (below its own base rate). Regime unfavourable (S2 wants weak tapes). Individual tickers not handed down tonight."
+    ],
+    "S4_pcr_fade": [
+      "ADVISORY_WATCH -- 17 clean survivors: LYG, GGG, RHP, ACA, LH, INCY, IMAX, VSNT, LBRT, BWA, EXEL, JXN, GFI, LNC, QSR, CSGP, MDLN. Lane +0.39% mean, n=1160 -- still the only lane positive forward as well as historically. Advisory-only regardless."
+    ],
+    "VOL_BOOK": [
+      "0DTE-VRP: STAND ASIDE both legs on net-of-cost economics. SPY gamma SHORT, spot pinned at the 773.02 zero-gamma flip (whipsaw risk) -- LOW-VIX-tercile net ~-0.119%. QQQ gamma sources disagree (fail-closed) -- LOW-tercile net ~-0.057%.",
+      "Earnings IV-crush (advisory, never sized): CSCO (08-12, IV rank 90.6, IM 6.81%, cleanest candidate on paper), CAVA (08-11, 85.9, 11.03%), CAH (08-11, 81.3, 5.69%), ENVX (08-12, 84.3, 14.94%, thin sub-$5 book, chronically fat-tailed per the 08-07 pass -- skip or fractional only). CSCO/ENVX print on CPI day; CAVA/CAH have PPI in the exit window -- argues wider wings / lower size across the book."
+    ]
+  },
+  "data_quality_carry_forward": [
+    "catalyst_split.py:98 boundary defect, CONFIRMED today on EWTX and now on file as a standing issue: `d[\"date\"] >= cat` counts the earnings-print day itself as post-catalyst, so a build that dies exactly on the print reads as still-LIVE the day after. EWTX's 08-06 OI row spans last_date 08-05 -> curr_date 08-06 (crossing the print), so its +6,668 single-session read was pre-print positioning miscounted as post-print. Fix needed: change the comparison to `d[\"date\"] > cat` (strictly after) or add an explicit same-day handling branch. Until fixed, manually pre/post-split any OI_FADE candidate whose build straddles its own earnings date, the way EWTX was handled tonight (post-print continuation = 387 of 8,490 = 4.6%, correctly excluding it).",
+    "prices.parquet coverage gap (standing, not triggered tonight): COO is the sole directional candidate, so no correlation computation was needed against the frozen-universe gap. Will bind again the moment two+ names are sized simultaneously."
+  ],
+  "next_actions": [
+    "2026-08-15: /calibration-audit due. 41 open rows (17 OI_FADE, 12 MOM_SHORT, 11 S4) mature 08-10->08-21; the 08-03->08-07 crash-guard block matures 08-18->08-22, the first cohort spanning non-overlapping exit-days.",
+    "Fix scripts/catalyst_split.py:98 (>= to >) -- flagged twice now (EWTX tonight, the SSNC precedent on file). Not a nightly-scan fix; route to the maintenance backlog.",
+    "Re-check COO's fundamentals the moment a new Finnhub read is available -- if it clears to NA/CONFIRM, the mechanical case (rel_build 1.029, persistence 0.549, clean earnings/catalyst/liquidity) is otherwise a clean starter-tier OI_FADE short.",
+    "CPI 08-12 / PPI 08-13 back-to-back -- re-run event-risk gate before opening anything with an h5/h10 window between now and then."
+  ]
+}
