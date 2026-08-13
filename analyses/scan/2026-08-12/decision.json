@@ -1,0 +1,214 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-12",
+  "report_kind": "market-scan",
+  "regime": "UPTREND",
+  "report_path": "analyses/scan/2026-08-12/report.md",
+  "regime_context": {
+    "regime_label": "UPTREND",
+    "ret5": 0.0035,
+    "ret10": 0.059,
+    "vol_state": "VIX 14.55 LOW tercile, contango (VIX9D 11.09 < VIX 14.55 < VIX3M 18.53). SPY VRP FAIR (iv30d 0.1211 vs realized30d 0.1239). SPY dealers SHORT gamma, spot 772.82 below the 779.01 flip; QQQ essentially AT its flip (724.04 vs 723.64), gamma sources disagree so treated as UNKNOWN/fail-closed. Vol-state only -- no direction read off GEX/DEX.",
+    "breadth_pct_green": 51.89,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {"event": "CPI (July)", "date": "2026-08-12", "tier": 1, "status": "PRINTED TODAY, in-line; tape FADED it -- opened 774.71 at the day high, closed 772.49 at 34% of range, -0.29% from the open"},
+      {"event": "PPI (July)", "date": "2026-08-13", "tier": 1, "status": "inside h10 window"},
+      {"event": "Retail Sales (July, advance)", "date": "2026-08-14", "tier": 1, "status": "inside h10 window"},
+      {"event": "FOMC minutes (Jul 28-29 mtg)", "date": "2026-08-19", "tier": 2, "status": "inside h10 window"},
+      {"event": "FOMC rate decision", "date": "2026-09-16", "tier": 1, "status": "OUTSIDE h10 window -- awareness only"}
+    ]
+  },
+  "calls": [
+    {
+      "ticker": "COO",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0059,
+      "excess_hit_minus_base": 0.17,
+      "excess_n": 1087,
+      "regime_fit": 0.4,
+      "tier": "WATCH",
+      "cluster_id": "OI_FADE_COO_2026-08-12",
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "P0.6 out-of-regime half-cap binds (regime-transitional); non-binding in practice as the name never reaches a sizing band",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- s1_standdown=false, OI_FADE is not S1-gated. But tape judged REGIME-TRANSITIONAL (trough-anchored ret10, four-session stall, faded CPI print, ~18pt breadth divergence, dealer short gamma); P0.6 half-cap binds as an overlay.",
+        "liquidity": "PASS -- $76.73, 20d $-ADV $149.3M, Common Stock (via scripts/liquidity.py, not hand-multiplied)",
+        "cluster": "PASS -- singleton. Measured pairwise corr vs NRG = 0.127 (n=141 paired days) against the 0.70 threshold; computed, not inferred from sector labels, and both names had full price history so this is not the absentee-reads-as-pass trap.",
+        "fundamentals": "CAUTION (-1 tier), flagged ELEVATED / borderline-VETO -- 2 of 3 mechanical legs contradict the short with hard first-party evidence (4-for-4 EPS beat streak; insider net BUYING, MSPR +40.33). Only growth confirms (-42.61% YoY EPS on 63x P/E). D/E 0.3041 genuinely low and the leverage_flag is CORRECT here. UBS Neutral $75 PT carried from 08-10/08-11 was NOT re-verified tonight -- unconfirmed.",
+        "event_risk": "-1 tier, INDEPENDENTLY SUFFICIENT -- PPI 08-13, Retail Sales 08-14, FOMC minutes 08-19 all inside the h10 window (08-13 -> 08-27).",
+        "tail_cap": "OI_FADE has no named tail cap in the ruleset; none invented. Dealer short gamma + bottom-tercile VIX noted as a larger-realized-move risk, not applied as a sizing input."
+      },
+      "fundamentals_verdict": "CAUTION",
+      "structure": null,
+      "entry_or_trigger": "WATCH only -- no entry tonight",
+      "invalidation": "close above $77.42 (CONFIRMED = 08-11 intraday high, ~0.9% above spot). CORRECTS last night's carried '~$80.50', which has no anchor in recent price: COO's max high since 06-01 is $77.42 and the $84 area is Feb-2026, six months stale.",
+      "key_risks": [
+        "LANE PRIOR SOFTENED TONIGHT. retro_harness.py --all was re-run on the rebuilt/extended panel (83 -> 86 days): OI_FADE now measures +0.0039 (n=1132) against the recorded +0.0059 (n=1087) baseline -- -34% relative on 45 new observations, the largest move of any lane. NOT a regression (no code changed; this is panel-growth drift, which the gate explicitly does not treat as a failure) and the structure is intact (hit-minus-base +0.172 vs the recorded +0.17; median still positive at +0.0081 vs +0.0095). But it compounds with the selection-rule mismatch below: the prior was already being borrowed from a differently-ranked population, and now measures ~a third lower on its own basis. The validated_excess field carries the recorded baseline 0.0059 as the rubric's score input; the freshly measured figure is 0.0039.",
+        "SELECTION-RULE MISMATCH, independently sufficient to cap at WATCH: the live lane ranks by rel_build, but the +0.59%/n=1087 baseline is measured on top-15 by RAW oi_net_5d (retro_harness.py:82-99, no persistence/catalyst_split/rel_build filter). COO ranks 192 of 1,359 gated names tonight -- ~13x outside the measured population. The prior is BORROWED, not measured for this selection rule; adjusted validated_excess < +0.3%.",
+        "Fundamentals sits at the literal VETO boundary (>=2 of 3 legs contradicting) and is held at CAUTION only because the growth leg is mixed (revenue +6.09% vs EPS -42.61% YoY) rather than a clean bearish confirm. Weakest fundamentals support of any OI_FADE short this week.",
+        "Shorting into a name where actual insiders are buying with real dollars and the company has beaten 4 straight quarters.",
+        "3rd consecutive WATCH night (08-10, 08-11, 08-12) with the underlying tension unresolved.",
+        "Build persistence is trending up (0.659 -> 0.733) toward the 0.85 single-day-block ceiling -- re-check tomorrow."
+      ],
+      "thesis": "Heavy, organically-distributed 5-day net call-OI build (+5,497, rel_build 1.115, persistence 0.733, positive net three straight sessions) precedes underperformance at h10. Earnings gate PASS (next print 09-09); catalyst_split NO_CATALYST_IN_WINDOW after reconciling a stale 08-26 preliminary estimate against the current field, stable at 09-09 since 08-05.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "NRG",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0059,
+      "excess_hit_minus_base": 0.17,
+      "excess_n": 1087,
+      "regime_fit": 0.35,
+      "tier": "WATCH",
+      "cluster_id": "OI_FADE_NRG_2026-08-12",
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "P0.6 out-of-regime half-cap binds (regime-transitional); non-binding in practice as the name never reaches a sizing band",
+      "gate_verdicts": {
+        "regime_crash": "PASS -- s1_standdown=false, OI_FADE is not S1-gated. Tape judged REGIME-TRANSITIONAL; P0.6 half-cap binds as an overlay.",
+        "liquidity": "PASS -- $120.66, 20d $-ADV $379.1M, Common Stock (via scripts/liquidity.py)",
+        "cluster": "PASS -- singleton. Measured pairwise corr vs COO = 0.127 (n=141 paired days), computed not inferred.",
+        "fundamentals": "CAUTION (-1 tier), but a STRUCTURALLY WEAKER contradiction than COO's -- insider SELLING (MSPR -60.91) and a two-quarter miss trend both CONFIRM the short; only growth contradicts. The loud 62-75% analyst-target gap is sell-side opinion whose targets were just CUT post-gap (Scotiabank $226->$211, Evercore $215->$195). D/E 9.78 genuinely HIGH -- the finnhub_enrich leverage_flag 'low' is the known bug reproducing. This INVERTS the 08-11 note that read NRG's CAUTION as the louder of the two.",
+        "event_risk": "-1 tier, INDEPENDENTLY SUFFICIENT -- PPI 08-13, Retail Sales 08-14, FOMC minutes 08-19 all inside the h10 window.",
+        "tail_cap": "No named OI_FADE tail cap; none invented. Short-gamma/low-VIX environment noted as risk only."
+      },
+      "fundamentals_verdict": "CAUTION",
+      "structure": null,
+      "entry_or_trigger": "WATCH only -- no entry tonight",
+      "invalidation": "close above $124.71 (CONFIRMED = 08-05 intraday swing high, ~3.4% above spot)",
+      "key_risks": [
+        "LANE PRIOR SOFTENED TONIGHT -- see the COO entry for the full note. OI_FADE re-measures +0.0039 (n=1132) on the extended 86-day panel vs the recorded +0.0059 (n=1087). Not a regression (panel-growth drift, no code changed) and the structure holds, but the prior underwriting this short is ~a third lower than the figure cited.",
+        "Selection-rule mismatch (contributing, not solely determinative here): raw rank 29 of 1,359 vs a baseline measured on the top-15 by raw oi_net_5d. Closer to the measured population than COO but still outside it; adjusted validated_excess ~ +0.30-0.35%, at the starter floor with low confidence.",
+        "D/E 9.78 is genuinely high -- do not treat this as a low-leverage name in any future sizing, regardless of what the tool's leverage_flag reports.",
+        "Two Street PTs sit 62-75% above spot; even with conviction being marked down, a re-rating on the LS Power / hyperscaler BYOP catalyst stack would run hard against a short.",
+        "rel_build decayed 0.835 -> 0.604 -- verified MECHANICAL (the large 08-05 session rolled out of the trailing 5d window), not an unwind, but worth re-checking as more sessions roll."
+      ],
+      "thesis": "Cleanest, most-distributed 5-day net call-OI build tonight (+49,909, persistence 0.419) precedes underperformance at h10. Post-crash dip-buyers rebuilding call exposure well past the 08-04 print (-15.5% gap). catalyst_split confirms LIVE_BUILD under BOTH boundaries and the strict '>' recompute RAISES the post-catalyst share (74.2% -> 81.3%), so the known print-day-boundary defect strengthens rather than flips this read -- the opposite of EWTX. News tape supports: 'Red-Hot Power Stocks Are Losing Steam' (sector rotation out).",
+      "realized_excess_pct": null
+    }
+  ],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.4,
+      "note": "Two names (COO, NRG) cleared the full mechanical/liquidity/cluster stack and reached Phase D, both held at WATCH and overdetermined -- COO by three independently sufficient gates (selection-rule discount, fundamentals CAUTION, event-risk stack), NRG by two (fundamentals CAUTION, event-risk stack). Three further names DEMOTED as single-day blocks on persistence > 0.85, the ceiling oi_build.py:145 itself flags as 'likely a single-day block, not organic building': USFD 1.053, NXPI 1.022, UTHR 1.057 -- the lane had ranked USFD #1 and NXPI #2 by rel_build. EWTX CUT as a repeat of the 2026-08-10 boundary artifact (shipped '>=' 85.3% LIVE vs strict '>' 15.6%; build is almost entirely the print day).",
+      "candidates": ["COO", "NRG", "USFD", "NXPI", "UTHR", "EWTX"],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.3,
+      "note": "10-name basket, all Yahoo-verified as genuine near-52w-lows (the pct_52w_range artifact breaks both outside [0,1] and in-range-but-wrong, and the in-range class manufactures FALSE shorts), all liquidity/earnings/ETP gated via the screener issue_type field. Capped watch-only by standing invariant #6 (baseline -0.0128, n=803, knowingly negative) -- NOT by tonight's regime, since s1_standdown=false. GPI excluded (prior blocking verdict, split/adjustment artifact, dropped 08-10) and HDB excluded (standing policy exclusion).",
+      "candidates": ["APP", "ACM", "RBA", "GME", "ROL", "AMRZ", "VICI", "NKE", "WING", "STLA"],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.5,
+      "note": "50-name near-52w-high basket (top-10 spot-verified against Yahoo). Baseline -0.0108, n=1066 -- negative-excess, tail-driven with a negative median. DURABLE-N bar unmet; basket/watch only, never sizes. Top 10 by proximity to high listed.",
+      "candidates": ["MPC", "DRI", "CAKE", "HAE", "AEHR", "VLO", "GKOS", "DXCM", "VCTR", "AXGN"],
+      "cluster_id": null
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile (VIX 14.55); dealers SHORT gamma, spot 772.82 below the 779.01 zero-gamma flip",
+      "implied_move": 0.0066,
+      "expected_range": 0.008,
+      "net_expectancy": -0.00095,
+      "suggested_structure": null,
+      "stand_aside_reason": "TWO independent vetoes. (1) The LOW-VIX CONDITIONAL net is negative once cost is charged: 0.005% gross - 0.10% round-trip = -0.095%/day. The pooled headline (+0.13%) is NOT the governing number -- zerodte_setup.py pools all VIX terciles and VIX 14.55 is squarely in the LOW bucket, which is exactly the pooling trap. (2) Dealers net SHORT gamma (spot below flip) -- a trend-acceleration regime this sleeve's unsampled left tail cannot survive.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile (VIX 14.55); spot 724.04 essentially AT the 723.64 flip (+0.06%), gamma sources DISAGREE -- regime UNKNOWN",
+      "implied_move": 0.0104,
+      "expected_range": 0.0139,
+      "net_expectancy": -0.00037,
+      "suggested_structure": null,
+      "stand_aside_reason": "TWO independent vetoes. (1) LOW-VIX conditional net negative: 0.063% gross - 0.10% cost = -0.037%/day; pooled headline +0.25% does not govern. (2) The CLI reports POSITIVE gamma while the local flip level implies SHORT -- one downtick from flipping. Regime not reliably known, so fail closed per the load-bearing gamma-sign rule (aggregate sign drives RANGE/wing-width, spot-vs-flip drives REGIME/the sell decision; never merged -- fixed 2026-08-05).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "TPR",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "IV-rank 87.7; front IV 165.6% (2DTE) vs back-month 52.9% -- confirmed BACKWARDATION, ratio 3.13",
+      "implied_move": 0.084,
+      "expected_range": 0.122,
+      "net_expectancy": null,
+      "suggested_structure": "Defined-risk iron fly, short strikes ATM, LONG wings placed beyond the ~12.2% RAW-IV move rather than the 8.4% headline implied_move_perc -- TPR gaps hard on past prints and narrow wings get blown through.",
+      "stand_aside_reason": "STRUCTURALLY QUALIFIES but NOT SIZED. No per-name net-of-cost backtest exists for the earnings-crush lane in this repo (RESEARCH/30 s3.1 is a structural prior, STRONG-but-fragile, not a per-ticker net figure). The vol-short tail cap requires a net-of-cost quote, so structural qualification alone is insufficient. Net expectancy must be verified against the live iron-fly credit at entry.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "LOW",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "IV-rank 83.2; front IV 39.5% vs back-month 34.1% -- BACKWARDATION ratio 1.16 (mild, weakest of the survivors)",
+      "implied_move": 0.017,
+      "expected_range": 0.029,
+      "net_expectancy": null,
+      "suggested_structure": "Defined-risk iron fly / wide-wing short strangle. Tightest execution of the four screened (583 front-expiry contracts). Size smaller than TPR given the weaker backwardation.",
+      "stand_aside_reason": "STRUCTURALLY QUALIFIES but NOT SIZED -- same reason as TPR: no per-name net-of-cost backtest exists, and the vol-short tail cap requires a net-of-cost quote.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QFIN",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "IV-rank 84.2, backwardation ratio 1.23 -- structurally qualifies",
+      "implied_move": 0.089,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "Option liquidity floor FAILED -- only 33 front-expiry contracts; wings will not fill at a workable credit and spreads eat the crush edge before it is captured.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "MRCY",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "IV-rank 80.7, backwardation ratio 1.52 -- structurally qualifies",
+      "implied_move": 0.145,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "Option liquidity floor FAILED -- only 41 front-expiry contracts.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "COO -- OI_FADE short WATCH, 3rd consecutive night. Invalidation CORRECTED to $77.42 (confirmed 08-11 high); last night's '~$80.50' had no anchor in six months of price. Fundamentals flagged ELEVATED/borderline-VETO -- scrutinize hard before any promotion. Effectively unvalidated for this selection rule (raw rank 192/1359).",
+    "NRG -- OI_FADE short WATCH, 2nd night. Invalidation $124.71 (confirmed 08-05 swing high). Cleanest build tonight (persistence 0.419); catalyst_split strengthens under the strict '>' boundary. Fundamentals CAUTION is structurally weaker than COO's -- insider selling and the miss trend CONFIRM the short.",
+    "USFD, NXPI, UTHR -- OI_FADE DEMOTED, single-day-block builds (persistence 1.053 / 1.022 / 1.057, all above the 0.85 ceiling). Do not promote on rel_build rank alone.",
+    "EWTX -- OI_FADE CUT (repeat 2026-08-10 boundary artifact; strict '>' recompute gives 15.6% vs the shipped 85.3%). Do not re-propose.",
+    "MOM_SHORT BASKET_WATCH: APP, ACM, RBA, GME, ROL, AMRZ, VICI, NKE, WING, STLA. GPI + HDB excluded on prior blocking verdicts.",
+    "S2 advisory, 15 names FULLY news-verified only: WFC, WDAY, FICO, SU, APO, CG, DBX, FISV, HBM, LBRDK, RY, MAR, TOST, NSC, MDLZ. AVB VETOED (AVB-EQR shareholder vote same day), BAH VETOED (Treasury contract cancellation 08-11). NTRA/RBLX/ROKU flagged. The other 60 gated names stay EXCLUDED fail-closed -- unverified.",
+    "S4 advisory, 27 names post-gate, led by PPL, EFX, JXN, IMAX, COKE, LEN, IRM. Separate ORTHOGONAL ivrank_chg_5d h3 tilt (BSP, TBIL, ASO, WKC, VOD, DVY, NI, CHWY, KR, EWH) -- never summed with PCR.",
+    "STANDING GAP: the live OI_FADE lane ranks by rel_build while the harness baseline (+0.59%, n=1087) is top-15 by RAW oi_net_5d with no persistence/catalyst_split/rel_build filter. Tonight's candidates rank 28-192 of 1,359. Decide whether to add the live screens to the harness and re-baseline, or record the prior as inherited rather than measured. Any change must clear retro_harness.py --all.",
+    "REGRESSION GATE re-run tonight on the rebuilt/extended panel (83 -> 86 days), no code changed. MOM_LONG -0.0119 (n=1091) / MOM_SHORT -0.0136 (n=813) / OI_FADE +0.0039 (n=1132) / S2 +0.0008 (n=1154) / S4 +0.0048 (n=1169). Four of five sit marginally below their recorded 2026-08-08 baselines, but with zero code change and n rising across every lane this is panel-growth drift, NOT a regression. OI_FADE's -0.0020 (-34% relative) is the largest move and is material to tonight's WATCH calls; its structure is intact (hit-minus-base +0.172 vs +0.17, median +0.0081 vs +0.0095). Consider whether the recorded baseline should be refreshed at the 08-15 audit.",
+    "REGIME NOTE: on flat price, ret10 decays to CHOP by 2026-08-18 as the 07-29 trough rolls out of the window -- inside the h10 horizon of anything entered tonight.",
+    "Next /calibration-audit due 2026-08-15. 41 open rows mature 08-10->08-21; the 08-03->08-07 crash-guard block matures 08-18->08-22, the first cohort spanning non-overlapping windows. Count distinct exit-days, not rows."
+  ]
+}
