@@ -1,0 +1,53 @@
+{
+  "conviction_date": "2026-08-11",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-11 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-11/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters. Book stays FLAT. Exactly TWO OI_FADE candidates reached Phase D (COO, NRG) -- both cleared liquidity, correlation-cluster (two distinct singleton clusters, different sectors), and mechanical build checks, and both sit in the MEDIUM/starter excess band pre-adjustment (+0.59% mean lane prior). Both are OVERDETERMINED to WATCH: fundamentals-gate CAUTION (-1 tier) on each AND the CPI(08-12)/PPI(08-13)/Retail-Sales(08-14) Tier-1 event-risk stack (-1 tier, independently sufficient) both bind. Verified explicitly: the event-risk gate alone would have capped both names at WATCH even under a CONFIRM/NA fundamentals read -- this was not a fundamentals-only call. Regime/crash gate is mechanically non-binding (s1_standdown FALSE, OI_FADE is not S1-gated) but judged qualitatively regime-transitional (decayed thrust, dealer short gamma both SPY/QQQ, persistent breadth divergence) -- the P0.6 out-of-regime half-cap would bind on any future HIGH-tier OI_FADE name, non-binding tonight only because neither name's excess reaches that band. MOM_LONG stays basket-only/never-sizes. MOM_SHORT (12 names) watch-capped by the standing invariant #6 provisional rule, not tonight's regime. S2/S4 advisory, never size.",
+    "net_book_new_starter_pct_exposure": "0 new starters; 0 open positions carried forward"
+  },
+  "held_position_reconciliation": {
+    "note": "Reconciled via `python3 scripts/held_book.py --prior analyses/scan/2026-08-10/conviction_2026-08-10.json`: 'read 0 position(s): 0 open, 0 closed -- no open positions carried in that file.' Genuinely flat (not the held-book EXIT-substring bug -- the tool reported a positive zero-count, not a bare empty result). Nothing to reconcile tonight; 0 open positions carried forward. SPY -0.32% on the day.",
+    "positions": []
+  },
+  "regime": {
+    "label": "UPTREND",
+    "ret5": "-0.100%",
+    "ret10": "+4.010%",
+    "dd15": "-1.540%",
+    "s1_standdown": false,
+    "note": "Crash/rebound guard expired 08-10; the thrust it was guarding has now fully flattened -- ret5 +5.53% (08-05 peak) -> +2.03% (08-10) -> -0.10% (tonight). VIX 15.28 LOW tercile, normal contango. SPY dealer gamma flipped from pinned-at-flip (08-10) to 2.44% BELOW flip -- short gamma. QQQ 6.6% below its flip, short gamma -- both sources now agree (disagreed 08-10).",
+    "breadth_divergence": "YES, and widening -- price breadth 54.67% green vs options-flow bullish only 36.1%, an 18.6pt gap. Rotation OUT of Technology + both Consumer sectors, INTO Energy/Financials/Industrials. Neither COO's sector (Healthcare) nor NRG's (Utilities/IPP) is a named rotation target tonight, though NRG sits thematically adjacent to the Energy inflow -- reflected as a soft headwind in its lower regime_fit (0.35 vs COO's 0.42)."
+  },
+  "watch_only": {
+    "OI_FADE": [
+      "COO -- $76.82, 20d $-ADV $150.5M (liquidity PASS, Common Stock). 5d net call-OI build +6,113, rel_build 1.317 (up from 1.029 on 08-10), persistence 0.659. 66% of the build landed in ONE session (today) with no COO-specific news found on the tape -- positioning, not catalyst. Lane validated_excess +0.59% mean/+0.95% median, n=1087 -- MEDIUM/starter band on its own. WATCH on fundamentals CAUTION (-1, unchanged from 08-10: EPS beat streak + insider buying contradict, -42.61% YoY EPS growth on 63x P/E + below-spot UBS PT confirm) AND independently on the CPI/PPI/Retail-Sales event-risk stack (-1). Invalidation: close above ~$80.50, or a fact pattern reversing the UBS Neutral thesis.",
+      "NRG -- $119.79, 20d $-ADV $383.2M (liquidity PASS, Common Stock). NEW name, no prior adjudication. 5d net call-OI build +66,359, rel_build 0.835, persistence 0.315 (well-distributed, the cleaner mechanical build of the two tonight). catalyst_split confirms LIVE_BUILD under both the as-shipped (60.4%) and strict >(66.3%) boundary -- the print-day-boundary defect strengthens this read rather than flipping it. Context: gapped -15.5% on its 08-04 Q2 print, drifted $117-120 since; build reads as post-crash dip-buyers rebuilding call exposure well past the print. WATCH on fundamentals CAUTION (-1: second consecutive EPS miss, insiders not buying the dip, D/E genuinely HIGH despite a tool mislabel reading it 'low' -- CONTRADICTED by a dated bullish catalyst stack, Scotiabank/Evercore PTs 63-76% ABOVE spot, forward P/E 11.10, PEG 0.69) AND independently on the same event-risk stack (-1). The fundamentals CAUTION label understates how loud the valuation dispute against the short actually is. Invalidation: approximate, close above ~$125 (top of post-crash drift band + buffer) -- exact swing-high not confirmed with OHLC, verify before any live use.",
+      "FORWARD-DECAY WATCH (standing, unchanged tonight) -- CLAUDE.md cadence note: 41 open rows (17 OI_FADE, 12 MOM_SHORT, 11 S4) mature 08-10->08-21; next /calibration-audit due 2026-08-15."
+    ],
+    "MOM_SHORT": [
+      "BASKET_WATCH, 12 names: APP, WING, RBA, ONON, VICI, ALHC, ACM, PEG, CMS, GME, ROL, GPI. Invariant #6 provisional cap (knowingly-negative -1.28% baseline), not tonight's regime -- s1_standdown FALSE. 4/12 (APP, WING, RBA, ONON) had UW pct_52w_range NEGATIVE (stale w52l) but Yahoo-verified genuine near-lows. GPI carries a PRIOR BLOCKING VERDICT (split/adjustment artifact, dropped 08-10) -- flagged, not promoted. PEG/CMS both Utilities -- cluster-collapse candidate if the cap is ever lifted."
+    ],
+    "MOM_LONG": [
+      "BASKET_WATCH, 20-name near-52w-high basket. All 20 carried UW pct_52w_range >1.0 (out-of-range artifact) but Yahoo-verified genuine near-highs. Baseline -1.08% mean, n=1066 -- basket/watch only, DURABLE-N bar unmet, never sizes."
+    ],
+    "S2_dp_revert": {
+      "note": "80 names post-gate (41 BUY-side), advisory-only, never sizes. Lane did NOT complete its news gate tonight -- treat the entire list as news-UNVERIFIED. Not individually re-adjudicated by Phase D; full list withheld from watchlist_write_back pending news verification."
+    },
+    "S4_pcr_fade": {
+      "note": "17 names pass gates, advisory-only, never sizes. Plus a 4-name ivrank_chg_5d h3 tilt (LYG, LBRT, IMAX, INCY), orthogonal to the PCR signal, never summed with it."
+    }
+  },
+  "orchestrator_action_items": [
+    "finnhub_enrich.py leverage_flag mislabeled NRG's D/E 5.55-9.78 as 'low' -- confirmed bug, orchestrator flagged it explicitly tonight. Route to a fundamentals-gate fix; until fixed, manually override the leverage read on any high-D/E name the tool calls 'low'.",
+    "NRG fundamentals CAUTION carries a materially louder contradiction than COO's (63-76% analyst-target gap vs a beat-streak/insider-buying split) but both land on the same -1 tier label -- the tier arithmetic is correctly mechanical, but the underlying risk asymmetry between the two CAUTIONs is worth a qualitative read every time, not just the numeric adjustment.",
+    "COO's rel_build accelerated 1.029 -> 1.317 day-over-day with 66% of the 5-day build landing in a single session and no confirmed news catalyst -- re-check tomorrow's dailies for whether this was a one-off print or the start of a genuinely faster build; persistence (0.659) still passes but is trending toward the 0.85 ceiling.",
+    "NRG invalidation level ($125) is an approximate technical reference, not derived from confirmed intraday OHLC -- Phase D was not handed precise swing-high data for this NEW name. Confirm with real price data before this name is ever promoted off WATCH.",
+    "S2's 80-name list is carried as advisory/unverified only -- the lane's news gate did not complete tonight. Do not treat any S2 name as clean until the news gate is re-run.",
+    "Regime judgment call made explicitly per orchestrator instruction: treated tonight's tape as regime-transitional (decayed UPTREND thrust, dealer short gamma both SPY/QQQ now agreeing, persistent 18.6pt breadth divergence, 3 consecutive Tier-1 macro prints) and would apply the P0.6 out-of-regime half-cap to any HIGH-tier OI_FADE name. Non-binding tonight only because both candidates sit in the MEDIUM/starter band pre-adjustment -- record this reasoning so a future HIGH-tier OI_FADE name on a similarly transitional tape does not slip through at half-size without the cap being actively applied.",
+    "Next /calibration-audit due 2026-08-15 per CLAUDE.md cadence -- 41 open rows mature 08-10->08-21, first cohort spanning non-overlapping windows from the 08-03->08-07 crash-guard block (matures 08-18->08-22)."
+  ],
+  "process_findings_summary": "Book stays FLAT for another session. Two OI_FADE shorts (COO, NRG) cleared the entire mechanical/liquidity/cluster stack and sat in the lane's MEDIUM/starter excess band (+0.59% mean, n=1087) pre-adjustment, but both are OVERDETERMINED to WATCH: fundamentals CAUTION (-1 tier) on each AND the CPI/PPI/Retail-Sales Tier-1 event-risk stack (-1 tier) each independently sufficient to force the same outcome. Verified explicitly per orchestrator instruction: the event-risk gate alone -- absent any fundamentals input -- would have capped both names at WATCH, so this was never purely a fundamentals-driven downgrade. The regime/crash gate's mechanical verdict (s1_standdown FALSE, non-binding on a flow-mechanism lane) was supplemented with an explicit qualitative judgment: tonight's tape reads as regime-transitional (flattened thrust, dealer short gamma agreeing across SPY/QQQ for the first time this stretch, an 18.6pt price/flow breadth gap, three consecutive Tier-1 macro sessions) and the P0.6 out-of-regime half-cap would be actively applied to any HIGH-tier OI_FADE name -- moot tonight only because neither candidate's excess reached that band. NRG's fundamentals CAUTION deserves a closer qualitative read than its label conveys: two Street PTs sit 63-76% above spot with a dated bullish catalyst stack, a materially louder contradiction than COO's more balanced beat-streak-vs-valuation split. Half-cap, no auto-full: neither name would have sized above starter even absent every downgrade tonight."
+}
