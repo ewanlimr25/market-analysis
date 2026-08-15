@@ -1,0 +1,171 @@
+{
+  "schema_version": "w1.0",
+  "report_kind": "weekly-review",
+  "iso_week": "2026-W33",
+  "report_date": "2026-08-14",
+  "report_path": "analyses/weekly/2026-W33/report.md",
+  "week_context": {
+    "weekly_candles": [
+      {
+        "symbol": "SPY",
+        "w_open": 772.6,
+        "w_high": 779.37,
+        "w_low": 769.2,
+        "w_close": 776.34,
+        "w_ret": 0.004841,
+        "close_pos": 0.702,
+        "body_frac": 0.368,
+        "structure_vs_prior": "higher_high, follow_through TRUE (2nd consecutive up week). Not inside, not outside. Range 10.17 pts = 1.31% of close -- the NARROWEST full 5-day week in the entire 24-full-week panel. Body collapsed from 0.849 to 0.368 with near-balanced wicks (3.03 up / 3.40 down): a digestion candle after the prior week's +3.18% expansion. New panel-high weekly close."
+      },
+      {
+        "symbol": "QQQ",
+        "w_open": 722.39,
+        "w_high": 734.39,
+        "w_low": 715.5,
+        "w_close": 731.07,
+        "w_ret": 0.012016,
+        "close_pos": 0.824,
+        "body_frac": 0.46,
+        "structure_vs_prior": "higher_high, follow_through TRUE. Range compressed 42.72 -> 18.89 (-56%), body_frac 0.813 -> 0.460. Still -1.29% below its 2026-06-15 panel-peak weekly close of 740.62 -- the repair gap narrowed from -2.38% last week but is NOT closed."
+      },
+      {
+        "symbol": "IWM",
+        "w_open": 300.51,
+        "w_high": 305.18,
+        "w_low": 299.08,
+        "w_close": 305.09,
+        "w_ret": 0.015241,
+        "close_pos": 0.985,
+        "body_frac": 0.751,
+        "structure_vs_prior": "higher_high, follow_through TRUE. Strongest of the three: best w_ret (+1.52%), highest close_pos (0.985 -- closed essentially at the weekly high, upper wick only 0.09), and it retained its body fraction (0.812 -> 0.751) while SPY/QQQ lost theirs. New panel-high weekly close."
+      }
+    ],
+    "catalysts": [
+      {
+        "event": "July CPI",
+        "date": "2026-08-12",
+        "weekday": "Wednesday",
+        "price_reaction": "Headline +0.1% m/m / 3.4% y/y, core +0.2% m/m / 2.5% y/y -- both in line, both down 0.1pp from June. SPY +0.25%, QQQ +0.73%, XLK +1.49%. September rate-HIKE odds cut to 42% (CME FedWatch). NOTE the sign of the policy risk this cycle: the market is pricing a possible hike, not a cut."
+      },
+      {
+        "event": "July PPI",
+        "date": "2026-08-13",
+        "weekday": "Thursday",
+        "price_reaction": "Headline flat, core +0.2% (below expectations), annual 4.7% vs revised 5.0% prior. The week's engine: SPY +0.70%, QQQ +1.16%. SPY set its fresh 52-week high close (777.88) and intraweek high (779.37) on this day."
+      },
+      {
+        "event": "July Retail Sales + UMich prelim sentiment",
+        "date": "2026-08-14",
+        "weekday": "Friday",
+        "price_reaction": "Retail sales dipped. Large caps gave a little back -- SPY -0.20%, QQQ -0.14% -- while IWM ADDED +0.52% and XLE +1.39%. A divergent close, not a broad risk-off."
+      },
+      {
+        "event": "SanDisk Investor Day + Korea-led AI-memory rotation (NOT Tier-1 macro)",
+        "date": "2026-08-13",
+        "weekday": "Thursday",
+        "price_reaction": "SNDK FY28-30 growth model + 100% cash return; Kospi +4% overnight on AI-infrastructure optimism; follows the 08-03 SNDK/SK Hynix High-Bandwidth-Flash tie-up. SNDK +13.67% Thu and +7.39% Fri, +35.38% on the week. This drove the week's DISPERSION; the macro prints drove the INDEX structure. Recorded separately so the macro pre-registration arm does not accrue credit for a sector catalyst."
+      }
+    ],
+    "regime_trajectory": "UPTREND every session Mon->Fri, s1_standdown FALSE every session. ret10 +4.590 -> +4.010 -> +5.900 -> +4.880 -> +3.920%; dd15 -1.300 -> -1.540 -> 0.000 -> -1.650 -> -2.350%. THE STRUCTURAL EVENT OF THE WEEK: the crash guard lapsed exactly at the week boundary -- s1_standdown was True every session of W32 (08-03..08-07) and False every session of W33, and the label dropped its REBOUND-THRUST qualifier (UPTREND/REBOUND-THRUST -> UPTREND). ret5 fell to +2.030% on 08-10, under the +2.5% trigger, and never came back (-0.100, +0.350, +1.210, +0.400). This is the first full week since the guard lapsed, so MOM_SHORT and OI_FADE were both mechanically live all week for the first time in this cycle. dd15 = 0.000% on 08-12 is NOT 'at the highs': dd15 = min(last 15 closes)/close_10_back - 1, and on 08-12 the 10-day anchor (07-29, 729.46) WAS the 15-day minimum -- a trough-anchored window, verified by hand. FORWARD DECAY CONFIRMED at flat price by two independent recomputations: Mon 08-17 still UPTREND (ret10 +2.46%), Tue 08-18 flips to CHOP (ret10 +0.65%) as the 08-04 gap-up day rolls out of the trailing-10 window. Pure window arithmetic, no price move required. VOL-STATE overlay: VIX 15.46 -> 14.25 monotonic decline, clean contango (VIX9D 10.61 < VIX 14.25 < VIX3M 18.46). SPY and QQQ dealer books both flipped negative->positive gamma mid-week and both closed Friday barely above their flip (SPY +0.18%, QQQ +0.07%) -- a real but THIN vol-suppression cushion that a ~0.2-0.3% pullback would undo. VRP: SPY FAIR (-0.73%), QQQ PREMIUM_BUYING (-5.06%, IV cheap vs realized). Breadth is the dissent: options-flow bullish only 35.1%, price breadth 49.7% green (250 adv / 245 dec) on a week SPY closed at a panel high -- a mild distribution/thinning-participation tell. UW's own classifier reads TRANSITIONAL against the mechanical UPTREND (advisory, not overriding)."
+    ,
+    "sector_leadership": "XLE +7.67% -- a dominant outlier, ~4.8x the next sector, on the continuing Hormuz/oil channel (XLE +4.66% on Monday alone). Then XLU +1.60, XLC +1.53, XLP +1.14, XLK +1.08, XLV +1.02, XLF +0.97, SMH +0.88, XLI +0.72, XLRE +0.65. Laggards: XLB -0.60, XLY -1.39. Energy-up / consumer-discretionary-down is the consumer-squeeze signature, and it is consistent with Friday's soft retail sales. All figures from week_context.py with NO staleness flags -- every series spans the same window.",
+    "notable_flow": "DIARY ONLY, 0 signal. Largest dark-pool premium: SPY $41.0B (60,795 prints), MU $37.3B (100,070), SNDK $32.1B (119,453), NVDA $26.4B, QQQ $26.2B, SPCX $17.3B, MSFT $16.3B, AAPL $16.1B, INTC $11.4B, AMD $11.0B. The #2 and #3 single-name prints (MU, SNDK) were also the week's two biggest movers (+10.7%, +35.4%) -- concentration and realized move coincided."
+  },
+  "weekly_technicals": [
+    {
+      "feature": "SPY weekly range compression",
+      "value": "Range 10.17 pts = 1.31% of close. Narrowest full 5-day week in all 24 full weeks of the panel (next narrowest 2026-04-20 at 12.19 / 1.71%). body_frac 0.368 with near-balanced wicks.",
+      "would_signal": "A volatility-expansion setup -- compression typically precedes range expansion, but DIRECTIONLESS: it says nothing about which way. Would need to be paired with a directional lane to mean anything, and is not.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT: >=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH(0.10). Panel is 30 weeks (24 full) -- roughly one-quarter of the minimum history."
+    },
+    {
+      "feature": "reversal-after-CPI",
+      "value": "DID NOT FIRE. CPI Wed 08-12 produced SPY +0.25%; the week did NOT reverse it -- Thursday followed through +0.70% to a fresh 52w high, and Friday gave back only -0.20%. Weekly close_pos 0.70.",
+      "would_signal": "A reversal of the catalyst-day move within the same week would be the bearish arm of this feature (crowd faded the print). This week is the CONTINUATION arm instead.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. This week is the first genuine Tier-1 observation the macro arm has accrued in three weeks -- W32 had only a day-5 payrolls print, W31 nothing. Accrual: 1 obs (continuation)."
+    },
+    {
+      "feature": "follow_through (confirm prior week's direction)",
+      "value": "TRUE for SPY, QQQ and IWM -- second consecutive up week for all three, after both QQQ and IWM printed follow_through FALSE last week. Panel base rate for SPY: 21 of 30 weeks TRUE (70%).",
+      "would_signal": "Continuation of the prior week's direction. Against a 70% base rate this carries almost no information -- the honest read is that the feature is close to unconditional.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. Note the base-rate problem: an arm firing 70% of weeks needs a large N to separate from the unconditional mean."
+    },
+    {
+      "feature": "higher_high with body compression (thrust decay into highs)",
+      "value": "All three made higher highs while body_frac collapsed: SPY 0.849 -> 0.368, QQQ 0.813 -> 0.460, IWM 0.812 -> 0.751. Paired with breadth dissent (35.1% bullish flow, 49.7% green tape).",
+      "would_signal": "Waning upside thrust / distribution into new highs -- the bearish arm. Explicitly NOT scored: this is precisely the pattern-plus-narrative combination the Layer-3 split exists to quarantine.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT."
+    },
+    {
+      "feature": "IWM close_pos extreme (small-cap leadership)",
+      "value": "IWM close_pos 0.985 -- closed essentially at its weekly high, upper wick 0.09 of a 6.10 range. Best w_ret of the three (+1.52%) and the only one to retain its body fraction. IWM also led on Friday (+0.52%) while SPY/QQQ were red.",
+      "would_signal": "Broadening risk appetite / small-cap leadership. Directly CONTRADICTS the breadth-dissent read above -- both are 0-point observations and the contradiction is left standing rather than resolved, since neither is scored.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT."
+    },
+    {
+      "feature": "candle-pattern arms (inside / outside / hammer-hanging / star)",
+      "value": "NONE fired this week for SPY. Panel base rates over 30 weeks of SPY: inside_week 0, outside_week 1, hammer_or_hanging 3, star_or_inverted 1.",
+      "would_signal": "Nothing this week. Recorded because the base rates are themselves the finding: three of the four candle arms have <=3 observations in the entire panel, and inside_week has never once fired for SPY. These arms cannot reach PR-WT on this panel in any reasonable time.",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT -- unreachable at current accrual rate; revisit only on the extended >=2yr panel."
+    }
+  ],
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": null,
+      "note": "Ran on the trailing 15-trading-day window (07-27..08-14, ~3 calendar weeks) via oi_build.py, ranked by oi_rel_build, floors abs(net_15d)>=1000 and avg_30d_call_oi>=1000, ETFs cut via Stock Screener issue_type. Population after floors 1,908. NO NAME SIZES. The standing selection-rule mismatch applies to every candidate: the live lane ranks by rel_build, but the +0.59% mean / +0.95% median / n=1087 harness baseline was measured on the top-15 by RAW oi_net_5d with no persistence and no catalyst_split filter. Best raw-rank proximity in the entire pool is SIRI at 35/1198 (5d) -- still outside the top-15 population. This is now the 5th+ consecutive session/week in which no reachable candidate clears the bar. Compounding it, the h10 prior is being stretched to an h10-h21 hold, an unvalidated extrapolation on top of the rank mismatch; and the prior is independently inflated because the harness applies no ETP/earnings hygiene to OI_FADE (tradeable edge ~+0.7% at best). Three CUTs this week were catalyst-hygiene catches, not rank calls: TRMB is a textbook print-day-boundary artifact -- catalyst_split's >= counts the 08-05 print day itself as post-catalyst, and 08-05 alone is +8,024 of +12,733 contracts (63% of the 15d net), so re-summing with strict > collapses post-share from 83.8%/99.3% to 20.8% (RESOLVED_AT_PRINT). USFD has persistence 0.993 (a single 08-07 block of +7,572 of +7,625) and its own last_call_net invalidation already fired. DBX and MRCY are both RESOLVED_PRE_PRINT. BSY is DOWNGRADED to excluded, diverging from Friday's daily carry: 94% of its build landed in the last two sessions while it sits at 28.0% of its 52-week range (Yahoo-verified) -- the NRG/STUB bottom-fishing profile that Standing Rule #10 exists to catch. ORCHESTRATOR CORRECTION: the lane reported FDX at pct_52w 0.589; Yahoo (path-aware, scripts/chart.py) says 93.6% (52w 178.33 .. 345.37, close 334.64). The daily scan's 93.6% was right and the lane's figure is wrong. FDX's disposition is unchanged at WATCH, but the error inverted the reasoning -- FDX is in fact the strongest near-highs/exhaustion fit in the cohort, which is the lane's actual validated setup. SECOND CORRECTION, inherited from the 08-14 daily scan: GEN's invalidation level $29.87 was labelled 'confirmed 52-week high, 2026-08-10'; it is in fact GEN's intraday high of 08-10, a 4-session-old local swing high. GEN's true 52-week high is $31.88 set 2025-08-22 (Yahoo), so true range position is 75.9%, not 88.5%. The level remains usable as an invalidation (~4.9% above spot) but the label was wrong -- and the $31.88 anchor rolls out of the trailing 52-week window around 2026-08-22, which will mechanically lift GEN's range position with no price move. Merger-arb gate checked (fz quote description + fz news) on every candidate: no pending acquisition/tender/scheme language; gate did not fire and remains UNTESTED on a live name. Liquidity verified via scripts/liquidity.py for all retained names, not hand-multiplied.",
+      "candidates": [
+        "SIRI",
+        "GEN",
+        "EG",
+        "FDX",
+        "ITRI"
+      ],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": null,
+      "note": "Crash guard NOT standing down -- s1_standdown FALSE every session, the first full week in this cycle that MOM_SHORT was mechanically live (it was suppressed every session of W32). It still does not size, for a reason independent of the guard: the PROVISIONAL tail cap holds it to watch-only pending a DURABLE-N (>=30) forward window re-clearing positive excess, and the lane's recorded harness baseline is knowingly negative (-0.0128, n=803) -- the single documented exception to 'no lane negative-excess'. All six names persist from Friday's daily scan with no dropouts and no tighter new entrant. All six independently Yahoo-verified path-aware (scripts/chart.py --52w), all issue_type = Common Stock (no ETP leak), all liquidity-verified via scripts/liquidity.py: ROL $235.4M, RBA $131.7M, NKE $813.7M, GPI $56.9M, AMRZ $159.5M, GME $116.9M. Yahoo-verified range positions: ROL 0.7% (52w low 35.98 set 08-14), RBA 1.8% (low 83.62 set 08-14), NKE 1.8% (low 40.00, 06-26), GPI 2.1% (low 259.24, 08-13), AMRZ 3.3% (low 46.03, 08-10), GME 3.4% (low 18.33, 08-13). THE WEEKLY-VIEW FINDING: five of the six set their 52-week low DURING THIS WEEK -- in the same week SPY printed a fresh 52-week high. That dispersion is invisible to a daily scan and is the clearest single argument that the index close is not describing the tape. LANE ERROR CORRECTED: the lane returned an invalidation level for each name equal to that name's 52-week LOW, i.e. BELOW spot on a short -- an inverted stop that would sit where the trade is working best. Not propagated; lane_status carries no invalidation field, so nothing wrong reached the envelope, but the lane needs fixing before it is ever trusted to emit a sized call.",
+      "candidates": [
+        "ROL",
+        "RBA",
+        "NKE",
+        "GPI",
+        "AMRZ",
+        "GME"
+      ],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": null,
+      "note": "Basket-only, never sizes (harness -0.0108, n=1066; DURABLE-N bar unmet). ORCHESTRATOR CORRECTION -- the lane's headline count is wrong and its explanation for it is wrong. The lane reported '~535 names' and attributed the jump from the daily scan's ~275 to 'horizon expansion: weekly bars show more names near 52w-high due to a longer resolution window'. That is a rationalisation of a filter failure. The lane explicitly declined to apply the Stock Screener issue_type field ('live lane responsible for full issue_type filtering'), which is the exact leak the standing rule forbids. Recomputed directly on the 2026-08-14 screener: at pct_52w_range >= 0.95 the raw cohort is 834 names, of which 560 are ETFs, 250 are Common Stock, 10 ADR, and 14 other/null. Equity-only is 250 -- in line with the daily lane's ~275, so there is no horizon effect to explain; there is 67% ETP contamination. Separately, 172 names in the screener show pct_52w_range > 1.0 and 26 show < 0, the known stale/un-split-adjusted UW w52h-w52l data-quality bug. Of the lane's five named exemplars, TWO are unusable: BOXX is issue_type=ETF -- a T-bill box-spread cash proxy that sits at 100% of its 52-week range BY CONSTRUCTION and would therefore top this screen every week in perpetuity, the single cleanest illustration of why the issue_type cut is load-bearing; and HEIA returns HTTP 404 from Yahoo (Heineken trades as HEIA.AS in Amsterdam, not as a US symbol) so it cannot be path-aware verified at all. The three that survive verification are NEU, CRNX and BNS, each Yahoo-confirmed at 100.0% of 52-week range and each issue_type=Common Stock. Only those three are listed below; the basket as a whole is recorded as ~250 equity names, not 535.",
+      "candidates": [
+        "NEU",
+        "CRNX",
+        "BNS"
+      ],
+      "cluster_id": null
+    }
+  ]
+}
