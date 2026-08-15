@@ -1,0 +1,248 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-14",
+  "report_kind": "market-scan",
+  "regime": "UPTREND",
+  "report_path": "analyses/scan/2026-08-14/report.md",
+  "regime_context": {
+    "regime_label": "UPTREND",
+    "ret5": 0.0040,
+    "ret10": 0.0392,
+    "vol_state": "VIX 14.25 (LOW tercile), falling from 16.50 on 08-04. SPY GEX positive (+$2.02B), spot pinned essentially AT the flip (776.06 vs zero-gamma 774.67). QQQ GEX positive (+$652M) but spot within 0.07% of its flip, and the two gamma reads disagree -- fails closed. SPY VRP FAIR (iv30d 11.76% vs realized 12.49%); QQQ realized (23.24%) running hotter than implied (18.17%). Vol-state only -- never a direction.",
+    "breadth_pct_green": 49.7,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {"event": "Retail data / prior-week catalysts", "date": "2026-08-14", "tier": 3, "status": "resolved intraday, SPY -0.20%"},
+      {"event": "PCE + Q2 GDP 2nd estimate", "date": "2026-08-26", "tier": 1, "status": "inside h10 window (~08-14->08-28)"},
+      {"event": "NVDA earnings", "date": "2026-08-26", "tier": 1, "status": "after close, inside h10 window"},
+      {"event": "Jackson Hole symposium -- new Fed Chair's first keynote", "date": "2026-08-27/29", "tier": 1, "status": "3-day Tier-1 cluster landing right at the h10 exit"}
+    ]
+  },
+  "calls": [
+    {
+      "ticker": "FDX",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0059,
+      "excess_hit_minus_base": 0.17,
+      "excess_n": 1087,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": "OI_FADE_FDX_2026-08-14",
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "No named OI_FADE tail cap in the ruleset; none invented. P0.6 out-of-regime half-cap (see regime_crash verdict) is the only overlay, and it is non-binding in practice -- the selection-rule discount below already caps this name at watch.",
+      "gate_verdicts": {
+        "regime_crash": "PASS (not stood down) -- s1_standdown=false, OI_FADE is not S1-relative-weakness-gated, and today's regime is genuinely UPTREND (ret5 +0.40%, ret10 +3.92%). Re-verified regime decay: Mon 08-17 still UPTREND, Tue 08-18 flips to CHOP as the 08-03..08-07 rally mechanically rolls out of the trailing 10-session window. Any h10 entry made tonight (window ~08-14->08-28) spends ~9 of 10 sessions OUTSIDE the regime that would justify it. P0.6 out-of-regime half-cap BINDS as an overlay on this basis -- moot in practice since the selection-rule discount already caps this name at watch.",
+        "liquidity": "PASS -- $334.64, 20d $-ADV $524.1M, verified via python3 scripts/liquidity.py --tickers STUB,FDX,GEN,INSW,BSY,ITRI --date 2026-08-14 (not hand-multiplied).",
+        "cluster": "Correlated with INSW at 0.703 (143 paired trading days, full-history close-price correlation via duckdb on data/prices.parquet) -- would collapse to ONE position if INSW were ever sized. INSW is CUT tonight (97.9% of 52w range -- shorting it opposes the momentum-long factor and it sits closest to the ENS breakout-chase failure mode), so the cluster is moot. Within the four names actually held at watch (FDX, GEN, BSY, ITRI), max pairwise correlation is FDX/GEN 0.248 -- no collapse.",
+        "fundamentals": "NA -- fundamentals-gate not spawned; correctly so, since nothing is being sized (held at watch on the selection-rule discount below). NA never penalizes per gate 4.",
+        "event_risk": "-1 tier, independently sufficient -- PCE + Q2 GDP (08-26), NVDA earnings (08-26 after close), and Jackson Hole's new Fed Chair keynote (08-27/29) form a 3-day Tier-1 cluster landing right at the h10 exit (~08-28). Moot for sizing since the selection-rule discount already caps this name at watch.",
+        "tail_cap": "No named OI_FADE tail cap in the ruleset; none invented."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": "WATCH only -- no entry tonight",
+      "invalidation": "close above $345.37 (confirmed 52-week high, 2026-06-15, ~3.2% above spot)",
+      "key_risks": [
+        "raw oi_net_5d rank 108/1503 -- ~7.2x outside the top-15 population the +0.59% prior was measured on. Same standing selection-rule discount applied to COO/NRG for four nights; effective validated_excess sits below the +0.3% starter floor despite the carried baseline figure above.",
+        "Best structural fit of tonight's watch cohort: 93.6% of 52w range, near highs -- the exhaustion-at-highs pattern the lane is actually validated on, not the bottom-fishing pattern that just cut NRG.",
+        "Clustered with INSW at 0.703 close-price correlation -- would size once as a pair if INSW ever re-qualifies; currently moot since INSW is cut.",
+        "Tier-1 event cluster (PCE/GDP, NVDA earnings, Jackson Hole) lands inside the h10 window regardless of the above.",
+        "Regime mechanically decays UPTREND->CHOP by 08-18, ~9 of 10 sessions of any h10 entry fall outside the regime that would justify it."
+      ],
+      "thesis": "Mechanically clean OI_FADE candidate (cleared liquidity, earnings gate h10, catalyst_split, issue_type, news) with the strongest structural fit of tonight's cohort (93.6% of 52w range), but fails the selection-rule bar the +0.59% prior was actually measured on (raw rank 108 vs top-15). Held at WATCH, not sized -- same treatment as COO/NRG on prior nights.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "GEN",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0059,
+      "excess_hit_minus_base": 0.17,
+      "excess_n": 1087,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": "OI_FADE_GEN_2026-08-14",
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "No named OI_FADE tail cap in the ruleset; none invented. P0.6 half-cap overlay binds per the regime_crash verdict; non-binding in practice.",
+      "gate_verdicts": {
+        "regime_crash": "PASS (not stood down) -- s1_standdown=false, not S1-gated. Regime genuinely UPTREND today but mechanically decays to CHOP by 08-18 (day 3 of the ~10-session h10 window); ~9 of 10 sessions of any entry made tonight fall outside UPTREND. P0.6 half-cap BINDS as an overlay -- moot since the selection-rule discount already caps this name at watch.",
+        "liquidity": "PASS -- $28.48, 20d $-ADV $136.2M, verified via python3 scripts/liquidity.py --tickers STUB,FDX,GEN,INSW,BSY,ITRI --date 2026-08-14 (not hand-multiplied).",
+        "cluster": "Singleton -- max pairwise close-price correlation to any watched OI_FADE name is FDX 0.248 (143-day history, duckdb on data/prices.parquet), well under 0.70. No collapse.",
+        "fundamentals": "NA -- not spawned, nothing sized. NA never penalizes.",
+        "event_risk": "-1 tier, independently sufficient -- same Tier-1 cluster (PCE/GDP, NVDA earnings, Jackson Hole 08-26..29) inside the h10 window. Moot for sizing.",
+        "tail_cap": "No named OI_FADE tail cap in the ruleset; none invented."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": "WATCH only -- no entry tonight",
+      "invalidation": "close above $29.87 (confirmed 52-week high, 2026-08-10, ~4.9% above spot -- set only 4 sessions ago)",
+      "key_risks": [
+        "raw oi_net_5d rank 119/1503 -- ~7.9x outside the top-15 population the +0.59% prior was measured on; same selection-rule discount as FDX/COO/NRG.",
+        "74.8% of 52w range, a fresh high just 4 sessions ago (08-10) -- decent but not the strongest structural fit of the cohort.",
+        "Tier-1 event cluster inside the h10 window regardless of the above.",
+        "Regime decays to CHOP inside the window (same mechanical basis as all four watch names tonight)."
+      ],
+      "thesis": "Mechanically clean OI_FADE candidate with a recent (08-10) 52w high and moderate-strong range position (74.8%), but outside the raw top-15 population the prior is measured on. Held at WATCH, not sized.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "BSY",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0059,
+      "excess_hit_minus_base": 0.17,
+      "excess_n": 1087,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": "OI_FADE_BSY_2026-08-14",
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "No named OI_FADE tail cap in the ruleset; none invented. P0.6 half-cap overlay binds per the regime_crash verdict; non-binding in practice.",
+      "gate_verdicts": {
+        "regime_crash": "PASS (not stood down) -- s1_standdown=false, not S1-gated. Regime genuinely UPTREND today but mechanically decays to CHOP by 08-18; ~9 of 10 sessions of any entry made tonight fall outside UPTREND. P0.6 half-cap BINDS as an overlay -- moot since the selection-rule discount already caps this name at watch.",
+        "liquidity": "PASS -- $36.24, 20d $-ADV $104.1M, verified via python3 scripts/liquidity.py --tickers STUB,FDX,GEN,INSW,BSY,ITRI --date 2026-08-14 (not hand-multiplied).",
+        "cluster": "Singleton -- max pairwise close-price correlation to any watched OI_FADE name is ITRI 0.579 (143-day history, duckdb on data/prices.parquet), under 0.70. No collapse.",
+        "fundamentals": "NA -- not spawned, nothing sized. NA never penalizes.",
+        "event_risk": "-1 tier, independently sufficient -- same Tier-1 cluster (PCE/GDP, NVDA earnings, Jackson Hole 08-26..29) inside the h10 window. Moot for sizing.",
+        "tail_cap": "No named OI_FADE tail cap in the ruleset; none invented."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": "WATCH only -- no entry tonight",
+      "invalidation": "close above $40.36 (confirmed 52-week high, 2026-03-09, ~11.4% above spot)",
+      "key_risks": [
+        "raw oi_net_5d rank 235/1503 -- weakest raw rank retained alongside ITRI, ~15.7x outside the top-15 population; selection-rule discount applies.",
+        "28.0% of 52w range -- the weakest structural fit of the four retained watch names, closer to the bottom-fishing pattern the cohort-level caution flags (though BSY itself is not part of tonight's raw top-15, a large-cap software name off a normal pullback, not a beaten-down turnaround story like STUB).",
+        "Tier-1 event cluster inside the h10 window regardless of the above.",
+        "Regime decays to CHOP inside the window."
+      ],
+      "thesis": "Mechanically clean OI_FADE candidate but weakest range position (28.0%) of the four retained names -- kept at watch rather than cut because it is a stable large-cap name off a routine pullback (unlike STUB/NRG's beaten-down-bounce pattern), not because the structural fit is strong. Held at WATCH, not sized; first candidate to reconsider if range position doesn't recover.",
+      "realized_excess_pct": null
+    },
+    {
+      "ticker": "ITRI",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": 0.0059,
+      "excess_hit_minus_base": 0.17,
+      "excess_n": 1087,
+      "regime_fit": 0.3,
+      "tier": "WATCH",
+      "cluster_id": "OI_FADE_ITRI_2026-08-14",
+      "pre_size": "starter",
+      "final_size": "watch",
+      "tail_cap_applied": "No named OI_FADE tail cap in the ruleset; none invented. P0.6 half-cap overlay binds per the regime_crash verdict; non-binding in practice.",
+      "gate_verdicts": {
+        "regime_crash": "PASS (not stood down) -- s1_standdown=false, not S1-gated. Regime genuinely UPTREND today but mechanically decays to CHOP by 08-18; ~9 of 10 sessions of any entry made tonight fall outside UPTREND. P0.6 half-cap BINDS as an overlay -- moot since the selection-rule discount already caps this name at watch.",
+        "liquidity": "PASS -- $101.56, 20d $-ADV $113.9M, verified via python3 scripts/liquidity.py --tickers STUB,FDX,GEN,INSW,BSY,ITRI --date 2026-08-14 (not hand-multiplied).",
+        "cluster": "Singleton -- max pairwise close-price correlation to any watched OI_FADE name is BSY 0.579 (143-day history, duckdb on data/prices.parquet), under 0.70. No collapse.",
+        "fundamentals": "NA -- not spawned, nothing sized. NA never penalizes.",
+        "event_risk": "-1 tier, independently sufficient -- same Tier-1 cluster (PCE/GDP, NVDA earnings, Jackson Hole 08-26..29) inside the h10 window. Moot for sizing.",
+        "tail_cap": "No named OI_FADE tail cap in the ruleset; none invented."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": "WATCH only -- no entry tonight",
+      "invalidation": "close above $108.20 (confirmed 52-week high, 2026-07-28, ~6.5% above spot)",
+      "key_risks": [
+        "raw oi_net_5d rank 273/1503 -- weakest raw rank of tonight's entire 6-name cohort, ~18.2x outside the top-15 population; selection-rule discount applies.",
+        "37.0% of 52w range -- below-median, marginal structural fit; sits just above the cohort caution's explicit 30% bottom-fishing threshold but not comfortably.",
+        "Tier-1 event cluster inside the h10 window regardless of the above.",
+        "Weakest-ranked of the four retained names -- most likely candidate to roll off next session if rank or range position doesn't improve."
+      ],
+      "thesis": "Mechanically clean OI_FADE candidate but weakest raw rank (273) and only marginal range position (37.0%) of the retained cohort. Held at WATCH on structural cleanliness alone, not sized; flagged as the most likely of the four to be cut next session.",
+      "realized_excess_pct": null
+    }
+  ],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.3,
+      "note": "Seven names touched Phase D tonight. NRG (carried WATCH, 3rd night) CUT -- overdetermined on two independently sufficient grounds: (1) price invalidation FIRED, close $126.24 vs standing 'close above $124.71' (08-05 swing high), closed AT the session high (+5.42% on a day SPY was -0.20%); (2) oi_build.py's own mechanical invalidation FIRED, last net -1,056 (call_net -110) -- calls genuinely closing, sequence +20,900 -> +13,239 -> +1,997 -> +89 -> -1,056. Nothing was sized on NRG, no realized loss; do not carry to a 4th watch night. Six NEW OI_FADE mechanical survivors (STUB, FDX, GEN, INSW, BSY, ITRI) cleared liquidity, earnings gate h10, catalyst_split, issue_type, and news per the lane, but NOT ONE clears the raw oi_net_5d top-15 cohort the +0.59%/n=1087 prior was measured on (ranks on the 1,503-name features spine: STUB 55, FDX 108, GEN 119, BSY 235, INSW 259, ITRI 273) -- the same standing selection-rule discount applied to COO/NRG for four consecutive nights. Of the six, STUB and INSW are excluded outright rather than admitted to watch: STUB (10.6% of 52w range, -71% off high, heavy call build on a beaten-down bounce) is the NRG failure mode restated -- exactly what just cost this book its only carried position; INSW (97.9% of range, effectively at a fresh high, ADV $50.3M a hair over the $50M floor) opposes the strongest cross-sectional factor in the study (pct_52w_range long, rank-IC t=+6.8) and reads closest to an ENS breakout-chase. FDX, GEN, BSY, ITRI held at WATCH -- mechanically clean, liquidity-clear, no cluster collapse (FDX/INSW correlate at 0.703 but INSW is cut, so moot; the four retained names' max pairwise is 0.579). Cohort-level caution: of the RAW oi_net_5d top-15 (a different, broader population than tonight's 6 survivors), 8 of 15 sit below 30% of 52w range (MSTR 3.8%, TTD 3.0%, MARA 15.1%, NFLX 21.2%, TSLA 22.3%, ACHR 22.5%, META 25.2%, SPCX 29.1%) -- tonight's call-OI building market-wide is bottom-fishing in broken/momentum names, not exhaustion at highs, structurally resembling MOM_SHORT (the one lane knowingly carrying negative excess) while carrying the same V-rebound risk NRG just realized.",
+      "candidates": ["NRG", "STUB", "FDX", "GEN", "INSW", "BSY", "ITRI"],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.3,
+      "note": "6-name basket, all Yahoo-verified genuinely near-52w-low: ROL 0.7%, RBA 1.8%, NKE 1.8%, GPI 2.1%, AMRZ 3.3%, GME 3.4%. Watch-only per the standing PROVISIONAL tail cap -- the 2026-07-18 audit's first matured forward window read MOM_SHORT 0-for-9 / -5.3% excess (shorted names beat SPY in a risk-on tape); no starter sizing until a DURABLE-N (>=30) forward window re-clears positive excess via a /calibration-audit recommendation. Not regime-stood-down (s1_standdown=false).",
+      "candidates": ["ROL", "RBA", "NKE", "GPI", "AMRZ", "GME"],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.5,
+      "note": "~275-name near-52w-high basket after removing IESC (un-split-adjusted UW w52h 408.26 vs true 816.51 -- actually 92.6% of high, fails the >=95% screen). Baseline -0.0108 (n=1066), negative-excess, DURABLE-N bar unmet. Basket/watch only, never sizes regardless of breadth strength (246 names within 5% of 52w highs vs 64 within 5% of lows tonight). No per-name subset itemized.",
+      "candidates": [],
+      "cluster_id": null
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile (VIX 14.25, falling). Dealer gamma POSITIVE (+$2.02B) but spot pinned essentially AT the flip (776.06 vs ZGL 774.67, 0.18% away) -- vol-state read only, never a direction.",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.00078,
+      "suggested_structure": null,
+      "stand_aside_reason": "LOW-VIX CONDITIONAL net is negative net of cost: -0.078% (0.022% gross - 0.10% cost) despite a positive POOLED +0.119% headline -- the documented zerodte_setup.py pooling trap. Positive gamma does not override this; vol-state only, never a sizing direction.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile (VIX 14.25). Dealer gamma POSITIVE but spot within 0.07% of its flip -- gamma sources DISAGREE, regime read UNKNOWN, fails closed per the aggregate-sign-vs-spot-vs-flip separation (never re-merge).",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.00009,
+      "suggested_structure": null,
+      "stand_aside_reason": "LOW-VIX conditional net ~breakeven/negative net of cost, AND gamma-source disagreement means regime is unknown -- fails closed independently of the conditional-net read.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ROST",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "IV-rank 93.2, structural backwardation. ATM 245-strike straddle (08-21 bracketing expiry): call $9.00 + put $8.95 = $17.95 -> 7.31% implied move, median IV ~64.5%.",
+      "implied_move": 0.0731,
+      "expected_range": null,
+      "net_expectancy": 0.068,
+      "suggested_structure": "If ever sized: defined-risk iron fly / wide-wing short strangle, wings no tighter than ~9.5-10% OTM -- treat the 7.31% straddle-implied move as a LOWER BOUND per the TPR precedent (realized -16.5% vs a ~12.2% raw-IV estimate on 08-13, wings would have breached).",
+      "stand_aside_reason": "STRUCTURALLY QUALIFIES, net-of-cost credit ~6.8%, but NOT SIZED -- the earnings IV-crush stack has no backtested harness (standing 08-10 decision); advisory only per gate 6's vol-short tail cap (quote net of cost, size for the unsampled left tail -- neither condition is met to size).",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "NRG -- CUT tonight, 3rd watch night, never sized, no realized loss. Overdetermined: price invalidation fired (close $126.24 vs $124.71, +5.42% on a day SPY was -0.20%) AND oi_build.py's own mechanical invalidation fired (last net -1,056, call_net -110, calls genuinely closing). Do not carry to a 4th watch night.",
+    "COO, WEC -- remain CUT from 08-13, correctly not re-proposed (COO raw rank 304 despite partial re-formation; WEC printed call_net -3,516 on its ex-dividend date).",
+    "OI_FADE watch (4): FDX, GEN, BSY, ITRI -- mechanically clean but outside the raw top-15 population the +0.59%/n=1087 prior was measured on (ranks 108/119/235/273 of 1503). Same standing selection-rule discount as COO/NRG for four nights; none reaches a sizing band.",
+    "OI_FADE excluded on first look, not admitted to watch: STUB (10.6% of range, -71% off high, heavy call build on a beaten-down bounce -- the NRG failure mode restated) and INSW (97.9% of range, effectively at a fresh high -- shorting it opposes the momentum-long factor; ADV $50.3M barely over the floor).",
+    "Cohort-level caution: of the RAW oi_net_5d top-15 (a different population than tonight's 6 survivors), 8/15 sit below 30% of 52w range -- market-wide OI building tonight is bottom-fishing in broken names, structurally resembling MOM_SHORT (the one knowingly-negative lane) and carrying the same V-rebound risk NRG just realized.",
+    "MOM_SHORT BASKET_WATCH, 6 names: ROL, RBA, NKE, GPI, AMRZ, GME, all Yahoo-verified genuinely near-52w-low. PROVISIONAL tail cap: advisory/watch only, no starter, pending a DURABLE-N (>=30) forward window re-clearing positive excess.",
+    "MOM_LONG BASKET_WATCH, ~275 names (IESC removed on an un-split-adjusted UW w52h data error). Never sizes (-0.0108, n=1066).",
+    "S2 DOWNGRADED to mechanically-screened-but-UNVERIFIED -- 70 names cleared hard gates but the lane ran NO news verification (its charter requires it, fail-closed on prior nights). Advisory-only, never sizes regardless.",
+    "S4 DOWNGRADED -- live lane omitted the harness's (call_volume+put_volume)>=1000 floor and LIMIT 15; 67% of its raw cohort is tiny-denominator noise. Harness-consistent top-15: RYN, UTZ, LTH, COCO, BMRN, CHRW, LBRT, FDXF, MOH, ECHO, STT, CAR, PGR, CAMT, FITB. Advisory-only, never sizes.",
+    "VOL BOOK: 0DTE stand-aside both SPY (-0.078%/day net, LOW-VIX conditional) and QQQ (~breakeven/negative net AND gamma-source disagreement, fails closed independently). ROST earnings-crush structurally qualifies (IV-rank 93.2, 7.31% straddle move, ~6.8% net credit) but stays advisory -- no backtested harness for the lane. KC/YRD/VWAV qualify but are not sizable (no clean net-of-cost quote).",
+    "EVENT RISK: PCE + Q2 GDP (08-26), NVDA earnings (08-26 after close), Jackson Hole new-Fed-Chair keynote (08-27/29) -- a 3-day Tier-1 cluster landing right at the h10 exit of anything entered tonight. -1 tier applied to all four OI_FADE watch names, independently sufficient regardless of the selection-rule discount.",
+    "REGIME: UPTREND genuine tonight (0.4% off high, 98.0% of 52w range, fresh 52w high 08-13) but mechanically decays to CHOP by 08-18 (day 3 of any h10 window entered tonight) as the 08-03..08-07 rally rolls out of the trailing 10-session window. ~9 of 10 sessions of any h10 entry fall outside UPTREND. P0.6 out-of-regime half-cap judged BINDING as an overlay -- non-binding in practice since nothing reaches a sizing band.",
+    "BOOK STATE: FLAT, 5th consecutive session. ZERO new starters -- the modal correct output on this evidence base, not manufactured emptiness.",
+    "Next /calibration-audit due 2026-08-15 (tomorrow) -- first cohort spanning non-overlapping exit-day windows (41 open rows mature 08-10->08-21; the 08-03->08-07 crash-guard block matures 08-18->08-22). Count distinct exit-days, not rows."
+  ]
+}
