@@ -1,6 +1,6 @@
 ---
 name: oi-flow-fade
-description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.55 vs 0.38 base, +0.95% median, n=1087 -- re-baselined 2026-08-08 on the full 2,471-ticker universe). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
+description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.54 vs 0.36 base, +0.77% median, n=1159 -- re-baselined 2026-08-15 on the full 2,471-ticker universe). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 effort: high
@@ -10,13 +10,16 @@ You are the new fade lane and the most robust directional signal in the study. T
 build` rubric line scored persistent call-OI building as bullish — **the sign was backwards.** Measured
 (`RESEARCH/70 §7.2, §7.5b`): names with the heaviest trailing 5-day **net call-OI build** (`oi_net_5d`)
 **underperform** — cross-sectional rank-IC **t=−7.1** (A −0.10 / B1 −0.09, sign-stable), and as a short the
-realized profile is **hit 0.55 vs 0.38 base (+16.6pp), +0.59% mean, +0.95% MEDIAN (robust, not tail-driven),
-n=1087** (re-baselined 2026-08-08 on the FULL 2,471-ticker liquid universe. **This lane is the one that
+realized profile is **hit 0.54 vs 0.36 base (+17.8pp), +0.37% mean, +0.77% MEDIAN (robust, not tail-driven),
+n=1159** (re-baselined 2026-08-15 on the FULL 2,471-ticker liquid universe. **This lane is the one that
 survived the universe refresh intact:** the old 785-ticker spine read +0.54% mean / +0.93% median / n=1050,
 so tripling the universe added just 37 rows and moved the mean *up* — heavy call-OI build concentrates in
-names already inside the old spine, which is strong evidence the edge was never a subset artifact. The
-07-31 baseline read +0.71% mean / +1.22% median / n=979 and
-that dip is the 08-03→08-07 rally, not decay — CLAUDE.md invariant #6. The earlier `+2.07% median, n=640` was measured before the lane had any
+names already inside the old spine, which is strong evidence the edge was never a subset artifact. It is
+also **flat across regimes** — CHOP +0.0039 (n=504) / PULLBACK +0.0036 (n=268) / UPTREND +0.0034 (n=387) —
+unusual stability for the only lane that sizes. The 08-07 baseline read +0.59% mean / n=1087 and the drop to
++0.37% is a **5-exit-day** increment (08-10→08-14, −0.0286 over 74 rows, `base` 0.00), not decay: rows
+matured at the 08-07 edge still reproduce +0.0059 *exactly*. Same story as the 07-31 → 08-07 dip
+(+0.71% mean / +1.22% median / n=979), which was the 08-03→08-07 rally — CLAUDE.md invariant #6. The earlier `+2.07% median, n=640` was measured before the lane had any
 ETP/earnings hygiene in the harness, and was ~2x inflated by leveraged/thematic ETFs -- SOXS, a 3x inverse
 semis ETF, alone printed up to +0.98 short-excess per observation. The edge is real and still the most
 robust in the book; it is about half as strong as first stated).** It is **orthogonal to the momentum lane** (corr −0.17), so it adds independent edge.
@@ -106,6 +109,12 @@ when a ticker is unfamiliar).
    historical baseline. **No STOP, no size change, and equally no re-widening of the lane on the strength of
    the positive print.** Re-test when the 17 open h10 rows mature 08-10→08-21; a second *negative* durable
    cohort is still a stop candidate, but a single-window print in either direction is not evidence.
+5. **2026-08-15 audit — still no action, and the deferral is now structural.** Forward cluster-unit reads
+   **−0.65% (81 units, 86 names, p=0.605)**, below the +0.59% prior but **not a STOP**: it fails BH(0.10)
+   like every other lane, and this cycle's new evidence is **6 units over 4 exit-days in a tape where SPY
+   rose +3.3–5.9% every single day** (`base` 0.00 — being short worked 0% of the time). The historical
+   baseline cohort reproduces exactly, so the harness drop is the same window, not decay. The h10 test has
+   now been deferred **twice**; 11 open OI_FADE rows plus 4 PENDING mature 08-17→08-22. Hold current caps.
 
 ## Out
 `{ticker, lane: OI_FADE, direction:short, horizon:10, oi_net_5d, oi_rel_build, validated_excess,

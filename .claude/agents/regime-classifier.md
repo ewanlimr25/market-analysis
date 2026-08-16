@@ -43,7 +43,12 @@ A context block: `{date, regime_label, vol_state, breadth, event_risk[], directi
     book was 0-for-9 shorting into exactly this setup — trailing ret5 ≈ −2.5% that then rebounded). It
     deliberately does NOT fire in a *confirmed* downtrend (`ret10 ≤ −2%`), where the short leg is meant to work.
   When true, `momentum` MOM_SHORT (relative-weakness) shorts are suppressed and all sizing is capped. This
-  guard firing on ~26/68 panel days (post-audit) is expected and correct — the short leg is meant to be rare.
+  guard firing on **20/88 panel days** (2026-08-15) is expected and correct — the short leg is meant to be rare.
+  **Evidence status — weaker than previously recorded.** Forcing the guard off and re-firing the lane query
+  on its 15 matured guard-days gives **−0.60%, p=0.237** over 220 suppressed name-days (day-clustered
+  −0.68%, p=0.401): still a net save (10/15 days negative), but **not** the DURABLE result the repo carried.
+  The retired **−1.73%, p=0.010** figure was measured on the old 785-ticker spine and does not survive the
+  universe refresh — do not re-cite it. PR-2 has not advanced; the 08-03→08-07 block matures 08-18→08-22.
 
 ## Event calendar
 Build `event_risk[]`: Tier-1 US macro (CPI/PPI/PCE/FOMC/NFP) in the next ~10 trading days (WebSearch to

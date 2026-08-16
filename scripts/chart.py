@@ -25,30 +25,118 @@ import urllib.request
 
 UA = {"User-Agent": "Mozilla/5.0"}
 
+# Yahoo blanks individual sessions at random -- see `bars()`. Which sessions come back null
+# varies per REQUEST, not per ticker or endpoint, so a retry on a rotated host decorrelates the
+# draw. Two hosts is enough: the 2026-08-15 audit emptied 115 hole-y tickers down to 1 this way.
+HOSTS = ("query2", "query1")
+MAX_FETCH_TRIES = 4
+
+
+def _parse(res: dict) -> tuple[dict[str, dict], list[str], list[dict]]:
+    """Chart-API result -> (bars keyed by date, the FULL session grid, split events).
+
+    The grid comes from `timestamp`, which Yahoo populates even for sessions whose OHLC is
+    null -- that is what makes a blanked session distinguishable from a non-trading day.
+    """
+    ts, q = res["timestamp"], res["indicators"]["quote"][0]
+    # Yahoo omits `adjclose` on some symbols; fall back to raw close rather than failing.
+    adj = (res["indicators"].get("adjclose") or [{}])[0].get("adjclose") or q["close"]
+    grid, by_date = [], {}
+    for i, t in enumerate(ts):
+        d = dt.datetime.fromtimestamp(t, dt.UTC).strftime("%Y-%m-%d")
+        grid.append(d)
+        if q["close"][i] is None or adj[i] is None:
+            continue
+        by_date[d] = {"date": d, "open": q["open"][i], "high": q["high"][i],
+                      "low": q["low"][i], "close": q["close"][i], "adj": adj[i],
+                      "volume": q["volume"][i]}
+    splits = [{"date": dt.datetime.fromtimestamp(s["date"], dt.UTC).strftime("%Y-%m-%d"),
+               "factor": float(s["denominator"]) / float(s["numerator"]),
+               "ratio": str(s.get("splitRatio", ""))}
+              for s in ((res.get("events") or {}).get("splits") or {}).values()]
+    return by_date, grid, sorted(splits, key=lambda s: s["date"])
+
+
+def _interior_holes(by_date: dict[str, dict], grid: list[str]) -> list[str]:
+    """Sessions on the grid that fall strictly INSIDE the ticker's own span but have no bar.
+
+    Interior only, deliberately. A ticker that simply stops (delisting, cash merger) trails off
+    the end of the grid, and retrying that forever would be a bug -- the 2026-08-15 audit's four
+    cash-merger delistings must stay INCONCLUSIVE rather than be papered over.
+    """
+    if not by_date:
+        return []
+    lo, hi = min(by_date), max(by_date)
+    return [d for d in grid if lo < d < hi and d not in by_date]
+
+
+def _apply_splits(by_date: dict[str, dict], splits: list[dict]) -> dict[str, dict]:
+    """Back-adjust `adj` across any split Yahoo has not yet propagated into `adjclose`.
+
+    Yahoo's adjclose is normally split-adjusted, but it LAGS on freshly-executed splits. MNST
+    2:1 (effective 2026-08-11) was still serving adj == raw close on both sides four sessions
+    later: 90.36 -> 45.53. Any window crossing that books a fake -50%, which dwarfs every real
+    signal this repo measures. Detected by comparing the observed jump across the split to the
+    split factor -- if the boundary move looks more like the factor than like a normal session,
+    the series is unadjusted and every pre-split `adj` is scaled.
+
+    Returns a new mapping; the input is not mutated.
+    """
+    out = {d: dict(b) for d, b in by_date.items()}
+    for sp in splits:
+        before = sorted(d for d in out if d < sp["date"])
+        after = sorted(d for d in out if d >= sp["date"])
+        if not before or not after:
+            continue                                  # split sits at the edge of the range
+        jump = out[after[0]]["adj"] / out[before[-1]]["adj"]
+        if abs(jump - sp["factor"]) >= abs(jump - 1.0):
+            continue                                  # already adjusted -- normal 1-day move
+        for d in before:
+            out[d] = {**out[d], "adj": out[d]["adj"] * sp["factor"]}
+    return out
+
+
+def _fetch(ticker: str, rng: str, host: str) -> dict:
+    url = (f"https://{host}.finance.yahoo.com/v8/finance/chart/{ticker}"
+           f"?range={rng}&interval=1d&events=div%2Csplit")
+    with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25) as r:
+        return json.load(r)["chart"]["result"][0]
+
 
 def bars(ticker: str, rng: str = "6mo") -> list[dict]:
     """Daily OHLCV + `adj` (split/dividend-adjusted close), oldest first.
 
-    Rows with a null close are dropped (holidays/halts). **Use `adj`, not `close`, for any
-    multi-day return or excess** -- the truth set (`truthset/build_prices.py`) and every
-    calibration-audit resolver measure on adjusted closes, so mixing the two silently
-    mis-prices any window containing a dividend or split.
+    **Use `adj`, not `close`, for any multi-day return or excess** -- the truth set
+    (`truthset/build_prices.py`) and every calibration-audit resolver measure on adjusted
+    closes, so mixing the two silently mis-prices any window containing a dividend or split.
+
+    Self-heals two Yahoo defects that both corrupt returns silently (found 2026-08-15):
+
+    1. **Transient null closes.** The chart endpoint intermittently serves `close: null` for
+       individual sessions on perfectly liquid names -- GD, MSM, MAT, PLNT among 115 tickers in
+       one audit pass -- and which sessions blank varies per request. Dropping them leaves a
+       hole, and a window whose entry or exit lands in one silently fails to resolve. Any
+       interior hole is re-fetched on a rotated host and merged, up to MAX_FETCH_TRIES.
+    2. **Unpropagated splits** -- see `_apply_splits`.
+
+    A hole that survives every retry is left as a genuine gap; callers must still handle a
+    missing date rather than assume the grid is dense.
     """
-    url = (f"https://query2.finance.yahoo.com/v8/finance/chart/{ticker}"
-           f"?range={rng}&interval=1d&events=div%2Csplit")
-    with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25) as r:
-        res = json.load(r)["chart"]["result"][0]
-    ts, q = res["timestamp"], res["indicators"]["quote"][0]
-    # Yahoo omits `adjclose` on some symbols; fall back to raw close rather than failing.
-    adj = (res["indicators"].get("adjclose") or [{}])[0].get("adjclose") or q["close"]
-    out = []
-    for i, t in enumerate(ts):
-        if q["close"][i] is None or adj[i] is None:
-            continue
-        out.append({"date": dt.datetime.fromtimestamp(t, dt.UTC).strftime("%Y-%m-%d"),
-                    "open": q["open"][i], "high": q["high"][i], "low": q["low"][i],
-                    "close": q["close"][i], "adj": adj[i], "volume": q["volume"][i]})
-    return out
+    res = _fetch(ticker, rng, HOSTS[0])
+    by_date, grid, splits = _parse(res)
+
+    for attempt in range(1, MAX_FETCH_TRIES):
+        if not _interior_holes(by_date, grid):
+            break
+        try:
+            more, more_grid, more_splits = _parse(_fetch(ticker, rng, HOSTS[attempt % len(HOSTS)]))
+        except Exception:                             # noqa: BLE001 -- a failed retry is not
+            continue                                  # fatal; we still have the first fetch
+        by_date = {**more, **by_date}                 # keep what we already trust
+        grid = more_grid if len(more_grid) > len(grid) else grid
+        splits = splits or more_splits
+
+    return [b for _, b in sorted(_apply_splits(by_date, splits).items())]
 
 
 def rets(ticker: str, horizons=(5, 10), rng: str = "6mo") -> dict:

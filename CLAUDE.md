@@ -21,29 +21,37 @@ logic or gates.** Full doc index, including the history behind every rule below:
 5. **Pre-registered ≠ scored.** Weekly technicals and all PR-* items are documented, never sized, until their
    bar clears on data that postdates registration.
 6. **Regression gate is law:** `python3 scripts/retro_harness.py --all` must show no lane **below its
-   recorded baseline** after any lane/threshold change. **Current baseline** (adopted 2026-08-08 on the
-   FULL liquid universe, panel→08-07, 83 days, 2,471-ticker spine): **MOM_LONG −0.0108 (n=1066) ·
-   MOM_SHORT −0.0128 (n=803) · OI_FADE +0.0059 (n=1087) · S2 +0.0009 (n=1123) · S4 +0.0035 (n=1145).** A
+   recorded baseline** after any lane/threshold change. **Current baseline** (adopted 2026-08-15 on the
+   FULL liquid universe, panel→08-14, 88 days, 2,471-ticker spine): **MOM_LONG −0.0122 (n=1121) ·
+   MOM_SHORT −0.0140 (n=828) · OI_FADE +0.0037 (n=1159) · S2 +0.0011 (n=1185) · S4 +0.0041 (n=1202).**
+   ⚠️ **This figure is depressed by a correlated draw.** Two consecutive increments (08-08 and 08-15) have
+   been the *same* one-way rally: the 08-15 increment is 317 rows across only **5 exit-days**, with `base`
+   pinned at 1.00 for MOM_LONG and 0.00 for both short lanes. When it unwinds the lanes will rise on their
+   own — **that recovery is not evidence a fix worked.** A
    baseline is only meaningful against the universe it was measured on — state the spine size whenever you
    record one, and a below-baseline lane is not automatically a regression (panel growth and universe
-   changes move the pooled mean independent of code). MOM_SHORT is the **one** recorded exception to "no
+   changes move the pooled mean independent of code). **This applies to gate-effectiveness figures too,
+   not just lanes:** any measured number carries the spine it was measured on, so re-run isolation check
+   (c) before citing one across a universe change. The 2026-08-15 audit is the worked example — the crash
+   guard's DURABLE p=0.010 was a 785-spine artifact and reads p=0.237 on the full spine. MOM_SHORT is the
+   **one** recorded exception to "no
    lane negative-excess" (knowingly negative, watch-only capped); don't add another without the same
-   written rationale. Full history, the isolation-check protocol, and the 2026-08-08 worked example:
-   [`docs/regression-gate.md`](docs/regression-gate.md).
+   written rationale. Full history, the isolation-check protocol, and the worked examples (2026-08-08
+   five-lane drop; 2026-08-15 gate-vs-spine): [`docs/regression-gate.md`](docs/regression-gate.md).
 7. **Path-aware outcomes from the Yahoo chart API**, never the close-only `mcp__yahoo-finance__*` tools.
 
 ## The validated lanes (priors from research/20, 50, 70)
-Historical-panel priors, harness-measured (2026-08-08 baseline, full 2,471-ticker universe). The forward
+Historical-panel priors, harness-measured (2026-08-15 baseline, full 2,471-ticker universe). The forward
 book is graded separately by `/calibration-audit` and can disagree — no lane has cleared BH(0.10) forward
 yet. Full per-lane notes and the 785-spine comparison: [`docs/lanes.md`](docs/lanes.md).
 
 | Lane | Dir | Horizon | Realized (harness) | Status |
 |---|---|---|---|---|
-| `oi-flow-fade` (OI_FADE) | short | h10 | +0.59% mean / +0.95% median, hit 0.55 vs 0.38, n=1087 | **Sizes — most robust lane** |
-| `momentum` MOM_SHORT (near-52w-low) | short | h10 | −1.28% mean, n=803 | Watch-only, crash-gated, never sizes |
-| `momentum` MOM_LONG (near-52w-high) | long | h10 | −1.08% mean, n=1066 | Basket/watch only, never sizes |
-| `liquidity-reversion` (S2) | long | h3–5 | +0.09%, n=1123 | Advisory-only |
-| `sentiment-contrarian` (S4) | long | h5–10 | +0.35%, n=1145 | Advisory-only |
+| `oi-flow-fade` (OI_FADE) | short | h10 | +0.37% mean / +0.77% median, hit 0.54 vs 0.36, n=1159 | **Sizes — most robust lane** |
+| `momentum` MOM_SHORT (near-52w-low) | short | h10 | −1.40% mean, n=828 | Watch-only, crash-gated, never sizes |
+| `momentum` MOM_LONG (near-52w-high) | long | h10 | −1.22% mean, n=1121 | Basket/watch only, never sizes |
+| `liquidity-reversion` (S2) | long | h3–5 | +0.11%, n=1185 | Advisory-only |
+| `sentiment-contrarian` (S4) | long | h5–10 | +0.41%, n=1202 | Advisory-only |
 | `vol-book` | non-dir | event/0DTE | VOL-ONLY | Net-of-cost, delta-neutral |
 | `fundamentals-gate` | veto | — | risk filter | Finnhub = veto, not alpha (`research/80`) |
 
@@ -55,9 +63,11 @@ yet. Full per-lane notes and the 785-spine comparison: [`docs/lanes.md`](docs/la
 
 ## Cadence
 Nightly `/market-scan` (post-8PM-EST export). Weekend `/weekly-review`. Weekly/per-~10-resolved
-`/calibration-audit`. **Next audit due 2026-08-15.** 41 open rows (17 OI_FADE, 12 MOM_SHORT, 11 S4) mature
-08-10→08-21, and the 08-03→08-07 crash-guard block matures 08-18→08-22 — the first cohort spanning
-non-overlapping windows. Count distinct **exit-days**, not rows, when judging any cohort
+`/calibration-audit`. **Next audit due 2026-08-22.** 23 open call-rows (11 OI_FADE, 5 MOM_SHORT, 7 S4),
+**174 open suppressed candidates**, and the 08-03→08-07 crash-guard block all mature 08-17→08-22 — the
+first genuinely non-overlapping cohort, now deferred twice (08-08 and 08-15 both expected it and both got
+a single one-way window instead: 08-15 added only 15 resolved rows across 5 exit-days). Count distinct
+**exit-days**, not rows, when judging any cohort
 ([`docs/regression-gate.md`](docs/regression-gate.md#exit-day-counting-companion-rule)).
 
 ## Git

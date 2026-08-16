@@ -5,19 +5,38 @@ the baseline moves; `CLAUDE.md` should only ever carry the *current* baseline nu
 
 ## Current baseline
 
-Adopted **2026-08-08** on the **FULL liquid universe** (panel→08-07, 83 days, 2,471-ticker spine):
+Adopted **2026-08-15** on the **FULL liquid universe** (panel→08-14, 88 days, 2,471-ticker spine):
 
 | Lane | Mean excess | n |
 |---|---|---|
-| MOM_LONG | −0.0108 | 1066 |
-| MOM_SHORT | −0.0128 | 803 |
-| OI_FADE | +0.0059 | 1087 |
-| S2 | +0.0009 | 1123 |
-| S4 | +0.0035 | 1145 |
+| MOM_LONG | −0.0122 | 1121 |
+| MOM_SHORT | −0.0140 | 828 |
+| OI_FADE | +0.0037 | 1159 |
+| S2 | +0.0011 | 1185 |
+| S4 | +0.0041 | 1202 |
 
 `python3 scripts/retro_harness.py --all` must show no lane below its recorded baseline after any
 lane/threshold change. **Every baseline is only meaningful against the universe it was measured on — state
 the spine size whenever you record one.**
+
+> ⚠️ **This baseline is depressed by a correlated draw — read the next section before treating a recovery
+> as a fix.** The 08-15 increment is 317 rows spanning only **5 exit-days** (08-10→08-14), with `base`
+> pinned at 1.00 for MOM_LONG and 0.00 for both short lanes. It is the *continuation* of the same rally
+> that moved the 08-08 baseline, not a second independent observation.
+
+### Prior baseline (2,471-ticker spine, panel→08-07, superseded 2026-08-15)
+
+MOM_LONG −0.0108 (1066) · MOM_SHORT −0.0128 (803) · OI_FADE +0.0059 (1087) · S2 +0.0009 (1123) ·
+S4 +0.0035 (1145)
+
+Same spine, same code (`git diff 711adb7 HEAD` over `retro_harness.py`, `_regime.py`, `_calendar.py`,
+`_env.py`, `truthset/` is **empty**), so this move is pure panel growth. Isolation check (b) reproduces it:
+rows matured by the 08-07 edge print −0.0107 / −0.0131 / **+0.0059** / +0.0008 / +0.0027. **OI_FADE — the
+only lane that sizes — reproduces exactly**, so its headline drop (+0.0059 → +0.0037) is entirely the
+5-exit-day increment (−0.0286 over 74 rows, base 0.00) and not decay.
+
+**Two consecutive baselines have now been set inside the same rally.** When it unwinds all five lanes will
+rise together; that is the artifact releasing, not a fix landing. Do not credit any change with it.
 
 ## Prior baseline (785-ticker spine, superseded 2026-08-08)
 
@@ -89,6 +108,38 @@ correlated draw and its true N is the count of distinct **exit-days**, not rows.
 
 **Corollary — do not read the recovery as a fix:** when this artifact unwinds next cycle the lanes will
 rise on their own, which is not evidence that any change worked.
+
+**Sequel, 2026-08-15:** the artifact did not unwind — it *extended*. The next increment was 317 rows across
+only **5 exit-days** (08-10→08-14) with the same pinned base, so two consecutive baselines are now set
+inside one rally. A cycle that expected the first non-overlapping cohort got a second one-way window and
+15 resolved rows instead.
+
+## Worked example: 2026-08-15, a GATE result that was a spine artifact
+
+The protocol's checks are usually run on lanes. This is the case that proves they must also be run on any
+**gate-effectiveness** number.
+
+The crash guard is graded by forcing it off and re-firing the lane query on the days it fired (see
+`/calibration-audit` Step 4). That counterfactual was recorded at **−1.73%, p=0.010 [DURABLE]** (day-clustered
+−1.86%, p=0.070) and was the strongest gate evidence in the repo — the whole of PR-2's progress. Re-run on
+2026-08-15 against the *same 15 guard-days with byte-identical code*, it returned **−0.60%, p=0.237**
+(day-clustered −0.68%, p=0.401).
+
+Isolation check (c) explains it exactly:
+
+| spine | name-days | mean | p | day-clustered | p |
+|---|---|---|---|---|---|
+| full 2,471 (today) | 220 | −0.60% | 0.237 | −0.68% | 0.401 |
+| old 785 (what was recorded) | 164 | −1.64% | **0.002** | −1.56% | 0.057 |
+
+Restricting to the old spine reproduces the original figure. The lane query's `LIMIT 15` now binds on days
+the 785-name subset could barely fill, and **12 of 15 guard-days move less-negative** on the full universe.
+
+**What to take from it:** the guard is not invalidated — it is still a net save (negative on both spines,
+10/15 days) — but it is no longer DURABLE evidence, and the retired figure must not be re-cited. The failure
+mode was procedural: the 2026-08-08 universe refresh re-measured every *lane* and no *gate*, so a subset
+artifact stood as the repo's headline gate result for a full cycle. **Any measured number carries the spine
+it was measured on.**
 
 ## MOM_SHORT: a knowingly-negative recorded exception
 

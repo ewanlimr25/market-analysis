@@ -89,10 +89,15 @@ resolved-N behind it), never applied. Print SUMMARY to chat.
   **staged**, never written back into an envelope.
 - **A lane below its recorded baseline is not automatically a regression.** The panel grows, and a signal day
   only enters the aggregate once its h-window matures, so the pooled mean drifts on its own. Before flagging
-  one, run both isolation checks (CLAUDE.md invariant #6): (a) re-run the *baseline commit's own*
+  one, run the isolation checks (CLAUDE.md invariant #6): (a) re-run the *baseline commit's own*
   `retro_harness.py` against the current panel — identical output proves any refactor behavior-preserving;
   (b) split resolved rows by whether they had matured at the old panel edge — the baseline cohort must still
-  reproduce the recorded figures. Only a lane that fails both is a real regression. [added 2026-08-01]
+  reproduce the recorded figures; (c) when the spine changed, re-run current code against the PREVIOUS
+  ticker list, which must reproduce the previous baseline. Only a lane that fails them is a real
+  regression. [added 2026-08-01; (c) added 2026-08-08]
+  **Check (c) applies to gate-effectiveness figures too** — see the crash-guard rule below, where skipping
+  it left a p=0.010 subset artifact standing as the repo's strongest gate evidence for a full cycle.
+  [added 2026-08-15]
 - **A cohort's N is its count of distinct EXIT-DAYS, not its count of rows.** Rows whose h-windows overlap
   share one macro draw. The tell is the `base` column: pinned at 1.00 for long lanes / 0.00 for short lanes
   means the benchmark moved one way across every window in the cohort, so the whole cohort is one
@@ -105,8 +110,33 @@ resolved-N behind it), never applied. Print SUMMARY to chat.
 - **To grade a gate that suppresses its own evidence, force it off.** A stood-down lane emits no calls, so an
   envelope-based effectiveness test is stuck at N<10 forever. Re-fire the harness's own lane query on the
   gate-days with the gate disabled and resolve from the truth set — that is the exact counterfactual book.
-  This took the crash guard from N=6/one episode to 100 name-days across three (p=0.010). Cluster by day
+  This took the crash guard from N=6/one episode to 220 name-days across three. Cluster by day
   before testing: one gate-day is one correlated observation, not N. [added 2026-08-01]
+- **A gate-effectiveness figure carries the universe it was measured on, exactly like a lane baseline.**
+  Before citing one across a spine change, re-run it under isolation check (c). The crash-guard
+  counterfactual was recorded as **−1.73%, p=0.010 [DURABLE]** (day-clustered −1.86%, p=0.070) — measured
+  on the retired 785-ticker spine. On the full 2,471 spine the *same 15 guard-days and the same code* give
+  **−0.60%, p=0.237** (day-clustered **−0.68%, p=0.401**); restricting to the old 785 reproduces the
+  original −1.64%/p=0.002. The lane query's `LIMIT 15` now binds on days the old subset could barely fill,
+  and 12 of 15 guard-days move less-negative. **The retired figure must not be re-cited.** The guard is
+  still directionally right (negative on both spines, 10/15 days saves), but it is no longer DURABLE
+  evidence and PR-2 has not advanced. This slipped through a whole cycle because the universe refresh
+  re-measured every *lane* and no *gate*. [added 2026-08-15]
 - Never recommend removing a risk gate on thin (<10 decided) effectiveness data — a gate's value is insurance
   against the regime not yet in the data.
 - Stratify every number by regime; never pool; an edge that flips sign across regimes is beta.
+- **Audit scripts must COMPUTE every comparison figure, never hardcode one.** Each cycle starts by copying
+  the prior cycle's scripts, so any literal baked into a string silently becomes this cycle's answer. Two
+  instances on 2026-08-15: `robust.py` printed the prior cycle's `−1.48%, p=0.020` as the "naive per-name
+  view" (live value: −1.06%, p=0.037), and `steps345.py` §4b still resolved suppressions off the
+  `calls[]`-only bars cache that `suppression_resolve.py` replaced, printing `*unresolved*` for names the
+  canonical script resolves. Constants that legitimately pin a prior cycle (`PRIOR`, `PRIOR_AUDIT_EDGE`)
+  must be re-pointed as the first step of the cycle and carry the commit they came from. Grep the copied
+  scripts for last cycle's numbers before trusting any table. [added 2026-08-15]
+- **Verify the price feed before resolving, not after.** Yahoo's chart API silently serves transient
+  `close: null` on liquid names (varying per request — 115 tickers / 273 sessions in one 2026-08-15 pass,
+  booking 51 false INCONCLUSIVE) and lags split adjustment into `adjclose` on fresh splits (MNST 2:1,
+  which would book a fake −50% on any window crossing it). `scripts/chart.py` now self-heals both, so
+  resolve through it; if an audit hand-rolls its own fetch, it must re-implement the interior-hole retry
+  and the `events.splits` check. A run whose INCONCLUSIVE count jumps is a data bug until proven a
+  delisting — the delisting signature is a *trailing* stop, never an interior hole. [added 2026-08-15]
