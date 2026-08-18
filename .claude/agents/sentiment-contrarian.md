@@ -13,8 +13,22 @@ NEGATIVE; **do not fire it.**
 
 ## Mechanical selection (point-in-time, data ≤ T)
 From the screener as-of T: liquid names (close ≥ $5 AND close·avg30_volume ≥ $50M) with `put_call_ratio`
-in the top 5% of the day's cross-section, an **option-liquidity floor** (call_vol > 0 AND put_vol > 0 AND
+in the top 5% of the day's cross-section, an **option-liquidity floor** (**`call_vol ≥ 250`** AND put_vol > 0 AND
 call_vol+put_vol ≥ 1000), and **no earnings inside the trade horizon**.
+
+> **The call leg needs its own floor — a combined floor does not constrain it.** [audit 2026-08-17]
+> The original filter was `call_vol > 0 AND put_vol > 0 AND call_vol+put_vol ≥ 1000`, which a name with
+> **3 calls against 2,046 puts** satisfies. That was NWG on 2026-08-17, printing **PCR 682** and ranking
+> #1 in the lane. TNGX (32 calls), SAN (66), AMRZ (68), HST (90) and JAZZ (63) were the same failure —
+> the top of the list was measuring an *empty call book*, not a put-heavy crowd. Across the panel the
+> median S4 selection carried only **154** call contracts (p25 = 66, p10 = 20).
+> `call_vol ≥ 250` is set on **ratio-stability** grounds: below it, one contract moves PCR by >0.5%; at
+> call_vol = 3 one contract moves it by 200+. It was **not** chosen to maximise measured excess —
+> raising the floor *monotonically lowers* S4's measured mean (see the re-baseline note below), because
+> the artifact names were carrying the lane's apparent edge.
+> Keep this in sync with `S4_MIN_CALL_VOLUME` in `scripts/retro_harness.py` — the harness re-implements
+> these gates inline and imports nothing, so patching only one side makes the live lane and the
+> instrument grading it disagree.
 **Use `python3 scripts/earnings_gate.py --date T --horizon 10 --tickers <list> --pass-only`; do NOT
 hand-write it as `T+horizon`.** The horizon is in *trading* days (h10 ≈ T+14 calendar), so a calendar-day
 cutoff is short by ~4 days: on 2026-07-24 that formulation passed DOX/NI (ER 08-05), KGS (08-06) and WEN

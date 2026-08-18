@@ -40,6 +40,18 @@ def panel_dates():
     return [r[0].isoformat() for r in con.execute(
         f"SELECT distinct date FROM read_parquet({SCR!r}) ORDER BY date").fetchall()]
 
+# ---- lane thresholds --------------------------------------------------------
+# S4 fades an over-hedged CROWD, which requires an actual two-sided book. The original
+# filter (call_volume>0 AND put_volume>0 AND call_volume+put_volume>=1000) put no real
+# floor on the CALL leg, so a name with 3 calls against 2,046 puts cleared it and printed
+# PCR 682 (NWG, 2026-08-17). Across the panel the median S4 selection carried only 154
+# call contracts, p25=66, p10=20 -- PCR on a two-digit denominator measures illiquidity,
+# not sentiment, and moves >0.5% per single contract.
+# Floor chosen on RATIO-STABILITY grounds (one contract must not move PCR materially),
+# not by maximising measured excess -- raising it monotonically LOWERS S4's measured mean.
+# [audit 2026-08-17]
+S4_MIN_CALL_VOLUME = 250
+
 # ---- regime gate (from SPY) -------------------------------------------------
 # Lives in scripts/_regime.py so the harness, the live scan and the lanes cannot drift
 # apart on the label or the crash guard -- same reasoning as the _calendar.hz_end move.
@@ -133,7 +145,7 @@ def fire(T):
           quantile_cont(put_call_ratio,0.95) OVER () AS p95
         FROM read_parquet({SCR!r})
         WHERE date=DATE '{T}' AND close>=5 AND close*avg30_volume>=50e6
-          AND call_volume>0 AND put_volume>0 AND (call_volume+put_volume)>=1000
+          AND call_volume>={S4_MIN_CALL_VOLUME} AND put_volume>0 AND (call_volume+put_volume)>=1000   -- real call book, not a 3-contract denominator [audit 2026-08-17]
           AND issue_type IN ('Common Stock','ADR')   -- exclude ETPs [audit 2026-07-18]
           AND (next_earnings_date IS NULL OR next_earnings_date> DATE '{hz_end(T,5)}'))   -- full h5 window (+3 -> +5 audit 2026-07-18; calendar -> trading-day audit 2026-07-24)
       SELECT ticker, put_call_ratio FROM d WHERE put_call_ratio>=p95

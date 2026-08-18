@@ -21,9 +21,14 @@ logic or gates.** Full doc index, including the history behind every rule below:
 5. **Pre-registered ≠ scored.** Weekly technicals and all PR-* items are documented, never sized, until their
    bar clears on data that postdates registration.
 6. **Regression gate is law:** `python3 scripts/retro_harness.py --all` must show no lane **below its
-   recorded baseline** after any lane/threshold change. **Current baseline** (adopted 2026-08-15 on the
-   FULL liquid universe, panel→08-14, 88 days, 2,471-ticker spine): **MOM_LONG −0.0122 (n=1121) ·
-   MOM_SHORT −0.0140 (n=828) · OI_FADE +0.0037 (n=1159) · S2 +0.0011 (n=1185) · S4 +0.0041 (n=1202).**
+   recorded baseline** after any lane/threshold change. **Current baseline** (adopted 2026-08-17 on the
+   FULL liquid universe, panel→08-17, 89 days, 2,471-ticker spine, post-S4-floor fix): **MOM_LONG −0.0127
+   (n=1154) · MOM_SHORT −0.0137 (n=830) · OI_FADE +0.0038 (n=1176) · S2 +0.0014 (n=1210) ·
+   S4 +0.0025 (n=1241).** Only S4 moved by code (call-volume floor, +0.0041 → +0.0025 — **artifact removal,
+   not decay**; an old-code/new-data control on the same 89-day panel read S4 +0.0048 and the other four
+   lanes bit-identical). ⚠️ **Do not read S4's drop as a lane getting worse:** its `hit − base` was already
+   negative *before* the fix (−0.041 → −0.056), so S4 has never had a hit-rate edge on this panel — the
+   removed names were supplying the right tail. See [`docs/regression-gate.md`](docs/regression-gate.md#s4-re-baseline-00041--00025-2026-08-17--artifact-removal-not-decay).
    ⚠️ **This figure is depressed by a correlated draw.** Two consecutive increments (08-08 and 08-15) have
    been the *same* one-way rally: the 08-15 increment is 317 rows across only **5 exit-days**, with `base`
    pinned at 1.00 for MOM_LONG and 0.00 for both short lanes. When it unwinds the lanes will rise on their
@@ -47,11 +52,11 @@ yet. Full per-lane notes and the 785-spine comparison: [`docs/lanes.md`](docs/la
 
 | Lane | Dir | Horizon | Realized (harness) | Status |
 |---|---|---|---|---|
-| `oi-flow-fade` (OI_FADE) | short | h10 | +0.37% mean / +0.77% median, hit 0.54 vs 0.36, n=1159 | **Sizes — most robust lane** |
-| `momentum` MOM_SHORT (near-52w-low) | short | h10 | −1.40% mean, n=828 | Watch-only, crash-gated, never sizes |
-| `momentum` MOM_LONG (near-52w-high) | long | h10 | −1.22% mean, n=1121 | Basket/watch only, never sizes |
-| `liquidity-reversion` (S2) | long | h3–5 | +0.11%, n=1185 | Advisory-only |
-| `sentiment-contrarian` (S4) | long | h5–10 | +0.41%, n=1202 | Advisory-only |
+| `oi-flow-fade` (OI_FADE) | short | h10 | +0.38% mean / +0.79% median, hit 0.54 vs 0.36, n=1176 | **Sizes — most robust lane** |
+| `momentum` MOM_SHORT (near-52w-low) | short | h10 | −1.37% mean, n=830 | Watch-only, crash-gated, never sizes |
+| `momentum` MOM_LONG (near-52w-high) | long | h10 | −1.27% mean, n=1154 | Basket/watch only, never sizes |
+| `liquidity-reversion` (S2) | long | h3–5 | +0.14%, n=1210 | Advisory-only |
+| `sentiment-contrarian` (S4) | long | h5–10 | +0.25%, n=1241 (post call-volume-floor fix) | Advisory-only; **hit − base negative (−0.056) — no hit-rate edge, right-tail only** |
 | `vol-book` | non-dir | event/0DTE | VOL-ONLY | Net-of-cost, delta-neutral |
 | `fundamentals-gate` | veto | — | risk filter | Finnhub = veto, not alpha (`research/80`) |
 

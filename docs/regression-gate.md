@@ -5,26 +5,80 @@ the baseline moves; `CLAUDE.md` should only ever carry the *current* baseline nu
 
 ## Current baseline
 
-Adopted **2026-08-15** on the **FULL liquid universe** (panel→08-14, 88 days, 2,471-ticker spine):
+Adopted **2026-08-17** on the **FULL liquid universe** (panel→08-17, 89 days, 2,471-ticker spine),
+**post-`S4_MIN_CALL_VOLUME` fix**:
 
-| Lane | Mean excess | n |
-|---|---|---|
-| MOM_LONG | −0.0122 | 1121 |
-| MOM_SHORT | −0.0140 | 828 |
-| OI_FADE | +0.0037 | 1159 |
-| S2 | +0.0011 | 1185 |
-| S4 | +0.0041 | 1202 |
+| Lane | Mean excess | n | Move vs 08-15 baseline | Attribution |
+|---|---|---|---|---|
+| MOM_LONG | −0.0127 | 1154 | −0.0005 | panel growth only (code identical) |
+| MOM_SHORT | −0.0137 | 830 | +0.0003 | panel growth only |
+| OI_FADE | +0.0038 | 1176 | +0.0001 | panel growth only |
+| S2 | +0.0014 | 1210 | +0.0003 | panel growth only |
+| **S4** | **+0.0025** | **1241** | **−0.0016** | **CODE — S4 call-volume floor, see below** |
 
 `python3 scripts/retro_harness.py --all` must show no lane below its recorded baseline after any
 lane/threshold change. **Every baseline is only meaningful against the universe it was measured on — state
 the spine size whenever you record one.**
 
-> ⚠️ **This baseline is depressed by a correlated draw — read the next section before treating a recovery
-> as a fix.** The 08-15 increment is 317 rows spanning only **5 exit-days** (08-10→08-14), with `base`
-> pinned at 1.00 for MOM_LONG and 0.00 for both short lanes. It is the *continuation* of the same rally
-> that moved the 08-08 baseline, not a second independent observation.
+**Why the whole table moved together.** Only S4 changed by code. The other four are the 88→89-day panel
+increment and nothing else — proven by an old-code/new-data control run on the identical 89-day panel
+*before* the patch: MOM_LONG −0.0127 (1154) · MOM_SHORT −0.0137 (830) · OI_FADE +0.0038 (1176) ·
+S2 +0.0014 (1210) · S4 **+0.0048** (1225). All four non-S4 lanes are **bit-identical pre- and post-patch**,
+which is isolation check (c) passing. Recording only S4's new figure against the old 88-day numbers would
+have mixed two spines inside one baseline line — the exact error this file exists to prevent.
 
-### Prior baseline (2,471-ticker spine, panel→08-07, superseded 2026-08-15)
+> ⚠️ **This baseline is still depressed by the same correlated draw — read the next section before treating
+> a recovery as a fix.** The 08-15 increment was 317 rows spanning only **5 exit-days** (08-10→08-14), with
+> `base` pinned at 1.00 for MOM_LONG and 0.00 for both short lanes; 08-17 adds a single further exit-day.
+> It is the *continuation* of the same rally, not an independent observation.
+
+### S4 re-baseline: +0.0041 → +0.0025 (2026-08-17) — artifact removal, not decay
+
+S4's drop is **code-attributable and intentional**, and it is the one baseline move in this file's history
+that is a lane getting *more honest* rather than a lane getting worse.
+
+The old option-liquidity filter was `call_volume > 0 AND put_volume > 0 AND call_volume+put_volume >= 1000`.
+The combined floor puts **no constraint on the call leg**: NWG cleared it on 2026-08-17 with **3 call
+contracts against 2,046 puts**, printing **PCR 682** and ranking #1 in the lane. TNGX (32 calls), SAN (66),
+AMRZ (68), HST (90), JAZZ (63) were the same failure. This was never a marginal contamination — across the
+panel the **median S4 selection carried 154 call contracts** (p25 = 66, p10 = 20; 64% under 250).
+
+`S4_MIN_CALL_VOLUME = 250` was chosen on **ratio-stability** grounds — below it a single contract moves PCR
+by >0.5%, and at call_volume = 3 one contract moves it by 200+. It was explicitly **not** chosen to maximise
+measured excess. The sensitivity runs monotonically *against* the fix:
+
+| call-volume floor | mean excess | hit − base | median |
+|---|---|---|---|
+| 1 (old) | +0.0048 | −0.041 | +0.0034 |
+| 100 | +0.0030 | −0.046 | +0.0025 |
+| **250 (shipped)** | **+0.0025** | **−0.056** | **+0.0009** |
+| 500 | +0.0027 | −0.062 | −0.0000 |
+| 1000 | +0.0009 | −0.081 | −0.0021 |
+
+Two things this makes explicit, both of which should shape how S4 is read from now on:
+
+1. **The artifact names were carrying the lane's apparent edge.** Removing them lowers the mean. The
+   +0.0041 was not a measurement of "fading an over-hedged crowd" — for most picks PCR was numerically
+   meaningless.
+2. **`hit − base` was already negative before the fix** (−0.041) and gets more negative after (−0.056).
+   S4 has never had a hit-rate edge on this panel; its positive mean is a right tail. That is consistent
+   with the lane's own documented status (advisory, never sizes) and is a reason to keep it there.
+
+Note the floor **swaps** selections rather than removing them — selection is top-15-by-PCR, so raising the
+floor backfills with the next-highest passing names and `n` *rises* (1225 → 1241). Do not read the n change
+as added coverage.
+
+**Paired-site requirement.** `retro_harness.py` re-implements the lane gates inline and imports nothing, so
+this fix had to land in **both** `scripts/retro_harness.py` (`S4_MIN_CALL_VOLUME`) and
+`.claude/agents/sentiment-contrarian.md`. Patching only the lane would have left the live engine more
+permissive than the instrument grading it.
+
+### Prior baseline (2,471-ticker spine, panel→08-14, 88 days, superseded 2026-08-17)
+
+MOM_LONG −0.0122 (1121) · MOM_SHORT −0.0140 (828) · OI_FADE +0.0037 (1159) · S2 +0.0011 (1185) ·
+S4 +0.0041 (1202)
+
+### Earlier baseline (2,471-ticker spine, panel→08-07, superseded 2026-08-15)
 
 MOM_LONG −0.0108 (1066) · MOM_SHORT −0.0128 (803) · OI_FADE +0.0059 (1087) · S2 +0.0009 (1123) ·
 S4 +0.0035 (1145)

@@ -140,6 +140,21 @@ Watch-only, news **UNVERIFIED** (10 of 15 unchecked — labeled, not silently pa
 
 ---
 
+## Addendum — S4 floor shipped as a code fix (post-scan, same day)
+
+The S4 defect found during this scan was fixed in the lane itself after the scan was written:
+`S4_MIN_CALL_VOLUME = 250`, paired across `scripts/retro_harness.py` and
+`.claude/agents/sentiment-contrarian.md`. **The shipped floor is 250, not the ad-hoc 500 used above** — the
+scan's correction was written before the threshold was calibrated. This section is left as-recorded rather
+than rewritten; the corrected watchlist above remains the 500-basis list.
+
+Consequence, recorded in full at [`docs/regression-gate.md`](../../../docs/regression-gate.md#s4-re-baseline-00041--00025-2026-08-17--artifact-removal-not-decay):
+S4 re-baselined **+0.0041 → +0.0025** (n=1241). The fix *lowers* measured excess because the artifact names
+were supplying the lane's right tail, and it exposed that S4's `hit − base` was **already negative before
+the fix** (−0.041 → −0.056) — the lane has never had a hit-rate edge on this panel. The forward +1.25%
+figure that made S4 "the only lane positive forward as well as historically" is **not clean** either, since
+those rows were selected by the buggy filter; S4 forward is pre-registered again from 2026-08-17.
+
 ## Data integrity (Phase 0)
 
 The truth-set parquets were **stale on arrival** — all three ended 2026-08-14 against a 2026-08-17 trade date. Rebuilt before any lane ran: `prices` (352,331 rows / 2,448 of 2,471 tickers priced; 23 unpriced fail closed downstream), `returns` (SPY self-excess 0.0 at every horizon), `features` (172,300 rows / 2,484 tickers / 89 dates). Preflight re-run clean. Panel 5/5 complete for 08-17.
