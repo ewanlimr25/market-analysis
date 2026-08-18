@@ -1,0 +1,183 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-17",
+  "report_kind": "market-scan",
+  "regime": "UPTREND",
+  "regime_context": {
+    "regime_label": "UPTREND",
+    "ret5": -0.0005,
+    "ret10": 0.0198,
+    "vol_state": "LOW",
+    "breadth_pct_green": 35.0,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {"date": "2026-08-20", "event": "FOMC minutes (July meeting)", "tier": "tier1-adjacent", "inside_h10_window": true},
+      {"date": "2026-08-21", "event": "Jackson Hole Symposium opens (Powell)", "tier": "tier1", "inside_h10_window": true},
+      {"date": "2026-08-26", "event": "Core PCE / Personal Income & Outlays, 8:30am ET", "tier": "tier1", "inside_h10_window": true},
+      {"date": "2026-08-26", "event": "NVDA Q2 FY27 earnings (after close) -- index-moving, especially QQQ; compounds with PCE on the same day", "tier": "tier1-adjacent", "inside_h10_window": true},
+      {"date": "2026-08-18/2026-08-21", "event": "HD / WMT / LOW / TJX / ADI -- consumer read-through", "tier": "tier2", "inside_h10_window": true},
+      {"date": "2026-08-18/2026-09-01", "event": "SUMMARY: the ENTIRE Tier-1 cluster sits inside the h10 window of anything entered tonight. Independently sufficient to cap sizing even before any lane-level gate.", "tier": "note", "inside_h10_window": true},
+      {"date": "2026-08-18/2026-09-01", "event": "REGIME TRAJECTORY: the ret10 anchor (08-03 close 757.67) rolls forward into the 771-773 range over the next 3-5 sessions, so absent fresh highs above ~785 UPTREND mechanically decays to CHOP well inside the h10 window. Same decay flagged 08-14.", "tier": "note", "inside_h10_window": true},
+      {"date": "2026-08-17", "event": "CROSS-CHECK DISAGREEMENT: `uw risk market-regime` independently reads TRANSITIONAL / half-size, disagreeing in emphasis with the mechanical UPTREND label. Carried forward as a conservative-sizing note.", "tier": "note", "inside_h10_window": false}
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": "oi_fade_2026-08-17_none",
+      "note": "Population after floors 1,166. Raw oi_net_5d top-15 is pure ETP/mega-cap beta (GLD, NVDA, SLV, TLT, GOOGL, AAPL, META, SQQQ) -- not a candidate list. Ranking by the live rule (oi_rel_build) yields a cohort whose BEST raw rank is AS at 50-61 of 1,166-1,896, and AS is separately earnings-BLOCKED (reports 08-18). Every remaining name sits at raw rank 125-798. Orchestrator-verified independently on data/features.parquet: AS 50, FDX 125, SPHR 195, XYL 197, GEN 216, BSY 264, ITRI 308, AAON 312, DK 346, KNSA 431 (of 1,896). The +0.0037 mean / +0.77% median prior was measured on the RAW top-15 population; a rel_build-ranked mid-pack name does not inherit it. Sixth consecutive night this selection-rule discount has held (COO, NRG, STUB, INSW, WEC, FDX, GEN, BSY, ITRI). Two mechanism catches: COKE's headline net +1,314 is put-covering not a call build (call OI over 5d is only +73 contracts, put OI -1,241) -- a Gate-2 sign/mechanism failure; ALC's dominant build day 08-11 is one day after its 08-10 print, an earnings-reaction block, strict '>' boundary 104.5% vs shipped 93.3%. ETPs cut via issue_type at this rank band: SSPC, VYM, SNDQ, SQQQ, BOIL, UVIX, UVXY. M&A-rumor tape checked on all non-vetoed names, none pending (XYL is the acquirer, not a target). Liquidity verified via scripts/liquidity.py, not hand-multiplied.",
+      "candidates": ["AS", "NEU", "KNSA", "AAON", "XYL", "SPHR", "PRM", "ALC", "WHD", "VIRT", "HON", "DK", "COKE", "ASO", "HLN"]
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_short_2026-08-17_watch",
+      "note": "WATCH-ONLY, never sizes -- baseline is knowingly NEGATIVE at -0.0140 (n=828) on the 2,471-ticker spine, the one recorded exception to the no-negative-excess invariant. s1_standdown is FALSE so the crash guard is mechanically non-binding tonight, but the negative baseline is independently disqualifying. 14 names cleared liquidity + earnings + issue_type. CRITICAL verification performed: the UW pct_52w_range for the leaders prints NEGATIVE (RBA -4.11%, NKE -2.27%, STLA -1.87%, AMRZ -1.51%, CPRI -0.78%) -- this is stale w52l not yet including today's new low, NOT a false signal. Yahoo-verified via scripts/chart.py --52w: all are genuinely at 52w lows SET TODAY (STLA 0.3% of range, RBA 0.2%, AMRZ 0.4%, NKE 0.6%, CPRI 0.8%). 44 of 1,920 names carry out-of-range pct_52w_range tonight; only the detectable class is visible, and the in-range-but-wrong class (un-split-adjusted w52h) is what manufactures false shorts, so this check is mandatory not optional.",
+      "candidates": ["RBA", "NKE", "STLA", "AMRZ", "CPRI", "ESAB", "ROL", "GPI", "GME", "HDB", "BKNG", "TTD", "KLAC", "ZTS"]
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_long_2026-08-17_basket",
+      "note": "BASKET/WATCH ONLY, never sizes -- baseline is knowingly NEGATIVE at -0.0122 (n=1121) on the 2,471-ticker spine. The tail-driven edge that carried the old 785-spine has evaporated on the full liquid universe. 30-name basket cleared earnings + issue_type. Top names Yahoo-verified genuinely at highs: PSX 99.9% of 52w range, PTGX 99.7%, RVMD 97.8%, ARGX 95.9%, IESC 95.5%. Standing caveat carried: the current baseline is depressed by a correlated draw (08-08 and 08-15 increments were the SAME one-way rally, base pinned at 1.00 for MOM_LONG), so a future recovery in this figure is NOT evidence a fix worked -- and is equally not grounds to inflate a candidate's expected excess tonight.",
+      "candidates": ["ARGX", "IESC", "PTGX", "PSX", "RVMD"]
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW",
+      "net_expectancy": -0.001,
+      "suggested_structure": null,
+      "stand_aside_reason": "Two independent grounds. (1) TERCILE-POOLING TRAP FIRED: the pooled headline verdict prints GO_PREMIUM_SELL_INTRADAY, but the conditional mean_pnl_by_vix_state[LOW] is -0.003% before cost and approx -0.10% after a ~0.10% round trip. Verified directly by the orchestrator, not taken from the headline. (2) Dealer SHORT-gamma regime: total_gex -367.98M, FULLY_NEGATIVE across all strikes, and zero_gamma_level is NULL so the flip is unresolvable -- failing closed on that leg. Script's own sell_premium=False, size_scalar=0.0. This is the vol-amplifying wide-range state the sleeve is not sized to sell into, and the unsampled left-tail regime the validation window never priced.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW",
+      "net_expectancy": -0.0003,
+      "suggested_structure": null,
+      "stand_aside_reason": "Same two grounds. (1) Conditional mean_pnl_by_vix_state[LOW] is +0.072% before cost, approx -0.03% after a ~0.10% round trip -- the pooled GO_PREMIUM_SELL_INTRADAY headline is a pooling artifact. (2) TEXTBOOK GAMMA-SIGN TRAP CASE: aggregate total_gex is POSITIVE (+582.19M) while spot 730.13 sits 0.60% BELOW the flip at 734.54 -- dealers are short gamma at the money that matters. The two readings are kept load-bearing and distinct per the standing rule: aggregate sign drives RANGE/wing-width, spot-vs-flip drives REGIME/sell-decision. gamma_disagreement=False and the 0.60% distance is outside the near-flip fail-closed threshold, so this is a clean STAND ASIDE, not a fail-closed. Script's own sell_premium=False, size_scalar=0.0.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "OKTA",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "IV-rank 81-84",
+      "implied_move": 0.1302,
+      "net_expectancy": 0.1193,
+      "suggested_structure": "Defined-risk iron fly / short strangle, wings set WIDER than the implied move",
+      "stand_aside_reason": "ADVISORY ONLY -- no harness validates this lane, so nothing here is a scored call. Prints 08-26, bracketing expiry 08-28 (11d), backwardation 1.45x. The implied move is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate). Computed off the BRACKETING expiry using MEDIAN ATM IV -- the naive default-DTE read misprices this name as CONTANGO because its print falls after the front 4dte expiry.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "HPQ",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "IV-rank 81-84",
+      "implied_move": 0.1077,
+      "net_expectancy": 0.1049,
+      "suggested_structure": "Defined-risk iron fly / short strangle, wings set WIDER than the implied move",
+      "stand_aside_reason": "ADVISORY ONLY -- no harness validates this lane. Prints 08-26, bracketing expiry 08-28 (11d), backwardation 1.32x, tightest cost drag of the set (2.6% of straddle). Implied move is a LOWER BOUND, not an estimate. Naive default-DTE read understates this move by ~3x because the print falls after the front expiry.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ADSK",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "IV-rank 81-84",
+      "implied_move": 0.094,
+      "net_expectancy": 0.0842,
+      "suggested_structure": "Defined-risk iron fly / short strangle, wings set WIDER than the implied move",
+      "stand_aside_reason": "ADVISORY ONLY -- no harness validates this lane. Prints 08-27, bracketing expiry 08-28 (11d), backwardation 1.20x. Implied move is a LOWER BOUND. Naive default-DTE read understates this move by ~3x (print falls after the front expiry).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ROST",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "elevated IV-rank",
+      "implied_move": 0.0609,
+      "net_expectancy": 0.0572,
+      "suggested_structure": "Short-fuse earnings crush, 4dte bracketing expiry 08-21",
+      "stand_aside_reason": "ADVISORY ONLY -- no harness validates this lane. Prints 08-20, backwardation 2.29x (steepest of the set). Implied move is a LOWER BOUND.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "TJX",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "elevated IV-rank",
+      "implied_move": 0.0434,
+      "net_expectancy": 0.0399,
+      "suggested_structure": "Short-fuse earnings crush, 4dte bracketing expiry 08-21",
+      "stand_aside_reason": "ADVISORY ONLY -- no harness validates this lane. Prints 08-19, backwardation 1.98x. Implied move is a LOWER BOUND.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "DE",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "elevated IV-rank",
+      "implied_move": 0.0518,
+      "net_expectancy": 0.0499,
+      "suggested_structure": "Short-fuse earnings crush, 4dte bracketing expiry 08-21",
+      "stand_aside_reason": "ADVISORY ONLY -- no harness validates this lane. Prints 08-20, backwardation 1.64x, tight cost (3.8% of straddle). Implied move is a LOWER BOUND.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "JKHY",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "elevated IV-rank",
+      "implied_move": 0.062,
+      "net_expectancy": 0.0532,
+      "suggested_structure": "Short-fuse earnings crush, 4dte bracketing expiry 08-21 -- watch fill quality",
+      "stand_aside_reason": "ADVISORY ONLY -- no harness validates this lane. Prints 08-18 (tomorrow). Cost drag 14.2% of straddle is wide for a name this size. Implied move is a LOWER BOUND.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "COTY",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "median ATM IV 160%+",
+      "implied_move": 0.174,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "EXCLUDED from the tradeable set -- liquidity/data-quality outlier, not a clean crush candidate. Sub-$3 stock, median ATM IV printing 160%+, only ~1-2 contracts traded per side at the ATM strike, bid/ask cost 15.8% of straddle. The nominal 14.65% credit is NOT trustworthy at that spread width. Flagged for the record, explicitly not traded.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "GEN -- CUT tonight. Mechanical OI_FADE invalidation FIRED: last session call_net -352, net -577, calls genuinely closing. Same rule that cut COO (08-13) and NRG (08-14). Nothing was ever sized; no realized loss. Do not re-propose without a fresh, organic multi-day build.",
+    "FDX -- retained WATCH. 5d net +13,537 but decaying; last session call +912 / net +277, rel_build 0.657, persistence 0.582. Raw oi_net_5d rank 125/1896 -- still far outside the top-15 population the prior was measured on.",
+    "BSY -- retained WATCH. Build stalled: last session call +167 / net +162 against a 5d net of +3,959. Raw rank 264/1896.",
+    "ITRI -- retained WATCH. Build effectively dead: last session call +18 / net +10 against a 5d net of +2,845. Raw rank 308/1896.",
+    "AS -- OI_FADE's best raw rank tonight (50/1896) but earnings-BLOCKED, reports 2026-08-18. Re-examine after the print clears, and test whether the build CONTINUES past it (the earnings gate is forward-only and cannot see a catalyst landing inside the build window).",
+    "KNSA -- OI_FADE's cleanest mechanical candidate (persistence 0.509 organic, no prior, earnings clear to 10-27) but raw rank 431/1896. Fails the selection-rule bar alone.",
+    "COKE -- do NOT re-propose on the headline net. Its +1,314 5d net is put-covering, not a call build: call OI +73 contracts vs put OI -1,241. Gate-2 mechanism failure.",
+    "MOM_SHORT watch (14, never sizes): RBA, NKE, STLA, AMRZ, CPRI, ESAB, ROL, GPI, GME, HDB, BKNG, TTD, KLAC, ZTS. All Yahoo-verified at genuine 52w lows set today; UW pct_52w_range prints negative for the leaders due to stale w52l.",
+    "MOM_LONG basket (30, never sizes), top: PSX, PTGX, RVMD, ARGX, IESC -- all Yahoo-verified genuinely at highs.",
+    "S4 advisory CORRECTED (call_volume >= 500 AND issue_type = Common Stock): CARR, EXE, APO, CHYM, XEL, VLO, RYN, BKR, FSLR, BURL, EQT, EIX, WM, SMMT, ARE. The lane's own raw-PCR ranking was contaminated by denominator artifacts -- NWG PCR 682 = 3 call contracts; TNGX 32, SAN 66, AMRZ 68, HST 90, JAZZ 63 calls. Only CARR and EXE survived from the lane's 15. Do not use the lane's unfiltered ranking.",
+    "S2 advisory watch, news UNVERIFIED (10 of 15 unchecked, labeled not silently passed): LYB, TWLO, EQIX, ROKU, AME, MFC, IDXX.",
+    "S2 EXCLUDED as catalyst-informed flow (not mean-reversion): RDDT (S&P 500 inclusion announced 08-17 + Form 144 insider sales), GH (post-Q2 upgrades), COF (ex-dividend 08-17), COP (ex-dividend 08-17 + CEO retirement).",
+    "S2 blocked on prior policy: V and KLAC (weekly standdowns), RTX (basket-only, never per-name), NXPI (OI_FADE demotion 08-12/13).",
+    "Cross-lane note (never summed): KLAC appears in both the MOM_SHORT watch list and S2's blocked set -- evidence-type diversification only. AMRZ's apparent MOM_SHORT-short vs S4-long conflict DISSOLVES once the S4 denominator artifact is removed.",
+    "Next /calibration-audit due 2026-08-22. The 23 open call-rows, 174 open suppressed candidates, and the 08-03..08-07 crash-guard block all mature 08-17..08-22 -- the first genuinely non-overlapping cohort, already deferred twice. Count distinct EXIT-DAYS, not rows, when judging it."
+  ],
+  "report_path": "analyses/scan/2026-08-17/report.md"
+}
