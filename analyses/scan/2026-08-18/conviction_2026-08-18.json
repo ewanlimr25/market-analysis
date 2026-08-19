@@ -1,0 +1,78 @@
+{
+  "conviction_date": "2026-08-18",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-18 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-18/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters. Book stays FLAT for a 7th consecutive session. No name reached a sizing band in any lane, so Phase D (risk-sizer) was VACUOUS and fundamentals-gate was correctly not spawned -- it runs only on names about to be sized, and the one name that reached the edge of a sizing band (RKT) was excluded UPSTREAM of sizing on the catalyst gate. The lanes failed independently, not for one shared reason: (1) OI_FADE -- the only lane whose baseline could support a starter (+0.0038) -- cleared no name; its single genuine candidate RKT was #6 in the harness's exact top-15 and therefore DID inherit the measured prior, but was excluded because its call build is activist/13F-catalyst-informed (ValueAct 9.9% stake, M&A strategy in scope; build accelerated 2.3x immediately behind the 08-14 and 08-17 disclosures). (2) MOM_SHORT and (3) MOM_LONG are both knowingly NEGATIVE on the 2,471-spine (-0.0137 and -0.0127) and never size by standing policy. (4) S2 (+0.0014) and S4 (+0.0025) are advisory-only lanes that never size regardless of measured excess.",
+    "prior_reconciliation": "held_book.py --prior conviction_2026-08-17.json returned 0 open positions; verified back through 08-04 that every conviction file carries 0. The book has been genuinely flat, so no vestigial-invalidation check applies and there is nothing to mark, hold, cut, or exit."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "ret5": -0.004,
+    "ret10": -0.005,
+    "dd15": -0.0543,
+    "vol_state": "LOW",
+    "vix": 15.84,
+    "s1_standdown": false,
+    "directional_tradable": true,
+    "note": "UPTREND->CHOP decay flagged on 08-14 and 08-17 landed today on schedule. CHOP is now STABLE across the whole h10 window (all ret10 anchors in a tight 768-778 band; flat-tape ret10 spans -1.34% to 0.00%), unlike last night's mechanically-decaying UPTREND. Pinch point is 08-27, where the anchor rolls onto the 777.88 local high and PULLBACK triggers at 766.21 -- only 0.16% below today's 767.45 close, and exactly where the PCE + NVDA + Warsh Jackson Hole stack lands."
+  },
+  "watch": [
+    {
+      "ticker": "FDX",
+      "lane": "OI_FADE",
+      "status": "WATCH",
+      "raw_oi_rank": "172/1162",
+      "note": "5d net +11,813 (was +13,537 on 08-17 -- decaying). Last session call +228 but NET -546, puts dominated. No mechanical invalidation (call leg still positive) but the build has gone choppy. Cut if the call leg turns negative."
+    },
+    {
+      "ticker": "BSY",
+      "lane": "OI_FADE",
+      "status": "WATCH",
+      "raw_oi_rank": "341/1162",
+      "note": "5d net +4,361, last session call +424 / net +404, still building organically (persistence 0.578). catalyst_split LIVE, 99.9% accrued after the 08-06 print. The cleanest-mechanically name on the watch list, but its raw rank is far outside the population the prior was measured on."
+    },
+    {
+      "ticker": "ITRI",
+      "lane": "OI_FADE",
+      "status": "WATCH",
+      "raw_oi_rank": "433/1162",
+      "note": "5d net +2,818, last session call +5 / net ~0 -- build STALLED, effectively dead two sessions running. On the edge of a stall-out cut; drop it if the next session adds nothing."
+    },
+    {
+      "ticker": "GEN",
+      "lane": "OI_FADE",
+      "status": "CUT",
+      "raw_oi_rank": "374/1162",
+      "note": "Stays CUT. The 08-17 mechanical invalidation fired (call net -352, calls genuinely closing). Tonight's call net is +460, positive again, but that is ONE bounce day on a stale 08-12 spike supplying 83.3% of the 5d net (persistence 0.833). A single recovery day is not the fresh organic multi-day build required to re-propose. Nothing was ever sized; no realized loss."
+    },
+    {
+      "ticker": "RKT",
+      "lane": "OI_FADE",
+      "status": "EXCLUDED",
+      "raw_oi_rank": "6/1391 (harness top-15)",
+      "note": "EXCLUDED as a catalyst-informed activist build -- the most important name of the night and the first in seven sessions where the raw-rank discount was NOT the reason for the pass. Passes every mechanical gate; excluded only on the news tape. Do NOT re-propose while the ValueAct activist situation is live. Re-examine only if the build continues well after the disclosure cycle goes quiet. Note `fz news --ticker RKT` is polluted with Rocket LAB (RKLB) headlines -- check issuer, not ticker."
+    },
+    {
+      "ticker": "AS",
+      "lane": "OI_FADE",
+      "status": "RE_EXAMINE",
+      "raw_oi_rank": "50/1896 (as of 08-17)",
+      "note": "Was OI_FADE's best raw rank on 08-17 but earnings-BLOCKED; it reported 2026-08-18. The print has now landed -- re-examine whether the OI build survives its own catalyst (strict `>` boundary on the daily re-sum) before any re-proposal."
+    }
+  ],
+  "advisory_no_size": {
+    "S4": "29 names, never sizes. Leaders BNY (PCR 85.2, 358 calls vs 30,511 puts), XEL (84.6, 282 vs 23,862), CARR (20.1), LYV (13.4), NVS (12.5), KGS, PWR, KD, CCJ, NTR. The shipped call_volume>=250 floor is confirmed applied and the leaders are orchestrator-verified as REAL put crowds, not denominator artifacts -- the opposite of 08-17's NWG-class failure. Secondary ivrank_chg_5d tilt (h3): FA, TLN, VIRT, TTEK, STWD, PK, RCI, AXTA, NI.",
+    "S2": "56 candidates, never sizes, and ALL are explicitly news-UNVERIFIED -- recorded as a tag, not a ranked watchlist (the lane reports IC ~ 0 on concentration magnitude). Largest one-sided prints: TMO $435.6M 93.7% sell, ABT $415.5M 91.0% sell, ADP $269.4M 91.8% sell, HON $164.0M 93.0% sell, JBL $87.4M 95.2% sell, XEL $85.6M 95.6% sell. Excluded catalyst-informed: REGN (ex-div 08-18), COF (ex-div 08-17). The lane read a one-session-stale screener (08-17) -- recorded, affects issue_type/liquidity fields only, sizes nothing.",
+    "cross_lane": "XEL appears in BOTH S2 (sell-side DP -> long-tilted revert) and S4 (PCR 84.6 -> long). Same direction from two orthogonal evidence types = evidence diversification, NEVER summed; both lanes are advisory and neither sizes."
+  },
+  "next_run_carry": [
+    "RE-RUN THE PRIOR-VERDICT CHECK ON RKT before any OI_FADE proposal -- it will keep appearing near the top of the raw rank while the activist build persists.",
+    "OI_FADE lane-vs-harness gap (135 harness calls vs 0 live calls over 9 sessions) is the headline item for the 2026-08-22 calibration audit. Do not treat it as resolved by any single night's outcome.",
+    "dd15 rolls from -5.43% to -0.72% by 08-24 as the 07-29 low leaves the 15-close window; crash-guard arm (b) goes mechanically dead from 08-24.",
+    "08-26 to 08-28 is the binding event stack (PCE + NVDA AH + Warsh's first Jackson Hole keynote as Fed Chair) and it lands on the 08-27 anchor-roll pinch point where PULLBACK triggers 0.16% below today's close.",
+    "The semis/AI-hardware complex (SOXX -4.96%, SMH -4.09%) de-risked hard today into NVDA's 08-26 print while defensives/value rallied. Watch whether this is a one-session rotation or the start of a regime-level leadership change -- the MOM_LONG cohort is already Financials/Healthcare/Energy-heavy."
+  ]
+}

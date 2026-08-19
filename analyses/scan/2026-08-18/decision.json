@@ -1,0 +1,278 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-18",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": -0.004,
+    "ret10": -0.005,
+    "vol_state": "LOW",
+    "breadth_pct_green": 33.6,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "date": "2026-08-19",
+        "event": "FOMC minutes (July 28-29 meeting)",
+        "tier": "tier2",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-21",
+        "event": "Monthly options expiration (3rd Friday) -- gamma rebalancing, not macro",
+        "tier": "tier2",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26",
+        "event": "PCE price index (July, Fed's preferred gauge), 8:30am ET + Q2 GDP 2nd estimate",
+        "tier": "tier1",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26",
+        "event": "NVDA Q2 FY27 earnings (after close) -- index-moving, especially QQQ; stacks with PCE on the same day",
+        "tier": "tier1-adjacent",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-28",
+        "event": "Kevin Warsh's first keynote as Fed Chair, Jackson Hole (symposium 08-27 to 08-29) -- new-chair policy-framework risk",
+        "tier": "tier1",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-09-01",
+        "event": "ISM Manufacturing PMI (August)",
+        "tier": "tier2",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26/2026-08-28",
+        "event": "SUMMARY: the Tier-1 cluster (PCE + NVDA + Warsh's first Jackson Hole keynote) is compressed into three sessions and lands exactly on the 08-27 ret10 anchor-roll pinch point, where PULLBACK triggers at 766.21 -- only 0.16% below today's 767.45 close.",
+        "tier": "note",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-18/2026-09-01",
+        "event": "REGIME TRAJECTORY: unlike 08-17's mechanically-decaying UPTREND, CHOP is STABLE across the whole h10 window. All ret10 anchors sit in a tight 768-778 band; at a flat tape ret10 ranges -1.34% to 0.00%, never reaching either +1.5% (UPTREND) or -1.5% (PULLBACK). Requires roughly a +/-1.5% move to flip the label.",
+        "tier": "note",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-24",
+        "event": "CRASH-GUARD DECAY: dd15 is -5.43% only because the 07-29 low (729.46) sits in the 15-close window against the 08-04 anchor (771.33); 07-29 is the OLDEST bar and rolls out at tomorrow's close. Holding flat, dd15 goes -3.65% (08-19) -> -2.80% -> -2.02% -> -0.72% (08-24). From 08-24 arm (b) of s1_standdown (ret5>+1.5% AND dd15<-2%) is MECHANICALLY DEAD; only arm (a) ret5>+2.5% and arm (c) ret5<-2% with ret10>-2% remain live.",
+        "tier": "note",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-18",
+        "event": "TAPE CHARACTER: headline SPY -0.68% / 33.6% green is misleading. This was a single-complex de-risking, not a broad decline: SOXX -4.96%, SMH -4.09%, ARKK -3.18% while IGV -0.03% (software FLAT), XLE +1.76%, XLV +1.60%, XLP +1.06%, XLF +0.45% all green, and RSP -0.45% BEAT SPY -0.68%. Median liquid constituent -0.598% also beat SPY. The damage is in the LEFT TAIL, not the median: liquid-universe p10 went -2.98% (08-17) -> -4.56% (08-18); full-spine p10 -3.11% -> -5.74%, mean -1.458% vs median -0.689%.",
+        "tier": "note",
+        "inside_h10_window": false
+      },
+      {
+        "date": "2026-08-18",
+        "event": "CROSS-CHECK: `uw risk market-regime` reads TRANSITIONAL / half-size -- consistent in substance with CHOP. Its separate trend:UPTREND field is a 30d/SMA read (different horizon, not a contradiction). Its options-flow bullish_pct 31.5% (2.2:1 bearish-skewed) with price within 1.5% of a 52w high is a mild under-the-surface hedging tell, carried as context, not a veto.",
+        "tier": "note",
+        "inside_h10_window": false
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": "oi_fade_2026-08-18_none",
+      "candidates": [
+        "NOK",
+        "META",
+        "ONDS",
+        "GOOGL",
+        "INTC",
+        "RKT",
+        "AAPL",
+        "MARA",
+        "WULF",
+        "CORZ",
+        "SMCI",
+        "TSLA",
+        "SOFI",
+        "CSCO",
+        "RIOT",
+        "FDX",
+        "BSY",
+        "ITRI",
+        "GEN",
+        "KNSA",
+        "NEU"
+      ],
+      "note": "Post-floor population 1,162 (live lane) / 1,391 (orchestrator, price>=$5 + $-ADV>=$50M + Common Stock). The listed candidates are the harness's EXACT top-15 tonight plus the carried watch names. STRUCTURAL FINDING, propose-only for the 2026-08-22 audit: the recorded +0.0038 (n=1176) baseline grades retro_harness.py's selection rule -- raw oi_net_5d top-15 after price>=$5, $-ADV>=$50M, earnings-clear-of-h10, issue_type IN ('Common Stock','ADR'), is_index=false, and NOTHING else. The live lane ranks by oi_rel_build and adds persistence/catalyst_split/news gates. Reproducing the harness query per session, 08-06 through 08-18 = 9 sessions: the harness rule fires 15 calls EVERY session (135 total), the live lane fires 0. n=1176/89 days = 13.2 calls/session, consistent with ~15/day throughout. So the number giving OI_FADE its 'most robust lane / sizes' status describes a rule the live engine has not executed once in nine sessions -- the regression gate is green on a strategy the engine is not trading. The live gates have caught real defects (COKE put-covering 08-17, GEN fired invalidation, RKT tonight) but have NEVER been measured: no harness variant implements them. The panel cannot currently distinguish (1) live gates add edge and the baseline UNDERSTATES the lane, from (2) gates are over-fitted to individually-diagnosed names and the lane is DECLINING a real edge 15x/session. PROPOSAL: add a harness variant implementing the live rule (rel_build rank + persistence + catalyst_split) and grade it against the raw-rank rule on the same panel; until then stop citing +0.0038 as 'the OI_FADE lane's' excess in sizing contexts. CORRELATION NOTE: the harness's 15 slots are NOT 15 independent bets -- 6 mega-cap tech (META, GOOGL, INTC, AAPL, TSLA, CSCO) and 5 crypto-miner/AI-datacenter (MARA, WULF, CORZ, RIOT, SMCI) are two clusters that collapse to ~2 positions under the corr>=0.70 rule, leaving ~6 effective bets, most of them QQQ beta. RKT -- EXCLUDED, catalyst-informed, and the name tonight actually turned on: it is #6 in the harness's exact top-15 (oi_net_5d +28,759; $13.99, $-ADV $401M), so it genuinely DOES inherit the measured prior and the six-session raw-rank discount does NOT apply to it. It passes every mechanical gate (liquidity PASS, earnings PASS reports 2026-10-29, prior_verdicts clean, persistence 0.349 organic, calls +158,862 vs puts +15,067, catalyst_split LIVE at 66.8% post-08-06-print). Excluded on the NEWS TAPE only: ValueAct holds a 9.9% ACTIVIST stake with board composition, capital allocation and M&A strategy explicitly in scope; their Q2 13F (RKT top move, 3.76% portfolio impact) hit 08-14 and a Diamond Hill $67.8M filing hit 08-17, and the build's two largest days are 08-17 (+38,431) and 08-18 (+50,158) -- a 2.3x acceleration immediately behind those disclosures. Catalyst-informed positioning, not a crowd to fade; same M&A/rumor gate-gap class as AZN (2026-08-05), invisible to catalyst_split because no earnings print is involved. SEPARATE DATA-QUALITY WARNING: `fz news --ticker RKT` is polluted with Rocket LAB (RKLB) headlines -- three of the four most recent items are the wrong company; check issuer, not ticker. Watch continuity: FDX raw rank 172 (5d net +11,813 decaying, last session call +228 but NET -546); BSY raw 341 (still building organically, persistence 0.578); ITRI raw 433 (build STALLED, net ~0 two sessions); GEN stays CUT (one bounce day on a stale 08-12 spike supplying 83.3% of 5d net); KNSA raw 572; NEU raw 721 (all from 08-12, dead since). AS reported 08-18 -- re-examine post-print. ENVELOPE LIMITATION: the v2 schema's lane_status enum admits only MOM_SHORT/MOM_LONG/OI_FADE, so tonight's S2 (56 advisory, all news-UNVERIFIED) and S4 (29 advisory) lanes have NO machine-readable slot and are recorded only in report.md. This compounds the known audit-resolver blindspot in which suppressed lane_status candidates go unresolved and starve the gate-effectiveness test."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_short_2026-08-18_watch",
+      "candidates": [
+        "STLA",
+        "ESAB",
+        "GPI",
+        "GME",
+        "AMRZ",
+        "AGCO",
+        "LII",
+        "JBTM",
+        "CRH",
+        "MLM",
+        "ROL",
+        "CPRI"
+      ],
+      "note": "17 names total, never sizes (knowingly negative baseline -0.0137, n=830 -- the one recorded exception to the no-negative-lane rule). s1_standdown FALSE tonight so the crash guard is not firing, but the watch cap is independent of it. Membership Yahoo-verified clean by the orchestrator: STLA 0.0% of 52w range, ESAB 0.1%, GPI 0.2%, GME 0.3%, AMRZ 1.5% -- all genuine new 52w lows SET TODAY (08-18). Their negative pct_52w_range prints are stale w52l not yet including today's low, i.e. the detectable benign class, NOT the dangerous in-range-but-wrong class. Sector spread: Industrials 5, Consumer Cyclical 5, Basic Materials 3, other 4. GPI carries a prior blocking verdict (W31 new-starter standdown). FORWARD NOTE: from 08-24 arm (b) of the crash guard is mechanically dead as dd15 rolls above -2%, so a 1.5-2.5% five-day up-thrust next week would NOT trigger the standdown it triggered in W32."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_long_2026-08-18_watch",
+      "candidates": [
+        "PSX",
+        "CLMT",
+        "AMLX",
+        "HAE",
+        "TRGP"
+      ],
+      "note": "236 names total, never sizes (knowingly negative baseline -0.0127, n=1154). FINDING: the lane reported 'NO CORRUPTION DETECTED' and ranked this leg by '% above 52w LOW' -- the wrong metric for a near-52w-HIGH leg -- and every one of its top-5 quoted 52w lows is wrong (orchestrator Yahoo-verified via chart.py): PSX claimed $240.67 vs actual $121.24; AMLX $24.60 vs $7.63; HAE $92.25 vs $47.32; CLMT $49.17 vs $12.94; TRGP $291.04 vs $144.14. Those are recent swing lows, not 52-week lows. This is the in-range-but-wrong corruption class, declared absent by the lane asked to check for it -- a lane's own 'verified' claim is not evidence. COHORT MEMBERSHIP IS CORRECT: all five verify at 95.5-99.9% of true 52w range (PSX 99.9%, CLMT 99.6%, AMLX 99.0%, HAE 96.6%, TRGP 95.5%), so nothing downstream is mis-selected and the leg sizes nothing regardless. Concentration: Financials 27.5%, Healthcare 25.0%, Energy 13.6% -- within the 1/3-per-sector cap. Note the alignment with today's rotation: this cohort is Financials/Healthcare/Energy-heavy, precisely the sectors that were green, while the semis complex that broke is absent from it."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "delta_neutral": true,
+      "sell_premium": false,
+      "vol_state": "LOW",
+      "net_expectancy": null,
+      "expected_range": 0.0123,
+      "stand_aside_reason": "UNCONDITIONAL on dealer positioning: aggregate GEX -1,223,683,865 (CLI regime FULLY_NEGATIVE, coherent with its own total). Dealers are SHORT gamma at the money -- the vol-amplifying, trend-accelerating state this sleeve is not sized to sell into. Short-gamma expected range 1.23% vs 0.77% long-gamma. size_scalar 0.0. VIX 15.84, LOW tercile (bounds [16.1, 17.3]), +4.3% on the day off 15.19 and +11.2% over two sessions from 14.25 on 08-14 -- richer, but still inside LOW."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "delta_neutral": true,
+      "sell_premium": false,
+      "vol_state": "LOW",
+      "net_expectancy": -0.0003,
+      "expected_range": 0.0208,
+      "stand_aside_reason": "Headline GO_PREMIUM_SELL_INTRADAY / sell_premium=True is OVERRIDDEN -- it is the VIX-tercile pooling artifact. Tonight's LOW bucket mean_pnl_by_vix_state[LOW] = +0.07% gross; less the ~0.10% round-trip cost = -0.03% NET, negative. The pooled headline is driven by MID/HIGH buckets (+0.431%/+0.493%) that do not apply tonight. ADDITIONALLY DATA-QUALITY FLAGGED: the CLI regime string reads POSITIVE while its own total_gex is -523,874,902 (independent per-strike sum -571,123,518, agreeing negative), and zero_gamma_level=261.7 against a $717.51 spot is not sane. The auto-generated suggested_structure text also mislabels the SHORT-gamma-bucket wing width (2.08%) as '(long-gamma: quieter, mean-reverting)' -- do NOT read that as license to size tight. The underlying math correctly keeps the two readings separate (aggregate sign -> range/wing-width; spot-vs-flip -> regime/sell decision); only the display conflates them."
+    },
+    {
+      "symbol": "NVDA",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": true,
+      "vol_state": "event",
+      "implied_move": 0.0637,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, never sizes -- no harness validates this lane. Print 2026-08-26 AH, BRACKETING expiry 2026-08-28 (first expiry >= print), median ATM IV. Implied move 6.37% is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate) -- size wings 1.3-1.5x wider than quoted, defined-risk iron fly / short strangle. Cost 0.7% of straddle. Best execution quality of the set (cost 0.7% of straddle). Straddle $14.00 at 220 strike / 219.80 spot, median ATM IV 48.2%. Naive CLI read 2.20% -- 2.9x understated. Index-moving into QQQ vol; treated as an isolated delta-neutral straddle, no directional QQQ inference drawn.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "OKTA",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": true,
+      "vol_state": "event",
+      "implied_move": 0.1399,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, never sizes -- no harness validates this lane. Print 2026-08-26, BRACKETING expiry 2026-08-28 (first expiry >= print), median ATM IV. Implied move 13.99% is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate) -- size wings 1.3-1.5x wider than quoted, defined-risk iron fly / short strangle. Cost 10.7% of straddle. Straddle $20.15 at 144 strike/spot, median ATM IV 105.8%. Naive CLI read 3.67% -- 3.8x understated. EVENT-KINKED, not simply backwardated: interior curve peaks AT the event expiry (08-21 112.3% -> 08-28 133.2% -> 09-04 108.4% -> 09-11 96.5%) while the tool reports flat BACKWARDATION with kink_expiry:None. Wings very wide given the raw move is only a floor.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "HPQ",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": true,
+      "vol_state": "event",
+      "implied_move": 0.1046,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, never sizes -- no harness validates this lane. Print 2026-08-26, BRACKETING expiry 2026-08-28 (first expiry >= print), median ATM IV. Implied move 10.46% is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate) -- size wings 1.3-1.5x wider than quoted, defined-risk iron fly / short strangle. Cost 2.4% of straddle. Straddle $3.135 at 30 strike / 29.98 spot, median ATM IV 79.4%. Naive CLI read 2.82% -- 3.7x understated. Tight/liquid execution.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "ADSK",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": true,
+      "vol_state": "event",
+      "implied_move": 0.0881,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, never sizes -- no harness validates this lane. Print 2026-08-27, BRACKETING expiry 2026-08-28 (first expiry >= print), median ATM IV. Implied move 8.81% is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate) -- size wings 1.3-1.5x wider than quoted, defined-risk iron fly / short strangle. Cost 3.7% of straddle. Straddle $21.80 at 247.5 strike / 247.47 spot, median ATM IV 69.2%. Naive CLI read 2.95% -- ~3x understated.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "ROST",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": true,
+      "vol_state": "event",
+      "implied_move": 0.0664,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, never sizes -- no harness validates this lane. Print 2026-08-20, BRACKETING expiry 2026-08-21 (first expiry >= print), median ATM IV. Implied move 6.64% is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate) -- size wings 1.3-1.5x wider than quoted, defined-risk iron fly / short strangle. Cost 5.7% of straddle. Straddle $15.70 at 237.5 strike / 236.42 spot, median ATM IV 93.1%.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "DE",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": true,
+      "vol_state": "event",
+      "implied_move": 0.0564,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, never sizes -- no harness validates this lane. Print 2026-08-20, BRACKETING expiry 2026-08-21 (first expiry >= print), median ATM IV. Implied move 5.64% is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate) -- size wings 1.3-1.5x wider than quoted, defined-risk iron fly / short strangle. Cost 8.6% of straddle. Straddle $33.25 at 590 strike / 589.16 spot, median ATM IV 71.6%. Moderate cost drag.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "TJX",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": true,
+      "vol_state": "event",
+      "implied_move": 0.0388,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, never sizes -- no harness validates this lane. Print 2026-08-19, BRACKETING expiry 2026-08-21 (first expiry >= print), median ATM IV. Implied move 3.88% is a LOWER BOUND on the realized move (TPR precedent: realized -16.5% vs a ~12.2% raw-IV estimate) -- size wings 1.3-1.5x wider than quoted, defined-risk iron fly / short strangle. Cost 6.0% of straddle. Straddle $5.85 at 150 strike / 150.94 spot, median ATM IV 57.3%. Iron fly, wings >=5-6% each side.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "JKHY",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": false,
+      "vol_state": "event",
+      "stand_aside_reason": "EXCLUDE -- cost 20.7% of straddle; call 3.0/4.4 and put 4.3/6.7 spreads with OI 95/64 are too thin for the number to be trustworthy, and an 08-18 AMC print leaves no entry window at tonight's close."
+    },
+    {
+      "symbol": "COTY",
+      "lane": "vol_earnings",
+      "delta_neutral": true,
+      "sell_premium": false,
+      "vol_state": "event",
+      "stand_aside_reason": "EXCLUDE -- sub-$3 stock ($2.74), 353% median ATM IV, cost 17.6% of straddle. Same precedent as the 08-17 exclusion; the credit number is not trustworthy at that spread width."
+    }
+  ],
+  "watchlist_write_back": [
+    "FDX -- retained WATCH. 5d net +11,813 (was +13,537 on 08-17 -- decaying). Last session call +228 but NET -546, puts dominated. Raw oi_net_5d rank 172/1,162 -- best of tonight's rel_build cohort but still far outside the top-15 population the prior was measured on. No mechanical invalidation (call leg still positive) but the build has gone choppy on a down tape.",
+    "BSY -- retained WATCH. 5d net +4,361, last session call +424 / net +404, still building organically (persistence 0.578). Raw rank 341/1,162. catalyst_split LIVE (99.9% accrued after the 08-06 print).",
+    "ITRI -- retained WATCH but on the edge of a stall-out cut. 5d net +2,818, last session call +5 / net ~0 -- the build is STALLED, effectively dead two sessions running. Raw rank 433/1,162.",
+    "GEN -- stays CUT. The 08-17 mechanical invalidation fired (last-session call net -352, calls genuinely closing). Tonight's call net is +460, positive again, but that is ONE bounce day sitting on a stale 08-12 spike supplying 83.3% of the 5d net (persistence 0.833). Per the standing rule, a single recovery day is not the fresh organic multi-day build required to re-propose. Nothing was ever sized; no realized loss.",
+    "RKT -- EXCLUDED as a catalyst-informed activist build, and the most important name of the night: it is #6 in the harness's EXACT top-15, so it genuinely DOES inherit the measured prior, and it passes every mechanical gate (liquidity, earnings clear to 2026-10-29, prior_verdicts clean, persistence 0.349 organic, calls +158,862 vs puts +15,067, catalyst_split LIVE). Excluded on the news tape only: ValueAct holds a 9.9% ACTIVIST stake with M&A strategy explicitly in scope; their Q2 13F hit 08-14 and a Diamond Hill $67.8M filing hit 08-17, and the build's two largest days are 08-17 (+38,431) and 08-18 (+50,158) -- a 2.3x acceleration right behind those disclosures. Same M&A/rumor gate-gap class as AZN (2026-08-05), invisible to catalyst_split because no earnings print is involved. Do not re-propose while the activist situation is live; re-examine only if the build continues well after the disclosure cycle goes quiet. SEPARATELY: `fz news --ticker RKT` is polluted with Rocket LAB (RKLB) headlines -- three of the four most recent items are the wrong company. Check issuer, not ticker.",
+    "AS -- reported 2026-08-18 (was earnings-blocked last night at raw rank 50/1896). The print has now landed; re-examine whether its OI build survives its own catalyst before any re-proposal."
+  ],
+  "report_path": "analyses/scan/2026-08-18/report.md"
+}
