@@ -1,0 +1,99 @@
+{
+  "conviction_date": "2026-08-19",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-19 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+  "source_decision_envelope": "analyses/scan/2026-08-19/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": false,
+    "detail": "ZERO new starters. Book stays FLAT for an 8th consecutive session. The central adjudication tonight is AS (OI_FADE): it clears every mechanical/hygiene gate (liquidity PASS $34.02/$178.1M ADV, earnings clear 2026-11-17, catalyst_split LIVE_BUILD on both boundary conventions, not deal-pinned, correlation clear at 0.550) AND the live lane's own rel_build/persistence selection rule -- but it is raw rank ~26-30 of 1,174 by oi_net_5d, roughly 2x outside the top-15 population the only measured OI_FADE prior (+0.0038, n=1176) was actually computed on. Per Phase C, score = validated_excess x regime_fit x (1-fundamental_contradiction); AS's validated_excess is UNESTABLISHED, not measured-zero and not measured-positive. An unestablished prior cannot inherit a positive score by riding the lane's general reputation -- doing so would repeat the exact additive-confluence-style error (hygiene-pass + narrative standing in for measured excess) the gate stack exists to prevent, and is the same failure class already flagged for this lane (the OI_FADE lane-vs-harness ranking gap: the harness's raw-rank rule has fired 135 calls across 9 sessions while the live rel_build-based lane has fired 0 -- the +0.0038 baseline grades a rule the live engine does not run). Score and size both floor at zero. AS is WATCH, not sized. Because AS never reached a sizing tier, fundamentals-gate was correctly NOT spawned (standing rule: spawn only on names about to be sized). Every other lane failed independently and for reasons unrelated to AS's adjudication: MOM_SHORT (-0.0137, n=830) additionally carries the NEW provisional cap after its 0-for-9/-5.3% forward miss and cannot size a starter even hypothetically until a DURABLE-N (>=30) revalidation; MOM_LONG (-0.0127, n=1154) is basket/watch-only with its own DURABLE-N bar; S2 (+0.0014) and S4 (+0.0025, hit-base negative) are advisory-only and never size regardless of measured excess. The vol book stood aside on both 0DTE sleeves (SPY -0.08%/day net, QQQ -0.033%/day net and short-gamma) and the one live-earnings candidate, ROST (prints tomorrow, 6.47% implied-move floor), lacks a net-of-cost quote analogous to the 0DTE figures, so per the vol-short tail-cap rule ('quote net of cost') it is flagged for manual construction, not sized.",
+    "prior_reconciliation": "held_book carried forward from conviction_2026-08-18.json: 0 open positions, verified back through 08-04 -- every conviction file in the run carries 0. The book has been genuinely flat for 8 sessions; no vestigial-invalidation check applies and there is nothing to mark, hold, cut, or exit."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "ret5": -0.0044,
+    "ret10": -0.0009,
+    "dd15": -0.0365,
+    "vol_state": "LOW",
+    "vix": 14.89,
+    "s1_standdown": false,
+    "directional_tradable": true,
+    "note": "VIX down to 14.89 (from 15.84), LOW tercile. Price breadth healthy (56.66% green) but options-flow breadth weak (36.5% bullish) and sector rotation defensive (out of Tech/Comm Svcs, into Healthcare/Defensive) -- a soft divergence, not a gate trigger. Two forward facts dominate next week: (1) the ret10 anchor mechanically rolls onto the 08-13 high (777.88) on 08-27, driving ret10 to -1.13% and putting PULLBACK only ~0.4% below a flat close; (2) dd15 -3.65% already satisfies crash-guard arm (a)'s dd15<-2% leg -- only a >=+1.5% five-day (close above ~780.65) is needed to flip s1_standdown True. Both land inside the 08-26/08-27/08-28 PCE+NVDA+Jackson-Hole+Warsh Tier-1 cluster. Anything opened this week resolving h5/h10 runs straight into that gauntlet."
+  },
+  "watch": [
+    {
+      "ticker": "AS",
+      "lane": "OI_FADE",
+      "status": "WATCH",
+      "raw_oi_rank": "~26-30/1174",
+      "note": "The night's central name. Clears every mechanical gate and the live lane's own selection rule (oi_rel_build 1.562, persistence 0.736, 5d net +75,011, catalyst_split LIVE_BUILD both boundary conventions) but sits ~2x outside the raw-top-15 population the measured +0.0038 prior covers, so validated_excess is UNESTABLISHED -- watch, not sized. Re-examine if its raw rank climbs into the actual top-15, or when the 2026-08-22 audit's proposed rel_build-rule harness variant lands."
+    },
+    {
+      "ticker": "BSY",
+      "lane": "OI_FADE",
+      "status": "CUT",
+      "raw_oi_rank": "outside top-15",
+      "note": "CUT -- OI_FADE mechanical invalidation FIRED: last call_net -124 on 08-19 (oi_build.py prints 'last call_net NEGATIVE -- calls genuinely closing'). Persistence 0.594, not 0.578. The 5d net is still +4,244 but the call leg has turned over, which is this lane's own stated cut criterion. Orchestrator correction of a Phase-D softening that read 'still building organically' against both the lane's CUT and the tool's explicit invalidation print."
+    },
+    {
+      "ticker": "FDX",
+      "lane": "OI_FADE",
+      "status": "CUT",
+      "raw_oi_rank": "354/1174",
+      "note": "CUT (discretionary, no mechanical trigger) -- last call_net still +440 so the invalidation has NOT fired, but persistence 1.205 trips oi_build.py's own '>0.85 = likely a single-day block, not organic building' flag; daily net alternates sign (08-13 -803, 08-18 -546); rel_build 0.188; raw rank 354/1174, never inherited the measured prior across its whole watch tenure. The organic-build thesis no longer holds."
+    },
+    {
+      "ticker": "NVDA",
+      "lane": "OI_FADE",
+      "status": "EARNINGS_BLOCKED",
+      "raw_oi_rank": "1/1174 (raw top of the population)",
+      "note": "Would otherwise be the strongest raw-rank candidate of the night; blocked outright by its 08-26 print landing inside h10. Re-examine post-print."
+    },
+    {
+      "ticker": "IREN",
+      "lane": "OI_FADE",
+      "status": "EARNINGS_BLOCKED",
+      "raw_oi_rank": "top-15",
+      "note": "08-27 print inside h10. Re-examine post-print."
+    },
+    {
+      "ticker": "RKT",
+      "lane": "OI_FADE",
+      "status": "EXCLUDED",
+      "raw_oi_rank": "top-15",
+      "note": "Exclusion carried forward: ValueAct 9.9% activist stake, build accelerated 2.3x behind the 08-14/08-17 disclosures, re-checked tonight and still live. Catalyst-informed positioning, not a crowd to fade."
+    },
+    {
+      "ticker": "ALHC / ESAB / CPRI / GME / JBTM / ROL / AGCO / CRH / PEG",
+      "lane": "MOM_SHORT",
+      "status": "BASKET_WATCH",
+      "raw_oi_rank": "n/a",
+      "note": "9 names, all Yahoo-verified genuine near-52w-lows. Never sizes; NEW provisional cap means it cannot size a starter even hypothetically pending a DURABLE-N (>=30) forward revalidation (last matured window: 0-for-9, -5.3%)."
+    },
+    {
+      "ticker": "MRNA / TWST / MRK / IOVA / AMLX",
+      "lane": "MOM_LONG",
+      "status": "BASKET_WATCH",
+      "raw_oi_rank": "n/a",
+      "note": "5 of 15 spot-verified genuine near-52w-highs (98.3-99.6% pct_range). Never sizes; lane's own ranking metric is a stale w52h artifact, membership is not."
+    },
+    {
+      "ticker": "ROST",
+      "lane": "vol_earnings",
+      "status": "FLAGGED_NOT_SIZED",
+      "raw_oi_rank": "n/a",
+      "note": "Prints 2026-08-20 before open. 6.47% implied-move FLOOR (ATM straddle 15.20/234.9 spot, deep backwardation 110.9% front vs 37.1% 30d), bracketing expiry confirmed correct. No net-of-cost quote computed -- cannot size under the vol-short tail-cap rule until one is. Flagged for manual construction only."
+    }
+  ],
+  "advisory_no_size": {
+    "S2": "4 candidates, all liquidity-PASS and earnings-clear, never sizes (+0.0014 baseline): SLF ($141.3M DP, 100% sell), YUMC ($21.9M, 90% buy), FRPT ($15.3M, 94.7% buy), ABG ($11.6M, 100% buy). DP complex thin tonight (39 tickers cleared the bar vs ~171 on 08-18).",
+    "S4": "Top clean names, never sizes (+0.0025 baseline, hit-base negative -0.056 -- right-tail only, no hit-rate edge): ZION (PCR 5.40, 307 calls, clears post-fix 250 floor), VICI, GD, TROW, DX. VSXY and BAH excluded on prior blocking VETOs."
+  },
+  "next_run_carry": [
+    "AS is the standing item for the 2026-08-22 calibration audit alongside the general OI_FADE lane-vs-harness gap: propose a harness variant that grades the live lane's rel_build/persistence selection rule against the raw-rank rule on the same panel. Until that lands, AS (and any future rel_build-only clean candidate) stays watch-only regardless of how clean its hygiene gates read.",
+    "NVDA (08-26) and IREN (08-27) earnings-blocked OI_FADE candidates -- re-examine both post-print; NVDA was raw rank 1 tonight.",
+    "MOM_SHORT provisional cap: needs a DURABLE-N (>=30) forward window with positive excess before starter sizing can be considered again -- track at each /calibration-audit, do not re-enable ad hoc.",
+    "The 08-26/08-27/08-28 Tier-1 event stack (PCE+NVDA / Jackson Hole open / Warsh's first keynote as Chair) lands exactly on the 08-27 mechanical PULLBACK pinch (~0.4% below flat) AND the crash-guard one-print-away condition (dd15 already satisfies arm (a); needs only a >=+1.5% five-day). This is the most important thing to watch into next week regardless of any single name.",
+    "ROST prints 2026-08-20 (tomorrow) -- if a net-of-cost vol-earnings quote gets computed intraday, it is workable before the print; otherwise it lapses.",
+    "OKTA and HPQ IV-crush reads are still only usable after overriding the tool's wrong-expiry implied_move_perc (correct bracket for both is 08-28, not the front expiry the tool reads)."
+  ]
+}

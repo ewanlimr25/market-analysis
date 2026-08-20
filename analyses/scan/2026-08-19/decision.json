@@ -1,0 +1,225 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-19",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": -0.0044,
+    "ret10": -0.0009,
+    "vol_state": "LOW",
+    "breadth_pct_green": 56.66,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "date": "2026-08-20",
+        "event": "ROST Q2 FY26 earnings (before open) -- vol-book earnings-IV-crush candidate only, no equity directional read",
+        "tier": "single-name",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26",
+        "event": "PCE price index (July) + Q2 GDP 2nd estimate, 8:30am ET, same-day NVDA Q2 FY27 earnings (after close)",
+        "tier": "tier1",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26",
+        "event": "NVDA earnings blocks the raw-rank #1 OI_FADE candidate (inside h10); IREN blocked by its 08-27 print for the same reason",
+        "tier": "tier1-adjacent",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-27",
+        "event": "MECHANICAL REGIME PINCH: holding SPY flat at 769.06, ret10's anchor rolls onto the 08-13 local high (777.88), driving ret10 to -1.13%; PULLBACK triggers on a 766.21 close -- ~0.4% below flat. Re-derived off tonight's rebuilt truth set.",
+        "tier": "note",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-27",
+        "event": "CRASH GUARD ONE PRINT FROM FIRING: dd15 -3.65% already satisfies guard-arm (a)'s dd15<-2% leg; only needs ret5>+1.5% (a close above ~780.65) to flip s1_standdown True. Jackson Hole opens same day.",
+        "tier": "note",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-28",
+        "event": "Kevin Warsh's first keynote as Fed Chair, Jackson Hole symposium (08-27 to 08-29)",
+        "tier": "tier1",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26/2026-08-28",
+        "event": "SUMMARY: the PCE+NVDA+Warsh Tier-1 cluster is compressed into three sessions and lands exactly on the 08-27 mechanical PULLBACK pinch AND the crash-guard one-print-away condition. Anything opened tonight resolving h5/h10 runs straight into this gauntlet.",
+        "tier": "note",
+        "inside_h10_window": true
+      }
+    ]
+  },
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": true,
+      "vol_state": "LOW tercile, VRP +0.11pp FAIR, LONG spot-vs-flip",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.0008,
+      "suggested_structure": null,
+      "stand_aside_reason": "LOW-VIX-tercile conditional gross +0.02%/day vs 0.10% round-trip cost = -0.08%/day net, despite a green POOLED headline (known tercile-pooling trap).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile, dealers net SHORT gamma (spot below flip)",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": -0.00033,
+      "suggested_structure": null,
+      "stand_aside_reason": "Fails twice over: dealers net short gamma (spot below flip, the left tail this sleeve can't survive) AND -0.033%/day net LOW-tercile.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ROST",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "deep backwardation, front IV 110.9% vs 30d 37.1%",
+      "implied_move": 0.0647,
+      "expected_range": null,
+      "net_expectancy": null,
+      "suggested_structure": "front-IV-crush candidate (e.g. calendar) -- mechanics only, not sized",
+      "stand_aside_reason": "Prints 2026-08-20, bracketing expiry 08-21 confirmed after the print, ATM straddle 15.20/234.9 spot = 6.47% implied move -- but that is a FLOOR, not a net-of-cost quote. Per the vol-short tail-cap rule ('quote net of cost' before sizing), no validated net-of-cost edge was computed the way SPY/QQQ 0DTE were, so it is flagged for manual construction, not sized tonight.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "AS",
+    "FDX",
+    "ALHC",
+    "ESAB",
+    "CPRI",
+    "GME",
+    "JBTM",
+    "ROL",
+    "AGCO",
+    "CRH",
+    "PEG",
+    "MRNA",
+    "TWST",
+    "MRK",
+    "IOVA",
+    "AMLX",
+    "SLF",
+    "YUMC",
+    "FRPT",
+    "ABG",
+    "ZION",
+    "VICI",
+    "GD",
+    "TROW",
+    "DX",
+    "ROST"
+  ],
+  "report_path": "analyses/scan/2026-08-19/report.md",
+  "calls": [
+    {
+      "ticker": "AS",
+      "lane": "OI_FADE",
+      "direction": "short",
+      "horizon_validated": 10,
+      "validated_excess": null,
+      "excess_hit_minus_base": null,
+      "excess_n": null,
+      "regime_fit": 1.0,
+      "tier": "WATCH",
+      "cluster_id": null,
+      "pre_size": "watch",
+      "final_size": "watch",
+      "tail_cap_applied": null,
+      "gate_verdicts": {
+        "regime_crash": "PASS - s1_standdown=False; CHOP is neither of the two mean-reversion regimes that trigger S1-short zeroing (up-thrust/rebound, V-bounce dip). No shorts zeroed. Out-of-regime half-cap ceiling (invariant 4) applies regardless of this gate.",
+        "liquidity": "PASS - price $34.02 (>=$5), 20d $-ADV $178.1M (>=$50M), pulled from liquidity.py, not hand-multiplied.",
+        "cluster": "PASS - single name; AS-SPY corr 0.550 (<0.70), no cluster collapse required, not a beta-in-disguise cohort.",
+        "fundamentals": "NOT_SPAWNED - name never reached a sizing tier (validated_excess unestablished), so per standing rule (spawn only on names about to be sized) fundamentals-gate was correctly not requested.",
+        "event_risk": "PASS single-name (earnings 2026-11-17, clear of h10). CAUTION market-wide: h10 from 08-19 spans the 08-26 PCE+NVDA / 08-27 Jackson Hole+mechanical-pinch / 08-28 Warsh Tier-1 cluster; would independently justify -1 tier (starter->watch) even in the counterfactual where excess had been established.",
+        "tail_cap": "OI_FADE carries no lane-specific tail cap in the NEW list (which only names S1/S2/vol-short); disposition is governed entirely by the validated-excess floor, not a tail cap."
+      },
+      "fundamentals_verdict": "NA",
+      "structure": null,
+      "entry_or_trigger": null,
+      "invalidation": "Not sized, so no stop applies. Re-examine only if (a) AS's raw oi_net_5d rank moves into the harness's actual top-15 population (currently ~26-30/1,174, 2x outside), which would make it inherit the measured +0.0038 prior, or (b) a harness variant that validates the live lane's rel_build/persistence selection rule clears the regression gate (2026-08-22 calibration-audit item).",
+      "key_risks": [
+        "validated_excess UNESTABLISHED, not positive: AS clears every mechanical/hygiene gate and the live lane's own rel_build selection rule, but sits outside the raw-oi_net_5d-top-15 population that the only measured OI_FADE prior (+0.0038, n=1176) was computed on -- an unestablished prior cannot be assumed positive by extension of the lane's general reputation.",
+        "Tier-1 macro stack (08-26 PCE+NVDA, 08-27 Jackson Hole, 08-28 Warsh) sits inside any h5/h10 window opened tonight.",
+        "08-27 mechanical PULLBACK pinch (~0.4% below flat) and crash guard one print (~+1.5% ret5) from firing both land in the same window."
+      ],
+      "thesis": "Best clean candidate under the live lane's own selection rule (oi_rel_build 1.562, persistence 0.736, 5d net +75,011 [call +112,733/put +37,722]), catalyst_split LIVE_BUILD on both boundary conventions, not deal-pinned (1.69%/day realized vol). Withheld from sizing solely because that selection rule has never been validated against a harness baseline -- the only measured OI_FADE prior describes the raw-rank-top-15 population, which AS is not a member of. Per Phase C, score = validated_excess x regime_fit x (1-fundamental_contradiction); an unestablished validated_excess floors the score, and therefore the size, at zero. This is not a claim AS's edge is negative -- it is an epistemic gate: hygiene-pass plus a large rel_build number is not a validated excess, and sizing on it would repeat the additive-confluence error the gate stack exists to prevent."
+    }
+  ],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": "oi_fade_2026-08-19_none",
+      "candidates": [
+        "NVDA",
+        "GLD",
+        "TLT",
+        "META",
+        "NOK",
+        "SLV",
+        "IREN",
+        "DRAM",
+        "WULF",
+        "GOOGL",
+        "AAPL",
+        "RKT",
+        "SQQQ",
+        "ONDS",
+        "MARA",
+        "AS",
+        "BSY",
+        "FDX"
+      ],
+      "note": "Raw top-15 by oi_net_5d (the population the +0.0038/n=1176 baseline is actually measured on): NVDA, GLD, TLT, META, NOK, SLV, IREN, DRAM, WULF, GOOGL, AAPL, RKT, SQQQ, ONDS, MARA. Disposition: 5 ETPs cut (GLD/TLT/SLV/DRAM/SQQQ); NVDA earnings-BLOCKED (08-26, inside h10); IREN earnings-BLOCKED (08-27, inside h10); NOK mechanically invalidated (last call_net -11,101); RKT exclusion carried forward (ValueAct 9.9% activist stake, build accelerated 2.3x behind 08-14/08-17 disclosures, re-checked tonight and still live -- catalyst-informed positioning, not a crowd to fade); META/GOOGL/AAPL/WULF pass every mechanical gate but oi_rel_build 0.045-0.121, an order of magnitude below the lane's own threshold -- big numbers on enormous books, the mega-cap/QQQ-beta-short failure mode, collapsed conceptually into one beta-neutral non-position rather than sized individually. AS is the only name clearing the live lane's rel_build/persistence/hygiene rule in full (see calls[] for the detailed gate stack and the central adjudication: raw rank ~26-30/1,174, outside the population the measured prior covers, so validated_excess is UNESTABLISHED and the score floors at zero -- watch only, not sized). Carried watch: BSY CUT -- mechanical invalidation FIRED (last call_net -124 on 08-19; oi_build.py prints 'last call_net NEGATIVE -- calls genuinely closing (OI_FADE invalidation)'). Persistence 0.594 (not 0.578). Orchestrator correction: Phase D had carried BSY as 'still building organically', which contradicts the lane's own CUT and the tool's explicit invalidation print; verified directly via oi_build.py --tickers BSY --date 2026-08-19 and FDX (dropped to CUT-adjacent watch -- persistence 1.205 = single-day block not organic, alternating daily sign, stuck at raw rank 354/1174)."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_short_2026-08-19_watch",
+      "candidates": [
+        "ALHC",
+        "ESAB",
+        "CPRI",
+        "GME",
+        "JBTM",
+        "ROL",
+        "AGCO",
+        "CRH",
+        "PEG"
+      ],
+      "note": "Baseline -0.0137 (n=830), knowingly negative, watch-only, never sizes. NEW PROVISIONAL CAP applied per the redesigned gate stack: the 2026-07-18 audit's first matured forward window read MOM_SHORT 0-for-9, -5.3% excess (shorted names beat SPY in a risk-on tape), so this lane may not size a real starter even hypothetically until a DURABLE-N (>=30) forward window re-clears positive excess -- advisory/watch only pending a /calibration-audit recommendation to re-enable. All 9 names Yahoo-verified clean by the orchestrator (pct_range 0.6-8.4%, genuine near-52w-lows). Dropped the lane's 10th name FDXF -- only 57 bars of history (spinoff, first bar 2026-05-27), so its '52-week' range is a ~3-month window and is not the validated factor. Lane correctly excluded VMRK/MIDD as stale-w52h false shorts."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_long_2026-08-19_watch",
+      "candidates": [
+        "MRNA",
+        "TWST",
+        "MRK",
+        "IOVA",
+        "AMLX"
+      ],
+      "note": "Baseline -0.0127 (n=1154), never sizes, plus a separate DURABLE-N bar. 15 names total near 52w highs; 5 spot-verified by the orchestrator on Yahoo (MRNA/TWST/MRK/IOVA/AMLX, pct_range 98.3-99.6%). Cohort membership verifies clean, but the lane's reported ranking figures (e.g. 'MRNA 203.7%') are a stale-panel w52h artifact -- name selection is trustworthy, the ranking metric is not."
+    }
+  ]
+}
