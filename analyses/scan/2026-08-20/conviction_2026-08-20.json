@@ -1,0 +1,119 @@
+{
+ "conviction_date": "2026-08-20",
+ "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-20 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+ "source_decision_envelope": "analyses/scan/2026-08-20/decision.json",
+ "book_state": {
+  "positions": 0,
+  "all_shorts": false,
+  "detail": "ZERO new starters. Book stays FLAT for a 9th consecutive session (held_book.py confirmed 0 open / 0 closed off the 08-19 conviction file). Tonight is not a repeat of 08-19's adjudication: AS (OI_FADE) crossed a real threshold -- its raw oi_net_5d rank moved 17 (08-19) -> 15 of 15 (08-20), putting it inside the harness's actual measured population (price>=$5, close*avg30_volume>=$50M, earnings-clear-h10, Common Stock/ADR, non-index, top-15 by oi_net_5d) for the first time. That makes validated_excess ESTABLISHED and POSITIVE (+0.34%, current 92-day panel, n=1218) rather than unestablished, and crosses into the +0.3-1% starter sizing band. The orchestrator correctly spawned fundamentals-gate (standing rule: spawn only on names about to be sized) and it returned VETO -- Q3 EPS guide MISS ($0.31-0.33 vs $0.39 est), Truist PT cut $50->$42, against an otherwise strong tape (4/4 beat streak, +32% YoY revenue, 65.6% gross margin, twice-raised FY26 guidance, net cash $573M, Street 'Strong Buy' ~$50 PT). Per the gate stack, a VETO forces watch-only regardless of a positive validated_excess -- this is a gate-driven downgrade, which the hard rule always permits (no upgrade above the excess-implied size is ever permitted, but downgrades are not a violation). Event-risk (gate 5) would independently have justified the same watch-only outcome even absent the veto: the PCE+NVDA (08-26) / Jackson Hole (08-27-29) / Warsh Fed-chair keynote (08-28) Tier-1 cluster sits inside any h10 window opened tonight, and starter -1 tier is watch. Every other lane failed independently: MOM_SHORT (-0.0136, n=822) carries the provisional cap (0-for-9/-5.3% forward miss) and cannot size a starter until a DURABLE-N (>=30) revalidation; MOM_LONG (-0.0117, n=1170) is basket/watch-only with its own DURABLE-N bar; S2 and S4 are advisory-only and never size regardless of measured excess. Vol-book Phase B DID run tonight; it was correctly not routed through Phase D because nothing in it reached a directional sizing band (the sleeve is non-directional and advisory by construction). Dispositions: 0DTE-VRP STAND ASIDE on both SPY and QQQ. Note the reason CHANGED from the prior eight sessions -- VIX 16.01 sits in the MID tercile (zerodte_setup.py's actual vix_tercile_bounds are [16.0, 17.3], so MID by 0.01), where conditional net is POSITIVE for both (SPY +0.109%/day, QQQ +0.248%/day, net of 0.10% round-trip). So the VIX-tercile pooling trap is NOT what killed it tonight; both were killed on dealer gamma instead. SPY total_gex -1.87B FULLY_NEGATIVE, zero_gamma_level null, spot-vs-flip reads SHORT gamma. QQQ: the CLI's zero_gamma_level 208.83 against spot 710.77 is a tool artifact (a 'flip' 71% below spot) that made zerodte_setup.py read LONG gamma; verified against the per-strike book (total_gex -777M, every strike 689-715 around spot net-negative) and OVERRIDDEN to SHORT. QQQ also independently trips its own front-end backwardation caution (0DTE IV 1.35x VIX). Earnings IV-crush: HPQ/OKTA/ADSK/BBWI all print 08-26 or 08-27 and all bracket on the 08-28 weekly; the bracketing-expiry trap fired on all four (CLI implied_move_perc understated 4-6x). Corrected ATM-straddle moves 10.14%/13.28%/8.83%/11.85%, with defined-risk iron flies quoted net of cost (+7.82%/+7.71%/+5.01%/+8.24% net credit). NOT SIZED: all four bracket expiries sit on top of PCE+NVDA (08-26) and inside Jackson Hole (08-27-29), stacking a macro-vol binary on the idiosyncratic earnings binary at the same expiration, so the unsampled-left-tail cap cannot be satisfied. CM/A/EH excluded (no expiry cleanly brackets their prints); KTCC excluded (7 contracts, untradeable). ROST resolved as calibration data, no P&L: implied-move floor 6.47% flagged 08-19 and correctly not sized, realized -2.43% close-to-close (234.69 -> 228.99) -- a clean crush win the book did not take.",
+  "prior_reconciliation": "held_book carried forward from conviction_2026-08-19.json: 0 open positions. The book has been genuinely flat for 9 sessions; no vestigial-invalidation check applies and there is nothing to mark, hold, cut, or exit."
+ },
+ "regime_carry": {
+  "regime": "CHOP",
+  "ret5": -0.01964,
+  "ret10": -0.00775,
+  "dd15": -0.028,
+  "vol_state": "VIX 16.01 (+7.52%), up sharply for a second session; MID VIX tercile (bounds [16.0, 17.3]) -- MID by 0.01. Both SPY and QQQ dealer books read net-SHORT gamma (vol-amplifying); QQQ's CLI 'POSITIVE'/zero_gamma_level 208.83 label is a verified tool artifact and was overridden.",
+  "vix": 16.01,
+  "s1_standdown": false,
+  "directional_tradable": true,
+  "note": "Two live, opposite-signed paths to a crash-guard flip bracket tonight's ret5: the unconfirmed-dip arm (ret5<-2% & ret10>-2%) is only ~4bp away (actual -1.964%), and the up-thrust/rebound arm (a) already has its dd15<-2% leg satisfied (dd15 -2.80%) and needs only ret5>+1.5% to complete. Either path flips s1_standdown True and zeroes MOM_SHORT/relative-weakness shorts. Breadth weak (31.2% green, 342 decliners vs 157 advancers, bullish_pct 34.6%) even as SPY sits only -0.84% on the day -- a soft-tape/narrow-participation signature. The 08-26 PCE+NVDA / 08-27 Jackson Hole / 08-28 Warsh Fed-chair-keynote Tier-1 cluster is the dominant forward risk: it lands inside any h5/h10 window opened this week and is specifically capable of driving the ret5 rebound-arm trigger (a dovish PCE, a strong NVDA print, or a dovish Warsh debut could each push ret5 through +1.5% intraweek), which would retroactively squeeze any short opened before it fires."
+ },
+ "watch": [
+  {
+   "ticker": "AS",
+   "lane": "OI_FADE",
+   "status": "WATCH",
+   "raw_oi_rank": "15/15 (marginal -- exactly at the harness's LIMIT 15 cutoff)",
+   "note": "REVISED STATUS FROM 08-19: AS's raw oi_net_5d rank crossed into the harness's measured top-15 population tonight (17 -> 15), which is the exact pre-registered trigger from the 08-19 conviction file. validated_excess is now ESTABLISHED and POSITIVE (+0.34%, n=1218), a starter-band score for the first time -- but the OI_FADE gate stack's fundamentals veto (gate 4) is binding and forces watch-only regardless (VETO: Q3 EPS guide miss, Truist PT cut to $42, vs an otherwise strong beat-streak/margin/guidance/balance-sheet profile). This is a materially sharper situation than 08-19's 'unestablished excess' adjudication -- AS no longer needs a rank improvement to size, it needs the fundamentals question to resolve.",
+   "re_examine_trigger": "AS re-enters sizing consideration ONLY if BOTH legs clear on a future session: (1) RANK LEG -- AS's raw oi_net_5d rank must hold inside the harness's actual top-15 population (it is marginal at exactly 15/15 tonight; a single name displacing it back to 16+ reverts validated_excess to unestablished/watch, the pre-08-20 state -- durable membership matters more than a one-night crossing); AND (2) FUNDAMENTALS LEG -- a re-run of fundamentals-gate on AS must return CONFIRM, not CAUTION and not VETO. CONFIRM is required specifically because AS's excess (+0.34%) sits in the starter band (+0.3-1%), the lowest sizeable tier above watch; a CAUTION verdict still applies a full -1 tier (starter -> watch), producing the same watch-only outcome as tonight's VETO, so nothing short of CONFIRM changes the disposition. What would move fundamentals-gate to CONFIRM: resolution or material de-risking of the Q3 EPS guidance miss (the 2026-11-17 print itself falls outside any h10 window opened from a pre-print re-examination, so an interim data point -- e.g. a positive pre-announcement, additional sell-side commentary discounting the miss as conservative guidance rather than deteriorating fundamentals, or a PT reversal from Truist or a peer -- would be needed before the print). Do not size AS on rank alone, and do not size it on a softened fundamentals read alone -- both legs are required per the gate stack's ordering (fundamentals veto is gate 4, independent of and after the excess/rank determination)."
+  },
+  {
+   "ticker": "ALHC / AMRZ / APP / APTV / CMS / MLM / PEG / QXO / ROL",
+   "lane": "MOM_SHORT",
+   "status": "BASKET_WATCH",
+   "raw_oi_rank": "n/a",
+   "note": "9 Yahoo-verified genuine near-52w-lows (of 87 raw candidates). Never sizes; PROVISIONAL cap unchanged pending a DURABLE-N (>=30) forward revalidation. Elevated squeeze risk this week specifically: the crash-guard rebound arm (dd15 already satisfies its leg; needs only ret5>+1.5%) sits one PCE/NVDA/Warsh surprise away from firing, which would zero this basket's short thesis outright."
+  }
+ ],
+ "advisory_no_size": {
+  "S2": "Advisory-only, never sizes (+0.0019 baseline, n=1229). The lane's own IC read is ~0 (binary timing tag, not a magnitude signal) -- ranking treated as non-informative per Phase B's note.",
+  "S4": "Advisory-only, never sizes (+0.0017 baseline, n=1262, call-volume floor >=250 verified biting, cohort min 258). hit-base negative (-0.044) -- right-tail-only, no hit-rate edge. 37 names cleared gates."
+ },
+ "next_run_carry": [
+  "AS is the standing item for the next /calibration-audit (due 2026-08-22): it is the first name in this repo's run to cross from unestablished to established-positive validated_excess purely on a rank change, and the first OI_FADE name blocked by fundamentals-gate rather than by the raw-rank/rel_build population gap. Track both legs of its re-examine trigger (rank durability + fundamentals CONFIRM) at each future session.",
+  "The 08-26/08-27/08-28 Tier-1 event stack (PCE+NVDA / Jackson Hole open / Warsh's first keynote as Fed Chair) is the dominant forward risk. It sits inside any h5/h10 window opened this week and is capable of firing the crash-guard's rebound arm (ret5>+1.5%), which needs only a modest V-shaped 5-day reversal given dd15 -2.80% already satisfies the other leg. A firing would retroactively zero any MOM_SHORT-adjacent short.",
+  "The unconfirmed-dip crash-guard arm is also live and only ~4bp from firing (ret5 -1.964% vs the -2.0% trigger) -- monitor both arms nightly, not just the rebound arm, since a further one-day decline could equally flip s1_standdown from the other side.",
+  "No vol-book Phase B handoff was provided tonight -- next session should confirm whether that lane is being run and, if so, carry its output into Phase D as usual."
+ ],
+ "vol_book": {
+  "zerodte": {
+   "SPY": "STAND_ASIDE",
+   "QQQ": "STAND_ASIDE",
+   "vix": 16.01,
+   "vix_tercile": "MID",
+   "vix_tercile_bounds": [
+    16.0,
+    17.3
+   ],
+   "conditional_net_pct_per_day": {
+    "SPY": 0.109,
+    "QQQ": 0.248
+   },
+   "reason": "MID-tercile net is positive for both; both vetoed on short dealer gamma, not on the pooling trap. QQQ CLI gamma label overridden as a tool artifact."
+  },
+  "earnings_iv_crush": {
+   "status": "ADVISORY_NOT_SIZED",
+   "names": [
+    {
+     "ticker": "HPQ",
+     "print": "2026-08-26",
+     "bracket": "2026-08-28",
+     "cli_implied_move_pct": 1.72,
+     "corrected_move_pct": 10.14,
+     "net_credit_pct": 7.82,
+     "max_loss_pct": 7.35
+    },
+    {
+     "ticker": "OKTA",
+     "print": "2026-08-26",
+     "bracket": "2026-08-28",
+     "cli_implied_move_pct": 2.28,
+     "corrected_move_pct": 13.28,
+     "net_credit_pct": 7.71,
+     "max_loss_pct": 6.45
+    },
+    {
+     "ticker": "ADSK",
+     "print": "2026-08-27",
+     "bracket": "2026-08-28",
+     "cli_implied_move_pct": 2.28,
+     "corrected_move_pct": 8.83,
+     "net_credit_pct": 5.01,
+     "max_loss_pct": 3.86
+    },
+    {
+     "ticker": "BBWI",
+     "print": "2026-08-26",
+     "bracket": "2026-08-28",
+     "cli_implied_move_pct": 2.4,
+     "corrected_move_pct": 11.85,
+     "net_credit_pct": 8.24,
+     "max_loss_pct": 9.79
+    }
+   ],
+   "not_sized_reason": "All four bracket expiries (08-28) stack a macro-vol binary (PCE+NVDA 08-26, Jackson Hole 08-27-29) on the idiosyncratic earnings binary at the same expiration; the unsampled-left-tail cap cannot be satisfied.",
+   "excluded": {
+    "CM/A/EH": "no expiry cleanly brackets the print",
+    "KTCC": "7 contracts total, untradeable"
+   }
+  },
+  "resolved": {
+   "ROST": {
+    "implied_move_floor_pct": 6.47,
+    "realized_pct": -2.43,
+    "outcome": "crush win, NOT SIZED -- calibration point only, no P&L"
+   }
+  }
+ }
+}

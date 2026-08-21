@@ -1,0 +1,88 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-20",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": -0.01964,
+    "ret10": -0.00775,
+    "vol_state": "VIX 16.01 (+7.52% vs prior close), up sharply for a second consecutive session; no 0DTE vol-book Phase B run in tonight's handoff so tercile/net-expectancy not computed -- descriptive only, no direction implied.",
+    "breadth_pct_green": 31.2,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "date": "2026-08-20",
+        "event": "REGIME NEAR-MISS: s1_standdown is False by only ~4bp. The unconfirmed-dip mean-reversion arm (ret5 < -2.0% AND ret10 > -2.0%, a V-bounce setup per RESEARCH/50) needs ret5 < -2.0%; tonight's actual ret5 is -1.964%. ret10 -0.775% already satisfies its leg. A ~4bp deterioration on the next session's ret5 flips s1_standdown True and zeroes all relative-weakness/MOM_SHORT shorts.",
+        "tier": "note",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-20",
+        "event": "CRASH-GUARD ARM (a) PARTIALLY LIVE: dd15 -2.80% already satisfies guard-arm (a)'s dd15<-2% leg (up-thrust/rebound mean-reversion arm); only needs ret5 > +1.5% (a sharp V-shaped 5-day reversal) to flip s1_standdown True via the OTHER arm. Two independent paths to the same crash-guard outcome are now live simultaneously (the dip arm at -4bp and the rebound arm needing +1.5% ret5) -- opposite-signed triggers bracketing the current ret5, which is itself a marker of a genuinely undecided tape.",
+        "tier": "note",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26",
+        "event": "July PCE price index + NVDA Q2 FY27 earnings (after close) -- Tier-1 macro print plus the single largest-cap earnings event of the cycle, same day.",
+        "tier": "tier1",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-27",
+        "event": "Jackson Hole symposium opens (through 08-29).",
+        "tier": "tier1",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-28",
+        "event": "Kevin Warsh's first keynote as Fed Chair, Jackson Hole symposium.",
+        "tier": "tier1",
+        "inside_h10_window": true
+      },
+      {
+        "date": "2026-08-26/2026-08-28",
+        "event": "SQUEEZE VECTOR FOR ANY SHORT COHORT: PCE+NVDA (08-26) and the Warsh keynote (08-28) both sit inside any h5/h10 window opened tonight, on top of the crash-guard being live from BOTH directions (see 08-20 notes above). A dovish PCE surprise, a strong NVDA print, or a dovish Warsh debut are each independently capable of driving the ret5 rebound-arm trigger (>+1.5%) intraweek, which would retroactively zero any MOM_SHORT/relative-weakness short opened before it fires. This is a live path, not a hypothetical -- it is the reason OI_FADE-short and MOM_SHORT candidates carry extra event-risk weight tonight even though nothing is sized.",
+        "tier": "note",
+        "inside_h10_window": true
+      }
+    ]
+  },
+  "watchlist_write_back": [
+    "AS",
+    "ALHC", "AMRZ", "APP", "APTV", "CMS", "MLM", "PEG", "QXO", "ROL"
+  ],
+  "report_path": "analyses/scan/2026-08-20/report.md",
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": null,
+      "candidates": ["AS"],
+      "note": "AS (Amer Sports) crossed a real threshold tonight: independently reproduced retro_harness.py:96-111's exact SQL (price>=$5, close*avg30_volume>=$50M, earnings-clear-h10, issue_type IN Common Stock/ADR, non-index, ORDER BY oi_net_5d DESC LIMIT 15) and confirmed AS moved rank 17 (08-19) -> 15 of 15 (08-20) -- the FIRST session it is inside the harness's actual measured population, which is what the +0.0034 (n=1218, current-panel) OI_FADE prior is computed on. That makes validated_excess ESTABLISHED and POSITIVE for the first time (prior sessions: unestablished, rank ~26-30). At +0.34% mean excess this crosses into the starter sizing band (+0.3-1%). Gate stack: regime/crash PASS (s1_standdown False, CHOP is neither mean-reversion arm, though both are one print away -- see regime_context.event_risk; out-of-regime half-cap ceiling applies to anything that sizes); liquidity PASS ($32.53 price, $176.7M 20d $-ADV, script-verified via liquidity.py, not hand-multiplied); correlation PASS (single name, AS-SPY corr 0.322 << 0.70, no cluster collapse); earnings clear (2026-11-17, outside h10 which ends ~09-03); catalyst_split LIVE_BUILD on both boundary conventions; not deal-pinned; invalidation not fired (last call_net +9,345). fundamentals-gate (spawned by the orchestrator because AS reached a sizing tier tonight) returned VETO: Q3 EPS guide MISS ($0.31-0.33 vs $0.39 est), Truist cut PT $50->$42, against a 4/4 beat streak, +32% YoY revenue, 65.6% gross margin (+710bps), twice-raised FY26 guidance, net cash $573M, Street 'Strong Buy' avg PT ~$50. Per gate 4, VETO -> watch-only regardless of the now-positive excess (hard rule: gate-driven downgrades are always allowed, no upgrade above the excess-implied size is ever permitted, but a downgrade below it is not a violation). Event-risk (gate 5) would independently have justified -1 tier even absent the veto: PCE+NVDA (08-26) and the Warsh Fed-chair keynote (08-28) both sit inside the h10 window, on top of two live crash-guard paths (see regime_context.event_risk) that specifically threaten to zero a MOM_SHORT-adjacent short mid-trade -- starter -1 tier is watch, so the two gates would have agreed on the outcome even though only the veto is binding. Tail cap (gate 6): OI_FADE carries no lane-specific cap in the NEW list (which names only S1/S2/vol-short); disposition here is governed by gates 4 and 5, not a tail cap. NET: AS is WATCH -- not because its excess is unproven anymore (it is now proven, for the first time), but because the fundamentals veto is binding and the hard rule forbids sizing through it. Re-examine trigger recorded in conviction_2026-08-20.json."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_short_2026-08-20_watch",
+      "candidates": ["ALHC", "AMRZ", "APP", "APTV", "CMS", "MLM", "PEG", "QXO", "ROL"],
+      "note": "9 Yahoo-verified genuine near-52w-lows out of 87 raw candidates (22 after issue_type+liquidity, 21 after earnings-clear, 9 after Yahoo 52w-range verification -- 12 dropped on stale/un-split-adjusted w52l). Baseline -0.0136 (n=822) tonight vs -0.0137 (n=830) at the 08-17 baseline -- knowingly negative-excess, the one recorded exception to the no-negative-lane invariant. PROVISIONAL cap from the 2026-07-18 audit remains binding: the lane's first matured forward window was 0-for-9, -5.3% excess, so it cannot size a real starter -- advisory/watch only -- until a DURABLE-N (>=30) forward window re-clears positive excess via a /calibration-audit recommendation. Elevated event-risk tonight specifically for this lane: the crash-guard's rebound arm (dd15 already satisfies its leg; needs only ret5 > +1.5%) would zero these shorts outright if it fires inside the 08-26/08-28 macro cluster -- see regime_context.event_risk squeeze-vector note."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "cluster_id": "mom_long_2026-08-20_watch",
+      "candidates": [],
+      "note": "86-name basket per Phase B. Baseline -0.0117 (n=1170) tonight vs -0.0127 (n=1154) at the 08-17 baseline -- still negative-excess, never sizes regardless, plus a separate unmet DURABLE-N bar. Individual candidate list not carried into this envelope (basket-scale, no per-name adjudication performed tonight since nothing in this lane approaches a sizing question); full 86-name list is in the Phase B handoff and report.md."
+    }
+  ]
+}
