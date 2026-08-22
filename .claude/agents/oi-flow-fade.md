@@ -1,6 +1,6 @@
 ---
 name: oi-flow-fade
-description: NEW lane (Phase 7). Fades persistent multi-day net CALL open-interest building — the single most robust directional edge measured (oi_net_5d rank-IC t=-7.1; short hit 0.54 vs 0.36 base, +0.77% median, n=1159 -- re-baselined 2026-08-15 on the full 2,471-ticker universe). Corrects the old rubric, which scored OI-building as BULLISH; the data says heavy call-OI build PRECEDES underperformance. Orthogonal to momentum (corr -0.17). Horizon h=10. Use in Phase B of /market-scan.
+description: Phase-7 lane, ADVISORY ONLY since 2026-08-22 (demoted from sizing). Fades persistent multi-day net CALL open-interest building. Its historical prior was re-measured 2026-08-22: the +0.38% headline carried a partial-window artifact worth roughly half of it, and the corrected baseline is +0.0013 (79 exit-days, p=0.767) -- indistinguishable from zero. The live lane's own floored selection measures -0.0081 (24 exit-days, p=0.080). NO variant has a validated positive edge, so the lane emits watch-only candidates and never sizes. Direction short, horizon h=10. Use in Phase B of /market-scan.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 effort: high
@@ -83,6 +83,11 @@ Direction **short**, horizon **10**. It is a multi-day (≤T) factor, so no sing
 **Never rank by raw `oi_net_5d`:** raw ranking just lists mega-caps by size and degenerates into a
 QQQ-beta short (−0.43% excess on mega-heavy days). The validated edge is the relative crowded-call
 extreme — beta-neutral dispersion, not an index short.
+**Full 5-day window required (added 2026-08-22):** `oi_net_5d` is `avg(oi_net_cp)` over the trailing
+5 rows and `avg()` does not require five observations, so a name with a partial window is divided by
+k<5 and inflates into the top cohort. On the 93-day panel 75 of 1,237 harness rows had a partial
+window and carried mean **+0.0277** vs **+0.0013** for full-window rows — 60 of them in the panel's
+first four days. Require five observations, fail-closed.
 **Never rank a tiny base — the mirror artifact:** a near-zero `avg_30_day_call_oi` denominator turns
 noise into a top rank (2026-07-06: JPST "6.67× build" off 12 contracts at rank #1; RAM/SNDU, 2×
 leveraged ETFs listed <2 weeks, in the top 6 on meaningless 30d baselines). Floors, fail-closed:
@@ -95,8 +100,14 @@ when a ticker is unfamiliar).
 1. **It is a fade / risk-tilt as much as a standalone short.** Use it two ways: (a) a short lane on the
    heaviest-OI-build names; (b) a **veto/downgrade on LONG calls** — a long thesis on a name with heavy
    `oi_net_5d` is fighting this signal (hand the flag to `risk-sizer`).
-2. **Short discipline:** it's a short on an up-biased tape — size starter/basket, respect the
-   correlation-cluster gate, and stand down if `regime-classifier` flags a strong-rebound thrust.
+2. **ADVISORY ONLY — this lane does not size (2026-08-22).** Emit candidates at `watch`; `risk-sizer`
+   caps the lane regardless. **The ranking was NOT changed**: a first attempt to grade raw `oi_net_5d`
+   against `oi_rel_build` omitted the floors above and wrongly concluded raw was better; faithfully
+   floored, `oi_rel_build` (−0.0081) beats raw (−0.0093) on this lane's own pool and the **persistence
+   gate helps** (−0.0125 → −0.0081). Keep `oi_rel_build` + persistence. What is genuinely open is
+   whether the FLOORS help or hurt — they cut 1,177 rows to 360 and that subset measures negative — and
+   24 exit-days cannot settle it. Still a short on an up-biased tape: respect the correlation-cluster
+   gate, and stand down if `regime-classifier` flags a strong-rebound thrust.
 3. **Provisional:** strong in-sample (t=−7.1, positive median, A&B1-stable) but still 54 days / 2 resolvable
    regimes. Pre-registered for cross-year + conjunction re-test (PR-6/PR-8).
 4. **Forward-decay watch — NOT CONFIRMED (resolved 2026-08-08).** The 08-01 audit flagged a new-evidence

@@ -5,36 +5,42 @@ the baseline moves; `CLAUDE.md` should only ever carry the *current* baseline nu
 
 ## Current baseline
 
-Adopted **2026-08-17** on the **FULL liquid universe** (panel→08-17, 89 days, 2,471-ticker spine),
-**post-`S4_MIN_CALL_VOLUME` fix**:
+Adopted **2026-08-22** on the **FULL liquid universe** (panel→08-21, 93 days, 2,471-ticker spine),
+**post-OI_FADE-full-window fix**:
 
-| Lane | Mean excess | n | Move vs 08-15 baseline | Attribution |
+| Lane | Mean excess | n | Move vs 08-17 baseline | Attribution |
 |---|---|---|---|---|
-| MOM_LONG | −0.0127 | 1154 | −0.0005 | panel growth only (code identical) |
-| MOM_SHORT | −0.0137 | 830 | +0.0003 | panel growth only |
-| OI_FADE | +0.0038 | 1176 | +0.0001 | panel growth only |
-| S2 | +0.0014 | 1210 | +0.0003 | panel growth only |
-| **S4** | **+0.0025** | **1241** | **−0.0016** | **CODE — S4 call-volume floor, see below** |
+| MOM_LONG | −0.0118 | 1213 | +0.0009 | panel growth only (code identical) |
+| MOM_SHORT | −0.0138 | 830 | −0.0001 | panel growth only |
+| **OI_FADE** | **+0.0013** | **1177** | **−0.0025** | **CODE — full-window fix, see below** |
+| S2 | +0.0018 | 1269 | +0.0004 | panel growth only |
+| S4 | +0.0024 | 1304 | −0.0001 | panel growth only |
 
 `python3 scripts/retro_harness.py --all` must show no lane below its recorded baseline after any
 lane/threshold change. **Every baseline is only meaningful against the universe it was measured on — state
 the spine size whenever you record one.**
 
-**Why the whole table moved together.** Only S4 changed by code. The other four are the 88→89-day panel
-increment and nothing else — proven by an old-code/new-data control run on the identical 89-day panel
-*before* the patch: MOM_LONG −0.0127 (1154) · MOM_SHORT −0.0137 (830) · OI_FADE +0.0038 (1176) ·
-S2 +0.0014 (1210) · S4 **+0.0048** (1225). All four non-S4 lanes are **bit-identical pre- and post-patch**,
-which is isolation check (c) passing. Recording only S4's new figure against the old 88-day numbers would
-have mixed two spines inside one baseline line — the exact error this file exists to prevent.
+**Why the table was re-pointed at all.** The 08-22 audit deliberately did *not* re-baseline on panel
+growth (see the unwind worked example below) — but a **code** change forces it, because post-fix code
+cannot be graded against a pre-fix baseline. Only OI_FADE moved by code. The other four are the 89→93-day
+panel increment and nothing else, proven by the old-code/new-data control on the identical 93-day panel
+*before* the patch: MOM_LONG −0.0118 (1213) · MOM_SHORT −0.0138 (830) · **OI_FADE +0.0029 (1237)** ·
+S2 +0.0018 (1269) · S4 +0.0024 (1304). All four non-OI_FADE lanes are **bit-identical pre- and
+post-patch** — isolation check (c) passing.
 
-> ⚠️ **This baseline was depressed by a correlated draw, and that draw UNWOUND on 2026-08-22 exactly as
-> pre-registered.** The 08-15 increment was 317 rows spanning only **5 exit-days** (08-10→08-14), with
-> `base` pinned at 1.00 for MOM_LONG and 0.00 for both short lanes; 08-17 added a single further exit-day.
-> The 08-22 increment is its **mirror** — see
-> [the worked example](#worked-example-2026-08-22-the-pre-registered-unwind-arrived). **The baseline below
-> is deliberately NOT re-pointed to the 93-day panel**: re-baselining on a 4-exit-day reversal would bake
-> one draw into the reference the next cycle compares against, which is the failure this file exists to
-> prevent. The baseline stays at `a4278af` until a genuinely multi-window increment arrives.
+> ⚠️ **Carried forward: this panel increment is a 4-exit-day correlated draw, the mirror of the two
+> before it.** MOM_LONG's +0.0009 and S2's +0.0004 are that draw unwinding, **not** lanes improving —
+> see [the worked example](#worked-example-2026-08-22-the-pre-registered-unwind-arrived). Do not credit
+> any change with them, and do not read OI_FADE's −0.0025 as decay: it is
+> [artifact removal](#solid-the-baseline-carried-a-panel-edge-artifact-fixed-re-baselined).
+
+> ⚠️ **OI_FADE no longer sizes** (demoted to advisory 2026-08-22). Its corrected +0.0013 is
+> indistinguishable from zero (79 exit-days, p=0.767), so **no lane in the book currently sizes.**
+
+### Prior baseline (2,471-ticker spine, panel→08-17, 89 days, superseded 2026-08-22)
+
+MOM_LONG −0.0127 (1154) · MOM_SHORT −0.0137 (830) · OI_FADE +0.0038 (1176) · S2 +0.0014 (1210) ·
+S4 +0.0025 (1241) — post-`S4_MIN_CALL_VOLUME` fix.
 
 ### S4 re-baseline: +0.0041 → +0.0025 (2026-08-17) — artifact removal, not decay
 
@@ -318,47 +324,83 @@ Three things follow:
    it is what `PR-9` already pre-registers for S4 entry timing. Until then, read OI_FADE's forward N as
    "~2 units per runner" and size nothing on its growth rate.
 
-## OI_FADE: the baseline and the live lane grade different rules (2026-08-22)
+## OI_FADE: the baseline carried an artifact, and the rules are NOT distinguishable (2026-08-22)
 
-`retro_harness.py --all --oi-variant both` exists because the only lane that **sizes** was being
-graded by a rule the engine does not run. The baseline ranks by raw `oi_net_5d`; the live lane
-(`.claude/agents/oi-flow-fade.md`, `scripts/oi_build.py`) ranks by `oi_rel_build` and drops
-single-day blocks on `persistence_ratio`. On the same 93-day panel:
+`retro_harness.py --all --oi-variant both` exists because the only lane that **sized** was being
+graded by a rule the engine does not run. Two conclusions, one solid and one a retraction.
 
-| lane | selection | n | mean excess | hit−base | median |
-|---|---|---|---|---|---|
-| `OI_FADE` | raw `oi_net_5d`, full pool (**the baseline**) | 1237 | **+0.0029** | +0.155 | +0.0077 |
-| `OI_FADE_RAWPOOL` | raw rank, live-eligible pool | 1177 | **−0.0004** | +0.179 | +0.0065 |
-| `OI_FADE_LIVE` | `oi_rel_build` + persistence gate | 1171 | **−0.0076** | +0.130 | −0.0023 |
+### Solid: the baseline carried a panel-edge artifact (FIXED, re-baselined)
 
-Read as two separate effects — conflating them is why the flag emits all three:
+`oi_net_5d` is `avg(oi_net_cp) OVER (ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)`, and `avg()` does
+**not** require five observations: a partial window divides by k<5 and inflates the name into the
+top-15. On the 93-day panel **75 of 1,237 resolved rows (6.1%) had a partial window and carried
+mean +0.0277**, against **+0.0013** for full-window rows. **60 of those 75 are the panel's FIRST
+FOUR DAYS** (2026-03-13→03-18), where the feature is not yet defined at all — 15 names × 4 days,
+one correlated draw at the left edge. Paired by exit-day the artifact is worth **+0.0021,
+p=0.018**.
 
-**1. Roughly half the baseline's edge is a partial-window artifact.** `oi_net_5d` is
-`avg(oi_net_cp) OVER (ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)`, and `avg` does **not** require
-five observations: a ticker with a partial window is divided by k<5, inflating it into the
-top-15. Of the baseline's 1,237 resolved rows, **75 (6.1%) have a partial window and carry mean
-+0.0277**, against **+0.0013** for the 1,162 full-window rows. This is the same shape as the S4
-PCR-denominator artifact — a metric whose denominator is not floored — and it was found the same
-way, by asking what the ranking actually selects.
+The lane now joins the full-window panel. **OI_FADE re-baselines +0.0029 → +0.0013** on the
+93-day panel. This is **artifact removal, not decay** — the same category as the S4 call-volume
+floor, and like it, the removed rows were supplying the right tail. `hit − base` is *unharmed*
+(+0.155 → +0.184) and the lane stays positive in all three regimes (CHOP +0.0023 / PULLBACK
++0.0014 / UPTREND +0.0001), so what was removed was mean, not hit-rate.
 
-**2. On an identical pool, the LIVE rule grades WORSE than the raw rule, not better.** Ranking by
-`oi_rel_build` costs ~48bp (−0.0004 → −0.0052 with the persistence gate off) and the persistence
-gate a further ~24bp (→ −0.0076). The 2026-08-18 scan set out two possibilities — that the live
-gates add edge and the baseline understates the live lane, or the reverse. **On this panel it is
-the reverse**, for the ranking and persistence components.
+### Retraction: the "live rule grades worse" finding was measured on a misspecified pool
 
-**What this does and does not license:**
+The first cut of this comparison reported the live rule at **−0.0076, p=0.014 on 79 exit-days**
+and concluded the live lane's ranking was measurably harmful. **That counterfactual omitted the
+live lane's own fail-closed floors** (`.claude/agents/oi-flow-fade.md`: net build ≥ 1,000
+contracts, `avg_30_day_call_oi` ≥ 1,000, exclude listings younger than ~60 trading days). It
+required only `acoi > 0`, re-admitting the precise tiny-base artifact the lane exists to exclude.
+Faithfully floored:
 
-- It does **not** condemn the live lane. Its news/catalyst gates are **still ungraded** — the panel
-  carries no news tape — and those gates have caught real defects (COKE 08-17, GEN, AZN). The
-  measured comparison covers selection, not gating.
-- It **does** mean the **+0.0038 prior may not be cited as validation of the lane the engine runs**.
-  It grades a different selection, and on a pool whose top decile is partly an artifact.
-- OI_FADE is the **only lane that sizes**, so this is the highest-priority open question in the
-  repo. Neither number is currently fit to size on: the prior grades the wrong rule, and the
-  forward book is frozen at ~80 cluster-units by [re-signal
-  dedup](#re-signal-dedup-caps-a-lanes-forward-n-structural-not-bad-luck).
-- **Do not "fix" the artifact by re-baselining to +0.0013 or to any of these figures.** They are
-  one panel, and the pool restriction changes which names backfill the top-15. The next step is a
-  decision about which rule the repo intends to run, not a new number.
+| selection (all on the live lane's own floored pool) | n | exit-days | mean | p |
+|---|---|---|---|---|
+| `oi_rel_build` + persistence gate (**the LIVE lane**) | 360 | 24 | **−0.0081** | 0.080 |
+| raw `oi_net_5d` rank, same pool | 360 | 24 | **−0.0093** | — |
+| `oi_rel_build`, persistence gate OFF | 360 | 24 | −0.0125 | 0.005 |
 
+Three corrections follow, and they reverse the original reading:
+
+1. **Raw ranking is not better than `oi_rel_build`** — on the live lane's own pool it is *worse*
+   (−0.0093 vs −0.0081). **No rule switch is warranted**, and none was made.
+2. **The persistence gate HELPS**, it does not hurt (−0.0125 → −0.0081). The earlier "the gate
+   costs 24bp" reading was an artifact of the unfloored pool.
+3. **The live rule's negative is PROVISIONAL, not DURABLE** — 24 exit-days at p=0.080, not 79 at
+   p=0.014. Under this file's own rules that is not actionable evidence.
+
+What actually differs between the +0.0013 baseline and the −0.0081 live measurement is **the
+pool, not the ranking**: the live lane's floors cut 1,177 rows to 360, and that floored subset
+measures negative. Whether those floors help or hurt is now the open question — they were adopted
+to remove a real artifact (JPST's "6.67× build" off 12 contracts), so they cannot simply be
+dropped, and 24 exit-days cannot settle it.
+
+**Procedural lesson, and it is the same one as 2026-08-15:** a counterfactual must re-implement
+the gate's *actual* floors. Grading a rule you did not faithfully reproduce measures nothing, and
+it took a near-miss lane change to catch. Re-read the lane spec before writing the counterfactual,
+not after.
+
+### Where this leaves the lane
+
+**No OI_FADE variant has a validated positive edge.** Corrected baseline +0.0013 (79 exit-days,
+p=0.767) is indistinguishable from zero; the live lane's floored measurement is −0.0081 at
+PROVISIONAL N. OI_FADE is therefore **demoted from sizing to advisory** (2026-08-22) — see
+[`lanes.md`](lanes.md). That is a consequence of "no validated edge", not of the retracted
+finding.
+
+### PR-10 — the rank band (pre-registered 2026-08-22, NOT scored)
+
+The signal is not in the extreme top of the ranking. On the full-window pool, raw rank:
+
+| band | n | mean | exit-day mean | p |
+|---|---|---|---|---|
+| ranks 1–15 (the shipped cut) | 1177 | −0.0004 | −0.0003 | 0.948 |
+| ranks 16–30 | 1184 | +0.0044 | +0.0044 | 0.376 |
+| **ranks 31–60** | 2359 | **+0.0093** | +0.0094 | **0.054** |
+| ranks 1–50 | 3936 | +0.0052 | +0.0052 | 0.212 |
+
+This matches both documented artifacts at once — raw's extreme top is a mega-cap beta short,
+`rel_build`'s extreme top is tiny-base noise, and the signal sits below both. **It is NOT scored:**
+p=0.054 **fails BH(0.10) across the five bands tested** (cut = 0.02), and the band was chosen after
+seeing the result, so it is in-sample by construction. It graduates only on data postdating
+2026-08-22. Do not size it, and do not re-cut the live lane to it.

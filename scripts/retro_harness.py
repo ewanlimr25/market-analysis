@@ -67,6 +67,17 @@ S4_MIN_CALL_VOLUME = 250
 # need the news tape, which the panel does not carry. `live` is the live RANKING plus the
 # persistence gate -- it prices the SELECTION difference, not the gating difference.
 OI_PERSISTENCE_MAX = 0.85          # oi_build.py flags >0.85 as a single institutional block
+# The live lane's OWN fail-closed floors (`.claude/agents/oi-flow-fade.md`, "Never rank a tiny
+# base"). Omitting them is not a simplification -- it re-admits the exact tiny-base artifact the
+# lane exists to exclude (JPST "6.67x build" off 12 contracts at rank #1), and a counterfactual
+# that does so measures a rule nobody runs. The first cut of this comparison (2026-08-22) made
+# that mistake and reported the live rule at -0.0076/p=0.014 on 79 exit-days; faithfully floored
+# it is -0.0081 on 360 rows / 24 exit-days, p=0.080 -- same sign, PROVISIONAL not DURABLE. It
+# also inverted the persistence-gate result: unfloored the gate looked harmful (-0.0052 ->
+# -0.0076), floored it HELPS (-0.0125 -> -0.0081).
+OI_MIN_NET_BUILD = 1000            # absolute 5d net call-put build, contracts
+OI_MIN_CALL_OI_BASE = 1000         # avg_30_day_call_oi -- the rel_build denominator
+OI_MIN_LISTING_DAYS = 60           # a fresh listing has no meaningful 30d OI base
 _OI_LIVE_PANEL_READY = False
 
 
@@ -85,9 +96,11 @@ def _ensure_oi_live_panel():
         FROM read_parquet('{FEAT}')
         WINDOW win AS (PARTITION BY ticker ORDER BY date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)
       )
-      SELECT ticker, date, close, avg30_volume, net_sum,
-             CASE WHEN net_sum<>0 THEN max_abs/abs(net_sum) END AS persistence
-      FROM w WHERE nobs=5""")
+      SELECT w.ticker, w.date, w.close, w.avg30_volume, w.net_sum, a.nrows,
+             CASE WHEN w.net_sum<>0 THEN w.max_abs/abs(w.net_sum) END AS persistence
+      FROM w JOIN (SELECT ticker, date, row_number() OVER (PARTITION BY ticker ORDER BY date)
+                     AS nrows FROM read_parquet('{FEAT}')) a USING(ticker, date)
+      WHERE w.nobs=5""")
     _OI_LIVE_PANEL_READY = True
 
 
@@ -119,10 +132,12 @@ def oi_fade_pool_candidates(T, rank="rel", persistence_gate=True, limit=15):
                    any_value(next_earnings_date) ned, any_value(issue_type) it,
                    any_value(is_index) idx
             FROM read_parquet({SCR!r}) WHERE date=DATE '{T}' GROUP BY ticker) s USING(ticker)
-      WHERE o.date=DATE '{T}' AND s.acoi>0 AND o.net_sum>0
+      WHERE o.date=DATE '{T}'
         AND o.close>=5 AND o.close*o.avg30_volume>=50e6
         AND (s.ned IS NULL OR s.ned > DATE '{hz_end(T,10)}')
-        AND s.it IN ('Common Stock','ADR') AND s.idx=false {pgate}
+        AND s.it IN ('Common Stock','ADR') AND s.idx=false
+        AND o.net_sum >= {OI_MIN_NET_BUILD} AND s.acoi >= {OI_MIN_CALL_OI_BASE}
+        AND o.nrows >= {OI_MIN_LISTING_DAYS} {pgate}
       ORDER BY {order} LIMIT {limit}""").fetchall()
 
 # ---- regime gate (from SPY) -------------------------------------------------
@@ -166,11 +181,21 @@ def fire(T, oi_variant="raw"):
             "invalidation":f"loses the 52w-high breakout / sharp risk-off reversal"})
     # OI_FADE — heavy 5-day net call-OI build => UNDERperformance (oi_net_5d, t=-7.1, Phase 7); short, h=10
     try:
+        _ensure_oi_live_panel()          # supplies the full-5-day-window requirement below
         rows = con.execute(f"""
           SELECT f.ticker, f.oi_net_5d FROM read_parquet('{FEAT}') f
+          -- `oi_net_5d` is avg(oi_net_cp) over ROWS BETWEEN 4 PRECEDING AND CURRENT ROW, and
+          -- avg() does NOT require five observations: a partial window divides by k<5 and
+          -- inflates the name into the top-15. 60 of the 75 partial-window rows on the 93-day
+          -- panel are the panel's FIRST FOUR DAYS, where the feature is not yet defined, and
+          -- they carried mean +0.0277 against +0.0013 for full-window rows -- paired by
+          -- exit-day the artifact is worth +0.0021, p=0.018. `oi_live` is filtered to nobs=5,
+          -- so joining it imposes the requirement. Artifact removal, not a threshold change.
+          -- [audit 2026-08-22]
+          JOIN oi_live w ON w.ticker=f.ticker AND w.date=f.date
           JOIN (SELECT ticker, any_value(next_earnings_date) ned, any_value(issue_type) it,
                        any_value(is_index) idx FROM read_parquet({SCR!r})
-                WHERE date=DATE '{T}' GROUP BY ticker) e USING(ticker)
+                WHERE date=DATE '{T}' GROUP BY ticker) e ON e.ticker=f.ticker
           WHERE f.date=DATE '{T}' AND f.oi_net_5d IS NOT NULL AND f.close>=5
             AND f.close*f.avg30_volume>=50e6
             -- [audit 2026-07-24] this lane previously had NO earnings gate and NO ETP
@@ -184,10 +209,14 @@ def fire(T, oi_variant="raw"):
           ORDER BY f.oi_net_5d DESC LIMIT 15""").fetchall()
         for tk,v in rows:
             calls.append({"ticker":tk,"lane":"OI_FADE","direction":"short","horizon":10,
-                "regime":reg["label"],"size":"starter","entry":None,
+                "regime":reg["label"],"size":"advisory","entry":None,
                 "invalidation":"OI build reverses / name breaks out on real catalyst"})
-    except Exception:
-        pass
+    except Exception as exc:
+        # NEVER swallow this. A broken lane query silently removes the lane from `--all`, and a
+        # missing lane reads as "no regression" instead of "the gate stopped measuring it".
+        # [audit 2026-08-22]
+        print(f"  !! OI_FADE lane query FAILED on {T}: {type(exc).__name__}: {exc}", file=sys.stderr)
+        raise
     # S2 DP one-sided concentration revert (h=5), long-tilted, earnings-gated
     erjoin = f"""JOIN (SELECT ticker, any_value(next_earnings_date) ned, any_value(issue_type) it,
                  any_value(is_index) idx FROM read_parquet({SCR!r})

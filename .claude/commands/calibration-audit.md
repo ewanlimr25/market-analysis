@@ -77,6 +77,11 @@ Accrue resolved evidence toward each open pre-registration and report progress v
 - **PR-WT** weekly-technical features (≥2yr / ≥30 weekly obs per arm, cross-regime, BH) — from `/weekly-review` Layer 3.
 - **PR-1** sector-flow (decided: beta, `research/60`), **PR-6** momentum×oi_net conjunction, **PR-7** PEAD/insider
   on extended panel (`research/80`), **PR-2** S1 crash guard through a real V-rebound, **PR-5** S1 options-carry.
+- **PR-10** OI_FADE rank band (registered 2026-08-22): the signal is not in the extreme top of the ranking —
+  ranks 31–60 measure **+0.0093** (exit-day p=0.054) where the shipped ranks 1–15 measure −0.0004. It **fails
+  BH(0.10) across the five bands tested** and the band was chosen after seeing the result, so it is in-sample
+  by construction. Bar: it must clear on data postdating 2026-08-22, cross-regime, BH. **Do not re-cut the
+  live lane to it before then** ([`docs/regression-gate.md`](../../docs/regression-gate.md#pr-10--the-rank-band-pre-registered-2026-08-22-not-scored)).
 - A pre-registration graduates to a scored lane ONLY when its bar is cleared on data that postdates its registration.
 
 ## Step 6 — Recommendations (propose-only) + SUMMARY

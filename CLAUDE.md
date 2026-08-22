@@ -17,14 +17,19 @@ logic or gates.** Full doc index, including the history behind every rule below:
 2. **No additive confluence.** A name scores on ONE lane's measured excess × regime-fit. Orthogonal lanes that
    agree are noted, never summed (additive confluence produced a −8.2% / 0-for-6 book — `research/50`).
 3. **Most days have no directional edge — say so.** The modal output is regime + vol book + watch list.
-4. **Half-cap, no auto-full.** No call sizes full until a cross-year edge validates.
+4. **Half-cap, no auto-full.** No call sizes full until a cross-year edge validates. **As of
+   2026-08-22 NO lane sizes at all** — OI_FADE, the last one, was demoted to advisory when its prior
+   was re-measured and no variant showed a validated positive edge. A book that sizes nothing is the
+   correct output of invariant #1 when nothing clears; it is not a defect to be worked around.
 5. **Pre-registered ≠ scored.** Weekly technicals and all PR-* items are documented, never sized, until their
    bar clears on data that postdates registration.
 6. **Regression gate is law:** `python3 scripts/retro_harness.py --all` must show no lane **below its
-   recorded baseline** after any lane/threshold change. **Current baseline** (adopted 2026-08-17 on the
-   FULL liquid universe, panel→08-17, 89 days, 2,471-ticker spine, post-S4-floor fix): **MOM_LONG −0.0127
-   (n=1154) · MOM_SHORT −0.0137 (n=830) · OI_FADE +0.0038 (n=1176) · S2 +0.0014 (n=1210) ·
-   S4 +0.0025 (n=1241).** Only S4 moved by code (call-volume floor, +0.0041 → +0.0025 — **artifact removal,
+   recorded baseline** after any lane/threshold change. **Current baseline** (adopted 2026-08-22 on the
+   FULL liquid universe, panel→08-21, 93 days, 2,471-ticker spine, post-OI_FADE-full-window fix):
+   **MOM_LONG −0.0118 (n=1213) · MOM_SHORT −0.0138 (n=830) · OI_FADE +0.0013 (n=1177) ·
+   S2 +0.0018 (n=1269) · S4 +0.0024 (n=1304).** Only OI_FADE moved by code (partial-window artifact
+   removal, +0.0029 → +0.0013 — **not decay**; `hit − base` *improved* +0.155 → +0.184); an
+   old-code/new-data control on the same 93-day panel reproduced the other four bit-identically. Only S4 moved by code (call-volume floor, +0.0041 → +0.0025 — **artifact removal,
    not decay**; an old-code/new-data control on the same 89-day panel read S4 +0.0048 and the other four
    lanes bit-identical). ⚠️ **Do not read S4's drop as a lane getting worse:** its `hit − base` was already
    negative *before* the fix (−0.041 → −0.056), so S4 has never had a hit-rate edge on this panel — the
@@ -62,7 +67,7 @@ yet. Full per-lane notes and the 785-spine comparison: [`docs/lanes.md`](docs/la
 
 | Lane | Dir | Horizon | Realized (harness) | Status |
 |---|---|---|---|---|
-| `oi-flow-fade` (OI_FADE) | short | h10 | +0.38% mean / +0.79% median, hit 0.54 vs 0.36, n=1176 | **Sizes** — ⚠️ but this prior grades the **raw `oi_net_5d`** rule, not the `oi_rel_build` rule the live lane runs. On an identical pool the live rule measures **−0.0076** vs raw's −0.0004, and ~half the +0.38% is a **partial-window artifact** (6.1% of rows, mean +0.0277). `--oi-variant both`; [`docs/regression-gate.md`](docs/regression-gate.md#oi_fade-the-baseline-and-the-live-lane-grade-different-rules-2026-08-22) |
+| `oi-flow-fade` (OI_FADE) | short | h10 | **+0.13% mean, n=1177** (post full-window fix) | ⚠️ **ADVISORY — demoted from sizing 2026-08-22.** No variant has a validated positive edge: the corrected baseline is indistinguishable from zero (79 exit-days, p=0.767) once a partial-window artifact worth ~half the old +0.38% is removed, and the live lane's floored selection reads −0.81% (24 exit-days, p=0.080). Ranking UNCHANGED (`oi_rel_build` + persistence — a first counterfactual that said otherwise omitted the lane's floors and is retracted). **No lane sizes now.** [`docs/regression-gate.md`](docs/regression-gate.md#oi_fade-the-baseline-carried-an-artifact-and-the-rules-are-not-distinguishable-2026-08-22) |
 | `momentum` MOM_SHORT (near-52w-low) | short | h10 | −1.37% mean, n=830 | Watch-only, crash-gated, never sizes |
 | `momentum` MOM_LONG (near-52w-high) | long | h10 | −1.27% mean, n=1154 | Basket/watch only, never sizes |
 | `liquidity-reversion` (S2) | long | h3–5 | +0.14%, n=1210 | Advisory-only |

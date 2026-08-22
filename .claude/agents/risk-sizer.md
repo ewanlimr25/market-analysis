@@ -37,6 +37,16 @@ You consume the Phase-B lane outputs + the Phase-A regime context + the Phase-C 
      not stopped, but it may not size a real starter until a DURABLE-N (≥30) forward window re-clears
      positive excess. Still a right-skew basket; never single-name HIGH. Re-enable starter sizing via a
      `/calibration-audit` recommendation, not ad hoc.
+   - **OI_FADE** → **advisory/watch only, NO starter, pending forward re-validation** (demoted from
+     sizing 2026-08-22). Its historical prior was re-measured that cycle and **no variant of the lane
+     has a validated positive edge**: the corrected baseline is **+0.0013** (79 exit-days, p=0.767 —
+     indistinguishable from zero) after removing a partial-window artifact that had supplied roughly
+     half the headline +0.38%, and the live lane's own floored selection measures **−0.0081**
+     (24 exit-days, p=0.080). The forward book is separately frozen at ~80 cluster-units by re-signal
+     dedup. **This was the last lane that sized, so the book currently sizes nothing** — that is the
+     honest reading of invariant #1, not an error. Re-enable via a `/calibration-audit`
+     recommendation on a DURABLE-N forward window, never ad hoc.
+     See [`docs/regression-gate.md`](../../docs/regression-gate.md#oi_fade-the-baseline-carried-an-artifact-and-the-rules-are-not-distinguishable-2026-08-22).
    - **S2 long** → cut on any same-day news/catalyst; veto if earnings fall anywhere in the h-window (not T+3).
    - **Vol-short** → size for the unsampled left tail; quote **net of cost**.
 
