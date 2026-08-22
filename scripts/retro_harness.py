@@ -15,6 +15,7 @@ Usage:
   python3 retro_harness.py --date 2026-06-23           # fire + resolve one day
   python3 retro_harness.py --all                       # validate across all panel days (aggregate excess by lane)
   python3 retro_harness.py --all --compare-old         # also resolve the old system's decision.json calls
+  python3 retro_harness.py --all --oi-variant both     # grade the RAW vs the LIVE OI_FADE rule
 """
 import duckdb, glob, json, argparse, os, statistics, sys
 from datetime import date as _date
@@ -52,6 +53,78 @@ def panel_dates():
 # [audit 2026-08-17]
 S4_MIN_CALL_VOLUME = 250
 
+# ---- OI_FADE: the harness rule vs the LIVE rule -----------------------------------------
+# The baseline OI_FADE lane below ranks by RAW `oi_net_5d`. The live lane
+# (`.claude/agents/oi-flow-fade.md`, `scripts/oi_build.py`) ranks by `oi_rel_build`
+# = net_5d / avg_30_day_call_oi and drops single-day blocks via `persistence_ratio`.
+# Those are DIFFERENT RULES, so the +0.0038 prior and the forward book grade different
+# things and the gap between them cannot be read as decay (2026-08-18 scan FINDING 1;
+# 2026-08-22 audit proposal 6). `--oi-variant both` grades all three selections on the same
+# panel -- baseline, raw-rank-on-the-live-pool, and the live rule -- so the RULE difference is
+# separated from the POOL difference instead of being read off one confounded number.
+#
+# NOT implementable here, and therefore still ungraded: the live lane's news/catalyst gates
+# need the news tape, which the panel does not carry. `live` is the live RANKING plus the
+# persistence gate -- it prices the SELECTION difference, not the gating difference.
+OI_PERSISTENCE_MAX = 0.85          # oi_build.py flags >0.85 as a single institutional block
+_OI_LIVE_PANEL_READY = False
+
+
+def _ensure_oi_live_panel():
+    """Materialise the 5-day OI build panel once -- a window scan per panel day is too slow."""
+    global _OI_LIVE_PANEL_READY
+    if _OI_LIVE_PANEL_READY:
+        return
+    con.execute(f"""
+      CREATE OR REPLACE TEMP TABLE oi_live AS
+      WITH w AS (
+        SELECT ticker, date, close, avg30_volume,
+               sum(oi_net_cp)      OVER win AS net_sum,
+               max(abs(oi_net_cp)) OVER win AS max_abs,
+               count(oi_net_cp)    OVER win AS nobs
+        FROM read_parquet('{FEAT}')
+        WINDOW win AS (PARTITION BY ticker ORDER BY date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW)
+      )
+      SELECT ticker, date, close, avg30_volume, net_sum,
+             CASE WHEN net_sum<>0 THEN max_abs/abs(net_sum) END AS persistence
+      FROM w WHERE nobs=5""")
+    _OI_LIVE_PANEL_READY = True
+
+
+def oi_fade_pool_candidates(T, rank="rel", persistence_gate=True, limit=15):
+    """OI_FADE selection on the LIVE-ELIGIBLE pool: a full 5-day OI window and a real call book.
+
+    `rank="rel"` is the live rule (oi_rel_build = net_5d / avg_30_day_call_oi);
+    `rank="raw"` is the baseline rule (net 5-day build) run on the SAME pool.
+
+    Why the pool is restricted, and why that matters for the comparison: the baseline lane
+    ranks on `features.oi_net_5d`, which is `avg(oi_net_cp)` over `ROWS BETWEEN 4 PRECEDING
+    AND CURRENT ROW` -- and `avg` does NOT require five observations. A ticker with a partial
+    window is divided by k<5, which inflates it into the top-15. Measured 2026-08-22: 75 of
+    the baseline's 1,237 resolved rows (6.1%) have a partial window and carry mean +0.0277,
+    against +0.0013 for the 1,162 full-window rows. **More than half the lane's headline
+    +0.0029 comes from 6% of rows that never had a full 5-day build** -- the same shape as the
+    S4 PCR-denominator artifact. `oi_rel_build` cannot even be computed for them (no call-OI
+    base), so any raw-vs-live comparison must hold the pool fixed or it prices the artifact
+    instead of the rule.
+    """
+    _ensure_oi_live_panel()
+    order = "o.net_sum/s.acoi DESC" if rank == "rel" else "o.net_sum DESC"
+    pgate = (f"AND (o.persistence IS NULL OR o.persistence <= {OI_PERSISTENCE_MAX})"
+             if persistence_gate else "")
+    return con.execute(f"""
+      SELECT o.ticker, o.net_sum/s.acoi AS rel_build, o.persistence
+      FROM oi_live o
+      JOIN (SELECT ticker, any_value(avg_30_day_call_oi) acoi,
+                   any_value(next_earnings_date) ned, any_value(issue_type) it,
+                   any_value(is_index) idx
+            FROM read_parquet({SCR!r}) WHERE date=DATE '{T}' GROUP BY ticker) s USING(ticker)
+      WHERE o.date=DATE '{T}' AND s.acoi>0 AND o.net_sum>0
+        AND o.close>=5 AND o.close*o.avg30_volume>=50e6
+        AND (s.ned IS NULL OR s.ned > DATE '{hz_end(T,10)}')
+        AND s.it IN ('Common Stock','ADR') AND s.idx=false {pgate}
+      ORDER BY {order} LIMIT {limit}""").fetchall()
+
 # ---- regime gate (from SPY) -------------------------------------------------
 # Lives in scripts/_regime.py so the harness, the live scan and the lanes cannot drift
 # apart on the label or the crash guard -- same reasoning as the _calendar.hz_end move.
@@ -61,7 +134,7 @@ def classify_regime(T):
     return _classify_regime(T, con)
 
 # ---- lanes ------------------------------------------------------------------
-def fire(T):
+def fire(T, oi_variant="raw"):
     reg = classify_regime(T)
     calls = []
     # S1 relative-weakness short (h=10), regime-gated
@@ -154,6 +227,26 @@ def fire(T):
         calls.append({"ticker":tk,"lane":"S4_pcr_fade","direction":"long","horizon":5,
             "regime":reg["label"],"size":"advisory","entry":None,
             "invalidation":"put-heavy turns out informed (gap down on news)"})
+    # OI_FADE (LIVE rule) -- emitted under its own lane name so a `both` run compares the two
+    # selections side by side on identical days. The raw block above is untouched: `raw` (the
+    # default) must stay bit-identical to the recorded baseline. [audit 2026-08-22]
+    if oi_variant in ("live", "both"):
+        # OI_FADE_RAWPOOL isolates the RULE from the POOL: raw ranking on the live-eligible
+        # pool. OI_FADE vs OI_FADE_RAWPOOL is the partial-window artifact; OI_FADE_RAWPOOL vs
+        # OI_FADE_LIVE is the actual raw-vs-live rule comparison. Reading the headline
+        # OI_FADE vs OI_FADE_LIVE alone conflates the two.
+        variants = ((("OI_FADE_RAWPOOL", "raw", False),) if oi_variant == "both" else ()) + \
+                   (("OI_FADE_LIVE", "rel", True),)
+        for lane_name, rank, pgate in variants:
+            try:
+                for tk, _rel, _pers in oi_fade_pool_candidates(T, rank, pgate):
+                    calls.append({"ticker":tk,"lane":lane_name,"direction":"short","horizon":10,
+                        "regime":reg["label"],"size":"starter","entry":None,
+                        "invalidation":"OI build reverses / name breaks out on real catalyst"})
+            except Exception:
+                pass
+    if oi_variant == "live":
+        calls = [c for c in calls if c["lane"] != "OI_FADE"]
     return reg, calls
 
 # ---- resolve realized excess from truth set ---------------------------------
@@ -172,12 +265,12 @@ def resolve(T, calls):
     """).fetchall()
     return rows
 
-def run_all(compare_old=False):
+def run_all(compare_old=False, oi_variant="raw"):
     dates = panel_dates()
     lane_acc = {}   # lane -> list of (dir_excess, win, base_hit)
     standdowns=0
     for T in dates:
-        reg, calls = fire(T)
+        reg, calls = fire(T, oi_variant)
         if reg["s1_standdown"]: standdowns+=1
         for tk,lane,dr,h,de,bh,res in resolve(T, calls):
             if not res or de is None: continue
@@ -220,10 +313,13 @@ if __name__=="__main__":
     ap=argparse.ArgumentParser()
     ap.add_argument("--date"); ap.add_argument("--all",action="store_true")
     ap.add_argument("--compare-old",action="store_true")
+    ap.add_argument("--oi-variant", choices=("raw","live","both"), default="raw",
+                    help="OI_FADE selection rule: raw oi_net_5d (baseline), the live "
+                         "oi_rel_build+persistence rule, or both side by side")
     a=ap.parse_args()
-    if a.all: run_all(a.compare_old)
+    if a.all: run_all(a.compare_old, a.oi_variant)
     elif a.date:
-        reg,calls=fire(a.date)
+        reg,calls=fire(a.date, a.oi_variant)
         print(f"REGIME {a.date}: {reg}")
         res={(r[0],r[1]):r for r in resolve(a.date,calls)}
         for c in calls:

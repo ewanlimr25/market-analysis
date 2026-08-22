@@ -29,16 +29,26 @@ logic or gates.** Full doc index, including the history behind every rule below:
    lanes bit-identical). ⚠️ **Do not read S4's drop as a lane getting worse:** its `hit − base` was already
    negative *before* the fix (−0.041 → −0.056), so S4 has never had a hit-rate edge on this panel — the
    removed names were supplying the right tail. See [`docs/regression-gate.md`](docs/regression-gate.md#s4-re-baseline-00041--00025-2026-08-17--artifact-removal-not-decay).
-   ⚠️ **This figure is depressed by a correlated draw.** Two consecutive increments (08-08 and 08-15) have
-   been the *same* one-way rally: the 08-15 increment is 317 rows across only **5 exit-days**, with `base`
-   pinned at 1.00 for MOM_LONG and 0.00 for both short lanes. When it unwinds the lanes will rise on their
-   own — **that recovery is not evidence a fix worked.** A
+   ⚠️ **That correlated draw UNWOUND on 2026-08-22, exactly as pre-registered — and the pre-registration
+   is what made the cycle readable.** Increments 08-08 and 08-15 were the *same* one-way rally (317 rows,
+   5 exit-days, `base` pinned 1.00 long / 0.00 short); the 08-22 increment is its **mirror** (4 exit-days,
+   base pinned 0.00 long / 1.00 short, SPY down in 100% of new windows). So **MOM_LONG's and S2's rise is
+   not a fix working, and OI_FADE's −9bp is not decay** — its baseline cohort reproduces exactly. The
+   baseline above is deliberately **not** re-pointed to the 93-day panel: re-baselining on a 4-exit-day
+   reversal would bake one draw into the reference. When an increment's `base` is pinned, write down what
+   the unwind will look like ([`docs/regression-gate.md`](docs/regression-gate.md#worked-example-2026-08-22-the-pre-registered-unwind-arrived)). A
    baseline is only meaningful against the universe it was measured on — state the spine size whenever you
    record one, and a below-baseline lane is not automatically a regression (panel growth and universe
    changes move the pooled mean independent of code). **This applies to gate-effectiveness figures too,
    not just lanes:** any measured number carries the spine it was measured on, so re-run isolation check
    (c) before citing one across a universe change. The 2026-08-15 audit is the worked example — the crash
-   guard's DURABLE p=0.010 was a 785-spine artifact and reads p=0.237 on the full spine. MOM_SHORT is the
+   guard's DURABLE p=0.010 was a 785-spine artifact and reads p=0.237 on the full spine. **A STOP flag is governed by the `cluster_id` unit** (else the name) — the
+   risk-sizer's own unit — with the **exit-day** view reported alongside it every cycle, and a lane whose
+   distinct exit-day count is <30 carries a correlated-draw caveat and cannot graduate to sizing on that
+   evidence alone. Declared 2026-08-22, when the three units first disagreed on the whole book (−0.60% /
+   −0.97% / −2.20%); never report one unit alone
+   ([`docs/regression-gate.md`](docs/regression-gate.md#which-clustering-unit-governs-a-stop-flag)).
+   MOM_SHORT is the
    **one** recorded exception to "no
    lane negative-excess" (knowingly negative, watch-only capped); don't add another without the same
    written rationale. Full history, the isolation-check protocol, and the worked examples (2026-08-08
@@ -52,7 +62,7 @@ yet. Full per-lane notes and the 785-spine comparison: [`docs/lanes.md`](docs/la
 
 | Lane | Dir | Horizon | Realized (harness) | Status |
 |---|---|---|---|---|
-| `oi-flow-fade` (OI_FADE) | short | h10 | +0.38% mean / +0.79% median, hit 0.54 vs 0.36, n=1176 | **Sizes — most robust lane** |
+| `oi-flow-fade` (OI_FADE) | short | h10 | +0.38% mean / +0.79% median, hit 0.54 vs 0.36, n=1176 | **Sizes** — ⚠️ but this prior grades the **raw `oi_net_5d`** rule, not the `oi_rel_build` rule the live lane runs. On an identical pool the live rule measures **−0.0076** vs raw's −0.0004, and ~half the +0.38% is a **partial-window artifact** (6.1% of rows, mean +0.0277). `--oi-variant both`; [`docs/regression-gate.md`](docs/regression-gate.md#oi_fade-the-baseline-and-the-live-lane-grade-different-rules-2026-08-22) |
 | `momentum` MOM_SHORT (near-52w-low) | short | h10 | −1.37% mean, n=830 | Watch-only, crash-gated, never sizes |
 | `momentum` MOM_LONG (near-52w-high) | long | h10 | −1.27% mean, n=1154 | Basket/watch only, never sizes |
 | `liquidity-reversion` (S2) | long | h3–5 | +0.14%, n=1210 | Advisory-only |
@@ -63,16 +73,20 @@ yet. Full per-lane notes and the 785-spine comparison: [`docs/lanes.md`](docs/la
 ## Data & tools
 - Panel: `~/Documents/Stocks/{All Options, Dark pool, Hot Option Chains, OI changes, Stock Screener}` (read via `uw` CLI / DuckDB).
 - Truth set: `data/{prices,returns,features,weekly_features}.parquet` (built by `scripts/truthset/*`). `edge.py` = the conditional-benchmark resolver.
-- `retro_harness.py` = the standing regression gate. `factor_scan.py` = the cross-sectional factor zoo.
+- `retro_harness.py` = the standing regression gate (`--oi-variant both` grades the raw vs the live OI_FADE rule). `factor_scan.py` = the cross-sectional factor zoo.
+- `resolved_ledger.py` = the durable record of matured calls. Re-deriving realized excess from the live vendor feed is **not idempotent** — EQR resolved at the 08-15 audit and was un-resolvable a week later after Yahoo retracted 11 sessions — so the audit book is not append-only unless the ledger restores it. `chart.py` exposes `gaps()`/`bars_grid()` for the same reason; never index a lookback by position.
 - `fz` (Finviz) advisory; `mcp__yahoo-finance__*` NOT for path-aware outcomes.
 
 ## Cadence
 Nightly `/market-scan` (post-8PM-EST export). Weekend `/weekly-review`. Weekly/per-~10-resolved
-`/calibration-audit`. **Next audit due 2026-08-22.** 23 open call-rows (11 OI_FADE, 5 MOM_SHORT, 7 S4),
-**174 open suppressed candidates**, and the 08-03→08-07 crash-guard block all mature 08-17→08-22 — the
-first genuinely non-overlapping cohort, now deferred twice (08-08 and 08-15 both expected it and both got
-a single one-way window instead: 08-15 added only 15 resolved rows across 5 exit-days). Count distinct
-**exit-days**, not rows, when judging any cohort
+`/calibration-audit`. **Next audit due 2026-08-29.** **11 open call-rows (all OI_FADE, 7 distinct names)**
+and **215 open suppressed candidates** — the suppressions are the real cohort now: they crossed into
+PROVISIONAL this cycle (21 lane-periods, −1.74%, p=0.008), while the call book added only **11 rows over
+2 exit-days** and the sized book gained **zero**. **Stop scheduling "the first non-overlapping OI_FADE
+cohort" as a matter of waiting** — re-signal dedup caps that lane at ~2 cluster-units per runner, however
+long it runs, which is why it has been deferred three cycles
+([`docs/regression-gate.md`](docs/regression-gate.md#re-signal-dedup-caps-a-lanes-forward-n-structural-not-bad-luck)).
+Count distinct **exit-days**, not rows, when judging any cohort
 ([`docs/regression-gate.md`](docs/regression-gate.md#exit-day-counting-companion-rule)).
 
 ## Git

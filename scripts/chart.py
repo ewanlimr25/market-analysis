@@ -103,6 +103,47 @@ def _fetch(ticker: str, rng: str, host: str) -> dict:
         return json.load(r)["chart"]["result"][0]
 
 
+def _healed(ticker: str, rng: str) -> tuple[dict[str, dict], list[str]]:
+    """Fetch + self-heal, returning (bars keyed by date, the FULL session grid).
+
+    Split out from `bars()` so callers that need to know what is MISSING can get the grid;
+    `bars()` alone returns a sparse list that is indistinguishable from a dense one.
+    """
+    res = _fetch(ticker, rng, HOSTS[0])
+    by_date, grid, splits = _parse(res)
+
+    for attempt in range(1, MAX_FETCH_TRIES):
+        if not _interior_holes(by_date, grid):
+            break
+        try:
+            more, more_grid, more_splits = _parse(_fetch(ticker, rng, HOSTS[attempt % len(HOSTS)]))
+        except Exception:                             # noqa: BLE001 -- a failed retry is not
+            continue                                  # fatal; we still have the first fetch
+        by_date = {**more, **by_date}                 # keep what we already trust
+        grid = more_grid if len(more_grid) > len(grid) else grid
+        splits = splits or more_splits
+
+    return _apply_splits(by_date, splits), grid
+
+
+def bars_grid(ticker: str, rng: str = "6mo") -> tuple[list[dict], list[str]]:
+    """`bars()` plus the full session grid, so a caller can see which sessions are absent."""
+    by_date, grid = _healed(ticker, rng)
+    return [b for _, b in sorted(by_date.items())], grid
+
+
+def gaps(ticker: str, rng: str = "6mo") -> list[str]:
+    """Interior sessions with no bar after every retry -- an UNHEALABLE vendor gap.
+
+    Not every hole is transient. EQR was served missing 11 sessions (2026-07-23 -> 08-10)
+    identically on both hosts AND both query forms, and the truth-set rebuild inherited it;
+    a previously-RESOLVED call became INCONCLUSIVE a week later. Retrying cannot fix that,
+    so callers must be able to ASK. [audit 2026-08-22]
+    """
+    by_date, grid = _healed(ticker, rng)
+    return _interior_holes(by_date, grid)
+
+
 def bars(ticker: str, rng: str = "6mo") -> list[dict]:
     """Daily OHLCV + `adj` (split/dividend-adjusted close), oldest first.
 
@@ -120,33 +161,54 @@ def bars(ticker: str, rng: str = "6mo") -> list[dict]:
     2. **Unpropagated splits** -- see `_apply_splits`.
 
     A hole that survives every retry is left as a genuine gap; callers must still handle a
-    missing date rather than assume the grid is dense.
+    missing date rather than assume the grid is dense -- use `gaps()` or `bars_grid()` to
+    detect one instead of indexing by position.
     """
-    res = _fetch(ticker, rng, HOSTS[0])
-    by_date, grid, splits = _parse(res)
-
-    for attempt in range(1, MAX_FETCH_TRIES):
-        if not _interior_holes(by_date, grid):
-            break
-        try:
-            more, more_grid, more_splits = _parse(_fetch(ticker, rng, HOSTS[attempt % len(HOSTS)]))
-        except Exception:                             # noqa: BLE001 -- a failed retry is not
-            continue                                  # fatal; we still have the first fetch
-        by_date = {**more, **by_date}                 # keep what we already trust
-        grid = more_grid if len(more_grid) > len(grid) else grid
-        splits = splits or more_splits
-
-    return [b for _, b in sorted(_apply_splits(by_date, splits).items())]
+    return bars_grid(ticker, rng)[0]
 
 
 def rets(ticker: str, horizons=(5, 10), rng: str = "6mo") -> dict:
-    """Trailing simple returns over N TRADING days (matching the truth-set grid)."""
-    b = bars(ticker, rng)
-    c = [x["close"] for x in b]
-    out = {"close": round(c[-1], 4), "date": b[-1]["date"]}
+    """Trailing simple returns over N TRADING days, anchored on the SESSION GRID by date.
+
+    Previously this walked back `h` POSITIONS in the returned bar list. That is only the same
+    thing when the series is dense, and an unhealable vendor gap makes it silently wrong:
+    on EQR (11 missing sessions) `rets(10)` reached back 21 real sessions and still labelled
+    itself `ret10` -- a 2.1x overstatement, in the read path `held_book.py` and the lanes use.
+
+    Anchors on `grid` instead, and REFUSES (returns None + `retN_why`) when the anchor session
+    has no bar, rather than substituting a different one. `retN_gaps` counts missing sessions
+    inside the window even when both endpoints are present, so a caller can tell that the
+    return is arithmetically fine but the window is not the h sessions it claims.
+
+    Returns are computed on `adj`, per this module's own rule for multi-day returns -- the old
+    close-based read booked the split factor as a price move on any lookback crossing a split.
+    [audit 2026-08-22]
+    """
+    rows, grid = bars_grid(ticker, rng)
+    if not rows:
+        return {"close": None, "date": None}
+    by_date = {b["date"]: b for b in rows}
+    last = rows[-1]["date"]
+    gi = grid.index(last)
+    out = {"close": round(rows[-1]["close"], 4), "date": last}
+
     for h in horizons:
-        out[f"ret{h}"] = round(c[-1] / c[-1 - h] - 1, 5) if len(c) > h else None
-        out[f"ret{h}_from"] = b[-1 - h]["date"] if len(c) > h else None
+        ai = gi - h
+        if ai < 0:
+            out[f"ret{h}"], out[f"ret{h}_from"] = None, None
+            out[f"ret{h}_why"] = f"only {gi} sessions of history before {last}"
+            continue
+        anchor = grid[ai]
+        window = grid[ai:gi + 1]
+        out[f"ret{h}_from"] = anchor
+        out[f"ret{h}_sessions"] = h
+        out[f"ret{h}_gaps"] = sum(1 for d in window if d not in by_date)
+        if anchor not in by_date:
+            out[f"ret{h}"] = None
+            out[f"ret{h}_why"] = (f"no bar on anchor session {anchor} (vendor gap) -- "
+                                  f"refusing to substitute a different session")
+            continue
+        out[f"ret{h}"] = by_date[last]["adj"] / by_date[anchor]["adj"] - 1
     return out
 
 
@@ -227,9 +289,14 @@ def main() -> int:
         if "rets" in r:
             v = r["rets"]
             parts = [f"close {v['close']} ({v['date']})"]
-            for k in v:
-                if k.startswith("ret") and not k.endswith("_from") and v[k] is not None:
-                    parts.append(f"{k} {100*v[k]:+.3f}% (vs {v[k+'_from']})")
+            # Only the bare `retN` keys are values; `_from`/`_sessions`/`_gaps`/`_why` are
+            # metadata and must not be formatted as percentages. [audit 2026-08-22]
+            for k in sorted(k for k in v if k.startswith("ret") and k[3:].isdigit()):
+                if v[k] is None:
+                    parts.append(f"{k} UNAVAILABLE ({v.get(k + '_why', 'no reason given')})")
+                    continue
+                note = f" [{v[k + '_gaps']} session(s) missing in window]" if v.get(k + "_gaps") else ""
+                parts.append(f"{k} {100*v[k]:+.3f}% (vs {v[k + '_from']}){note}")
             print("  " + " | ".join(parts))
         if "w52" in r:
             v = r["w52"]

@@ -210,3 +210,76 @@ class TestBarsRetry:
         monkeypatch.setattr(C, "_fetch", lambda t, r, h: seq.pop(0) if seq else second)
         out = C.bars("GD", "1y")
         assert [b["date"] for b in out] == sorted(b["date"] for b in out)
+
+
+class TestSessionGrid:
+    """`bars()` alone cannot tell a caller that sessions are MISSING -- it returns a sparse
+    list and looks dense. The 2026-08-22 audit found EQR served with an 11-session interior
+    gap that persisted across both hosts AND both query forms, so the retry cannot heal it.
+    Callers therefore need the grid to detect what is absent."""
+
+    def test_bars_grid_returns_full_session_grid(self, monkeypatch):
+        res = payload(["2026-07-20", "2026-07-21", "2026-07-22"], [1.0, None, 3.0])
+        monkeypatch.setattr(C, "_fetch", lambda t, r, h: res)
+        rows, grid = C.bars_grid("EQR", "1y")
+        assert [b["date"] for b in rows] == ["2026-07-20", "2026-07-22"]
+        assert grid == ["2026-07-20", "2026-07-21", "2026-07-22"], "grid keeps the blanked session"
+
+    def test_gaps_reports_unhealed_interior_sessions(self, monkeypatch):
+        res = payload(["2026-07-20", "2026-07-21", "2026-07-22"], [1.0, None, 3.0])
+        monkeypatch.setattr(C, "_fetch", lambda t, r, h: res)
+        assert C.gaps("EQR", "1y") == ["2026-07-21"]
+
+    def test_gaps_empty_on_dense_series(self, monkeypatch):
+        res = payload(["2026-07-20", "2026-07-21"], [1.0, 2.0])
+        monkeypatch.setattr(C, "_fetch", lambda t, r, h: res)
+        assert C.gaps("SPY", "1y") == []
+
+
+class TestRetsAreDateIndexed:
+    """The live defect: `rets()` walked back h POSITIONS in the returned bar list, so a
+    vendor gap silently widened the window. On EQR, `rets(10)` spanned 21 real sessions and
+    still called itself `ret10`. It must index on the session grid, and refuse rather than
+    guess when the anchor session has no bar."""
+
+    # 12 sessions, with 07-23..07-24 blanked -- the EQR shape in miniature.
+    DATES = ["2026-07-20", "2026-07-21", "2026-07-22", "2026-07-23", "2026-07-24",
+             "2026-07-27", "2026-07-28", "2026-07-29", "2026-07-30", "2026-07-31",
+             "2026-08-03", "2026-08-04"]
+    HOLED = [100.0, 101.0, 102.0, None, None, 105.0, 106.0, 107.0, 108.0, 109.0, 110.0, 111.0]
+    DENSE = [100.0, 101.0, 102.0, 103.0, 104.0, 105.0, 106.0, 107.0, 108.0, 109.0, 110.0, 111.0]
+
+    def test_dense_series_anchors_exactly_h_sessions_back(self, monkeypatch):
+        monkeypatch.setattr(C, "_fetch", lambda t, r, h: payload(self.DATES, self.DENSE))
+        out = C.rets("SPY", (10,), "1y")
+        assert out["ret10_from"] == "2026-07-21", "10 sessions back from 2026-08-04"
+        assert out["ret10"] == pytest.approx(111.0 / 101.0 - 1)
+        assert out["ret10_sessions"] == 10
+
+    def test_gap_at_anchor_refuses_rather_than_spanning(self, monkeypatch):
+        # 10 grid-sessions back from 2026-08-04 is 2026-07-21 (present) -- use h=8, whose
+        # anchor 2026-07-23 IS blanked, so the old code would have reached further back.
+        monkeypatch.setattr(C, "_fetch", lambda t, r, h: payload(self.DATES, self.HOLED))
+        out = C.rets("EQR", (8,), "1y")
+        assert out["ret8"] is None, "must not silently substitute a different session"
+        assert out["ret8_from"] == "2026-07-23"
+        assert "gap" in (out["ret8_why"] or "").lower()
+
+    def test_gap_elsewhere_in_window_is_still_reported(self, monkeypatch):
+        """Anchor present but the window interior is holed: the return is arithmetically
+        fine (endpoints only) yet the window is not the h sessions it claims."""
+        monkeypatch.setattr(C, "_fetch", lambda t, r, h: payload(self.DATES, self.HOLED))
+        out = C.rets("EQR", (10,), "1y")
+        assert out["ret10"] == pytest.approx(111.0 / 101.0 - 1)
+        assert out["ret10_gaps"] == 2, "07-23 and 07-24 are missing inside the window"
+
+    def test_multi_day_return_uses_adjusted_close(self, monkeypatch):
+        """The module mandates `adj` for any multi-day return; `rets` used raw close, so a
+        split inside the lookback booked the split factor as a price move."""
+        raw = [200.0, 202.0, 204.0, 206.0, 208.0, 210.0, 212.0, 214.0, 216.0, 218.0, 110.0, 111.0]
+        split = [{"date": "2026-08-03", "num": 2.0, "den": 1.0, "ratio": "2:1"}]
+        monkeypatch.setattr(C, "_fetch", lambda t, r, h: payload(self.DATES, raw, adj=raw,
+                                                                 splits=split))
+        out = C.rets("MNST", (10,), "1y")
+        # pre-split adj halves to 101.0; a close-based read would book ~-45%.
+        assert out["ret10"] == pytest.approx(111.0 / 101.0 - 1)
