@@ -1,0 +1,162 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-08-21",
+ "report_kind": "market-scan",
+ "regime": "CHOP",
+ "regime_context": {
+  "regime_label": "CHOP",
+  "ret5": -0.0137,
+  "ret10": -0.0098,
+  "vol_state": "VIX 15.13 (-0.88 pts, -5.5%) -> LOW tercile (actual vix_tercile_bounds [16.0, 17.3]). SPY dealers decisively SHORT gamma (total_gex -894.8M, no flip in range, per-strike book uniformly negative around spot 765.72). QQQ weakly short / near-flat (total_gex -18.7M; spot+/-10 strikes sum -9.0M) -- the CLI's POSITIVE/LONG label rests on zero_gamma_level 207.89 vs spot 713.23, the same artifact class as 08-20's 208.83, and was OVERRIDDEN for a second consecutive night.",
+  "breadth_pct_green": 66.0,
+  "directional_tradable": true,
+  "s1_standdown": false,
+  "event_risk": [
+   {
+    "date": "2026-08-26",
+    "event": "PCE (Fed preferred inflation gauge)",
+    "tier": 1
+   },
+   {
+    "date": "2026-08-26",
+    "event": "NVDA Q2 FY27 earnings, after close",
+    "tier": 1,
+    "note": "market-moving single-name"
+   },
+   {
+    "date": "2026-08-27..2026-08-29",
+    "event": "Jackson Hole Symposium",
+    "tier": 1
+   },
+   {
+    "date": "2026-08-28",
+    "event": "Fed Chair Warsh first Jackson Hole keynote",
+    "tier": 1
+   },
+   {
+    "date": "2026-09-04",
+    "event": "August NFP",
+    "tier": 1,
+    "note": "lands on the FINAL trading day of any h10 window opened 2026-08-21"
+   }
+  ]
+ },
+ "calls": [],
+ "lane_status": [
+  {
+   "lane": "OI_FADE",
+   "disposition": "NO_NAME_CLEARED",
+   "direction": "short",
+   "regime_fit": 1.0,
+   "cluster_id": null,
+   "candidates": [
+    "AS",
+    "ULS",
+    "VIRT",
+    "NXPI",
+    "PR",
+    "NYT",
+    "VIK",
+    "ACMR",
+    "TJX",
+    "ALHC",
+    "CAKE",
+    "PSNL",
+    "DK",
+    "PTEN",
+    "CCC"
+   ],
+   "note": "ZERO clean established candidates. (1) BINDING LANE-LEVEL CONSTRAINT: OI_FADE's CHOP-conditional excess is +0.0014 (n=359, t=0.28, 95% CI [-0.0088,+0.0117]) -- statistically indistinguishable from zero and below the +0.3% starter floor. This is the regime-stratified input Phase C actually specifies; the pooled figure (+0.0029, n=1237) is ALSO below the floor, so both readings agree. (2) AS -- the standing 2-leg carry trigger from 08-20 -- RESOLVED AND CUT, overdetermined: leg 1 (rank durability) PASSED and improved, raw oi_net_5d rank 17->15->12 of 15 within the harness's exact 1,399-name population (orchestrator reproduced retro_harness.py:94-111 verbatim, then the lane confirmed independently); leg 2 (fundamentals CONFIRM) FAILED -- fundamentals-gate re-run returned VETO restated, nothing material since 08-20 (all substantive news dated 08-18/08-19; the lone 08-20-stamped item does not mention AS); and NEW tonight and decisive, AS's own mechanical invalidation FIRED -- last call_net -5,956, net -3,446, calls genuinely closing against a 5d build of +101,641 (08-17 +55,187 / 08-18 +8,200 / 08-19 +33,349 / 08-20 +8,351 / 08-21 -3,446). Same rule that cut COO 08-13, NRG 08-14, GEN 08-17 -- AS is the 4th. AS was also already -11.4% over 10 days (RSI14 39.8), a fade arriving late. catalyst_split still LIVE both boundaries (54.7% inclusive / 45.1% strict), so the build was real through 08-20 -- it is the reversal, not the build, that kills it. (3) raw-vs-rel_build overlap is 1 of 15 (AS alone); the standing oi-fade-lane-vs-harness-ranking-gap continues -- all 14 other rel_build candidates carry UNESTABLISHED validated_excess (best raw rank among mechanically clean names is VIK 153/1,399) and cannot inherit the lane prior. CUTS: PSNL -- MERGER-ARB GATE, FIRST LIVE CATCH SINCE THE GATE SHIPPED 2026-08-01 (announced $1.5B all-stock Tempus AI acquisition disclosed 08-20; essentially the entire 5d build accrued in the two sessions after the deal broke -- spread hedging, not fadeable froth). TJX -- print-day boundary trap fired, catalyst_split 132.6% inclusive vs 15.8% STRICT '>': opposite verdicts from the same data, the EWTX failure mode. PR/NYT/ALHC/CCC -- single-day blocks (persistence 0.906-1.029). NXPI -- carried 08-07 mechanism-cut, unresolved Ambarella rumor, nothing changed. RKT -- carried ValueAct activist-stake exclusion, nothing changed."
+  },
+  {
+   "lane": "MOM_SHORT",
+   "disposition": "BASKET_WATCH",
+   "direction": "short",
+   "regime_fit": 1.0,
+   "cluster_id": null,
+   "candidates": [
+    "APP",
+    "AZO",
+    "BWXT",
+    "CMS",
+    "CPRI",
+    "FRVO",
+    "GXO",
+    "LHX",
+    "LII",
+    "NRG",
+    "ONON",
+    "PEG"
+   ],
+   "note": "12 Yahoo-verified genuine near-52w-lows from 82 raw candidates; the screener issue_type filter cut 70 ETF/ETN at source (AGG, BIL, VXX, UVXY, UVIX, RWM and 64 others) and every survivor was re-verified with chart.py --52w per the pct_52w_range corruption defect (stale/un-split-adjusted w52h manufactures FALSE SHORTS). NEVER SIZES: PROVISIONAL cap, knowingly-negative lane (invariant #6's single recorded exception), forward book 0-for-9 / -5.3%; requires a DURABLE-N (>=30) forward revalidation via /calibration-audit, not ad hoc. CHOP-conditional excess -0.0220 (n=282, t=-4.36) -- negative in EVERY regime bucket (CHOP -0.0220, PULLBACK -0.0098, UPTREND -0.0094). Carry-over from 08-20: only APP, CMS, PEG persist of the prior 9; ALHC, AMRZ, APTV, MLM, QXO, ROL dropped out. Blocking priors unchanged on APP (08-12 provisional cap), FRVO (07-28 tail cap), PEG (08-11 CAUTION -1 tier: second consecutive EPS miss, no insider dip-buying, D/E 5.55-9.78). SQUEEZE RISK ELEVATED: crash-guard rebound arm's dd15 leg is already satisfied (-2.020%) and needs only ret5 > +1.5% (a +2.87pt swing) -- a dovish PCE/Warsh or strong NVDA print inside 08-26..08-28 would fire it and retroactively zero this basket."
+  },
+  {
+   "lane": "MOM_LONG",
+   "disposition": "BASKET_WATCH",
+   "direction": "long",
+   "regime_fit": 1.0,
+   "cluster_id": null,
+   "candidates": [],
+   "note": "455 raw near-52w-high names; basket/watch only, never sizes, DURABLE-N bar unmet. CHOP-conditional excess -0.0257 (n=356, t=-4.30, 95% CI [-0.0374,-0.0140]) -- the WORST cell in tonight's lane x regime table. Pooled -0.0118 (n=1213), which is ABOVE its -0.0127 baseline, but that improvement is the same correlated draw that hurt OI_FADE (increment +0.0058 over 59 rows / 4 entry-days) and is not evidence of anything."
+  }
+ ],
+ "vol_book": [
+  {
+   "symbol": "SPY",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "LOW tercile (VIX 15.13, bounds [16.0,17.3])",
+   "implied_move": 0.38,
+   "expected_range": 1.18,
+   "net_expectancy": -0.04,
+   "suggested_structure": null,
+   "delta_neutral": true,
+   "stand_aside_reason": "LOW-tercile conditional gross +0.06%/day -> -0.04%/day NET of the 0.10% round-trip: negative before the gamma gate even applies (the VIX-tercile pooling trap read the correct bucket, not the pooled headline). Dealers additionally decisively SHORT gamma (total_gex -894.8M, no flip in range) = trend-acceleration tape, the unsampled short-vol left tail."
+  },
+  {
+   "symbol": "QQQ",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "LOW tercile (VIX 15.13, bounds [16.0,17.3])",
+   "implied_move": 0.66,
+   "expected_range": 1.98,
+   "net_expectancy": 0.051,
+   "suggested_structure": null,
+   "delta_neutral": true,
+   "stand_aside_reason": "Tool's sell_premium=true OVERRIDDEN. zerodte_setup.py inherited dealer_gamma_regime=LONG from the CLI's zero_gamma_level 207.89 against spot 713.23 -- a flip 71% below spot, the identical artifact class as 08-20's 208.83 vs 710.77, now TWO CONSECUTIVE NIGHTS. The CLI's own total_gex_0_45d (-18.7M) and the 24 strikes bracketing spot (-9.0M) both read SHORT gamma, contradicting its LONG label. Net edge +0.051%/day is razor-thin and rests on a disputed regime read. Recommend a standing override rather than a nightly manual catch."
+  },
+  {
+   "symbol": "ADSK",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": null,
+   "implied_move": 9.0,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "iron fly / wide-wing short strangle, defined-risk -- NOT SIZED",
+   "delta_neutral": true,
+   "stand_aside_reason": "Print 08-27, bracket 08-28. Bracketing-expiry trap fired: CLI implied_move_perc 2.28% vs ATM straddle recomputed off the raw parquet at the bracketing expiry (median IV ~79.2%) = 8.8-9.2%. Treat as a LOWER BOUND, not a target (TPR realized -16.5% vs a ~12.2% raw-IV estimate). NOT SIZED: the 08-28 expiry stacks a macro-vol binary (PCE + NVDA 08-26, Jackson Hole 08-27-29, Warsh keynote 08-28) on top of the idiosyncratic earnings binary at the SAME expiration -- unsampled-left-tail cap unsatisfiable. Unchanged from 08-20."
+  },
+  {
+   "symbol": "HPQ",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": null,
+   "implied_move": 9.75,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "iron fly / wide-wing short strangle, defined-risk -- NOT SIZED",
+   "delta_neutral": true,
+   "stand_aside_reason": "Print 08-26, bracket 08-28. Bracketing-expiry trap fired: CLI 1.72% vs recomputed ATM straddle 9.7-9.8% (median ATM IV ~89.7-90.7%). Lower bound, not a target. Same 08-28 macro-collision as ADSK -- unchanged from 08-20. MNSO/GOTU/EH excluded (no expiry cleanly brackets the print); KTCC excluded (untradeable, 7 contracts)."
+  }
+ ],
+ "watchlist_write_back": [
+  "MOM_SHORT BASKET_WATCH (12, never sizes): APP, AZO, BWXT, CMS, CPRI, FRVO, GXO, LHX, LII, NRG, ONON, PEG",
+  "AS -- DROPPED from watch (was the standing OI_FADE carry item): mechanical invalidation fired 08-21 (last call_net -5,956). Re-entry requires BOTH last_call_net positive again AND a fundamentals CONFIRM (not CAUTION).",
+  "S2 advisory (68 names, never sizes, ranking non-informative, IC~0): EXE, SWKS, DXCM, AES, AGI, LYV, RJF, EPAM, TRP, OSCR + 58 more",
+  "S4 advisory (8 names, never sizes): CARR, UTHR, MRCY, WOLF, SYM, FORM, ECL, DAVE (call-volume floor verified biting, cohort min 254 vs 250; UTHR/MRCY carry blocking priors)",
+  "PSNL -- merger-arb gate first live catch (Tempus AI $1.5B all-stock, announced 08-20); track to resolution, the gate is still unvalidated",
+  "QQQ zero_gamma_level artifact recurred 2 consecutive nights (207.89 / 208.83) -- candidate for a standing override"
+ ],
+ "report_path": "analyses/scan/2026-08-21/report.md"
+}

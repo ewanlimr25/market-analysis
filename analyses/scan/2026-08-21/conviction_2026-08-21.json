@@ -1,0 +1,96 @@
+{
+ "conviction_date": "2026-08-21",
+ "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-21 market-scan, persisted for the next run's held-position reconciliation and adverse-flow exit check.",
+ "source_decision_envelope": "analyses/scan/2026-08-21/decision.json",
+ "book_state": {
+  "positions": 0,
+  "all_shorts": false,
+  "detail": "ZERO new starters. Book stays FLAT for a 10th consecutive session (held_book.py against conviction_2026-08-20.json: 0 open / 0 closed, and that file's own book_state.positions=0 confirms the empty result is real, not the held_book EXIT-substring bug). TONIGHT'S BINDING CONSTRAINT IS MEASUREMENT, NOT GATES -- a change from the prior nine sessions. In tonight's CHOP regime NO lane clears the +0.3% starter floor on the REGIME-CONDITIONAL excess Phase C actually specifies: OI_FADE +0.0014 (n=359, t=0.28, 95% CI [-0.0088,+0.0117], indistinguishable from zero), MOM_LONG -0.0257 (t=-4.30), MOM_SHORT -0.0220 (t=-4.36), S2 +0.0014 (t=0.46), S4 +0.0081 (t=2.38 but advisory-only and never sizes). METHODOLOGY NOTE FOR THE AUDIT: prior sessions scored off the POOLED lane prior; Phase C and risk-sizer.md both specify validated_excess 'for this horizon/regime', so the regime-stratified figure is the correct standing input going forward. Tonight the distinction is not load-bearing -- pooled OI_FADE reads +0.0029, ALSO below the +0.3% floor (by 1bp) -- so both readings agree on watch. S4's CHOP cell (+0.0081) is the only positive-above-floor cell in the 5x6 table; it does NOT size (advisory lane by rule) and should be treated as an audit observation, not a signal: one nominal result among ~30 lane x regime cells with no multiple-testing correction, in a lane whose hit-base is negative (right-tail only). Vol-book ran and contributed zero directional points; correctly not routed to Phase D since nothing reached a directional sizing band. Phase D produced no sized calls, so no risk-sizer envelope was generated -- every gate was executed and evidenced directly by the orchestrator (fundamentals VETO on AS, correlation clusters computed from prices.parquet, event-risk stack enumerated, liquidity floors applied in-lane).",
+  "prior_reconciliation": "held_book.py --prior analyses/scan/2026-08-20/conviction_2026-08-20.json -> 0 position(s): 0 open, 0 closed (SPY +0.41% on the day). The book has been genuinely flat for 10 sessions; nothing to mark, hold, cut, or exit, and no vestigial-invalidation check applies."
+ },
+ "regime_carry": {
+  "regime": "CHOP",
+  "ret5": -0.0137,
+  "ret10": -0.0098,
+  "dd15": -0.0202,
+  "vix": 15.13,
+  "vol_state": "VIX 15.13 (-0.88 pts, -5.5%), reversing last night's spike -- LOW tercile (actual bounds [16.0,17.3]); last night's 16.01 was MID by 0.01. SPY dealers decisively SHORT gamma (total_gex -894.8M, no flip in range). QQQ weakly short/near-flat; its CLI LONG label is the zero_gamma_level artifact for a SECOND consecutive night (207.89 vs spot 713.23; 08-20 was 208.83 vs 710.77) and was overridden again.",
+  "s1_standdown": false,
+  "directional_tradable": true,
+  "note": "Crash-guard arms have SEPARATED since last night. Arm (a) unconfirmed-dip (ret5 < -2% & ret10 > -2%): ret5 -1.370%, now 63bp away and RECEDING (it was 4bp from firing on 08-20) -- this arm de-escalated. Arm (b) up-thrust/rebound remains the live risk: its dd15 < -2% leg is still satisfied (-2.020%, marginally) and needs only ret5 > +1.5%, a +2.87pt swing. The 08-26 PCE+NVDA / 08-27-29 Jackson Hole / 08-28 Warsh keynote cluster sits inside the 5-day window ret5 measures and is exactly the catalyst class that completes arm (b), which would retroactively zero the MOM_SHORT basket. BREADTH DIVERGENCE worth carrying: green price tape (332 adv / 169 dec, 66% green) against bearish options flow (bullish_pct 39.2%, 2,479 bullish vs 3,837 bearish) -- quiet distribution into a still-green tape. Advisory context, not a gate. Also note uw risk market-regime's own headline reads TRANSITIONAL despite tagging trend UPTREND off the 20/50 SMA, and shows heavy Technology outflow (-$328.6M) into Healthcare/Financials/Materials -- rotation, not a breadth crash."
+ },
+ "watch": [
+  {
+   "ticker": "AS",
+   "lane": "OI_FADE",
+   "status": "DROPPED_FROM_WATCH",
+   "raw_oi_rank": "12/15 of a 1,399-name population (improved from 15 on 08-20 and 17 on 08-19)",
+   "note": "THE STANDING TWO-LEG CARRY TRIGGER FROM 08-20 IS NOW RESOLVED, AND AS IS CUT -- overdetermined on three independent grounds. LEG 1 (rank durability) PASSED and improved: raw oi_net_5d rank 17 -> 15 -> 12, with a clear buffer to rank 16 (AAPL), verified by the orchestrator reproducing retro_harness.py:94-111 verbatim and confirmed independently by the lane. validated_excess ESTABLISHED for a second night. LEG 2 (fundamentals CONFIRM required) FAILED: fundamentals-gate re-run returned VETO RESTATED -- nothing material since 08-20 (Q2 print, Q3 guide miss, Truist $50->$42 and Barclays $49->$50 are all dated 08-18/08-19; the lone 08-20-stamped feed item does not mention AS, a tagging artifact). None of the three pre-registered CONFIRM triggers occurred, and the agent correctly restated rather than re-litigating. The known finnhub leverage_flag bug did NOT misfire here (D/E 0.3022 genuinely low, verified by hand); the fz Recom/PT leg does not exist in this CLI build and was skipped without penalty rather than fabricated. THIRD AND DECISIVE, NEW TONIGHT: AS's own mechanical OI_FADE invalidation FIRED -- last call_net -5,956, net -3,446, calls genuinely CLOSING against a 5d build of +101,641 (08-17 +55,187 / 08-18 +8,200 / 08-19 +33,349 / 08-20 +8,351 / 08-21 -3,446). This is the same rule that cut COO (08-13), NRG (08-14) and GEN (08-17); AS is the FOURTH. Supporting context: AS was already -11.4% over 10 days (RSI14 39.8, 26.8% of 52w range) -- a fade arriving late -- and is genuinely uncorrelated with the rest of the raw top-15 (max pairwise 0.509 vs RKT), so correlation gate 3 was never its binding constraint. catalyst_split still reads LIVE_BUILD on the 08-18 print under BOTH boundaries (54.7% inclusive / 45.1% strict >), so the build was real through 08-20 -- it is the reversal, not the build, that kills it.",
+   "re_examine_trigger": "AS re-enters consideration ONLY if ALL THREE clear on a future session: (1) last_call_net turns POSITIVE again (the fired invalidation must un-fire -- a crowd that started leaving is not a crowd to fade); (2) raw oi_net_5d rank holds inside the harness's actual top-15; and (3) fundamentals-gate returns CONFIRM, not CAUTION and not VETO. Requirement (3) is unchanged and still binding on its own: because OI_FADE's excess sits at or below the starter band, a CAUTION applies a full -1 tier and yields the same watch-only outcome as a VETO. Additionally note requirement (0), new tonight: the LANE itself must clear the +0.3% floor in the prevailing regime -- in CHOP it currently does not (+0.0014, t=0.28), so even a perfect AS setup would not size in a CHOP tape."
+  },
+  {
+   "ticker": "APP / AZO / BWXT / CMS / CPRI / FRVO / GXO / LHX / LII / NRG / ONON / PEG",
+   "lane": "MOM_SHORT",
+   "status": "BASKET_WATCH",
+   "raw_oi_rank": "n/a",
+   "note": "12 Yahoo-verified genuine near-52w-lows of 82 raw candidates; issue_type cut 70 ETF/ETN at source. Never sizes (PROVISIONAL cap; 0-for-9 / -5.3% forward; DURABLE-N >=30 required, via /calibration-audit not ad hoc). Negative in EVERY regime bucket. Carry-over: only APP, CMS, PEG persist of last night's 9 -- ALHC, AMRZ, APTV, MLM, QXO, ROL dropped out. Blocking priors unchanged on APP, FRVO, PEG. Squeeze risk elevated via crash-guard arm (b)."
+  }
+ ],
+ "advisory_no_size": {
+  "S2": "Advisory-only, never sizes. 68 names cleared all gates (DP prem >=$10M, one-sided >=90%, issue_type, liquidity, earnings h5, prior verdicts, news). CHOP-conditional +0.0014 (t=0.46). RANKING IS NON-INFORMATIVE -- dp_oneside is a binary timing tag with IC~0, so the 100%-one-sided names are NOT higher conviction; sell-side names carry the same long-tilted reversion and imply no short conviction.",
+  "S4": "Advisory-only, never sizes. 8 names: CARR, UTHR, MRCY, WOLF, SYM, FORM, ECL, DAVE. Call-volume floor VERIFIED BITING -- cohort minimum call_volume 254 vs the 250 threshold, so no PCR is manufactured off a handful of contracts (the NWG-682-on-3-calls artifact class). 11 ETFs cut, WDAY earnings-blocked (ER 08-27). UTHR and MRCY carry blocking priors. hit-base negative (right-tail only, no hit-rate edge)."
+ },
+ "next_run_carry": [
+  "CALIBRATION AUDIT IS DUE 2026-08-22 AND THE COHORT HAS FINALLY ARRIVED. All 85 sized calls (56 OI_FADE, 22 MOM_SHORT, 7 S2) have MATURED -- zero open. Plus 528 matured suppressed observations (389 calls[] watch/skip + 139 lane_status candidates) for the gate-effectiveness test. This is the genuinely non-overlapping cohort deferred twice (08-08 and 08-15 both expected it and both got a single one-way window instead).",
+  "AUDIT ITEM 1 -- AS is the first name in this repo's run to cross to established-positive validated_excess on a rank change alone and then die on its own mechanical invalidation the very next session. Grade BOTH the rank-durability trigger and the last_call_net invalidation rule against it. The invalidation rule has now fired on 4 names (COO, NRG, GEN, AS) and has never been graded.",
+  "AUDIT ITEM 2 -- ADOPT THE REGIME-CONDITIONAL PRIOR AS THE STANDING PHASE-C INPUT. Phase C and risk-sizer.md both specify validated_excess 'for this horizon/regime', but prior sessions scored off the pooled figure. The 5x6 lane x regime table computed tonight (93-day panel) shows the two can disagree materially -- OI_FADE pooled +0.0029 vs CHOP +0.0014 vs CHOP/REBOUND-THRUST +0.0100. Ratify or reject this explicitly rather than letting it drift in.",
+  "AUDIT ITEM 3 -- the merger-arb gate got its FIRST live catch since shipping 2026-08-01: PSNL, under an announced $1.5B all-stock Tempus AI acquisition disclosed 08-20, with essentially the entire 5d build accruing in the two post-announcement sessions. Gate remains 'cheap insurance, still not validated' until this resolves; track it.",
+  "REGRESSION GATE READ AS DATA, NOT CODE -- no lane/threshold code changed tonight, and the panel grew 89 -> 93 days on a 2,471 -> 2,488 spine, so the baseline is not directly comparable. MOM_LONG -0.0118 (up), MOM_SHORT -0.0138 (n unchanged at 830, ZERO new rows), OI_FADE +0.0029 (down 0.0009), S2 +0.0018 (up), S4 +0.0024 (flat). OI_FADE's drop is 61 rows across only FOUR distinct entry-days (08-04 +0.0295 / 08-05 -0.0151 / 08-06 -0.0305 / 08-07 -0.0433) averaging -0.0145 -- one correlated window, not 61 independent observations. Critically, SPY was DOWN 0.1-1.0% across those h10 windows (08-04->08-18 -0.50%, 08-07->08-21 -0.98%), so this was NOT a beta rally: the CROWDED names outperformed a soft tape, precisely the environment that punishes a call-OI-build fade, while MOM_LONG (+0.0058) and S2 (+0.0100) gained on the same draw. DO NOT RE-BASELINE HERE -- that is the audit's call, and a recovery next window would not be evidence any fix worked.",
+  "QQQ zero_gamma_level artifact has now recurred on TWO CONSECUTIVE NIGHTS (207.89 vs spot 713.23 tonight; 208.83 vs 710.77 on 08-20) -- a flip ~71% below spot both times, and zerodte_setup.py inherits it as dealer_gamma_regime=LONG each night. This is a pattern, not a one-off; consider a standing sanity override (reject any zero_gamma_level more than ~25% from spot and fall back to the per-strike book) rather than relying on a nightly manual catch.",
+  "TJX demonstrated the print-day boundary trap again: catalyst_split 132.6% inclusive vs 15.8% under a STRICT '>' -- opposite verdicts from identical data. Keep re-summing dailies with '>' on any single-day-dominated build."
+ ],
+ "vol_book": {
+  "zerodte": {
+   "SPY": "STAND_ASIDE",
+   "QQQ": "STAND_ASIDE",
+   "vix": 15.13,
+   "vix_tercile": "LOW",
+   "vix_tercile_bounds": [
+    16.0,
+    17.3
+   ],
+   "conditional_net_pct_per_day": {
+    "SPY": -0.04,
+    "QQQ": 0.051
+   },
+   "reason": "SPY: LOW-tercile net is NEGATIVE (-0.04%/day) before the gamma gate even applies, plus decisively short dealer gamma. QQQ: net +0.051% is razor-thin AND the LONG-gamma regime it depends on is the zero_gamma_level artifact (2nd consecutive night) -- overridden to SHORT on the per-strike book. Note the reason differs from 08-20, when MID-tercile net was positive for both and only gamma killed them."
+  },
+  "earnings_iv_crush": {
+   "status": "ADVISORY_NOT_SIZED",
+   "names": [
+    {
+     "ticker": "ADSK",
+     "print": "2026-08-27",
+     "bracket": "2026-08-28",
+     "cli_implied_move_pct": 2.28,
+     "corrected_move_pct": 9.0,
+     "note": "8.8-9.2% range, median ATM IV ~79.2%; stable vs 8.83% on 08-20"
+    },
+    {
+     "ticker": "HPQ",
+     "print": "2026-08-26",
+     "bracket": "2026-08-28",
+     "cli_implied_move_pct": 1.72,
+     "corrected_move_pct": 9.75,
+     "note": "9.7-9.8% range, median ATM IV ~89.7-90.7%; vs 10.14% on 08-20, one fewer day to print"
+    }
+   ],
+   "not_sized_reason": "The 08-28 bracket expiry still stacks a macro-vol binary (PCE + NVDA 08-26, Jackson Hole 08-27-29, Warsh keynote 08-28) on top of each name's idiosyncratic earnings binary at the SAME expiration; the unsampled-left-tail cap cannot be satisfied. Unchanged from 08-20. Corrected moves are LOWER BOUNDS, not targets (TPR realized -16.5% vs a ~12.2% raw-IV estimate).",
+   "excluded": {
+    "MNSO/GOTU/EH": "no expiry cleanly brackets the print",
+    "KTCC": "untradeable, 7 contracts",
+    "OKTA/BBWI": "no longer surfaced by earnings-play at days_to_earnings<=7 & iv_rank>=80 tonight"
+   }
+  }
+ }
+}
