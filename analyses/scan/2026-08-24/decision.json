@@ -1,0 +1,251 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-24",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": -0.0119,
+    "ret10": -0.0124,
+    "vol_state": "LOW VIX tercile by 0.05 (VIX 15.85, +0.72pts; bounds [15.9,17.3]); SPY and QQQ BOTH SHORT gamma (SPY total_gex -1.284B, empirical flip ~765.5 vs spot 763.70; QQQ -548M, flip ~712.5 vs spot 706.72). CLI 'regime' field for SPY reads POSITIVE and is CORRUPTED -- contradicts its own total_gex sign; zero_gamma_level 336.67 vs spot 763.70. DEX net-negative both.",
+    "breadth_pct_green": 60.44,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "PCE / Core PCE (July)",
+        "date": "2026-08-26",
+        "impact": "tier-1 macro"
+      },
+      {
+        "event": "NVDA earnings",
+        "date": "2026-08-26",
+        "impact": "tier-1 single-name, index-moving"
+      },
+      {
+        "event": "Jackson Hole Symposium",
+        "date": "2026-08-27..29",
+        "impact": "tier-1 window"
+      },
+      {
+        "event": "Warsh keynote",
+        "date": "2026-08-28",
+        "impact": "tier-1; lands ON the 08-28 options expiry"
+      },
+      {
+        "event": "Payrolls annual benchmark revision (prelim)",
+        "date": "2026-08-28",
+        "impact": "tier-2"
+      },
+      {
+        "event": "NFP (August jobs report)",
+        "date": "2026-09-04",
+        "impact": "tier-1 macro"
+      },
+      {
+        "event": "Labor Day",
+        "date": "2026-09-07",
+        "impact": "market closed"
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "DK",
+        "ULS",
+        "VIK",
+        "NXPI",
+        "FRT",
+        "VIRT",
+        "SAN",
+        "CBRS",
+        "PTEN",
+        "FN",
+        "VIAV",
+        "WSC",
+        "CAKE",
+        "ACMR",
+        "BIDU"
+      ],
+      "note": "ADVISORY-ONLY since 2026-08-22; never sizes. final_size=watch. horizon_validated=10. validated_excess=UNESTABLISHED for ALL 15 -- overlap with the raw oi_net_5d top-15 is ZERO tonight (population 1,313), so no candidate can inherit the +0.0013 pooled prior (n=1177, 79 exit-days, p=0.767) nor the live floored-selection read (-0.0081, 24 exit-days, p=0.080). PLAIN-CHOP conditional excess is -0.0010 (n=344, 23 exit-days, t=-0.13) -- NEGATIVE, and distinct from CHOP/REBOUND-THRUST which reads +0.0098 (n=148, 10 exit-days); conditioning on the wrong stratum flips the sign, so any quoted regime-conditional prior must state its stratum. No last_call_net invalidation fired. catalyst_split produced NO boundary-driven sign flip -- all 5 in-window builds stay LIVE_BUILD under strict '>'. AS RE-ENTRY FAILS and stays cut: leg 1 clears (last_call_net +436) and fundamentals are favorable (4/4 beat streak, raised FY guide), but leg 2 fails outright at raw rank 38/1,313. BIDU is the watch name at raw rank 16/1,313 -- one place outside, the way AS crossed on 08-20. The raw measured population itself (META, AMZN, TSLA, BABA, INTC, WMT, SPCX + crypto WULF/CIFR/MARA/SBET; median mcap ~$47B vs ~$10B live) is the mega-cap/crypto beta artifact the lane exists to avoid, and is the same complex that produced tonight's -6.33% increment."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "FRVO",
+        "BWXT",
+        "FDXF",
+        "OLN",
+        "LII",
+        "NRG",
+        "ONON",
+        "LHX",
+        "APP",
+        "CMS",
+        "CPRI",
+        "JBTM",
+        "PEG",
+        "TLN",
+        "CRUS"
+      ],
+      "note": "Watch-only, crash-gated, NEVER sizes (the one recorded invariant-6 negative-excess exception). s1_standdown FALSE so the crash guard is open, but plain-CHOP excess is -0.0220 (n=282, 24 exit-days, t=-1.93), far below the +0.3% floor. ALL 15 Yahoo-verified genuine via chart.py --52w: 13 of 15 made a FRESH 52-week low ON 2026-08-24 (pct_range 0.1-4.2%) while SPY fell only 0.29% -- no false shorts from the pct_52w_range corruption tonight. issue_type cut 2,624 ETPs at source. CLUSTER: 4 of 15 are power/utility names (NRG, PEG, CMS, TLN) -- the AI-datacenter-power complex breaking down together. ORCHESTRATOR CORRECTION: the lane reported 'no VETO/EXCLUDED blocks' on its candidates; prior_verdicts.py flags prior blocking verdicts on APP, FRVO, PEG, NRG and CMS. Disposition unchanged (never sizes), but the lane's gate claim did not survive verification."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "TGT",
+        "V",
+        "VMRK",
+        "SOLV",
+        "WEX",
+        "WT",
+        "ILMN",
+        "EXPE",
+        "SCHW",
+        "SEIC",
+        "MTCH",
+        "SXT",
+        "FCX",
+        "SSRM",
+        "ABNB"
+      ],
+      "note": "Basket/watch only, NEVER sizes. 233 raw near-52w-high names; the 15 listed are the canonical measured top-15. WORST cell in tonight's table: plain-CHOP excess -0.0257 (n=356, 24 exit-days, t=-2.41) -- the only lane significantly negative at the exit-day-clustered level."
+    },
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "long",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "COF",
+        "BSX",
+        "RTX",
+        "SCHW",
+        "BLK",
+        "MNST",
+        "GRMN",
+        "PNC",
+        "CI",
+        "REGN",
+        "TKO",
+        "CVS",
+        "PSX",
+        "ICE"
+      ],
+      "note": "LANE_STATUS[S2_dp_revert] -- recorded here because lane_status.lane admits only MOM_SHORT/MOM_LONG/OI_FADE and this advisory lane has no schema slot (same convention as 2026-08-04). ADVISORY-ONLY, never sizes. final_size=watch. horizon_validated=5. Plain-CHOP excess +0.0014 (n=352, 24 exit-days, t=0.29) -- below floor. 14 advisory names listed; TWO was cut on the liquidity floor ($-ADV $40.8M < $50M); 15/15 cleared the h5 trading-day earnings gate. Ranking treated as NON-INFORMATIVE (dp_oneside is a binary timing tag, IC ~ 0). Financials cluster COF/SCHW/BLK/PNC/ICE is one theme, not five names. LANE OUTPUT WAS DISCARDED AND REBUILT BY THE ORCHESTRATOR: the S2 sub-agent reported 25 raw candidates -> 4 survivors (CCO, TBBB, RIGL, BTE) -> 0 after liquidity, and declared the lane empty. Ground truth reproduced from retro_harness.py's own S2 block: 105 names clear the full canonical filter, and the canonical top-15 by DP premium are the large liquid names listed above. The lane's four names appear nowhere in the canonical ranking. OPEN ITEM FOR THE 2026-08-29 AUDIT: the harness S2 rule applies NO liquidity floor, while the live book requires price>=$5 and $-ADV>=$50M -- so the S2 prior grades a population the book could never trade, the same measurement-vs-live gap already catalogued for OI_FADE's ranking."
+    },
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "long",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "XEL",
+        "TSEM",
+        "FLEX",
+        "INFY",
+        "MDLN",
+        "HSBC",
+        "EMBJ",
+        "TXT",
+        "LNC",
+        "MCK",
+        "WPM",
+        "FROG",
+        "BBIO",
+        "CNK",
+        "OMF"
+      ],
+      "note": "LANE_STATUS[S4_pcr_fade] -- recorded here for the same no-schema-slot reason as S2. ADVISORY-ONLY, never sizes. final_size=watch. horizon_validated=5. Plain-CHOP excess +0.0081 (n=357, 24 exit-days) is the only above-floor cell, BUT clustered on the mandated exit-day unit its t is 1.52, NOT the 2.38 reported on 2026-08-21 (that figure was row-level and faked the N). 24 exit-days is under 30, so it also carries the correlated-draw caveat and cannot graduate on this evidence. hit-base remains NEGATIVE (-0.021 pooled): no hit-rate edge, right tail only. One nominal cell among ~30 lane x regime cells, no multiple-testing correction. Call-volume floor VERIFIED BITING: cohort minimum call_volume 263 (MCK) vs the 250 threshold, 73 names rejected below it including the artifact class it exists for (CHE PCR 314.9 on 8 calls; FBND PCR 250 on 2 calls). ORCHESTRATOR CORRECTION: the lane cut XEL, INFY and SWK as carrying blocking priors; all three were restored. XEL's hits are its own 08-18 advisory appearances (recorded as tags, not vetoes); SWK's are an S2 advisory list plus a MOM_LONG basket mention, and SWK is not in the canonical top-15 anyway; INFY's is a genuine but STALE 2026-08-03 OI_FADE long_caution -- INFY is net PUT-building tonight (net_5d -2,092, call +14,504 / put +16,596, rel_build -0.014) and is no longer a crowded-call name."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW",
+      "delta_neutral": true,
+      "implied_move": 0.61,
+      "expected_range": 1.15,
+      "net_expectancy": 0.013,
+      "suggested_structure": null,
+      "stand_aside_reason": "Dealers SHORT gamma -- hard stand-aside. LOW-tercile conditional gross +0.113%/day minus the 0.10% round-trip = +0.013%/day net, inside noise, so the economics are moot anyway. The CLI's 'regime' field read POSITIVE while its own total_gex was -1,284,006,949 and its zero_gamma_level was 336.67 against spot 763.70; zerodte_setup.py trusts that field and emitted sell_premium=true, which was OVERRIDDEN. Strikes bracketing spot are decisively negative (764: -314.7M, 765: -226.1M, 760: -250.4M)."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW",
+      "delta_neutral": true,
+      "implied_move": 1.04,
+      "expected_range": 1.94,
+      "net_expectancy": 0.107,
+      "suggested_structure": null,
+      "stand_aside_reason": "Dealers SHORT gamma (total_gex -548,122,446, empirical flip ~712.5 vs spot 706.72) -- hard stand-aside OVERRIDES a genuinely positive net expectancy of +0.107%/day (gross +0.207% less 0.10% cost). The gate, not the economics, is binding."
+    },
+    {
+      "symbol": "ADSK",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": null,
+      "delta_neutral": true,
+      "implied_move": 10.93,
+      "expected_range": 15.0,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY_NOT_SIZED -- defined-risk wide-wing short strangle/iron fly, 2026-08-28 expiry, wings >= ~15% (floor x1.35)",
+      "stand_aside_reason": "Reports 08-27, iv_rank 85.7, backwardation. Straddle recomputed off the raw parquet on the correctly bracketing 08-28 expiry using MEDIAN IV (not the CLI mean); 10.93% is a LOWER BOUND per the TPR calibration (realized -16.5% vs a ~12.2% raw-IV estimate). Not sized: the 08-28 expiry stacks PCE + NVDA (08-26), Jackson Hole (08-27..29), the Warsh keynote landing ON expiry day, and the payrolls benchmark revision on top of the idiosyncratic earnings binary -- the unsampled-left-tail cap is unsatisfiable. Re-derived from tonight's term structure, not inherited from 08-21."
+    },
+    {
+      "symbol": "HPQ",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": null,
+      "delta_neutral": true,
+      "implied_move": 12.02,
+      "expected_range": 16.0,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY_NOT_SIZED -- defined-risk wide-wing short strangle/iron fly, 2026-08-28 expiry, wings >= ~16% (floor x1.35)",
+      "stand_aside_reason": "Reports 08-26, iv_rank 84.6, backwardation. Same 08-28 macro-stack as ADSK; 12.02% is a lower bound (median IV, bracketing expiry)."
+    },
+    {
+      "symbol": "OKTA",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": null,
+      "delta_neutral": true,
+      "implied_move": 16.05,
+      "expected_range": 22.0,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY_NOT_SIZED -- defined-risk wide-wing short strangle/iron fly, 2026-08-28 expiry, wings >= ~22% (floor x1.35)",
+      "stand_aside_reason": "Reports 08-26, iv_rank 81.6, backwardation. Same 08-28 macro-stack as ADSK; 16.05% is a lower bound (median IV, bracketing expiry)."
+    }
+  ],
+  "watchlist_write_back": [
+    "BIDU -- OI_FADE raw rank 16 of 1,313, ONE place outside the top-15. This is the AS-on-08-20 setup; if it crosses into the measured population its validated_excess becomes ESTABLISHED. Re-check nightly.",
+    "AS -- stays CUT. Re-entry needs raw oi_net_5d rank inside the harness top-15 (tonight 38/1,313); last_call_net and fundamentals legs are already clearing, so rank is the sole binding leg.",
+    "MOM_SHORT power/utility cluster (NRG, PEG, CMS, TLN) -- 4 of 15 names, all fresh 52w lows on 08-24. Watch whether the AI-datacenter-power complex keeps breaking as a bloc.",
+    "GEX CLI corruption -- now on SPY's 'regime' field (was QQQ's zero_gamma_level 08-20/08-21). zerodte_setup.py's cli_gamma_regime() trusts that field and shipped a wrong sell_premium=true tonight. Third consecutive manual override; needs the standing internal-consistency guard.",
+    "LBRDK -- second instance of the EQR non-idempotency class; bars now gap 2026-07-17 -> 2026-08-21 and its 07-23 S2 row (excess +0.1181) no longer resolves. Restore from resolved_ledger.py rather than re-deriving.",
+    "AUDIT 2026-08-29 ITEM -- the harness S2 rule applies no liquidity floor while the live book requires price>=$5 / $-ADV>=$50M; the S2 prior therefore grades an untradeable population. Same class as the OI_FADE ranking gap.",
+    "AUDIT 2026-08-29 ITEM -- lane x regime tables must be clustered on exit-day, not rows. S4's CHOP cell reads t=2.38 row-level but t=1.52 across 24 exit-days. Also split plain CHOP from CHOP/REBOUND-THRUST: OI_FADE's sign flips between them (-0.0010 vs +0.0098)."
+  ],
+  "report_path": "analyses/scan/2026-08-24/report.md"
+}

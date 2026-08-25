@@ -1,0 +1,138 @@
+{
+  "conviction_date": "2026-08-24",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-24 market-scan, persisted for the next run's held-position reconciliation. Sub-agents do not carry open positions -- the orchestrator reconciles this file with scripts/held_book.py at the start of the next scan.",
+  "source_decision_envelope": "analyses/scan/2026-08-24/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": 0,
+    "detail": "FLAT for an 11th consecutive session. No lane in this repo sizes at all since OI_FADE's 2026-08-22 demotion to advisory. Zero sized calls tonight and zero open positions carried in.",
+    "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-08-21/conviction_2026-08-21.json read 0 positions (0 open, 0 closed). Verified NOT the known EXIT-substring bug by inspecting the prior file directly: book_state.positions == 0 and calls[] was empty in the 08-21 envelope, so the empty result is genuine."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "ret5": -0.0119,
+    "ret10": -0.0124,
+    "dd15": -0.0135,
+    "vix": 15.85,
+    "vol_state": "LOW tercile by 0.05 (bounds [15.9,17.3]); SPY AND QQQ both SHORT gamma. Third consecutive night the VIX has printed within 0.05 of a tercile boundary.",
+    "s1_standdown": false,
+    "directional_tradable": true
+  },
+  "watch": [
+    {
+      "ticker": "BIDU",
+      "lane": "OI_FADE",
+      "status": "PRE_REGISTERED_WATCH",
+      "raw_oi_rank": "16 of 1,313 -- ONE place outside the harness's measured top-15",
+      "note": "The single name worth tracking nightly. This is structurally the AS-on-2026-08-20 setup: a rel_build candidate sitting one rank outside the RAW oi_net_5d top-15. If it crosses in, its validated_excess becomes ESTABLISHED and it inherits the lane prior; until then it is UNESTABLISHED like the other 14. Mechanics tonight: net_5d +72,101 (call +96,648 / put +24,547), rel_build 0.302, persistence 0.410, last_call_net +6,106 -- build is live and not a single-day block. catalyst_split on its 08-18 print reads 82.3% inclusive / 53.1% strict '>' -- LIVE_BUILD under BOTH boundary conventions, so no EWTX/TJX-class boundary trap. No name-specific prior block in the last 21 days. PRE-REGISTERED TRIGGER: raw rank enters top-15 AND last_call_net stays positive -> promote to a measured-population candidate. Note the lane still cannot SIZE it (advisory-only since 08-22); the trigger promotes it to established-excess watch, not to a position."
+    },
+    {
+      "ticker": "AS",
+      "lane": "OI_FADE",
+      "status": "CUT_STANDS",
+      "raw_oi_rank": "38 of 1,313",
+      "note": "Re-entry test from the 08-21 conviction file was run and FAILS on the rank leg. Leg 1 (last_call_net positive) CLEARS at +436 -- the mechanical invalidation that killed it on 08-21 has stopped firing. Leg 3 (fundamentals CONFIRM) now looks favorable: finnhub reads a 4-for-4 EPS beat streak, +29% revenue growth and a raised FY guide, a genuine reversal of the 08-21 VETO. But leg 2 fails outright -- raw oi_net_5d rank is 38 of 1,313, nowhere near the top-15 it briefly reached (12) on 08-21. Two of three legs clearing is not the bar; the rank leg is the one that makes validated_excess inheritable. AS stays CUT and out of the candidate list."
+    }
+  ],
+  "advisory_no_size": {
+    "S2": {
+      "count": 14,
+      "names": [
+        "COF",
+        "BSX",
+        "RTX",
+        "SCHW",
+        "BLK",
+        "MNST",
+        "GRMN",
+        "PNC",
+        "CI",
+        "REGN",
+        "TKO",
+        "CVS",
+        "PSX",
+        "ICE"
+      ],
+      "note": "Never sizes. Ranking NON-INFORMATIVE (dp_oneside is a binary timing tag, IC ~ 0) -- presented unranked. TWO cut on the liquidity floor ($-ADV $40.8M). Financials cluster COF/SCHW/BLK/PNC/ICE is ONE theme. THIS LIST WAS REBUILT BY THE ORCHESTRATOR after the S2 sub-agent returned a materially wrong set (25 raw -> 4 micro-cap survivors -> 0); canonical ground truth from retro_harness.py's own S2 block is 105 names clearing the full filter."
+    },
+    "S4": {
+      "count": 15,
+      "names": [
+        "XEL",
+        "TSEM",
+        "FLEX",
+        "INFY",
+        "MDLN",
+        "HSBC",
+        "EMBJ",
+        "TXT",
+        "LNC",
+        "MCK",
+        "WPM",
+        "FROG",
+        "BBIO",
+        "CNK",
+        "OMF"
+      ],
+      "note": "Never sizes. Call-volume floor verified biting (cohort min call_volume 263 vs the 250 threshold; 73 names rejected below it). hit-base NEGATIVE -- no hit-rate edge, right tail only. XEL, INFY and SWK were RESTORED after the sub-agent over-claimed blocking priors on them; INFY's flag was a stale 2026-08-03 long_caution and INFY is net PUT-building tonight (net_5d -2,092)."
+    },
+    "MOM_SHORT": {
+      "count": 15,
+      "names": [
+        "FRVO",
+        "BWXT",
+        "FDXF",
+        "OLN",
+        "LII",
+        "NRG",
+        "ONON",
+        "LHX",
+        "APP",
+        "CMS",
+        "CPRI",
+        "JBTM",
+        "PEG",
+        "TLN",
+        "CRUS"
+      ],
+      "note": "Never sizes. ALL 15 Yahoo-verified genuine; 13 made a FRESH 52w low on 2026-08-24 while SPY fell only 0.29%. Power/utility cluster NRG/PEG/CMS/TLN is 4 of 15. Blocking priors DO exist on APP, FRVO, PEG, NRG, CMS -- contrary to the lane's claim of none."
+    },
+    "OI_FADE": {
+      "count": 15,
+      "names": [
+        "DK",
+        "ULS",
+        "VIK",
+        "NXPI",
+        "FRT",
+        "VIRT",
+        "SAN",
+        "CBRS",
+        "PTEN",
+        "FN",
+        "VIAV",
+        "WSC",
+        "CAKE",
+        "ACMR",
+        "BIDU"
+      ],
+      "note": "Advisory-only, never sizes. ALL validated_excess UNESTABLISHED -- zero overlap with the raw top-15. No last_call_net invalidation fired. DK at persistence 0.833 is marginal against the 0.85 ceiling (83% of its 5-day build landed on 08-24 alone) -- flag if it persists. NXPI kept as watch with its unresolved Ambarella M&A rumor flagged: it is the ACQUIRER, so its own price is not deal-pinned."
+    }
+  },
+  "next_run_carry": [
+    "REGRESSION GATE READ AS DATA, NOT CODE, AND THE ISOLATION CHECK PASSED CLEANLY. OI_FADE (+0.0013 -> +0.0004) and S2 (+0.0018 -> +0.0015) both read below baseline; neither is a regression. (a) The baseline cohort reproduces BIT-IDENTICALLY for four of five lanes (MOM_LONG -0.0118/1213, MOM_SHORT -0.0138/830, OI_FADE +0.0013/1177, S4 +0.0024/1304). (b) S2's shortfall is exactly ONE row -- LBRDK 2026-07-23, excess +0.1181 -- which no longer resolves because the vendor's bars for LBRDK now gap 07-17 -> 08-21; removing that row from the 08-22 stored rows gives +0.001660 vs tonight's +0.001641, agreement to float noise. (c) The increment is ONE exit-day across ALL five lanes: entry 2026-08-10, exit 2026-08-24, base PINNED (1.00 short / 0.00 long) = SPY down in 100% of the new windows (-1.24%). DO NOT RE-BASELINE onto a single pinned-base draw.",
+    "OI_FADE's -6.33% increment has a readable cause, not decay: a speculative rally ran AGAINST a falling index. The lane was short CELH (+28.7%), MSTR (+26.0%) and MARA (+17.0%) over the window, while its only gains came from the mega-caps it was also short -- META -6.0%, AMZN -5.8%, NVDA -4.2%. Fading crowded call-OI is structurally short exactly the complex that squeezed. Expect this shape to recur whenever the junk/crypto complex rallies into index weakness.",
+    "METHODOLOGY FIX -- THE CHOP CELL WAS BEING COLLAPSED. Prior sessions folded CHOP/REBOUND-THRUST rows into 'CHOP'. The strata disagree materially and OI_FADE's SIGN flips between them: plain CHOP -0.0010 (n=344, 23 exit-days) vs CHOP/REBOUND-THRUST +0.0098 (n=148, 10 exit-days). Tonight is plain CHOP (s1_standdown FALSE). MOM_SHORT's n is identical (282) under both groupings -- it never fires during a stand-down -- which is what confirms the diagnosis. Every regime-conditional prior quoted from here must state its stratum.",
+    "METHODOLOGY FIX -- CLUSTER THE LANE x REGIME TABLE ON EXIT-DAY. S4's CHOP cell was reported on 2026-08-21 as '+0.0081, t=2.38, the only positive-and-above-floor cell'. Clustered on the mandated exit-day unit the same +0.0081 carries t=1.52 across 24 exit-days -- and 24 < 30 triggers the standing correlated-draw caveat. The row-level t was faking the N, the exact calibration-audit clustering trap. Carry into the 08-29 audit as a check on HOW the table is computed, not just what it says.",
+    "AUDIT 2026-08-29 ITEM -- THE S2 PRIOR GRADES AN UNTRADEABLE POPULATION. retro_harness.py's S2 block applies NO liquidity floor, while the live book requires price >= $5 AND 20d $-ADV >= $50M. So S2's +0.0015 measures names the book could never enter. This is the same measurement-vs-live gap already catalogued for OI_FADE's ranking, and it should be decided explicitly rather than left to drift.",
+    "TOOL DEFECT ESCALATED -- THE GEX CORRUPTION MOVED FROM QQQ'S zero_gamma_level TO SPY'S regime FIELD. Verified three independent times tonight: SPY total_gex -1,284,006,949 (negative) while the CLI's own regime field reads 'POSITIVE', with zero_gamma_level 336.67 against spot 763.70. Strikes bracketing spot are decisively negative (764: -314.7M, 765: -226.1M, 760: -250.4M). This matters because zerodte_setup.py's cli_gamma_regime() trusts the regime FIELD as arbiter -- it therefore emitted sell_premium=true / size_scalar 0.5 and framed SPY as 'long-gamma: quieter, mean-reverting', i.e. it recommended SELLING PREMIUM INTO A SHORT-GAMMA TAPE. QQQ escaped only by accident (its label 'FULLY_NEGATIVE' fails to parse as POSITIVE/NEGATIVE and fell through to the local flip). THIRD CONSECUTIVE NIGHT OF MANUAL OVERRIDE. Proposed guard: reject the CLI as arbiter whenever sign(regime) != sign(total_gex) OR |zero_gamma_level - spot|/spot > 0.25, and fall back to the per-strike derivation.",
+    "LBRDK IS THE SECOND INSTANCE OF THE EQR NON-IDEMPOTENCY CLASS. A row that resolved at the 08-22 audit is un-resolvable tonight because the vendor's history now gaps 2026-07-17 -> 2026-08-21. Cost: one S2 baseline row and 2bp. Reinforces that resolved_ledger.py, not a re-derivation from the live feed, is the durable record -- and that any baseline delta of ~1 row should be diffed against the stored rows before being called drift.",
+    "LANE RELIABILITY -- THREE OF FIVE SUB-AGENTS RETURNED CLAIMS THAT DID NOT SURVIVE VERIFICATION, and two would have changed the written record. (1) The S2 lane was materially WRONG: it returned 25 raw candidates -> 4 micro-cap survivors -> 0 and declared the lane empty; ground truth is 105 names clearing the canonical filter with a top-15 of large liquid names. Its output was discarded and rebuilt. (2) The S4 lane over-claimed blocking priors on XEL, INFY and SWK; all three were restored after checking, and its stated rationales were OI_FADE-flavored reasoning applied to an S4 name. (3) The momentum lane claimed 'no VETO/EXCLUDED blocks' when prior_verdicts.py flags APP, FRVO, PEG, NRG and CMS. The standing lesson holds: re-run every gate result a lane hands back, and treat a lane's own filter counts as a claim, not a measurement.",
+    "MOM_SHORT BREADTH OBSERVATION -- 13 of 15 candidates made a FRESH 52-week low on 2026-08-24 while SPY fell only 0.29%. That is a real dispersion signal underneath a quiet index. The power/utility bloc (NRG, PEG, CMS, TLN) is 4 of 15 -- the AI-datacenter-power complex breaking down together. Watch whether it persists as a bloc; it is the kind of single-theme cohort the correlation gate exists for if this lane ever sizes again.",
+    "NEXT CALIBRATION AUDIT DUE 2026-08-29. Book has been flat 11 sessions; the suppressed-candidate cohort remains the informative population, not the call book."
+  ],
+  "vol_book": {
+    "zerodte": "BOTH SPY and QQQ STAND ASIDE on the corrected SHORT-gamma read. SPY net +0.013%/day (gross +0.113% less 0.10% cost) is inside noise anyway; QQQ net +0.107%/day is genuinely positive and was overridden by the gamma gate. Read mean_pnl_by_vix_state for the LOW bucket and subtract cost by hand -- the headline net_expectancy pools all terciles.",
+    "earnings_iv_crush": "ADSK / HPQ / OKTA ADVISORY_NOT_SIZED. Implied moves off the bracketing 2026-08-28 expiry using MEDIAN IV: 10.93% / 12.02% / 16.05%, all LOWER BOUNDS (TPR calibration), so wings sized at floor x1.35 = ~15% / ~16% / ~22%. Not sized because that one expiry stacks PCE + NVDA (08-26), Jackson Hole (08-27..29), the Warsh keynote ON expiry day, and the payrolls benchmark revision on top of the earnings binary. NVDA itself fails the iv_rank>=80 screen (42.7). RY, CM, A, QFIN, DCI, EH, TRMD excluded -- nearest listed expiry is 25+ DTE, so nothing brackets their print."
+  }
+}
