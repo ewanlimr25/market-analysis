@@ -1,0 +1,192 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-25",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": -0.002,
+    "ret10": -0.006,
+    "vol_state": "LOW VIX tercile with real buffer (VIX 15.45, -0.40pts/-2.52%; bounds [15.86,17.28], 0.41 below the cut -- first night in four not hugging a boundary). DEALER GAMMA derived from the CUMULATIVE per-strike profile, because every CLI header field is unreliable tonight: SPY cumulative at spot -$503M, first zero-cross strike 785 (+2.5% above spot 765.91) => SHORT gamma. QQQ cumulative -$167.6M at strike 710 and +$9.3M at 711 with spot 710.72 => ON ITS FLIP, marginally short, entire crossing carried by one strike (711, +$176.9M). CLI corruption is now bidirectional and self-contradicting: SPY total_gex -132,647,317 but regime field 'POSITIVE' and zero_gamma_level 332.87 (impossible vs ~$766 spot); QQQ total_gex +338,944,439 but regime field 'NEGATIVE'. For SPY the header total_gex even disagrees in SIGN with the sum of its own per_strike array (+112,722,410), so 'trust total_gex not the label' is no longer sufficient. zerodte_setup.py inherited the corruption on BOTH symbols.",
+    "breadth_pct_green": 41.15,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "PCE / Core PCE (July)",
+        "date": "2026-08-26",
+        "impact": "tier-1 macro"
+      },
+      {
+        "event": "NVDA Q2 FY27 earnings (after close) -- same day as PCE",
+        "date": "2026-08-26",
+        "impact": "tier-1 single-name, index-wide vol contagion"
+      },
+      {
+        "event": "Jackson Hole Economic Symposium",
+        "date": "2026-08-27",
+        "impact": "tier-1 macro (runs 08-27 to 08-29)"
+      },
+      {
+        "event": "Warsh Jackson Hole keynote (first as Fed Chair) + BLS preliminary CES benchmark revision, same morning",
+        "date": "2026-08-28",
+        "impact": "tier-1 macro"
+      },
+      {
+        "event": "August Employment Situation (NFP)",
+        "date": "2026-09-04",
+        "impact": "tier-1 macro"
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.35,
+      "cluster_id": "crypto_beta",
+      "note": "ADVISORY since 2026-08-22; nothing sizes. ASST is the ONLY ESTABLISHED name -- inside BOTH rankings (rel_build #8 of the 329-name gated live pool AND raw oi_net_5d #13, independently confirmed; lane read #12 on a tighter universe). oi_net_5d +115,821 (call +133,402/put +17,581), rel_build 0.678, persistence 0.654, last_call_net +30,775. It inherits the pooled prior +0.0013 (n=1177, 79 exit-days, p=0.767) -- indistinguishable from zero. MATERIAL CAUTION: ASST (Strive Inc) is a bitcoin-treasury company, effectively a leveraged BTC proxy despite passing the Common Stock filter; treat as crypto-beta cluster alongside excluded BTCZ/ETH and CIFR/WULF/MARA, same class as the SOXS leveraged-inverse artifact. All other 14 live candidates UNESTABLISHED (no raw top-15 overlap). Plain-CHOP cell -0.0010, 23 exit-days, t=-0.13. 16/16 pass earnings gate, liquidity floor and catalyst_split on BOTH boundary conventions; no M&A deal-pin cuts.",
+      "candidates": [
+        "ASST",
+        "AS",
+        "VIK",
+        "TJX",
+        "NXPI",
+        "UCTT",
+        "SAN",
+        "HON",
+        "FN",
+        "BR",
+        "VIRT",
+        "LPLA",
+        "FRT",
+        "CPAY",
+        "ULS"
+      ]
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.35,
+      "cluster_id": "utilities_power",
+      "note": "Watch-only capped, never sizes (the one recorded knowingly-negative lane). s1_standdown FALSE so the crash guard is off, but the plain-CHOP cell is -0.0220 across 24 exit-days (clustered -0.0177, t=-1.93) -- below floor. 15 verified names. CORRECTION TO LANE OUTPUT: its reported pct_52w_range column printed values >1.0 (impossible on [0,1]) -- those are close/w52l ratios, not the factor; the cohort is nonetheless correct on chart-API verification. CPRI/ONON/OLN were dropped for UW-vs-Yahoo 52w mismatch, but the mismatch is stale UW week_52_low because each made a NEW 52w low today; on verified data they sit at 0.6%/1.2%/2.1% of range -- NEARER the low than kept names PEG (5.0%) and CMS (6.7%). Correct handling is to substitute the verified value, not drop; harmless only because the lane never sizes.",
+      "candidates": [
+        "LII",
+        "FDXF",
+        "AMRZ",
+        "LHX",
+        "BWXT",
+        "WSO",
+        "APTV",
+        "PEG",
+        "CMS",
+        "INIO",
+        "CRUS",
+        "ROL",
+        "NKE",
+        "MLM",
+        "VICI"
+      ]
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.3,
+      "cluster_id": null,
+      "note": "Basket/watch only, never sized per-name. Plain-CHOP cell -0.0257 across 24 exit-days (clustered -0.0256, t=-2.41), hit-base -0.360 -- the worst-conditioned lane on tonight's stratum. ~93 verified near-52w-high names; 15 sampled. Lane's own regime statistics (n=25, -7.76%, base 92%) do not reconcile with the harness and were discarded.",
+      "candidates": [
+        "FCX",
+        "ERO",
+        "MRK",
+        "BIO",
+        "PK",
+        "SSRM",
+        "WT",
+        "TVTX",
+        "MTCH",
+        "NTRA",
+        "BHP",
+        "KSPI",
+        "TEVA",
+        "REPL",
+        "TECK"
+      ]
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW VIX tercile (15.45, bounds [15.86,17.28]); dealers SHORT gamma",
+      "implied_move": null,
+      "expected_range": 0.0113,
+      "net_expectancy": 0.00013,
+      "delta_neutral": true,
+      "suggested_structure": null,
+      "stand_aside_reason": "HARD STAND-ASIDE on the gamma gate: cumulative per-strike net-GEX at spot is -$503M and the first zero-cross is strike 785, +2.5% ABOVE spot 765.91. Economics were immaterial anyway -- LOW-tercile conditional gross +0.113%/day -> +0.013% net of the 0.10% round-trip, inside noise. Gate is the binding reason, not the P&L."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW VIX tercile; dealers ON THE FLIP, marginally short",
+      "implied_move": 0.0117,
+      "expected_range": 0.0139,
+      "net_expectancy": 0.00101,
+      "delta_neutral": true,
+      "suggested_structure": null,
+      "stand_aside_reason": "ORCHESTRATOR OVERRIDE of the vol-book lane, which returned sell_premium=true on a 'robust LONG gamma' read. That read took the sign from PER-STRIKE values (citing 707-711 as 'already net positive') rather than the CUMULATIVE profile. Cumulatively QQQ is -$167.6M at strike 710 and does not cross zero until 711, with spot at 710.72 -- it sits INSIDE that one-strike interval, i.e. ON its flip, with the entire crossing carried by a single strike (711, +$176.9M). Not robustly long. Fail-closed => stand aside. The forgone economics were real (gross +0.201% -> +0.101% net), which is exactly why the gate and not the P&L decides."
+    },
+    {
+      "symbol": "BBWI",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "iv_rank 95.3; earnings 2026-08-26 premarket",
+      "implied_move": 0.187,
+      "expected_range": 0.253,
+      "net_expectancy": null,
+      "delta_neutral": true,
+      "suggested_structure": "defined-risk iron fly, ATM 17.5, wings floor x1.35 ~=25.3% -- ADVISORY_NOT_SIZED",
+      "stand_aside_reason": "Unsampled-left-tail cap unsatisfiable: the bracketing 2026-08-28 expiry IS the Warsh keynote day and the BLS benchmark revision morning, inside Jackson Hole 08-27->29 and the week of NVDA's 08-26 print. Straddle from raw-parquet MEDIAN IV (171.5% avg ATM) = 18.7% 1-sigma, treated as a LOWER BOUND (TPR precedent: realized -16.5% vs ~12.2% raw-IV estimate); CLI implied_move_perc 10.6% understates by ~43%."
+    },
+    {
+      "symbol": "OKTA",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "iv_rank 80.4; earnings 2026-08-26 postmarket",
+      "implied_move": 0.192,
+      "expected_range": 0.259,
+      "net_expectancy": null,
+      "delta_neutral": true,
+      "suggested_structure": "defined-risk iron fly, ATM 130-131, wings floor x1.35 ~=25.9% -- ADVISORY_NOT_SIZED",
+      "stand_aside_reason": "Same 2026-08-28 bracketing expiry and same macro stack as BBWI; tail cap unsatisfiable. Median-IV straddle ~176.2% avg ATM = 19.2% 1-sigma, a lower bound; CLI implied_move_perc 11.1% understates by ~42%."
+    },
+    {
+      "symbol": "MDB",
+      "lane": "vol_earnings",
+      "sell_premium": null,
+      "vol_state": "iv_rank 80.3; earnings 2026-09-01 postmarket",
+      "implied_move": 0.217,
+      "expected_range": 0.293,
+      "net_expectancy": null,
+      "delta_neutral": true,
+      "suggested_structure": "defined-risk iron fly, ATM 405, wings floor x1.35 ~=29.3% -- ADVISORY_NOT_SIZED",
+      "stand_aside_reason": "TONIGHT'S CLEAN BRACKETING-EXPIRY-TRAP ILLUSTRATION: the 08-28 contract expires BEFORE the 09-01 print, so the CLI's headline implied_move_perc of 4.1% prices a no-catalyst window and understates by ~5x. Real bracket is 09-04. Median-IV straddle on 09-04 ~122.0% avg ATM = 21.7% 1-sigma (lower bound). Holds to 09-04, spanning the ENTIRE macro stack plus its own binary => tail cap unsatisfiable."
+    }
+  ],
+  "watchlist_write_back": [
+    "ASST -- the ONLY ESTABLISHED OI_FADE name (rel_build #8 AND raw oi_net_5d #13). Inherits the pooled prior +0.0013/p=0.767, i.e. zero. Track nightly, but CAUTION: bitcoin-treasury company = leveraged BTC proxy, crypto-beta cluster, NOT idiosyncratic -- same class as the SOXS artifact.",
+    "BIDU -- DOWNGRADED from PRE_REGISTERED_WATCH. It did not converge on the top-15, it moved away: raw rank 16 -> 38, rel_build 0.302 -> 0.206, call-side build -23% with the put side flat. last_call_net still +6,277 so no mechanical invalidation fired. Retire the 'AS-on-08-20 converging setup' framing.",
+    "AS -- CUT_STANDS, 3rd consecutive night, on ONE binding leg. last_call_net +14,813 CLEARS; fundamentals CONFIRM (4-for-4 EPS beats, +29% YoY rev, raised FY guide) -- a real reversal of the 08-21 VETO; raw rank 36 of 1,480 FAILS. Rank has now failed at 38 -> 33/36 -> 36 across three nights.",
+    "GEX CLI corruption -- 4th consecutive night of manual override, now spanning EVERY header field and BIDIRECTIONAL. SPY: total_gex -132.6M vs regime field 'POSITIVE' vs zero_gamma_level 332.87 (impossible) -- AND the header total_gex disagrees in SIGN with the sum of its own per_strike array (+112.7M). QQQ: total_gex +338.9M vs regime field 'NEGATIVE'. 'Trust total_gex not the label' is NO LONGER SUFFICIENT; only the cumulative per-strike reconstruction is trustworthy. zerodte_setup.py inherited the corruption on BOTH symbols tonight. Needs the standing internal-consistency guard.",
+    "BASELINE EROSION (AUDIT 2026-08-29 ITEM) -- 3rd consecutive instance of the non-idempotency class, now COMPOUNDING. Tonight lost AVB x3 and EQR x2 (on top of LBRDK on 08-24); all three truncated by the vendor to start 2026-07-17, EQR's last bar is 08-21. S2 and MOM_SHORT baselines can no longer be reproduced from live data. Panel-wide: 62 tickers start after 2026-04-01, 18 have no 08-25 bar. resolved_ledger.json protects the FORWARD book only -- EQR is in it, AVB and LBRDK are not. PROPOSAL: snapshot the baseline cohort rows to a frozen artifact so the gate can reproduce its own reference.",
+    "S2 LANE DEFECT -- its final roster claimed 36 names, listed 37, and contained NRIX (FAILS the fail-closed liquidity floor at $29.7M 20d $-ADV vs the $50M bar) plus TPG (which the lane itself listed as prior-excluded). Corrected to 35. Lane also carried its regime prior forward from the 08-24 audit instead of recomputing on tonight's 95-day panel.",
+    "LANE ARITHMETIC -- three figures handed back tonight did not survive re-derivation: S4 computed its regime cell on h5+h10 pooled when the gate measures S4 at h5 ONLY (its 34 exit-days would have wrongly waived the <30 correlated-draw caveat; the gate's basis gives 25); momentum's regime statistics (MOM_SHORT n=42, MOM_LONG n=25/-7.76%/base 92%) do not reconcile with the harness at all and were discarded; momentum's pct_52w_range column printed values >1.0, i.e. close/w52l ratios mislabeled as the factor. Re-derive every lane-reported statistic from the harness."
+  ],
+  "report_path": "analyses/scan/2026-08-25/report.md"
+}

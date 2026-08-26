@@ -1,0 +1,88 @@
+{
+  "conviction_date": "2026-08-25",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-25 market-scan, persisted for the next run's held-position reconciliation. Sub-agents do not carry open positions -- the orchestrator reconciles this file with scripts/held_book.py at the start of the next scan.",
+  "source_decision_envelope": "analyses/scan/2026-08-25/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": 0,
+    "detail": "FLAT for a 12th consecutive session. No lane in this repo sizes at all since OI_FADE's 2026-08-22 demotion to advisory. Zero sized calls tonight and zero open positions carried in. Phase D (risk-sizer) was VACUOUS and fundamentals-gate was correctly not spawned -- it runs only on names about to be sized.",
+    "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-08-24/conviction_2026-08-24.json read 0 positions (0 open, 0 closed). Verified NOT the known EXIT-substring bug by inspecting the prior file directly: book_state.positions == 0 and calls[] was empty in the 08-24 envelope, so the empty result is genuine."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "ret5": -0.002,
+    "ret10": -0.006,
+    "dd15": -0.0103,
+    "vix": 15.45,
+    "vol_state": "LOW tercile with 0.41 of buffer (bounds [15.86,17.28]) -- first night in four not hugging a boundary (08-20 was +0.02 above the cut, 08-24 was -0.01 below). SPY SHORT gamma (cumulative at spot -$503M, flip strike 785 = +2.5% above spot 765.91). QQQ ON ITS FLIP, marginally short (cumulative -$167.6M at strike 710, +$9.3M at 711, spot 710.72; whole crossing carried by strike 711 alone).",
+    "s1_standdown": false,
+    "directional_tradable": true,
+    "breadth_note": "207 adv / 294 dec, 41.15% green, flow bullish_pct 35.7%. SPY closed GREEN (+0.32%) on sub-50% breadth -- the DISTRIBUTION TELL FIRES tonight; it did NOT fire on 08-24 (60.4% green). Technology premium flipped to +$122.4M inflow from -$346M outflow."
+  },
+  "watch": [
+    {
+      "ticker": "ASST",
+      "lane": "OI_FADE",
+      "status": "ESTABLISHED_WATCH",
+      "raw_oi_rank": "13 of 1,480 (orchestrator count); lane read 12 of 1,315 on a tighter universe -- top-15 on BOTH",
+      "note": "The ONLY name tonight inside BOTH rankings: rel_build #8 of the 329-name gated live pool AND the raw oi_net_5d top-15. It therefore inherits the pooled prior -- which is +0.0013 (n=1177, 79 exit-days, p=0.767), indistinguishable from zero, so ESTABLISHED status buys nothing directional. Mechanics: oi_net_5d +115,821 (call +133,402 / put +17,581), rel_build 0.678, persistence 0.654, last_call_net +30,775. MATERIAL CAUTION: ASST (Strive Inc) is a bitcoin-treasury company -- effectively a leveraged BTC proxy despite passing the Common Stock filter. Belongs to a crypto-beta cluster with tonight's excluded BTCZ/ETH and the CIFR/WULF/MARA prints; the same class of trap as the SOXS leveraged-inverse artifact. Do NOT treat as an idiosyncratic short."
+    },
+    {
+      "ticker": "BIDU",
+      "lane": "OI_FADE",
+      "status": "WATCH_DOWNGRADED",
+      "raw_oi_rank": "38 of 1,480 (was 16 of 1,313 on 08-24)",
+      "note": "Downgraded. It did not converge on the top-15 -- it moved AWAY. rel_build 0.302 -> 0.206, net_5d +72,101 -> +49,709, call-side build -23% while the put side held flat (+24,547 -> +24,604). last_call_net stays positive (+6,277) so no mechanical invalidation fired, and it is outside the live lane's own rel_build top-15 too (rel rank 47 of 329). The 'AS-on-2026-08-20 converging setup' framing from 08-24 is retired."
+    },
+    {
+      "ticker": "AS",
+      "lane": "OI_FADE",
+      "status": "CUT_STANDS",
+      "raw_oi_rank": "36 of 1,480",
+      "note": "Third consecutive night CUT, and now on a SINGLE binding leg. Leg 1 (last_call_net positive): CLEARS at +14,813. Leg 3 (fundamentals): CONFIRM -- finnhub reads a 4-for-4 EPS beat streak, +29.0% YoY revenue, a raised FY guide and low leverage, a genuine reversal of the 08-21 VETO. Leg 2 (raw rank inside the harness top-15): FAILS at 36. Rank has failed at 38 -> 33/36 -> 36 across three nights; it is the only thing keeping AS out, and the fundamentals leg moving the other way is itself the documented anti-selection risk."
+    }
+  ],
+  "advisory_no_size": {
+    "S2_dp_revert": {
+      "clean_names": 35,
+      "note": "CORRECTED from the lane's output, which claimed 36, listed 37, and contained two names that should not have been there: NRIX FAILS the fail-closed liquidity floor ($29.7M 20d $-ADV vs the $50M bar) and TPG was on the lane's own prior-excluded list. Top by DP premium: PG $409.3M/91.1% buy, SBUX $188.7M, RHI $102.8M, KHC $95.2M, CTSH $79.9M. Ranking treated as non-informative (IC ~ 0 -- binary liquidity-event tag, not a magnitude signal). Plain-CHOP cell +0.0011, 25 exit-days, t=0.26 -- below floor."
+    },
+    "S4_pcr_fade": {
+      "clean_names": 19,
+      "names": [
+        "ATI",
+        "DLR",
+        "HSBC",
+        "BHF",
+        "JAZZ",
+        "CDNA",
+        "IP",
+        "AMGN",
+        "DOCN",
+        "FRSH",
+        "FTAI",
+        "VSAT",
+        "OTIS",
+        "SEI",
+        "BTDR",
+        "CRH",
+        "RRX",
+        "RGLD",
+        "ALLY"
+      ],
+      "note": "All 19 independently re-verified against the liquidity floor -- all pass. Call-volume floor (250) confirmed applied to the CALL leg specifically, so no small-denominator PCR artifacts survived. Plain-CHOP cell on the GATE's basis (h5 only): +0.0076, 25 exit-days, clustered t=1.49, hit-base +0.013. The lane reported n=507/34 exit-days/+0.0039 by pooling h5+h10 -- wrong basis, and its 34 exit-days would have wrongly waived the <30 correlated-draw caveat."
+    },
+    "cross_lane": "S2 and S4 rosters are DISJOINT and no OI_FADE name appears in either -- no confluence question arises tonight."
+  },
+  "next_run_carry": [
+    "Re-derive EVERY lane-reported statistic from the harness. Three failed re-derivation tonight (S4 wrong horizon basis, momentum's regime stats irreconcilable, momentum's pct_52w_range column mislabeled).",
+    "GEX: use ONLY the cumulative per-strike reconstruction. All header fields are now unreliable, including total_gex, which for SPY disagrees in sign with the sum of its own per_strike array.",
+    "Baseline erosion is compounding (AVB, EQR, LBRDK truncated to 2026-07-17). Raise the frozen-baseline-cohort proposal at the 2026-08-29 audit.",
+    "OI_FADE pooled excess is now NEGATIVE (-0.0003) but it is two pinned-base exit-days of one squeeze, not decay. Do NOT re-baseline on it."
+  ],
+  "vol_book": {
+    "SPY_0dte": "STAND ASIDE (sell_premium=false) -- short gamma; economics immaterial anyway (gross +0.113% -> +0.013% net).",
+    "QQQ_0dte": "STAND ASIDE (sell_premium=false) -- ORCHESTRATOR OVERRIDE of the lane's sell_premium=true. QQQ is ON its flip, not robustly long; the lane read per-strike signs instead of the cumulative profile. Forgone economics were real (gross +0.201% -> +0.101% net).",
+    "earnings": "BBWI / OKTA / MDB all ADVISORY_NOT_SIZED -- tail cap unsatisfiable on the 08-28 Warsh-keynote expiry stack. NVDA (iv_rank 40.15), ADSK (78.12), HPQ (73.36) all FAIL the >=80 screen tonight, so the 08-24 trio is not carried forward. MDB is the clean bracketing-expiry-trap illustration (CLI understates ~5x)."
+  }
+}
