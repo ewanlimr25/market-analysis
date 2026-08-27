@@ -1,0 +1,105 @@
+{
+  "conviction_date": "2026-08-26",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-26 market-scan, persisted for the next run's held-position reconciliation. Sub-agents do not carry open positions -- the orchestrator reconciles this file with scripts/held_book.py at the start of the next scan.",
+  "source_decision_envelope": "analyses/scan/2026-08-26/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": 0,
+    "detail": "FLAT for a 13th consecutive session. No lane in this repo sizes at all since OI_FADE's 2026-08-22 demotion to advisory. Zero sized calls tonight and zero open positions carried in. Phase D (risk-sizer) was VACUOUS and fundamentals-gate was correctly not spawned -- it runs only on names about to be sized.",
+    "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-08-25/conviction_2026-08-25.json read 0 positions (0 open, 0 closed). Verified NOT the known EXIT-substring bug by inspecting the prior files directly: book_state.positions == 0 in the 08-25 conviction file AND calls[] was empty in the 08-25 envelope. The empty result is genuine."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "ret5": -0.0039,
+    "ret10": -0.0083,
+    "dd15": -0.0128,
+    "vix": 15.21,
+    "vol_state": "LOW tercile and FALLING (15.45 -> 15.21). SPY SHORT gamma at the money: cumulative net-GEX -$964M at spot 766.71, the 742-791 strike band NEVER crosses zero -- the strongest short-gamma read in several sessions (08-25 was -$503M with a flip at +2.5%). QQQ SHORT at spot (-$225.8M at 711.9), flip ~+0.6% above. Header zero_gamma_level 364.22 is structurally impossible and was discarded; zerodte_setup.py ALSO consumed the corrupted field this time and had to be overridden for SPY.",
+    "s1_standdown": false,
+    "directional_tradable": true,
+    "breadth_note": "927 adv / 939 dec, 48.97% green on the 2,428-name spine; 50.5% >20dma, 56.0% >50dma. Flow bullish_pct 34.7%. SPY +0.02%. Breadth MATCHES the flat tape -- the distribution tell that fired on 08-25 (green SPY on 41% breadth) does NOT fire tonight."
+  },
+  "regression_gate_carry": {
+    "panel_days": 96,
+    "verdict": "NO REGRESSION -- do not re-baseline",
+    "oi_fade_pooled": -0.0011,
+    "oi_fade_baseline_cohort": 0.0013,
+    "detail": "OI_FADE pooled crossed further below zero (-0.0003 on 08-25 -> -0.0011 tonight) against a +0.0013 baseline. Isolation check (analyses/audit/2026-08-26/harness_split.py) says DATA, not code: (a) the baseline cohort pinned at 2026-08-21 reproduces MOM_LONG -0.0118/n=1213, OI_FADE +0.0013/n=1177, S4 +0.0024/n=1304 bit-identically -- MOM_SHORT n=828 vs 830 and S2 n=1264 vs 1269 lost 7 rows to the known non-idempotent vendor feed (the EQR retraction class), means moving <=0.0002; (b) no code changed; (c) the increment is THREE exit-days (08-24/25/26) with `base` PINNED -- 1.00 both short lanes, 0.00 all three long lanes, i.e. SPY down in 100% of the new windows. OI_FADE's increment n=45 mean -0.0617 is near-IDENTICAL on each day (-0.0633/-0.0611/-0.0607, hit 0.33 on all three): ONE cohort resolving on three consecutive days from signal dates 08-10/11/12 on the SAME names, not three independent draws. Left tail is entirely the crypto/speculative squeeze: MSTR -30.7%, CELH -30.0/-28.4/-26.4%, MARA -22.8/-18.2/-17.2%. The benchmark FELL in every one of these windows and a short lane still lost 6%.",
+    "next_cycle_watch": "If the 08-24/25/26 draw is a squeeze and not decay, the pinned-base cohort should UNWIND as it rolls out of the h10 window (~09-08 onward) the way the 08-22 mirror did. Pre-register that now: if OI_FADE's pooled figure does NOT recover toward its baseline once these three exit-days age out, the decay reading gains real weight. Count distinct EXIT-DAYS, not rows."
+  },
+  "phase_c_regime_cell": {
+    "cell": "plain CHOP, s1_standdown=FALSE (NOT the collapsed CHOP row)",
+    "warning": "The pooled 'CHOP' row collapses plain CHOP with CHOP/REBOUND-THRUST and OI_FADE's SIGN FLIPS between them: -0.0010 plain vs +0.0098 thrust, collapsed reads a misleading +0.0023. Tonight s1_standdown=FALSE, so the PLAIN cell governs. All t-stats below are clustered on EXIT-DAYS, not rows.",
+    "cells": {
+      "MOM_LONG": {"mean": -0.0256, "t": -2.41, "p": 0.016, "exit_days": 24, "n_rows": 356},
+      "MOM_SHORT": {"mean": -0.0177, "t": -1.93, "p": 0.054, "exit_days": 24, "n_rows": 282},
+      "OI_FADE": {"mean": -0.0009, "t": -0.13, "p": 0.898, "exit_days": 23, "n_rows": 344},
+      "S2_dp_revert": {"mean": 0.0014, "t": 0.31, "p": 0.755, "exit_days": 26, "n_rows": 380},
+      "S4_pcr_fade": {"mean": 0.0068, "t": 1.39, "p": 0.165, "exit_days": 26, "n_rows": 387}
+    },
+    "read": "NOT ONE lane has a positive, significant excess in tonight's regime. Every cell is <30 exit-days so all carry the correlated-draw caveat (invariant #6). The only statistically real number is MOM_LONG's NEGATIVE excess (p=0.016) -- an argument against the near-52w-high basket, not for anything."
+  },
+  "watch": [
+    {
+      "ticker": "DKS",
+      "lane": "OI_FADE",
+      "status": "WATCH",
+      "raw_oi_rank": "rel_build #1 of 1,364 (4.687); RAW oi_net_5d #67 -- NOT in the raw top-15",
+      "note": "Strongest mechanical OI_FADE read tonight but does NOT inherit the historical top-15-by-RAW prior. Calls building INTO a falling tape (52w-low headlines, Nike fallout, Truist downgrade) = the crowded-contrarian-long setup the lane exists to fade. Earnings printed 08-25 and the build SURVIVES a strict '>' recompute at 73.9% post-print (script's '>=' read 84.2%) -- genuinely LIVE_BUILD, not a pre-print artifact. Persistence 0.765 (organic, not a single block). Next ER 2026-11-24, clear of h10. Prior verdicts clean. No M&A language on the tape."
+    },
+    {
+      "ticker": "DYN",
+      "lane": "OI_FADE",
+      "status": "WATCH",
+      "raw_oi_rank": "rel_build #6 (2.011); RAW #535",
+      "note": "MARGINAL LIQUIDITY -- ADV $50.8M against a $50M floor. No catalyst inside the build window; next ER 2026-11-04. FDA/biotech headline noise (DMD program), no M&A signal. Does not inherit the RAW prior."
+    },
+    {
+      "ticker": "FRT",
+      "lane": "OI_FADE",
+      "status": "WATCH",
+      "raw_oi_rank": "rel_build #13 (1.403); RAW #443",
+      "note": "Lowest persistence of the three (0.411). Next ER 2026-10-30. Its prior_verdicts 'blocking' flag is LANE-LEVEL, not name-specific (weekly W34 noting OI_FADE's CHOP-conditional excess is indistinguishable from zero) -- correctly read as such by the lane. Does not inherit the RAW prior."
+    },
+    {
+      "ticker": "ASST",
+      "lane": "OI_FADE",
+      "status": "DROPPED_OFF_BOTH_RANKINGS",
+      "raw_oi_rank": "RAW #25, rel_build #60 on tonight's full floored universe (was rel #8 / raw #13 on 08-25)",
+      "note": "No longer ESTABLISHED. Not a cut for cause -- its rel_build compressed to 0.698 (vs DKS 4.687) while raw magnitude grew elsewhere. Mechanics still building: oi_net_5d +122,010 (call +146,076 / put +24,066), persistence 0.621, last_call_net +13,726, no unwind signal. Liquidity fine ($21.50, ADV $105.1M). STANDING CAUTION RETAINED: Strive Inc is a bitcoin-treasury company -- a leveraged BTC proxy in a crypto-beta cluster, NOT idiosyncratic; same class as the SOXS leveraged-inverse artifact, and the same cluster that produced this cycle's -6% OI_FADE increment."
+    }
+  ],
+  "advisory_no_size": {
+    "MOM_SHORT": {
+      "names": ["CRUS", "FRVO", "TJX", "TTD", "TLN", "LII", "WING", "MLM", "CMS", "STLA"],
+      "note": "Watch-only permanently. Orchestrator Yahoo-verified 6 of 10 via the chart API -- CRUS 0.7% off its 52w low, TJX 2.7%, TTD 0.5%, STLA 1.4%, FRVO 0.8%, TLN 3.2%. All genuine near-lows; NO stale-w52h false shorts. Lane's low for TJX read 134.75 vs Yahoo 135.90, FRVO 15.31 vs 15.22 -- small drift, classification unaffected. 70 ETPs cut at source via issue_type."
+    },
+    "MOM_LONG": {
+      "names": ["WT", "RVTY", "AXGN", "VCTR", "NTRA", "BNS", "EXPD", "APGE", "IVZ", "DBRG", "REPL", "IQV", "DGX"],
+      "note": "Basket/watch only. Significantly NEGATIVE in tonight's regime cell (-0.0256, p=0.016) -- the one statistically real number on the board, pointing away from the trade. Lane cosmetic defect: reported 'CUT (7 names)' but listed 6."
+    },
+    "S4_pcr_fade": {
+      "names": ["BX", "GLXY", "TNGX", "WRBY", "STNG", "WBD", "BHF", "TEL"],
+      "note": "ETP LEAK FOUND AND CORRECTED BY THE ORCHESTRATOR. The lane shipped an 11-name slate claiming its ETP gate cut only EWJ/RSP/XLY; a direct issue_type check on the 2026-08-26 screener found THREE ETFs still in it -- SPYM, XRT, and LABD (Direxion Daily S&P Biotech Bear 3X, a LEVERAGED INVERSE, the exact SOXS artifact class). Corrected slate is the 8 names above. The call-volume floor IS working: it cut 78 of 95 pre-gate names (82%) as manufactured PCRs (EMB 682 on 4 calls, BKD 267 on 2); every survivor has call_volume >= 264. TWO LANE BLOCK-REASONS WERE MISREAD: BLDR's W31 verdict stands it down by standing policy invariant #6 and explicitly records s1_standdown=FALSE (the lane blamed the crash guard, which is not firing tonight); CARR's 'blocking verdict' is just the routine 'S4 advisory-only, never sizes' lane-status tag from 08-21, not a name veto. Both stay out regardless. REMINDER: S4's hit-base is NEGATIVE (-0.010 pooled, -0.028 baseline) -- no hit-rate edge, right-tail only."
+    },
+    "S2_dp_revert": {
+      "names": ["PEP", "TER", "DIS", "TPR", "ADI"],
+      "note": "Top 5 by DP premium of 82 gated names -- the full 82 is TOO BROAD to be a useful watch list and is treated as diary. Orchestrator independently recomputed and MATCHED the lane's top 5: PEP $677M oneside 0.965 buy-skew +0.931; TER $391M 0.962 -0.924; DIS $378M 0.946 +0.891; TPR $352M 0.987 -0.975; ADI $247M 0.929 -0.859. The lane DID cut ETPs correctly even though it did not say so -- GOVT is #1 by premium ($2,191M) and is properly absent, as are XLF and EWT. Earnings gate blocked 5 reporting 08-27 (BIPC, CM, PURR, RY, TD); liquidity blocked 9. CAVEAT: the lane tilts LONG on both buy- and sell-side concentration; the sell-side half (TER, TPR, ADI) is the weaker part of that claim."
+    }
+  },
+  "cross_lane_overlap": "NONE. No name appears in two lanes tonight, so no confluence question arises. Had one, it would be noted as evidence-type diversification and NEVER summed (invariant #2).",
+  "vol_book": {
+    "0dte": "STAND ASIDE on both SPY and QQQ. TRAP #1 FIRED ON SPY: zerodte_setup.py reported dealer_gamma_regime 'LONG' with zero_gamma_level 364.19 against a spot of 766.71 and recommended sell_premium=True -- it consumed the SAME corrupted uw gex CLI field. Overridden fail-closed; SPY is SHORT gamma at the money (-$964M). QQQ's script read agreed with the hand derivation and was already standing aside. TRAP #2 corrected: mean_pnl_by_vix_state is GROSS -- LOW-VIX bucket SPY +0.132%/day gross = +0.032% net, QQQ +0.233% = +0.133% net; both moot once the gamma sign fails closed.",
+    "earnings": "3 advisory candidates, none sized: BURL (print 08-27, bracketing expiry 08-28, IV rank 88.4, backwardation 3.01x, implied move 9.11%), ADSK (08-27, 08-28, 80.7, 1.56x, 8.50%), MDB (09-01, 09-04 at 8 DTE, 81.7, 1.13x, 15.98%). Treat every implied move as a WING FLOOR not an estimate (TPR precedent: realized -16.5% vs a 12.2% raw-IV read); wings >=1.3-1.5x. Spread cost runs 6-9% of straddle notional and eats most of the crush edge. DROPPED: NTAP and MNSO -- NO expiry brackets their print (nearest 22+ DTE), so any implied-move read is a no-catalyst window (the HPQ/ADSK/OKTA trap); SPWH and YRD illiquid with null implied_move."
+  },
+  "next_run_carry": {
+    "audit_due": "2026-08-29",
+    "open_call_rows": "11 (all OI_FADE, 7 distinct names) + 215 open suppressed candidates -- unchanged tonight; the sized book gained ZERO for a 13th session.",
+    "reminders": [
+      "Re-signal dedup caps OI_FADE at ~2 cluster-units per runner, so 'wait for the first non-overlapping cohort' is structurally unreachable -- stop scheduling it as a matter of waiting.",
+      "Count distinct EXIT-DAYS, not rows, when judging any cohort. A STOP flag is governed by the cluster_id unit, with the exit-day view reported alongside it every cycle.",
+      "Jackson Hole runs 08-27 to 08-29 with Warsh keynoting 08-28 -- the next scan lands inside it.",
+      "CPI 09-11 sits one trading day past tonight's h10 window; it will bite straddles bracketing it."
+    ]
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-26",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": -0.0039,
+    "ret10": -0.0083,
+    "vol_state": "LOW tercile and FALLING (VIX 15.21 from 15.45; SPY realized30d 12.30%). Dealer gamma hand-derived because the uw gex CLI corrupts the regime field: SPY SHORT gamma at the money (cumulative net-GEX -$964M at spot 766.71; the 742-791 band never crosses zero; header zero_gamma_level 364.22 structurally impossible and discarded). QQQ SHORT at spot (-$225.8M at 711.9), flipping positive ~+0.6% above. Fragile-quiet: low VIX with dealers amplifying, not dampening. SPY VRP +0.0038 fair; QQQ VRP -0.0279 (IV30d 18.88% below realized 21.66%).",
+    "breadth_pct_green": 48.97,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "Jackson Hole symposium (Warsh keynote 08-28)",
+        "date": "2026-08-27/2026-08-29",
+        "tier": "medium",
+        "in_horizon": true
+      },
+      {
+        "event": "Aug Employment Situation / NFP",
+        "date": "2026-09-04",
+        "tier": "tier-1",
+        "in_horizon": true
+      },
+      {
+        "event": "Labor Day - market closed",
+        "date": "2026-09-07",
+        "tier": "holiday",
+        "in_horizon": true
+      },
+      {
+        "event": "Aug PPI",
+        "date": "2026-09-10",
+        "tier": "tier-1",
+        "in_horizon": true
+      },
+      {
+        "event": "Aug CPI",
+        "date": "2026-09-11",
+        "tier": "tier-1",
+        "in_horizon": false,
+        "note": "ONE trading day past the h10 window; bites any straddle bracketing it - carry into next cycle"
+      },
+      {
+        "event": "FOMC",
+        "date": "2026-09-15/2026-09-16",
+        "tier": "tier-1",
+        "in_horizon": false,
+        "note": "outside window, note only"
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "note": "ADVISORY since 2026-08-22; nothing sizes. 1,364 names cleared the floors; 3 survived all gates: DKS (rel_build rank 1, 4.687, persistence 0.765), DYN (rank 6, ADV $50.8M -- AT the liquidity floor), FRT (rank 13). NO name sits in BOTH rankings tonight, so NONE inherits the historical top-15-by-RAW prior (raw ranks 67/535/443); they are graded only by the live rel_build rule, whose own forward measurement is -0.0081 (24 exit-days, p=0.080). DKS is the cleanest read -- calls building INTO a falling tape (52w-low headlines, Nike fallout, Truist downgrade), and the build SURVIVES a strict '>' recompute at 73.9% post-print vs the script's '>=' 84.2%, so it is not a pre-print artifact. ASST, last night's only ESTABLISHED name, FELL OUT OF BOTH rankings (raw #25, rel #60) as its rel_build compressed to 0.698 -- not a cut for cause. Applicable regime cell (plain CHOP, standdown FALSE) is -0.0009, t=-0.13 across 23 exit-days, p=0.898 -- indistinguishable from zero. Do NOT use the collapsed CHOP row (+0.0023): it merges plain CHOP with CHOP/REBOUND-THRUST and OI_FADE's sign FLIPS between them (-0.0010 vs +0.0098).",
+      "candidates": [
+        "DKS",
+        "DYN",
+        "FRT"
+      ]
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "note": "Watch-only by permanent policy (the one recorded negative-excess exception, invariant #6); crash guard NOT firing (s1_standdown=FALSE) but the watch cap is structural. 10 names. Orchestrator independently Yahoo-verified 6 via the chart API: CRUS 0.7% off its 52w low, TJX 2.7%, TTD 0.5%, STLA 1.4%, FRVO 0.8%, TLN 3.2% -- all genuine near-lows, NO stale-w52h false shorts (the in-range-but-wrong class). Lane's low for TJX read 134.75 vs Yahoo 135.90 and FRVO 15.31 vs 15.22; small drift, classification unaffected. 70 ETPs cut at source via issue_type. Applicable cell (plain CHOP, standdown FALSE): -0.0177, t=-1.93 across 24 exit-days, p=0.054.",
+      "candidates": [
+        "CRUS",
+        "FRVO",
+        "TJX",
+        "TTD",
+        "TLN",
+        "LII",
+        "WING",
+        "MLM",
+        "CMS",
+        "STLA"
+      ]
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "note": "Basket/watch only, never sizes. 13 names. THIS IS THE ONE LANE WITH A STATISTICALLY REAL NUMBER TONIGHT, AND IT POINTS THE WRONG WAY: applicable cell (plain CHOP, standdown FALSE) is -0.0256, t=-2.41 across 24 exit-days, p=0.016 -- significantly NEGATIVE. That is an argument against the near-52w-high basket tonight, not for it. Cosmetic lane defect noted: it reported 'CUT (7 names)' but listed only 6 (SRRK, CRNX, V, TECH, FBRX, CDNA); no candidate affected.",
+      "candidates": [
+        "WT",
+        "RVTY",
+        "AXGN",
+        "VCTR",
+        "NTRA",
+        "BNS",
+        "EXPD",
+        "APGE",
+        "IVZ",
+        "DBRG",
+        "REPL",
+        "IQV",
+        "DGX"
+      ]
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW VIX tercile (15.21, falling); SHORT gamma at the money",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": 0.00032,
+      "suggested_structure": null,
+      "stand_aside_reason": "TRAP #1 FIRED. zerodte_setup.py reported dealer_gamma_regime 'LONG' with zero_gamma_level 364.19 and recommended sell_premium=True -- reading the SAME corrupted uw gex CLI field, with a flip level far below a spot of 766.71. Hand-derived truth: SPY is SHORT gamma at the money (cumulative net-GEX -$964M). Recommendation OVERRIDDEN, fail-closed. Trap #2 also corrected: mean_pnl_by_vix_state is GROSS -- tonight's LOW bucket is +0.132%/day gross, +0.032% net of the 0.10% round-trip, thin and moot once the gamma sign fails closed.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW VIX tercile; SHORT gamma at spot, flip ~+0.6% above",
+      "implied_move": null,
+      "expected_range": null,
+      "net_expectancy": 0.00133,
+      "suggested_structure": null,
+      "stand_aside_reason": "Script read (SHORT, sell_premium=False) AGREES with the hand derivation -- no override needed, already standing aside. LOW-VIX-bucket conditional +0.233%/day gross, +0.133% net; irrelevant given the gamma sign. Front-end backwardation adds gap risk.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "BURL",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "IV rank 88.4; BACKWARDATION front/back 3.01x",
+      "implied_move": 0.0911,
+      "expected_range": 0.0911,
+      "net_expectancy": null,
+      "suggested_structure": "Iron fly centered at spot, wings >=1.3-1.5x the straddle read. ADVISORY ONLY, not sized.",
+      "stand_aside_reason": "Print 2026-08-27, bracketing expiry 2026-08-28 (1 DTE), ATM straddle $28.60 / $313.89 spot, median near-ATM IV 152%. Treat 9.11% as a WING FLOOR, not an estimate (TPR precedent: realized -16.5% vs a 12.2% raw-IV read). ~9% half-spread on straddle notional eats most of the crush edge.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ADSK",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "IV rank 80.7; BACKWARDATION front/back 1.56x",
+      "implied_move": 0.085,
+      "expected_range": 0.085,
+      "net_expectancy": null,
+      "suggested_structure": "Iron fly centered at spot, wings >=1.3-1.5x the straddle read. ADVISORY ONLY, not sized.",
+      "stand_aside_reason": "Print 2026-08-27, bracketing expiry 2026-08-28 (1 DTE), ATM straddle $21.65 / $254.73 spot, median near-ATM IV 136%. Wing floor, not an estimate. ~6-7% half-spread.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "MDB",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "IV rank 81.7; BACKWARDATION front/back 1.13x (weakest of the three)",
+      "implied_move": 0.1598,
+      "expected_range": 0.1598,
+      "net_expectancy": null,
+      "suggested_structure": "Iron fly centered at spot, wings >=1.3-1.5x the straddle read. ADVISORY ONLY, not sized.",
+      "stand_aside_reason": "Print 2026-09-01, nearest expiry 2026-09-04 (8 DTE) includes ~3 decay days past the print. Median near-ATM IV 125%. History of double-digit earnings gaps, consistent with the 16% raw-IV floor. Weakest backwardation of the three -- thinnest imminent-event signal. Dropped entirely: NTAP and MNSO (NO expiry brackets the print, nearest 22+ DTE, so any implied-move read is not an earnings bracket -- the HPQ/ADSK/OKTA trap); SPWH, YRD (illiquid, null implied_move).",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "DKS",
+    "DYN",
+    "FRT",
+    "CRUS",
+    "FRVO",
+    "TJX",
+    "TTD",
+    "TLN",
+    "LII",
+    "WING",
+    "MLM",
+    "CMS",
+    "STLA",
+    "WT",
+    "RVTY",
+    "AXGN",
+    "VCTR",
+    "NTRA",
+    "BNS",
+    "EXPD",
+    "APGE",
+    "IVZ",
+    "DBRG",
+    "REPL",
+    "IQV",
+    "DGX",
+    "BX",
+    "GLXY",
+    "TNGX",
+    "WRBY",
+    "STNG",
+    "WBD",
+    "BHF",
+    "TEL",
+    "PEP",
+    "TER",
+    "DIS",
+    "TPR",
+    "ADI"
+  ],
+  "report_path": "analyses/scan/2026-08-26/report.md"
+}
