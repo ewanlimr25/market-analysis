@@ -1,0 +1,204 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-08-27",
+ "report_kind": "market-scan",
+ "regime": "CHOP",
+ "report_path": "analyses/scan/2026-08-27/report.md",
+ "regime_context": {
+  "regime_label": "CHOP",
+  "ret5": 0.0111,
+  "ret10": -0.0087,
+  "vol_state": "VIX 14.51, -4.60% on the day and -9.37% over 5 sessions -- LOW tercile and falling, and BELOW the zerodte backtest's own low-tercile floor of 15.8 (out-of-sample vol regime). SPY VRP -0.44% (IV30d 11.84% vs realized30d 12.29%) = FAIR. Dealer gamma hand-derived from the per-strike ladder: SPY sits ON its zero-gamma flip -- cumulative net-GEX up to spot is +21.7M on an +881.5M ladder (~zero), crossing at strike 770 vs spot 770.55, with 859.8M of 881.5M ABOVE spot and a +359.9M wall at 770. QQQ is cleanly LONG gamma (+736.7M cumulative to spot, crossing 717 vs spot 720, +601.0M wall at 720). NOTE: the CLI `regime` field was NOT corrupted tonight -- SPY's NEGATIVE is consistent with spot just under the flip; what misleads is reading the SIGN of header `total_gex`, which sums the whole ladder regardless of spot. Separately the header total_gex (+690.0M) does NOT equal the sum of the published ladder (+881.5M), a 191M gap -- only the ladder is trustworthy. || DD15: -0.0196, a TROUGH-ANCHOR distance, NOT a drawdown-from-highs -- the 15d low sits below the c10 anchor and price has already recovered above it. || BREADTH: Full 5,931-name spine 49.28% green (2,923 adv / 2,919 dec). Top-500 by marketcap only 35.60% green with median -0.565%; top-2000 42.20% green, median -0.31%. SPY +0.655%, QQQ +1.369%, IWM +0.294%. The median stock FELL while the index rose -- a narrow, earnings-gap-led advance and a genuine distribution tell. Phase A's 30.22% figure was an S&P-500-only fz read; recomputed here on the screener spine, whose prev_close was verified against Yahoo on SPY/QQQ/IWM to the basis point. || S1_STANDDOWN: FALSE but a DOUBLE near-miss: ret5 +1.11% vs the 1.5% leg and dd15 -1.96% vs the -2% leg. A modestly stronger thrust tomorrow flips the cell to CHOP/REBOUND-THRUST, where OI_FADE's sign inverts to +0.0098.",
+  "breadth_pct_green": 49.28,
+  "directional_tradable": true,
+  "s1_standdown": false,
+  "event_risk": [
+   {
+    "event": "Jackson Hole symposium (Warsh keynote 08-28)",
+    "date": "2026-08-27/2026-08-29",
+    "tier": "medium",
+    "in_horizon": true
+   },
+   {
+    "event": "Aug Employment Situation / NFP",
+    "date": "2026-09-04",
+    "tier": "tier-1",
+    "in_horizon": true,
+    "note": "ALSO the ZS earnings straddle's bracketing-expiry date -- crush thesis conflated with a Tier-1 macro print"
+   },
+   {
+    "event": "Labor Day - market closed",
+    "date": "2026-09-07",
+    "tier": "holiday",
+    "in_horizon": true
+   },
+   {
+    "event": "Aug PPI",
+    "date": "2026-09-10",
+    "tier": "tier-1",
+    "in_horizon": true
+   },
+   {
+    "event": "Aug CPI",
+    "date": "2026-09-11",
+    "tier": "tier-1",
+    "in_horizon": false,
+    "note": "one trading day past the h10 window; spanned by NTAP's 22-DTE bracket"
+   },
+   {
+    "event": "FOMC",
+    "date": "2026-09-15/2026-09-16",
+    "tier": "tier-1",
+    "in_horizon": false
+   },
+   {
+    "event": "Aug Core PCE",
+    "date": "2026-09-30",
+    "tier": "tier-1",
+    "in_horizon": false
+   }
+  ]
+ },
+ "calls": [],
+ "lane_status": [
+  {
+   "lane": "OI_FADE",
+   "disposition": "NO_NAME_CLEARED",
+   "direction": "short",
+   "regime_fit": 0.0,
+   "cluster_id": null,
+   "candidates": [
+    "FRT",
+    "BZ"
+   ],
+   "note": "ADVISORY since 2026-08-22; nothing sizes. 1,341-name floored universe ranked by oi_rel_build+persistence. Two survivors. NEITHER sits in the RAW oi_net_5d top-15 (BZ raw #398, FRT raw #417 of 1,341), so NEITHER inherits the historical +0.0013 prior, which grades top-15-by-RAW; they are graded only by the live rel_build rule, whose own forward measurement is -0.0081 (24 exit-days, p=0.080). Plain-CHOP cell for this lane is -0.0010 (23 exit-days, t=-0.13, p=0.900). ORCHESTRATOR CORRECTION: the lane called BZ 'organic, not single-block' -- its daily split is +632/+464/+802/-93/+3,884, i.e. 68.3% of the 5-day net landed in TODAY's session alone. It clears the 0.85 persistence cut on the number but is not a persistent multi-day build. FRT is the cleaner build (persistence 0.39) but is DECAYING -- today's +271 is one-eighth of the 08-25 peak of +2,058. Cuts: UHALB (partial 5d window, fail-closed), DKS (persistence 0.986 -- last night's strongest name, now a single-day block), IRD (0.912), FTEC (0.975 and an ETF), HONA (0.985, IPO 06-16 under the listing-age floor), ETH (an ETF, last_call_net negative), and 7 on liquidity including DYN at $48.1M ADV (was 'at the floor' at $50.8M last night, now below it). No M&A/tender language on either survivor's news tape."
+  },
+  {
+   "lane": "MOM_LONG",
+   "disposition": "BASKET_WATCH",
+   "direction": "long",
+   "regime_fit": 0.0,
+   "cluster_id": null,
+   "candidates": [
+    "OKTA",
+    "FROG",
+    "RVTY",
+    "MANH",
+    "CDNA"
+   ],
+   "note": "207 names; basket/watch only, NEVER sizes. This is the one lane with a SIGNIFICANTLY NEGATIVE excess in tonight's cell: plain CHOP -0.0257, 24 exit-days, t=-2.41, p=0.024 -- an argument AGAINST the basket. ORCHESTRATOR CORRECTION 1: the lane's proximity table printed closes ABOVE their 52w highs (OKTA '172.91 vs w52h 157.00, -10.13% off high'). That is NOT the stale-split artifact -- UW's w52h/w52l EXCLUDE the current session, so any name setting a fresh extreme today reads as outside its own range. Yahoo confirms OKTA pct_range 98.3% (off_high -1.1%), FROG 98.9%, RVTY 99.8%, MANH 97.0%, CDNA 96.8% -- all genuine near-highs. Classifications stand; the lane's proximity ranking and sign labels do not. ORCHESTRATOR CORRECTION 2 (material): EARNINGS-GAP CONTAMINATION -- 9 of 207 gapped >=7% TODAY (OKTA +28.63%, CRWD +20.50%, FROG +12.10%, SLS +10.78%, TEAM +10.18%, FTNT +9.67%, NVDA +8.74%, FIVN +8.03%, ZETA +7.05%). They entered the near-52w-high cohort BECAUSE of a print that already landed, and earnings_gate.py is FORWARD-ONLY so it passed all of them (lane reported 'earliest next print 09-09'). Meanwhile the median MOM_LONG name was -0.07% today and only 47.3% of the basket closed green: the leg's apparent strength is a handful of gaps, not breadth. Deal-pinned watch: APGE (0.017%/day realized vol at 134.96 vs 134.99 high), ACA, CRNX -- cut on any cash-acquisition announcement."
+  },
+  {
+   "lane": "MOM_SHORT",
+   "disposition": "BASKET_WATCH",
+   "direction": "short",
+   "regime_fit": 0.0,
+   "cluster_id": null,
+   "candidates": [
+    "TJX",
+    "APTV",
+    "MCD",
+    "VICI",
+    "HDB"
+   ],
+   "note": "22 names; watch-only and crash-gated by permanent policy, never sizes -- the one recorded exception to 'no lane negative-excess'. Plain-CHOP cell -0.0220 (24 exit-days, t=-1.93, p=0.066). Orchestrator Yahoo-verified the five nearest the low: ALL printed a genuine NEW 52-week low today -- TJX 134.22 (pct_range 0.1%), APTV 45.44 (0.4%), MCD 260.06 (0.3%), VICI 25.77 (0.2%), HDB 22.46 (0.1%). No stale-w52h false shorts. 2,618 ETPs cut at source via issue_type."
+  }
+ ],
+ "vol_book": [
+  {
+   "symbol": "SPY",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "LOW VIX tercile (14.51, -9.37%/5d); dealers AT the zero-gamma flip -- cumulative net-GEX to spot +21.7M on an +881.5M ladder, crossing strike 770 vs spot 770.55",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "FAIL-CLOSED. Spot sits ON the flip: there is no gamma sign to trade around. Hand-derived from the per-strike ladder -- 859.8M of the 881.5M total sits ABOVE spot, with a +359.9M wall at 770. NOTE the CLI `regime` field was NOT corrupted tonight (its NEGATIVE is consistent with spot just under the flip); what misleads is reading the SIGN of header total_gex, which sums the whole ladder regardless of spot -- Phase A did exactly that and wrongly concluded 'net long gamma'. Separately, header total_gex (+690.0M) does NOT equal the ladder sum (+881.5M), a 191M gap; only the ladder is trustworthy. Operationally SPY is pinned at 770 with dealers damping ABOVE and amplifying BELOW -- a downside-asymmetric pin, not calm.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "QQQ",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "LOW VIX tercile; genuinely LONG gamma at spot (+736.7M cumulative, crossing 717 vs spot 720, +601.0M wall at 720)",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": 0.0012,
+   "suggested_structure": null,
+   "stand_aside_reason": "Gamma sign is clean and CLI agrees, but the edge is too thin to take. mean_pnl_by_vix_state is GROSS and its LOW tercile is bounded [15.8, 17.3] -- tonight's VIX of 14.51 is BELOW the backtest's own low-tercile floor, a colder vol regime than anything in the 60-day sample. LOW-state gross +0.223% minus the 0.10% round-trip = +0.12% net, and that is an UPPER BOUND on an out-of-sample regime.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "ZS",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "IV rank 82.3; front-end BACKWARDATION 1.535; print 2026-09-03, bracketing expiry 2026-09-04 (8 DTE)",
+   "implied_move": 0.14,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly, short ~187.5 straddle, wings 1.3-1.5x the implied move (+/-18.2-21.0%), expiry 2026-09-04. ADVISORY, NOT SIZED.",
+   "stand_aside_reason": "NOT SIZED (nothing in this repo sizes). Recorded because THE BRACKETING-EXPIRY TRAP FIRED HARD AND WAS INDEPENDENTLY VERIFIED: the CLI reported implied_move_perc 2.14%, but ZS's nearest expiry is 2026-08-28 (1 DTE), BEFORE the 09-03 print, so that number reads a no-catalyst window. The correct 09-04 bracket hand-builds to 26.44 (187.5 call mid 13.21 + put mid 13.23) on a ~189 spot = 14.0%, roughly 6.5x the CLI figure. Straddle spread (0.78+1.05)/26.44 = 6.9% of notional. CAUTION: the bracketing expiry IS the NFP release date (09-04), conflating the crush thesis with a Tier-1 macro print landing on expiry day. Treat the implied move as a WING FLOOR, not an estimate -- TPR realized -16.5% against a 12.2% raw-IV read.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "NTAP",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "IV rank 98.1; raw-term backwardation 67.4->56.6%; print 2026-09-02, bracketing expiry 2026-09-18 (22 DTE, no weekly exists)",
+   "implied_move": 0.131,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly, short 190 straddle, wings 1.3-1.5x (+/-17.0-19.6%), expiry 2026-09-18. ADVISORY, NOT SIZED.",
+   "stand_aside_reason": "NOT SIZED. The CLI's 10.8% understated the hand-built 13.1% (190 straddle = 24.95 vs spot 190.68). The only bracketing expiry is 22 DTE, 16 days past the print; straddle spread is 14.8% of notional -- the widest of the set -- and eats a large share of the crush edge before the tail. The bracket spans BOTH NFP (09-04) and CPI (09-11) if held to expiry.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "VSXY",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": "IV rank 92.3; FLAT front-end ratio (no weekly)",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "DROPPED. No live two-sided NBBO for the ATM put (92 contracts name-wide); the ~17.9% read is parity-interpolated and untrustworthy. Bracket is also 15 days past the print and spans NFP + CPI. Also dropped: SPWH (only a 141-DTE expiry exists, nothing brackets the print), ZGN (no IV data), ZUMZ (464.2% avg IV on 26 contracts -- a quote artifact, not a market).",
+   "delta_neutral": true
+  }
+ ],
+ "watchlist_write_back": [
+  "FRT",
+  "BZ",
+  "DKS",
+  "TJX",
+  "APTV",
+  "MCD",
+  "VICI",
+  "HDB",
+  "OKTA",
+  "FROG",
+  "RVTY",
+  "MANH",
+  "CDNA",
+  "CAR",
+  "EIX",
+  "ECHO",
+  "YPF",
+  "MGM",
+  "PAYC",
+  "WMB",
+  "CPNG",
+  "URBN",
+  "INFY",
+  "BAC",
+  "C",
+  "CVX",
+  "TGT",
+  "EQIX",
+  "TER",
+  "CAI",
+  "MAR",
+  "MDLZ",
+  "ADP"
+ ]
+}

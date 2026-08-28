@@ -1,0 +1,84 @@
+{
+ "conviction_date": "2026-08-27",
+ "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-27 market-scan, persisted for the next run's held-position reconciliation. Sub-agents do not carry open positions -- the orchestrator reconciles this file with scripts/held_book.py at the start of the next scan.",
+ "source_decision_envelope": "analyses/scan/2026-08-27/decision.json",
+ "book_state": {
+  "positions": 0,
+  "all_shorts": 0,
+  "detail": "FLAT for a 14th consecutive session. No lane in this repo sizes at all since OI_FADE's 2026-08-22 demotion to advisory. Zero sized calls tonight and zero open positions carried in. Phase D (risk-sizer) was VACUOUS and fundamentals-gate was correctly NOT spawned -- it runs only on names about to be sized.",
+  "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-08-26/conviction_2026-08-26.json read 0 positions (0 open, 0 closed) with SPY +0.66% on the day. Verified NOT the known EXIT-substring bug by inspecting the prior files directly: book_state.positions == 0 in the 08-26 conviction file AND calls[] was empty in the 08-26 envelope. The empty result is genuine."
+ },
+ "regime_carry": {
+  "regime": "CHOP",
+  "ret5": 0.0111,
+  "ret10": -0.0087,
+  "dd15": -0.0196,
+  "vix": 14.51,
+  "vol_state": "LOW tercile and falling (VIX 14.51, -4.60% on the day, -9.37% over 5 sessions) -- and BELOW the zerodte backtest's own low-tercile floor of 15.8, i.e. an out-of-sample vol regime. SPY is AT its zero-gamma flip: cumulative net-GEX to spot +21.7M on an +881.5M ladder, crossing at strike 770 vs spot 770.55, with 859.8M of the total ABOVE spot and a +359.9M wall at 770 -- dealers damp above, amplify below. QQQ cleanly LONG gamma (+736.7M to spot, crossing 717 vs spot 720, +601.0M wall at 720). This is a REVERSAL from 08-26, when SPY was clearly short gamma at -964M.",
+  "gex_field_note": "The uw gex `regime` FIELD was NOT corrupted tonight -- SPY's NEGATIVE is consistent with spot just below the flip. The live trap tonight was different and is worth carrying: the SIGN of header `total_gex` is NOT the spot-relative gamma sign (it sums the whole ladder regardless of spot). Phase A read it that way and wrongly concluded SPY was 'net long gamma'. Also: header total_gex (+690.0M) != sum of the published per-strike ladder (+881.5M), a 191M gap. Derive from the CUMULATIVE AT SPOT, off the ladder, every time.",
+  "s1_standdown": false,
+  "s1_standdown_note": "FALSE but a DOUBLE near-miss -- ret5 +1.11% vs the 1.5% leg and dd15 -1.96% vs the -2% leg. A modestly stronger thrust flips the cell to CHOP/REBOUND-THRUST, where OI_FADE's sign INVERTS to +0.0098 (vs -0.0010 plain). Re-check first thing next session.",
+  "directional_tradable": true,
+  "breadth": "Full 5,931-name spine 49.28% green; top-500 by marketcap only 35.60% green with median -0.565%; top-2000 42.20% green. SPY +0.655% / QQQ +1.369% / IWM +0.294%. The median stock FELL while the index rose -- a narrow, earnings-gap-led advance and a genuine distribution tell."
+ },
+ "watch_names": {
+  "OI_FADE": [
+   {
+    "ticker": "FRT",
+    "status": "WATCH",
+    "rel_rank": 14,
+    "raw_rank": 417,
+    "persistence": 0.39,
+    "note": "Cleanest build of the two but DECAYING -- +271 today vs +2,058 on 08-25. No inherited prior (not in raw top-15)."
+   },
+   {
+    "ticker": "BZ",
+    "status": "WATCH",
+    "rel_rank": 6,
+    "raw_rank": 398,
+    "persistence": 0.683,
+    "note": "68.3% of the 5-day net landed TODAY alone (+3,884 of +5,689). Clears the 0.85 persistence cut but is not a persistent multi-day build. No inherited prior."
+   },
+   {
+    "ticker": "DKS",
+    "status": "DROPPED_FOR_CAUSE",
+    "note": "Last night's strongest candidate (rel rank 1). Cut on persistence 0.986 -- 08-26 alone carried +38,754 of the net and 08-27 reversed net negative. A one-day event, not a build."
+   },
+   {
+    "ticker": "DYN",
+    "status": "DROPPED_LIQUIDITY",
+    "note": "ADV $48.1M -- was 'at the floor' at $50.8M on 08-26, now below the $50M floor."
+   }
+  ],
+  "MOM_LONG_caveated": [
+   {
+    "ticker": "OKTA",
+    "note": "Lane's #1 by proximity but +28.63% TODAY on an earnings gap the forward-only gate cannot see. Genuine 52w high (pct_range 98.3%) -- the entry is a print, not momentum."
+   },
+   {
+    "ticker": "CRWD",
+    "note": "+20.50% today, same earnings-gap class."
+   },
+   {
+    "ticker": "FROG",
+    "note": "+12.10% today, same earnings-gap class."
+   }
+  ],
+  "cross_lane_overlap": [
+   {
+    "ticker": "CDNA",
+    "lanes": [
+     "MOM_LONG",
+     "S4_pcr_fade"
+    ],
+    "note": "The ONLY cross-lane overlap tonight -- MOM_LONG pct_range 96.8%, S4 PCR 2.53. Evidence-type diversification ONLY, never summed (invariant #2). Sizes nothing either way."
+   }
+  ]
+ },
+ "carry_forward": [
+  "Re-check s1_standdown first thing -- it is a double near-miss and the OI_FADE regime cell inverts sign if it flips.",
+  "MOM_LONG's post-earnings-gap entrants (OKTA, CRWD, FROG, SLS, TEAM, FTNT, NVDA, FIVN, ZETA) are a forward-only-gate blindspot. If they persist in the cohort, the lane's prior does not cleanly apply to them.",
+  "OI_FADE's pooled figure is below baseline (-0.0017 vs +0.0013) for a 4th session. Isolation check says NO REGRESSION: baseline cohort reproduces bit-identically and the increment is ONE cohort over 4 pinned-base exit-days. Do NOT re-baseline.",
+  "Next /calibration-audit due 2026-08-29. 11 open call-rows (all OI_FADE, 7 distinct names); 215 open suppressed candidates -- the suppressions are the real cohort."
+ ]
+}
