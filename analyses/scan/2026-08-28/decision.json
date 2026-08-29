@@ -1,0 +1,192 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-28",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "report_path": "analyses/scan/2026-08-28/report.md",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": 0.0047,
+    "ret10": -0.009,
+    "vol_state": "VIX 14.43, -0.55% on the day and -4.63% over 5 sessions -- a 10-day low, LOW tercile, and below the zerodte backtest's low-tercile floor on either derivation (see the recorded discrepancy below). SPY VRP -0.27pp (IV30d 11.63% vs realized30d 11.90%) = FAIR. DEALER GAMMA FLIPPED TONIGHT: SPY and QQQ are BOTH net SHORT gamma at spot, a reversal from 08-27 when SPY sat ON its flip (+21.7M cumulative) and QQQ was cleanly long-gamma and pinned (+736.7M). Hand-derived from the per-strike ladder: SPY cumulative net-GEX up to spot = -615.8M, zero-crossing ~789.6 vs spot 769.30, put walls just below spot (765: -189.5M; 760: -187.8M). QQQ cumulative to spot = -218.9M, single-signed negative across the entire sampled 695-738 ladder, ATM 716 = -87.1M. Three independent derivations agree (two agents hand-summing the ladder plus zerodte_setup.py's own local_flip, which reports sell_premium=false and gamma_disagreement=false). GEX CLI BUGS BOTH FIRED AGAIN: the `regime` field read FULLY_NEGATIVE for both names, which is wrong (the ladder carries many positive strikes -- SPY 772: +99.7M, QQQ 730: +64.9M); and header total_gex again fails to reproduce the ladder sum, this time WITH THE OPPOSITE SIGN ON SPY (header -139.8M vs ladder sum +45.6M). Only the ladder, cumulated to spot, is trustworthy. || DD15: -0.0177, a TROUGH-ANCHOR distance, NOT a drawdown-from-highs. || BREADTH: full 5,935-name spine 31.47% green, median -0.463%; top-500 by marketcap 38.00% green, median -0.281%; top-2000 33.15% green, median -0.376%. SPY -0.227%, QQQ -0.649%, IWM -1.354%. Index and breadth AGREE tonight -- this is NOT the 08-27 divergence -- but the median stock fell about 2x SPY's own move and small-caps led down: a mild risk-off/quality tell. Recomputed independently on the screener spine; reproduces Phase A exactly. || S1_STANDDOWN: FALSE and now a CLEAN MISS on both legs (it was a double near-miss on 08-27). ret5 +0.470% is 2.03pts short of the 2.5% up-thrust bar; dd15 -1.77% fails the >=2% dip precondition for the lower 1.5% bar; and the dip leg needs ret5 < -2%, the wrong sign entirely. || RECORDED DISCREPANCY, UNRESOLVED: two agents quoted different low-VIX-tercile floors -- [15.1, 15.5] (--days 20) and [15.8, 17.3]. Neither bound could be reproduced from zerodte_setup.py's JSON output, so NEITHER should be cited until the field is located. It does not change tonight's verdict: VIX 14.43 is below either floor and the gamma sign vetoes outright. || WRITE-BACK NOTE: FLAT for a 15th consecutive session. Zero sized calls and zero open positions. held_book.py --prior analyses/scan/2026-08-27/conviction_2026-08-27.json read 0 positions (0 open, 0 closed) with SPY -0.23% on the day; verified NOT the known EXIT-substring bug -- book_state.positions == 0 in the 08-27 conviction file AND calls[] was empty in the 08-27 envelope. The empty result is genuine. S2 and S4 are advisory lanes outside the lane_status convention and are documented in report.md only.",
+    "breadth_pct_green": 31.47,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "Jackson Hole symposium concludes",
+        "date": "2026-08-29",
+        "tier": "medium",
+        "in_horizon": true
+      },
+      {
+        "event": "Aug Employment Situation / NFP",
+        "date": "2026-09-04",
+        "tier": "tier-1",
+        "in_horizon": true,
+        "note": "ALSO the MDB earnings straddle's bracketing-expiry date -- crush thesis conflated with a Tier-1 macro print landing on expiry"
+      },
+      {
+        "event": "Labor Day - market closed",
+        "date": "2026-09-07",
+        "tier": "holiday",
+        "in_horizon": true
+      },
+      {
+        "event": "Aug PPI",
+        "date": "2026-09-10",
+        "tier": "tier-1",
+        "in_horizon": true
+      },
+      {
+        "event": "Aug CPI",
+        "date": "2026-09-11",
+        "tier": "tier-1",
+        "in_horizon": true,
+        "note": "day 9 of the h10 window"
+      },
+      {
+        "event": "FOMC",
+        "date": "2026-09-15/2026-09-16",
+        "tier": "tier-1",
+        "in_horizon": false,
+        "note": "day 11/12 -- just outside h10, but close enough to flag for any position opened next session"
+      },
+      {
+        "event": "Aug Core PCE",
+        "date": "2026-09-30",
+        "tier": "tier-1",
+        "in_horizon": false
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [],
+      "note": "ADVISORY since 2026-08-22; nothing sizes. ZERO SURVIVORS -- the first empty night this cycle. All 15 oi_rel_build-ranked candidates cut: 8 on the liquidity/price floor (MBUU $5.3M ADV, MNRO $17.4M, ZURA $7.4M, DYN $44.7M, UHALB $20.6M, EYPT $4.48 close, TUYA $1.88 close, IRD $3.69 close), 3 on persistence/single-day-block (DCI 0.991, IRD 0.910, DKS 1.143 -- 08-26 alone printed +38,754 = 114% of the 5d net and 08-27 reversed -11,233), 3 ETFs (FTEC, NBIZ 2x-short single-stock, BTCZ 2x-inverse-bitcoin), HONA on listing age (IPO 2026-06-16, 53 trading days < the 60-day floor), UHALB additionally on a partial 5d window (2 of 5 panel days, fail-closed), and BZ on concentration plus invalidation (80.3% of the 5d net landed on 08-27 alone, up from 68.3% last night, AND last_call_net went negative today at -20 -- calls genuinely closing). ORCHESTRATOR VERIFICATION: I re-ran liquidity.py on all seven liquidity/price cuts myself and all seven reproduce. DYN's decay through the floor is real and now unambiguous across three sessions: $50.8M (08-26) -> $48.1M (08-27) -> $44.7M (08-28). NONE of the 15 sits in the RAW oi_net_5d top-15, so none would have inherited the historical +0.0013 prior even before the gates -- that prior grades top-15-by-RAW. RAW top-15 is again the degenerate ETP/mega-cap case: EWZ, SPY, SLV, IBIT, USO, TLT (ETFs), VIX (an index, not tradeable), then BABA, SPCX, INTC, NVDA, PBR, SOFI, META, WULF -- zero overlap with the rel_build ranking. catalyst_split.py correctly not run: with zero survivors there is no live >=/> boundary question. TOOL LIMITATION RECORDED: fz news returned only generic market-wide headlines, not ticker-specific, so the M&A/rumor-gate check is an ABSENCE OF EVIDENCE, not a clean bill; moot since every name is cut on other grounds. Plain-CHOP cell for this lane is -0.0010 (23 exit-days, t=-0.13, p=0.898)."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "TEAM",
+        "DINO",
+        "MPC",
+        "DK",
+        "APGE"
+      ],
+      "note": "181 names; basket/watch only, NEVER sizes. This is the one lane with a SIGNIFICANTLY NEGATIVE excess in tonight's cell: plain CHOP -0.0266, 24 exit-days, t=-2.51, p=0.012 -- an argument AGAINST the basket. EARNINGS-GAP CONTAMINATION IS MUCH SMALLER THAN LAST NIGHT: 1 gapper, not 9. ESTC +19.31% (08-27 post-market print) is the only name that gapped >=7%; earnings_gate.py is FORWARD-ONLY and passed it, reporting next print 09-09. ORCHESTRATOR FINDING -- ESTC also demonstrates the current-session-exclusion artifact changing cohort MEMBERSHIP, not just labels: its screener pct_52w_range prints 1.0712, OUTSIDE [0,1], because UW's w52h (96.065) excludes the session in which ESTC printed a 108.00 high. On Yahoo's range ESTC is at 87.7% and closed 7.5% off a high it set TODAY -- a gap-up that faded hard, which would NOT clear the 0.95 x w52h rule on current-session data. It is in the cohort only because today's high is invisible to the screen. NO BREADTH: median day-move +0.02%, only 51.9% green -- half the basket fell. Deal-pinned watch (near-zero realized vol pinned at the high; cut if a cash acquisition is announced): APGE 0.033%/day at 134.97 vs a 134.99 high, CRNX 0.035%/day at 84.84 vs 84.885, TECH 0.221%/day at 72.35 vs 72.62."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "cluster_id": null,
+      "candidates": [
+        "MLM",
+        "LII",
+        "MCD",
+        "LHX",
+        "TJX"
+      ],
+      "note": "23 names reported by the lane, but only 21 are VALID -- I cut two, and they fail for DIFFERENT reasons, which is the pct_52w_range trap firing in two distinct classes on one night. (1) MIDD is a DATA ARTIFACT / false short: screener range 110.82-180.13 vs Yahoo 89.16-148.55, so MIDD sits at 39.7% of its true range (off_high -24.1%), not near its low. BOTH legs are ~1.22x Yahoo's -- the signature of an UNADJUSTED CORPORATE ACTION, not a one-sided stale print. I am correcting the lane's own diagnosis here: it reported 'NOT a split artifact but stale UW panel data'; the two-legged 1.22x ratio says otherwise, and the cause matters for whether it self-heals. (2) TECH is NOT a data problem at all -- the screener is CORRECT (43.195-72.62, pct_range 0.9908, matching Yahoo exactly). TECH sits at 99.1% of range, i.e. near its 52-week HIGH, and the lane filed the same ticker into BOTH its near-low short list AND its deal-pinned near-high watch. That is a lane bookkeeping error. VERIFIED CLEAN: the other four nearest the low reproduce exactly against Yahoo (MLM 522.19, LII 387.45, MCD 259.85, LHX 258.54), and TJX (low 133.55) and APTV (low 44.88) both set GENUINE fresh 52-week lows today, at pct_range 4.3% and 2.0%. Watch-only by permanent policy; knowingly-negative lane, never sizes. Plain-CHOP cell -0.0220 (24 exit-days, t=-1.93, p=0.054)."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW VIX tercile (14.43, a 10-day low, -4.63%/5d); dealers SHORT gamma at spot -- cumulative net-GEX to spot -615.8M, zero-crossing ~789.6 vs spot 769.30",
+      "implied_move": 0.0039,
+      "expected_range": 0.011,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "HARD VETO, not a marginal call. Dealers are SHORT gamma at spot: hedging flows AMPLIFY moves rather than damping them, a trend-acceleration regime whose left tail is unsampled by the premium-selling backtest. Three independent derivations agree -- two agents hand-summing the per-strike ladder plus zerodte_setup.py's own local_flip (sell_premium=false, gamma_disagreement=false). This is a REVERSAL from 08-27, when SPY sat ON its flip at +21.7M cumulative. CLI BUGS FIRED AGAIN: the `regime` field read FULLY_NEGATIVE, which is wrong (strike 772 alone is +99.7M), and header total_gex (-139.8M) has the OPPOSITE SIGN to the ladder sum (+45.6M). Only the ladder cumulated to spot is trustworthy. The VIX-tercile question is moot here: the gamma sign vetoes outright.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW VIX tercile; dealers SHORT gamma at spot -- cumulative net-GEX to spot -218.9M, single-signed negative across the entire sampled 695-738 ladder, ATM 716 = -87.1M",
+      "implied_move": 0.0059,
+      "expected_range": 0.0191,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "HARD VETO. Cumulative net-GEX never crosses zero within the sampled ladder -- the book is single-signed negative, so dealers are unambiguously SHORT gamma and the flip sits above 738 or is unresolved at the dte<=45 cap. A REVERSAL from 08-27, when QQQ was cleanly LONG gamma at +736.7M cumulative with a +601.0M wall at 720. Same CLI bugs as SPY: `regime` field FULLY_NEGATIVE is wrong (strike 730 is +64.9M), header total_gex (-90.1M) does not reproduce the ladder sum (-21.3M).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "MDB",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "IV rank 81.4, front term structure in backwardation 199% -> 148% -> 114%; earnings 2026-09-01",
+      "implied_move": 0.156,
+      "expected_range": 0.156,
+      "net_expectancy": null,
+      "suggested_structure": "ADVISORY ONLY, not sized. Defined-risk iron fly: short the 445/450 ATM straddle (~69.65 net, 15.6% of a 446.92 spot) on the 09-04 bracket, long wings at 1.3-1.5x the straddle (~20.3-23.4% from spot).",
+      "stand_aside_reason": "NOT stood aside on data quality, but NOT sized either -- the vol book is advisory and delta-neutral by construction. THE BRACKETING-EXPIRY TRAP FIRED HARD AND I VERIFIED THE ARITHMETIC MYSELF: MDB's front expiry is 08-28 -- TODAY, 0DTE, and BEFORE the 09-01 print -- so the CLI's implied_move_perc of 0.6% prices a no-catalyst window. At the correct 09-04 bracket (7 DTE, clean), spot 446.92: strike 445 straddle = 36.4625 + 33.8250 = 70.2875 (15.73%); strike 450 = 34.1375 + 34.4750 = 68.6125 (15.35%); distance-weighted ~15.6%. That is a 26x understatement by the CLI. Spread cost ~12.0% of straddle value (445: 12.9%, 450: 10.5%) -- material, below the 14.8% kill line but must be subtracted. FLAG 1: the bracketing expiry 09-04 IS NFP DAY, so the structure carries a Tier-1 macro tail on top of the earnings binary. FLAG 2 (orchestrator-found, NOT raised by the lane): the PUT LEGS ARE THIN -- the 445 put's median NBBO rests on 17 contracts and the 450 put on 106, against 1,510 on the 450 call, and the 445 put's $5.05 bid/ask is 15% of its own mid. The put side is a materially weaker input than the call side. Per the TPR precedent (realized -16.5% vs a 12.2% raw-IV read), treat 15.6% as a WING FLOOR, not an estimate.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "NTAP",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "IV rank 88.6, raw term backwardation 67.4% -> 56.6%; earnings 2026-09-02",
+      "implied_move": 0.1208,
+      "expected_range": 0.1208,
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "STAND ASIDE ON STRUCTURE, not data quality. NTAP has no weekly chain: the only expiry after the 09-02 print is 09-18, 16 days past it. The 12.08% is a 21-DAY implied move of which just 5 days precede the catalyst, so it is diluted by ambient vega and leaves two weeks of un-crushed vega risk AFTER the thesis (realized <= implied on the print) has already resolved. The quote itself is fine -- strike 190 straddle 22.75 on a 188.36 spot, cross-checked at strike 185 (22.725, 12.06%) -- and the 8.3% spread is the cheapest of tonight's candidates. It is the bracket that is impure, not the market.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "MLM",
+    "LII",
+    "MCD",
+    "LHX",
+    "TJX",
+    "APTV",
+    "TEAM",
+    "DINO",
+    "MPC",
+    "DK",
+    "APGE",
+    "CRNX",
+    "TECH",
+    "FAST",
+    "ORLY",
+    "GH",
+    "LTH",
+    "EQNR",
+    "WBD",
+    "IMAX",
+    "NXT",
+    "APH",
+    "VICI",
+    "VEEV",
+    "ACN",
+    "SU",
+    "TENB",
+    "MCHP",
+    "CME",
+    "CI",
+    "PM",
+    "ADP",
+    "MPWR",
+    "MDB",
+    "NTAP"
+  ]
+}

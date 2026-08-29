@@ -1,0 +1,66 @@
+{
+  "conviction_date": "2026-08-28",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-28 market-scan, persisted for the next run's held-position reconciliation. Sub-agents do not carry open positions -- the orchestrator reconciles this file with scripts/held_book.py at the start of the next scan.",
+  "source_decision_envelope": "analyses/scan/2026-08-28/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": 0,
+    "detail": "FLAT for a 15th consecutive session. No lane in this repo sizes at all since OI_FADE's 2026-08-22 demotion to advisory, and tonight OI_FADE returned ZERO candidates for the first time this cycle. Phase D (risk-sizer) was VACUOUS and fundamentals-gate was correctly NOT spawned -- it runs only on names about to be sized.",
+    "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-08-27/conviction_2026-08-27.json read 0 positions (0 open, 0 closed) with SPY -0.23% on the day. Verified NOT the known EXIT-substring bug by inspecting the prior files directly: book_state.positions == 0 in the 08-27 conviction file AND calls[] was empty in the 08-27 envelope. The empty result is genuine."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "ret5": 0.0047,
+    "ret10": -0.009,
+    "dd15": -0.0177,
+    "vix": 14.43,
+    "vol_state": "LOW tercile at a 10-day low (VIX 14.43, -0.55% on the day, -4.63% over 5 sessions), below the zerodte backtest's low-tercile floor on either derivation. SPY VRP -0.27pp = FAIR. THE NIGHT'S REAL CHANGE: dealer gamma FLIPPED -- SPY and QQQ are BOTH net SHORT gamma at spot, reversing 08-27 when SPY sat ON its flip (+21.7M cumulative) and QQQ was cleanly long-gamma and pinned (+736.7M). SPY cumulative net-GEX to spot -615.8M, crossing ~789.6 vs spot 769.30, put walls just below spot (765: -189.5M, 760: -187.8M). QQQ cumulative -218.9M, single-signed negative across the whole 695-738 ladder. Dealers now AMPLIFY moves in both names rather than damping them; with VIX at a 10-day low that is a cheap-optionality setup and long premium stays structurally favoured over short premium.",
+    "gex_field_note": "BOTH standing GEX CLI bugs fired tonight. (1) The `regime` FIELD read FULLY_NEGATIVE for both SPY and QQQ -- wrong; the ladder carries many positive strikes (SPY 772: +99.7M, QQQ 730: +64.9M). (2) Header total_gex does not reproduce the ladder sum, and on SPY it has the OPPOSITE SIGN: header -139.8M vs ladder sum +45.6M (QQQ: -90.1M vs -21.3M). Derive from the CUMULATIVE AT SPOT, off the ladder, every time -- three independent derivations agreed tonight (two hand-sums plus zerodte_setup.py's local_flip, which reported gamma_disagreement=false).",
+    "s1_standdown": false,
+    "s1_standdown_note": "FALSE and now a CLEAN MISS on both legs, where 08-27 was a double near-miss. ret5 +0.470% is 2.03pts short of the 2.5% up-thrust bar; dd15 -1.77% fails the >=2% dip precondition for the lower 1.5% bar; the dip leg needs ret5 < -2% and the sign is wrong. The cell is unlikely to flip to CHOP/REBOUND-THRUST -- where OI_FADE's sign INVERTS to +0.0098 vs -0.0010 plain -- without a substantially stronger thrust than tonight's tape offers.",
+    "directional_tradable": true,
+    "breadth": "Full 5,935-name spine 31.47% green, median -0.463%; top-500 by marketcap 38.00% green, median -0.281%; top-2000 33.15% green, median -0.376%. SPY -0.227% / QQQ -0.649% / IWM -1.354%. Index and breadth AGREE tonight -- this is NOT the 08-27 divergence -- but the median stock fell about 2x SPY's own move and small-caps led down: a mild risk-off/quality tell, not a distribution-under-a-rally tell."
+  },
+  "watch_names": {
+    "OI_FADE": [],
+    "MOM_SHORT": [
+      {"ticker": "MLM", "status": "WATCH", "note": "52w low 522.19 verified exactly against Yahoo; close 531.05"},
+      {"ticker": "LII", "status": "WATCH", "note": "52w low 387.45 verified exactly; close 393.39"},
+      {"ticker": "MCD", "status": "WATCH", "note": "52w low 259.85 verified exactly; close 265.00"},
+      {"ticker": "LHX", "status": "WATCH", "note": "52w low 258.54 verified exactly; close 262.82"},
+      {"ticker": "TJX", "status": "WATCH", "note": "GENUINE fresh 52w low set TODAY at 133.55; close 135.12, pct_range 4.3%"},
+      {"ticker": "APTV", "status": "WATCH", "note": "GENUINE fresh 52w low set TODAY at 44.88; close 45.75, pct_range 2.0%"}
+    ],
+    "MOM_SHORT_CUT_BY_ORCHESTRATOR": [
+      {"ticker": "MIDD", "status": "CUT", "reason": "FALSE SHORT -- data artifact. Screener range 110.82-180.13 vs Yahoo 89.16-148.55; MIDD is at 39.7% of its TRUE range (off_high -24.1%), not near its low. BOTH legs are ~1.22x Yahoo's, the signature of an UNADJUSTED CORPORATE ACTION rather than a one-sided stale print. The lane diagnosed it as 'stale UW panel data, NOT a split artifact' -- that diagnosis is wrong even though the cut is right, and the cause matters for whether it self-heals."},
+      {"ticker": "TECH", "status": "CUT", "reason": "NOT a data problem -- the screener is CORRECT (43.195-72.62, pct_range 0.9908, matching Yahoo exactly). TECH sits at 99.1% of range, i.e. near its 52-week HIGH. The lane filed the same ticker into BOTH its near-low short list AND its deal-pinned near-high watch. Lane bookkeeping error; TECH belongs only in the deal-pinned list."}
+    ],
+    "MOM_LONG": [
+      {"ticker": "TEAM", "status": "WATCH", "note": "genuine fresh 52w high today (194.96); basket/watch only"},
+      {"ticker": "DINO", "status": "WATCH", "note": "near-high, prior-session high"},
+      {"ticker": "MPC", "status": "WATCH", "note": "very tight to the high; also in the S4 slate (PCR 2.84) -- evidence-type diversification, NEVER summed"},
+      {"ticker": "DK", "status": "WATCH", "note": "genuine breakout"},
+      {"ticker": "ESTC", "status": "WATCH_FLAGGED", "note": "The night's only >=7% earnings gapper (+19.31%, 08-27 post-market print); earnings_gate.py is FORWARD-ONLY and passed it. Its screener pct_52w_range prints 1.0712 -- OUTSIDE [0,1] -- because w52h (96.065) excludes the session in which ESTC printed a 108.00 high. On Yahoo's range ESTC is at 87.7% and closed 7.5% off a high it set TODAY: a gap-up that faded hard, which would NOT clear the 0.95 x w52h rule on current-session data. It is in the cohort only because today's high is invisible to the screen."}
+    ],
+    "DEAL_PINNED": [
+      {"ticker": "APGE", "status": "WATCH", "note": "0.033%/day realized vol, 134.97 vs a 134.99 high -- cut if a cash acquisition is announced"},
+      {"ticker": "CRNX", "status": "WATCH", "note": "0.035%/day, 84.84 vs 84.885"},
+      {"ticker": "TECH", "status": "WATCH", "note": "0.221%/day, 72.35 vs 72.62 -- this is TECH's correct classification"}
+    ],
+    "S4_pcr_fade": ["FAST", "ORLY", "GH", "LTH", "EQNR", "WBD", "IMAX", "NXT", "APH", "VICI"],
+    "S2_dp_revert": ["VEEV", "ACN", "SU", "TENB", "MCHP", "CME", "CI", "PM", "ADP", "MPWR"],
+    "VOL_BOOK": [
+      {"ticker": "MDB", "status": "ADVISORY", "note": "Earnings 09-01, clean 09-04 bracket (7 DTE). Hand-built ATM straddle 15.6% of a 446.92 spot vs the CLI's 0.6% -- a 26x understatement, because MDB's front expiry is 08-28 (TODAY, 0DTE, BEFORE the print). Spread ~12.0%. TWO FLAGS: 09-04 IS NFP day, and the put legs are THIN (445P median NBBO rests on 17 contracts, 450P on 106, vs 1,510 on the 450 call)."},
+      {"ticker": "NTAP", "status": "STAND_ASIDE", "note": "Stand aside on STRUCTURE, not data quality. No weeklies; the only post-print expiry is 09-18, 16 days past the 09-02 print, so the 12.08% is a 21-day implied move with just 5 days before the catalyst."}
+    ]
+  },
+  "next_session_checks": [
+    "OI_FADE returned ZERO candidates tonight -- check whether that persists or whether it was a one-night artifact of the liquidity floor biting 8 of 15 names.",
+    "DYN has now decayed through the liquidity floor across three sessions ($50.8M -> $48.1M -> $44.7M). If it recovers above $50M it re-enters the OI_FADE universe.",
+    "The OI_FADE harness increment is now 5 pinned-base exit-days (08-24 -> 08-28) and the NEWEST day is the first sign of the unwind (-0.0095, hit 0.53, against -0.056/-0.063 and hit 0.33 on the prior four). Watch whether 08-31 continues the dilution. Do NOT re-baseline on this cohort.",
+    "MOM_LONG's baseline cohort lost 4 rows tonight (-0.0122/n=1209 vs a recorded -0.0118/n=1213) after reproducing bit-identically on 08-27 -- the Yahoo-retraction non-idempotency. Re-check at the next audit.",
+    "UNRESOLVED: two agents quoted different zerodte low-VIX-tercile bounds ([15.1, 15.5] vs [15.8, 17.3]) and NEITHER could be reproduced from zerodte_setup.py's JSON. Locate the field before citing either figure.",
+    "Dealer gamma flipped SHORT on both SPY and QQQ tonight. If it persists, the 0DTE premium-selling book stays vetoed regardless of VIX state.",
+    "Next /calibration-audit due 2026-08-29."
+  ]
+}
