@@ -264,7 +264,23 @@ in the repo said which one decides. The same 323-row forward book reads:
 |---|---|---|---|
 | naive per-name | 323 | −0.97% | 0.051 |
 | declared `cluster_id`, else the name | 265 | **−0.60%** | 0.278 |
-| distinct exit-day (across lanes) | 35 | −2.20% | 0.054 |
+| **exit-session** (distinct exit sessions, pooled across lanes) | 35 | −2.20% | 0.054 |
+| **lane-exit-day** (lane × exit-day, summed over lanes) | 95 | −1.69% | 0.022 |
+
+⚠️ **The last two are DIFFERENT units and the repo used to call both of them "exit-day".** Named apart
+2026-08-29, after an audit spent a cycle treating the 35-unit and 95-unit figures as a contradiction in
+the record. They are not: re-running the 08-22 cohort reproduces **both** exactly (35 units / −2.20% /
+p=0.054 pooled; 95 units / −1.69% / p=0.022 lane-wise). Definitions, binding from now on:
+
+- **`exit-session`** — one calendar exit session is one observation, pooled across every lane. The
+  strictest unit; ~3× fewer observations than the lane-wise view on the same rows. **This is the
+  whole-book figure** quoted in CLAUDE.md invariant #6.
+- **`lane-exit-day`** — one (lane, exit-day) pair is one observation. **This is the per-lane column**
+  in every audit's `robustness.md` §(C), and it is the unit rule 3 below means by "distinct exit-day
+  count", because that bar is applied per lane.
+
+Use the names, not the phrase "exit-day", in any table or claim. Two units that share a name are two
+numbers that can be swapped after the fact.
 
 Prior cycles leaned on `cluster_id` to dissolve the naive per-name negative — correctly, but the repo's
 *own* companion rule (exit-days, below) points the other way, and an undeclared choice means the reading
@@ -273,10 +289,11 @@ can be selected after seeing it. The rule, from now on:
 1. **`cluster_id` (else the name) is the governing unit for a Step-3 STOP flag and for the confidence
    label.** It is the only unit consistent with how `risk-sizer.md` would actually have held the book —
    a STOP exists to stop losing money, so the unit must be the unit of risk.
-2. **The exit-day view must be reported alongside it, every cycle, for every lane.** It is the
+2. **The `lane-exit-day` view must be reported alongside it, every cycle, for every lane** (and the
+   whole-book `exit-session` figure alongside the whole-book cluster-unit figure). It is the
    independent-draw count, and it is what tells you whether the cluster-unit N is real evidence or one
    macro window wearing many names.
-3. **A lane whose distinct exit-day count is below 30 carries an explicit correlated-draw caveat and
+3. **A lane whose `lane-exit-day` count is below 30 carries an explicit correlated-draw caveat and
    cannot graduate to sizing on that evidence alone**, however many cluster-units it has. As of 2026-08-22
    *every* lane is in this state (MOM_LONG 14 · MOM_SHORT 21 · OI_FADE 22 · S2 20 · S4 18 exit-days), which
    is the honest description of the forward book: it is roughly 20 independent windows, not 265.
@@ -382,11 +399,17 @@ not after.
 
 ### Where this leaves the lane
 
-**No OI_FADE variant has a validated positive edge.** Corrected baseline +0.0013 (79 exit-days,
+**No OI_FADE variant has a validated positive edge.** Corrected baseline +0.0013 (79 `lane-exit-day`,
 p=0.767) is indistinguishable from zero; the live lane's floored measurement is −0.0081 at
 PROVISIONAL N. OI_FADE is therefore **demoted from sizing to advisory** (2026-08-22) — see
 [`lanes.md`](lanes.md). That is a consequence of "no validated edge", not of the retracted
 finding.
+
+> **Superseded 2026-08-29.** One cycle later `OI_FADE_LIVE` reads −0.0093 at 29 `lane-exit-day`,
+> **p=0.028, surviving BH(0.10)** — no longer "indistinguishable from zero" but significantly
+> negative, and robust to dropping the crypto names that moved the pooled baseline. The lane is
+> **stood down to diary-only**; see
+> [OI_FADE_LIVE is significantly NEGATIVE](#oi_fade_live-is-significantly-negative--lane-stood-down-to-diary-only-2026-08-29).
 
 ### PR-10 — the rank band (pre-registered 2026-08-22, NOT scored)
 
@@ -404,3 +427,70 @@ This matches both documented artifacts at once — raw's extreme top is a mega-c
 p=0.054 **fails BH(0.10) across the five bands tested** (cut = 0.02), and the band was chosen after
 seeing the result, so it is in-sample by construction. It graduates only on data postdating
 2026-08-22. Do not size it, and do not re-cut the live lane to it.
+
+**Accrual, 2026-08-29: 0 out-of-sample rows, and none was possible yet.** A signal dated after
+2026-08-22 needs 10 trading sessions to mature and the panel edge is 08-28, so the earliest PR-10
+evidence exits ~2026-09-08. Recorded so the next cycle does not re-derive it: **PR-10 cannot advance
+before then, and the absence of evidence is arithmetic, not a null result.**
+
+
+## OI_FADE_LIVE is significantly NEGATIVE — lane stood down to diary-only (2026-08-29)
+
+The 2026-08-22 cycle demoted OI_FADE from sizing to advisory on "no variant has a validated positive
+edge". One cycle later the finding is stronger and its sign is no longer ambiguous: **the rule the
+engine actually runs is significantly negative.**
+
+98-day panel (2026-03-13 → 08-28), `retro_harness.py --all --oi-variant both`:
+
+| variant | n | pooled | `lane-exit-day` | p | ex-MSTR/CELH/MARA | baseline cohort (exit ≤ 08-21) |
+|---|---|---|---|---|---|---|
+| `OI_FADE` (raw rank, full pool) | 1252 | −0.0018 | 84 | 0.707 | **+0.0011 — sign flips** | +0.0013 / 79 / p 0.767 ✅ exact |
+| **`OI_FADE_LIVE`** (`oi_rel_build` + persistence) | 435 | **−0.0093** | **29** | **0.028** | −0.0070 — holds | −0.0081 / 24 / p 0.080 ✅ exact |
+| `OI_FADE_RAWPOOL` (raw rank, live pool) | 435 | −0.0166 | 29 | 0.008 | −0.0074 — holds | −0.0093 / 24 |
+
+**`LIVE` and `RAWPOOL` both survive BH(0.10)** across the three variants. Every recorded post-fix
+figure reproduces **bit-exactly** on the baseline cohort, so the move from p=0.080 to p=0.028 is new
+rows, not code — isolation checks (a), (b) and (c) all pass (`git diff 6cceae8 HEAD -- scripts/
+.claude/agents/` is empty; spine unchanged at 2,471).
+
+**Why this is not the same finding as the pooled baseline crossing zero.** `OI_FADE`'s pooled figure
+went +0.0013 → −0.0018 this cycle, but that is **three tickers**: MSTR, MARA and CELH signalled on five
+consecutive sessions (08-10 → 08-14) into one crypto squeeze, contributing 14 of the increment's 75
+rows. Drop those three names from the whole 98-day panel and OI_FADE returns to **+0.0011**. The pooled
+baseline is therefore *not* evidence of decay and **must not be re-baselined**. `OI_FADE_LIVE` is
+different: removing the same three names leaves it at −0.0070. Its negative sign does not depend on any
+small set of names.
+
+**Consequence — the lane is STOOD DOWN to diary-only.** It no longer emits a watch list. Prior status
+("advisory, emits watch-only candidates") presented a ranked list of shorts every night from a rule now
+measured as significantly negative; a watch list is an implicit suggestion, and invariant #1 does not
+have a category for "suggest a name from a rule we have measured as losing". The lane still **runs and
+is still documented** in the nightly journal — the numbers, the gates and the cuts are diary material.
+
+**This does not starve the test.** `retro_harness.py` fires its own lane query independent of the agent,
+so the historical evidence keeps accruing at ~5 `lane-exit-day` per week whether or not the lane emits
+candidates. That is the opposite of the crash-guard problem (a gate that suppresses its own evidence).
+
+**Re-check bar.** `OI_FADE_LIVE` is at **29 `lane-exit-day`, one short of the 30 that makes it DURABLE.**
+At the next audit it will cross. Two outcomes are pre-registered here:
+
+- **Still negative and BH-significant at ≥30 `lane-exit-day`** → this becomes a formal Step-3 STOP and
+  the second recorded exception alongside MOM_SHORT, with the same written rationale.
+- **Reverts to indistinguishable-from-zero** → the p=0.028 was the 5-exit-day pinned-base increment
+  leaking in, and the lane returns to advisory. Note the increment's `base` was pinned 1.00 for shorts
+  (SPY down in 100% of the new windows), so a short lane losing in it is the harder read, not the easier.
+
+Do not re-cut the ranking in the meantime; see PR-10 below.
+
+## The 2026-08-22 suppression result did not replicate (2026-08-29)
+
+Recorded 08-22: gate discipline was "**significantly** negative for the first time" at **21 lane-periods,
+−1.74%, p=0.008 [PROVISIONAL]**. At 57% more baskets it is **33 lane-periods, −0.89%, p=0.054**, and no
+lane survives BH: MOM_LONG 11 baskets −1.62% (p=0.124), MOM_SHORT 12, −0.67% (p=0.338), OI_FADE 10,
+−0.36% (p=0.597). Resolved candidate-rows went 121 → 195; 102/195 correct.
+
+The 08-22 write-up already flagged the same shape one level down — "the earlier 19/22 (86%) hit-rate was
+flattering — it is 59% at 5× the sample" — and then leaned on the pooled p=0.008 anyway. **A gate-
+effectiveness result at PROVISIONAL N is a hypothesis, and this one did not survive its first re-test.**
+Gate discipline remains directionally right (negative at every N measured so far) and no gate should be
+removed on it; it is simply not significant, and the 08-22 figure must not be re-cited.

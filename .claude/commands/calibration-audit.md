@@ -71,6 +71,15 @@ the historical backtest and the realized forward book.
   fall (gate cost edge)? Report downgrade-effectiveness with decided-N; advisory below N=10.
 - **Fundamentals veto / correlation cluster / tail caps:** did vetoed/clustered/capped names underperform the
   book? Same C24-style effectiveness, same N floor.
+- **Distinguish a DORMANT gate from an ACCRUING one, and do not re-derive a dormant one.** [added
+  2026-08-29] A gate only produces evidence when it **fires**; firing is a regime event with no schedule,
+  unlike a call whose window matures on a calendar. Check the gate's decided-N against last cycle **first**
+  — if it has not moved, report *"dormant, unchanged since <date>"* in one line and spend the cycle
+  elsewhere. Two gates have been in this state and were re-derived anyway, producing bit-identical tables
+  for three consecutive cycles: the **crash guard** (20 guard-days, −0.58%, p=0.212 — no guard-day has
+  fired since 2026-08-07) and the **fundamentals veto** (VETO n=15 / −2.28%, CONFIRM n=23 / −1.21% —
+  unchanged since 2026-08-15). Neither is "close to clearing"; both are waiting on the market.
+  Do not schedule them as pending work, and do not let an unchanged number read as a fresh confirmation.
 
 ## Step 5 — Pre-registration ledger
 Accrue resolved evidence toward each open pre-registration and report progress vs its bar:
@@ -82,6 +91,9 @@ Accrue resolved evidence toward each open pre-registration and report progress v
   BH(0.10) across the five bands tested** and the band was chosen after seeing the result, so it is in-sample
   by construction. Bar: it must clear on data postdating 2026-08-22, cross-regime, BH. **Do not re-cut the
   live lane to it before then** ([`docs/regression-gate.md`](../../docs/regression-gate.md#pr-10--the-rank-band-pre-registered-2026-08-22-not-scored)).
+  **Accrual as of 2026-08-29: 0 out-of-sample rows, and none was possible** — a post-registration signal
+  needs 10 sessions to mature and the panel edge was 08-28, so the earliest PR-10 evidence exits
+  ~2026-09-08. Do not re-derive this before then; the absence is arithmetic, not a null result.
 - A pre-registration graduates to a scored lane ONLY when its bar is cleared on data that postdates its registration.
 
 ## Step 6 — Recommendations (propose-only) + SUMMARY
@@ -104,7 +116,12 @@ resolved-N behind it), never applied. Print SUMMARY to chat.
   it left a p=0.010 subset artifact standing as the repo's strongest gate evidence for a full cycle.
   [added 2026-08-15]
 - **A cohort's N is its count of distinct EXIT-DAYS, not its count of rows.** Rows whose h-windows overlap
-  share one macro draw. The tell is the `base` column: pinned at 1.00 for long lanes / 0.00 for short lanes
+  share one macro draw. **Use the named units, never the bare phrase "exit-day"** [added 2026-08-29]:
+  **`lane-exit-day`** = one (lane, exit-day) pair, the per-lane column and the unit the "<30" bar below
+  is measured in; **`exit-session`** = one distinct exit session pooled across lanes, the whole-book
+  figure. On the same 08-22 book they read 95 units / −1.69% / p=0.022 and 35 units / −2.20% / p=0.054
+  respectively — **both correct, ~3× apart**. The 08-29 audit lost a cycle treating them as a
+  contradiction in the record before re-deriving both. The tell is the `base` column: pinned at 1.00 for long lanes / 0.00 for short lanes
   means the benchmark moved one way across every window in the cohort, so the whole cohort is one
   observation. On 2026-08-08 this decided two readings at once — all five harness lanes fell below baseline
   on a 190-row increment that was a single 08-03→08-07 rally, and the long-awaited post-fix h10 cohort
@@ -129,6 +146,12 @@ resolved-N behind it), never applied. Print SUMMARY to chat.
   re-measured every *lane* and no *gate*. [added 2026-08-15]
 - Never recommend removing a risk gate on thin (<10 decided) effectiveness data — a gate's value is insurance
   against the regime not yet in the data.
+- **A gate-effectiveness result at PROVISIONAL N is a hypothesis until it survives one re-test, and it must
+  be stated that way.** [added 2026-08-29] The 08-22 cycle recorded suppression discipline as
+  "significantly negative for the first time" (21 lane-periods, −1.74%, **p=0.008**); one cycle later, at
+  33 lane-periods, it is **−0.89%, p=0.054** with no lane surviving BH. The same write-up had already
+  noted the hit-rate fell 86% → 59% at 5× the sample and leaned on the pooled p anyway. Carry the N and
+  the date next to any gate figure, and re-check a headline result before re-citing it.
 - Stratify every number by regime; never pool; an edge that flips sign across regimes is beta.
 - **Audit scripts must COMPUTE every comparison figure, never hardcode one.** Each cycle starts by copying
   the prior cycle's scripts, so any literal baked into a string silently becomes this cycle's answer. Two
@@ -138,6 +161,14 @@ resolved-N behind it), never applied. Print SUMMARY to chat.
   canonical script resolves. Constants that legitimately pin a prior cycle (`PRIOR`, `PRIOR_AUDIT_EDGE`)
   must be re-pointed as the first step of the cycle and carry the commit they came from. Grep the copied
   scripts for last cycle's numbers before trusting any table. [added 2026-08-15]
+- **Consume a tool's `--out` / `--json` output; NEVER parse its stdout table.** `suppression_resolve.py`,
+  `retro_harness.py` and `resolved_ledger.py` all emit machine-readable output — use it. On 2026-08-29 a
+  working script split `suppression_resolve.py`'s table on whitespace and kept rows by field count; the
+  6-field `saved` rows parsed and every 7-field `COST EDGE` row was dropped. It silently graded **102 of
+  195** rows — all of them the gate's wins — and printed **−4.50%, p<0.001** where the truth is
+  **−0.89%, p=0.054**. **This failure mode is invisible because the wrong answer is MORE significant
+  than the right one**, so it reads as a finding rather than a bug. Assert the parsed row count against
+  the tool's own reported total before using it. [added 2026-08-29]
 - **Verify the price feed before resolving, not after.** Yahoo's chart API silently serves transient
   `close: null` on liquid names (varying per request — 115 tickers / 273 sessions in one 2026-08-15 pass,
   booking 51 false INCONCLUSIVE) and lags split adjustment into `adjclose` on fresh splits (MNST 2:1,

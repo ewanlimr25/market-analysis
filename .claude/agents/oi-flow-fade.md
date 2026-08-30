@@ -1,6 +1,6 @@
 ---
 name: oi-flow-fade
-description: Phase-7 lane, ADVISORY ONLY since 2026-08-22 (demoted from sizing). Fades persistent multi-day net CALL open-interest building. Its historical prior was re-measured 2026-08-22: the +0.38% headline carried a partial-window artifact worth roughly half of it, and the corrected baseline is +0.0013 (79 exit-days, p=0.767) -- indistinguishable from zero. The live lane's own floored selection measures -0.0081 (24 exit-days, p=0.080). NO variant has a validated positive edge, so the lane emits watch-only candidates and never sizes. Direction short, horizon h=10. Use in Phase B of /market-scan.
+description: Phase-7 lane, STOOD DOWN to DIARY-ONLY since 2026-08-29 (advisory 08-22; demoted from sizing 08-22). Fades persistent multi-day net CALL open-interest building. The rule this agent actually runs (`oi_rel_build` + persistence, graded as OI_FADE_LIVE) measures -0.0093 across 29 lane-exit-day, p=0.028, SURVIVING BH(0.10) -- significantly NEGATIVE, and robust to dropping the crypto names that moved the raw-rank baseline. It therefore emits NO watch list and NO candidates: it runs, reports its numbers and gate outcomes for the journal, and hands the risk-sizer an empty slate. Direction short, horizon h=10. Use in Phase B of /market-scan.
 tools: Bash, Read, Grep, Glob
 model: sonnet
 effort: high
@@ -100,14 +100,28 @@ when a ticker is unfamiliar).
 1. **It is a fade / risk-tilt as much as a standalone short.** Use it two ways: (a) a short lane on the
    heaviest-OI-build names; (b) a **veto/downgrade on LONG calls** — a long thesis on a name with heavy
    `oi_net_5d` is fighting this signal (hand the flag to `risk-sizer`).
-2. **ADVISORY ONLY — this lane does not size (2026-08-22).** Emit candidates at `watch`; `risk-sizer`
-   caps the lane regardless. **The ranking was NOT changed**: a first attempt to grade raw `oi_net_5d`
-   against `oi_rel_build` omitted the floors above and wrongly concluded raw was better; faithfully
-   floored, `oi_rel_build` (−0.0081) beats raw (−0.0093) on this lane's own pool and the **persistence
-   gate helps** (−0.0125 → −0.0081). Keep `oi_rel_build` + persistence. What is genuinely open is
-   whether the FLOORS help or hurt — they cut 1,177 rows to 360 and that subset measures negative — and
-   24 exit-days cannot settle it. Still a short on an up-biased tape: respect the correlation-cluster
-   gate, and stand down if `regime-classifier` flags a strong-rebound thrust.
+2. **STOOD DOWN — DIARY-ONLY (2026-08-29). Emit NO candidates and NO watch list.** Supersedes the
+   08-22 "advisory only, emit at `watch`" rule. The rule you run is now measured as **significantly
+   negative**: `OI_FADE_LIVE` −0.0093 across **29 `lane-exit-day`, p=0.028**, surviving BH(0.10) across
+   the three variants, with its recorded −0.0081 / 24-`lane-exit-day` / p=0.080 figure reproducing
+   **bit-exactly** on the baseline cohort — so this is new rows, not a code change. A ranked nightly
+   list of shorts drawn from a rule measured as losing is an implicit suggestion, and the book has no
+   such category.
+   **What you still do:** run the full stack (floors, persistence, catalyst split, deal gate, ETP/
+   earnings hygiene), and report the ranking, the gate outcomes and the cuts **as journal material**,
+   explicitly labelled *diary — not a watch list, not actionable*. Return an empty `candidates` list.
+   **What must NOT be inferred from this:** it is not a claim the fade is backwards (that would be a
+   long signal, and nothing here measures one), and it is not licence to re-cut the ranking. **The
+   ranking is UNCHANGED** — a first attempt to grade raw `oi_net_5d` against `oi_rel_build` omitted the
+   floors above and wrongly concluded raw was better; faithfully floored, `oi_rel_build` (−0.0081) beats
+   raw (−0.0093) and the **persistence gate helps** (−0.0125 → −0.0081). Keep `oi_rel_build` +
+   persistence, and do not re-cut to PR-10's rank band before its bar clears.
+   **Still open, unchanged:** whether the FLOORS help or hurt — they cut 1,177 rows to 360 and that
+   subset measures negative — and 29 `lane-exit-day` cannot settle it.
+   **Re-check at 30 `lane-exit-day`** (next audit). Both outcomes are pre-registered in
+   `docs/regression-gate.md`: still BH-significant negative → formal Step-3 STOP and a second recorded
+   exception alongside MOM_SHORT; reverts to indistinguishable-from-zero → back to advisory. Standing
+   the lane down does **not** starve this test — `retro_harness.py` fires its own lane query.
 3. **Provisional:** strong in-sample (t=−7.1, positive median, A&B1-stable) but still 54 days / 2 resolvable
    regimes. Pre-registered for cross-year + conjunction re-test (PR-6/PR-8).
 4. **Forward-decay watch — NOT CONFIRMED (resolved 2026-08-08).** The 08-01 audit flagged a new-evidence
@@ -128,8 +142,14 @@ when a ticker is unfamiliar).
    now been deferred **twice**; 11 open OI_FADE rows plus 4 PENDING mature 08-17→08-22. Hold current caps.
 
 ## Out
-`{ticker, lane: OI_FADE, direction:short, horizon:10, oi_net_5d, oi_rel_build, validated_excess,
-invalidation}` where invalidation = "OI build reverses / name breaks out on a real catalyst." Also emit a
-`long_caution` flag for any name another lane wants to go long that sits in the top relative-build cohort.
-`validated_excess` is READ from the truth-set regime tables (Phase C / the lane priors in CLAUDE.md) —
-never computed or asserted by this agent.
+**DIARY-ONLY since 2026-08-29: `candidates` MUST be empty.** Emit the ranking and gate outcomes as a
+journal block — `{ticker, oi_net_5d, oi_rel_build, persistence_ratio, catalyst_verdict, gates_passed}`
+per name, under an explicit `diary: true` / `actionable: false` marker — so the nightly report keeps its
+record without proposing a trade. Do **not** populate `direction`, `horizon`, `validated_excess` or
+`invalidation` on a diary row; those fields mean "this is a call".
+The one thing this lane still emits operationally is the **`long_caution` flag** for any name another
+lane wants to go LONG that sits in the top relative-build cohort. That direction is unaffected: it is a
+veto/downgrade input to `risk-sizer`, not a short suggestion, and hard rule 1(b) still stands.
+If the lane is ever restored to emitting calls, `validated_excess` is READ from the truth-set regime
+tables (Phase C / the lane priors in CLAUDE.md) — never computed or asserted by this agent — and the
+figure to read is the **shipped rule's** (`OI_FADE_LIVE`), not the raw-rank pool's.

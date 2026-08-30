@@ -66,7 +66,10 @@ python/duckdb; they fail CLOSED and carry the incident that motivated them in th
 ## Phase B — Layer 2: validated lanes at the weekly horizon (SCORED)
 Run the **`momentum`** and **`oi-flow-fade`** lanes on the weekly timeframe (hold 2–4 weeks ≈ daily h10–h21):
 - Momentum: weekly 52w-range position (long near-high / short near-low) — same factor, longer hold.
-- OI-flow fade: the trailing multi-week net call-OI build fade.
+- OI-flow fade: the trailing multi-week net call-OI build fade. ⛔ **STOOD DOWN to diary-only
+  (2026-08-29)** — run it and record its ranking/gates in the journal, but it emits **no candidates**
+  and nothing for `risk-sizer` to score. Its `lane_status[]` entry is `STOOD_DOWN`, and its would-be
+  names still belong in `candidates[]` there so the suppression cohort keeps accruing.
 These carry their validated-excess priors and are scored/sized by `risk-sizer` exactly as in `/market-scan`
 (regime gate, crash guard, correlation cluster, fundamentals veto, tail caps, half-cap). The liquidity-reversion
 (S2) and PCR (S4) lanes are daily-horizon and are **not** re-run weekly.

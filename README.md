@@ -45,7 +45,7 @@ Five commitments follow from that, and they are enforced in code, not just prose
 
 | Lane | Direction | Horizon | What it fires on |
 |---|---|---|---|
-| `oi-flow-fade` | short | h10 | heavy multi-day **net call** open-interest build → subsequent underperformance |
+| `oi-flow-fade` | short | h10 | heavy multi-day **net call** open-interest build → subsequent underperformance. ⛔ **Stood down to diary-only 2026-08-29** — the shipped rule measures significantly *negative* excess, so the lane runs and is journalled but emits no candidates |
 | `momentum` (long leg) | long | h10 | near-52-week-high, basket only — **never sizes per-name** |
 | `momentum` (short leg) | short | h10 | near-52-week-low, crash-regime-gated, watch-only cap |
 | `liquidity-reversion` | long | h3–5 | extreme one-sided dark-pool dollar concentration, news-gated |
@@ -56,6 +56,10 @@ Five commitments follow from that, and they are enforced in code, not just prose
 Per-lane measured excess, sample sizes, and the caveats attached to each live in `CLAUDE.md` (full detail
 in [`docs/lanes.md`](docs/lanes.md)) and are re-baselined on every audit cycle. They are **historical-panel
 priors**; the forward book is graded separately and can disagree.
+
+**As of 2026-08-29 no lane sizes and `oi-flow-fade` emits nothing** — a lane is stood down when its
+measured edge does not survive, and an engine whose honest output is an empty book is working as
+designed. A lane appearing in this table means it is implemented and graded, not that it is firing.
 
 This is deliberately **not** a microstructure options-flow engine. Raw flow was measured here and came
 back as beta, so it is used as a filter and cut from scoring.

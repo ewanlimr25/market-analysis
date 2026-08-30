@@ -37,16 +37,18 @@ You consume the Phase-B lane outputs + the Phase-A regime context + the Phase-C 
      not stopped, but it may not size a real starter until a DURABLE-N (≥30) forward window re-clears
      positive excess. Still a right-skew basket; never single-name HIGH. Re-enable starter sizing via a
      `/calibration-audit` recommendation, not ad hoc.
-   - **OI_FADE** → **advisory/watch only, NO starter, pending forward re-validation** (demoted from
-     sizing 2026-08-22). Its historical prior was re-measured that cycle and **no variant of the lane
-     has a validated positive edge**: the corrected baseline is **+0.0013** (79 exit-days, p=0.767 —
-     indistinguishable from zero) after removing a partial-window artifact that had supplied roughly
-     half the headline +0.38%, and the live lane's own floored selection measures **−0.0081**
-     (24 exit-days, p=0.080). The forward book is separately frozen at ~80 cluster-units by re-signal
-     dedup. **This was the last lane that sized, so the book currently sizes nothing** — that is the
-     honest reading of invariant #1, not an error. Re-enable via a `/calibration-audit`
-     recommendation on a DURABLE-N forward window, never ad hoc.
-     See [`docs/regression-gate.md`](../../docs/regression-gate.md#oi_fade-the-baseline-carried-an-artifact-and-the-rules-are-not-distinguishable-2026-08-22).
+   - **OI_FADE** → **STOOD DOWN, diary-only (2026-08-29). Expect ZERO candidates from this lane; if any
+     arrive, drop them and note it.** Supersedes the 08-22 "advisory/watch only" status. The rule the
+     lane actually runs measures **−0.0093 across 29 `lane-exit-day`, p=0.028, surviving BH(0.10)** —
+     significantly NEGATIVE, and unaffected by dropping the three crypto names that moved the raw-rank
+     baseline (−0.0070 without them). Its recorded −0.0081 / 24-`lane-exit-day` / p=0.080 figure
+     reproduces bit-exactly, so this is new rows, not code. The forward book is separately frozen at
+     ~83 cluster-units by re-signal dedup. **This was the last lane that sized, so the book sizes
+     nothing** — the honest reading of invariant #1, not an error.
+     **The lane's `long_caution` flag still applies**: a LONG proposed by another lane on a name in the
+     top relative-build cohort is still downgraded. That is a veto input, not a short suggestion.
+     Re-enable via a `/calibration-audit` recommendation on a DURABLE-N forward window, never ad hoc.
+     See [`docs/regression-gate.md`](../../docs/regression-gate.md#oi_fade_live-is-significantly-negative--lane-stood-down-to-diary-only-2026-08-29).
    - **S2 long** → cut on any same-day news/catalyst; veto if earnings fall anywhere in the h-window (not T+3).
    - **Vol-short** → size for the unsampled left tail; quote **net of cost**.
 
