@@ -1,0 +1,210 @@
+{
+  "schema_version": "w1.0",
+  "report_kind": "weekly-review",
+  "iso_week": "2026-W35",
+  "report_date": "2026-08-28",
+  "report_path": "analyses/weekly/2026-W35/report.md",
+  "week_context": {
+    "weekly_candles": [
+      {
+        "symbol": "SPY",
+        "w_open": 764.78,
+        "w_high": 775.29,
+        "w_low": 762.08,
+        "w_close": 769.35,
+        "w_ret": 0.006,
+        "close_pos": 0.55,
+        "body_frac": 0.346,
+        "structure_vs_prior": "INSIDE WEEK - the first and only one in the 32-week panel (1/26 full weeks). High 775.29 < prior 776.78; low 762.08 > prior 762.04 by 4 cents. follow_through F."
+      },
+      {
+        "symbol": "QQQ",
+        "w_open": 709.66,
+        "w_high": 724.12,
+        "w_low": 702.7,
+        "w_close": 716.43,
+        "w_ret": 0.0095,
+        "close_pos": 0.641,
+        "body_frac": 0.316,
+        "structure_vs_prior": "lower_low, no higher_high, closed UP +0.95% - rejection of the 702.70 washout. follow_through F. W34's bearish outside week did not follow through down."
+      },
+      {
+        "symbol": "IWM",
+        "w_open": 299.55,
+        "w_high": 300.39,
+        "w_low": 295.67,
+        "w_close": 295.75,
+        "w_ret": -0.0127,
+        "close_pos": 0.017,
+        "body_frac": 0.805,
+        "structure_vs_prior": "lower_low, close_pos 0.017 = LOWEST weekly close position in the 26-week panel (0th pctile), 0.81 body. The ONLY index that confirmed last week's direction (follow_through T)."
+      }
+    ],
+    "catalysts": [
+      {
+        "event": "PCE (July) - Tier-1 macro",
+        "date": "2026-08-26",
+        "weekday": "Wed",
+        "price_reaction": "Headline 3.7% y/y vs 3.6% expected, core 3.3% in line - slightly hot. SPY +0.02% on the day (O 764.73 -> C 766.08, +0.18% o->c); 10y +1bp to 4.649%; dollar rose the most in ~4 weeks. NULL equity reaction to an upside inflation surprise - accrues one Tier-1 macro-arm observation as a non-reversal."
+      },
+      {
+        "event": "NVDA FY27 Q2 earnings",
+        "date": "2026-08-26",
+        "weekday": "Wed (post-close)",
+        "price_reaction": "EPS $2.22, revenue $96.2B (+106% y/y). Gapped +6.3% Thu open, closed +8.74% (209.66 -> 227.98). Gave back -4.30% Friday (cpos 0.06), finishing the week only +1.32%. The week's SPY/QQQ gain was made almost entirely on this Thursday gap."
+      },
+      {
+        "event": "Jackson Hole - Warsh's first keynote as Fed Chair",
+        "date": "2026-08-28",
+        "weekday": "Fri",
+        "price_reaction": "REVERSAL-AFTER-CATALYST. Warsh: inflation 'too high', price stability 'predominant focus', 2% PCE a firm target. September rate-HIKE odds jumped to ~57%; 2y to 4.35%. Market rallied through the speech to the week's high 775.29, then reversed after midday to close 769.35 - SPY cpos 0.15, -0.31% o->c; QQQ cpos 0.15; IWM cpos 0.02. Logged to the Fed-COMMUNICATION arm, NOT the Tier-1 macro arm (same precedent W34 used for the FOMC minutes)."
+      }
+    ],
+    "regime_trajectory": "Plain CHOP all five sessions, s1_standdown FALSE every day - the flattest regime week in the journal. ret5 -1.190 / -0.200 / -0.390 / +1.110 / +0.470; ret10 -1.240 -> -0.900; dd15 -1.350 -> -1.770. CHOP has now held 9 consecutive sessions (since Tue 08-18). Thu 08-27 was a DOUBLE NEAR-MISS on the crash guard (ret5 +1.11% vs the 1.5% leg, dd15 -1.96% vs the -2% leg); by Friday it was a clean miss on both legs. VOL-STATE: VIX fell every session to a 10-day low 14.43 (-8.96% on the week) while VVIX/VIX ROSE all week and popped +5.1% Friday (5.71 -> 6.00) - vol-of-vol richening against a falling spot VIX. Term structure CONTANGO (VIX3M/VIX 1.212 Fri); VRP FAIR all week (SPY -0.27pp Fri), no premium-selling edge. Dealer gamma flipped twice: SHORT / SHORT+on-flip / SHORT / Thu SPY AT FLIP and QQQ cleanly LONG+pinned (+736.7M, the only long-gamma session, and the one that absorbed the NVDA gap) / Fri BOTH SHORT again (SPY -615.8M, QQQ -218.9M, re-derived independently from the raw per-strike ladder).",
+    "sector_leadership": "NEAR-TOTAL REVERSAL of W34. Winners XLC +1.43%, XLK +1.30%, XLF +1.08%; losers XLV -1.98%, XLI -1.73%, XLE -1.51%, XLRE -1.33%. Spearman rank correlation W34 vs W35 = -0.434: last week's #1 (XLV +4.33%) is this week's #12; last week's #11 (XLK -3.53%) is this week's #2; XLE 2 -> 10; SMH 12 -> 8. The hard-asset rotation UNWOUND (W34 carry-forward item 4 resolved): GLD -3.42%, SLV -4.30%, USO -3.67%, AU -6.62%, UUP +1.00%. Credit and duration again flat (TLT +1.01%, HYG +0.16%) - the bond market declined to ratify the equity narrative for a second week, this time into a hawkish keynote that moved Sept hike odds to 57%. BREADTH: only 38.6% of the Common/ADR >=$50M-ADV spine (n=1,299) rose, median -0.86%, while SPY was +0.47% and RSP -0.44% (equal-weight LAGGED cap-weight by 0.91pp) - the exact mirror of W34's +0.87pp. A narrow, mega-cap-led advance on deteriorating breadth. Above-50dma 52.9%; above-200dma NOT COMPUTABLE from this repo's data (prices.parquet spans ~155 trading days).",
+    "notable_flow": "Largest dark-pool premium: NVDA $54.2B (154,491 prints) - roughly 60% larger than SPY's $33.9B - then SPY, MU $28.0B, QQQ $25.1B, SNDK $21.2B, MSFT $16.1B, IVV $15.8B, VOO $14.4B, TSLA $13.6B, AAPL $12.9B. MU and SNDK printing at index scale for a SECOND consecutive week. Movers (Common/ADR, >=$50M ADV): UP CAPR +52.46, ANF +36.15, OKTA +23.01, CRM +22.39, ASST +19.32, GAP +18.59, ESTC +16.26, CRWD +13.78, NOW +12.63, XMTR +12.59; DOWN IESC -54.78, VISN -45.94, DKS -26.27, DY -25.09, AEHR -20.56, AXTI -17.12, AGX -16.72, QBTS -16.67, BURL -16.40, LUNR -16.10. The up-list is an enterprise-software earnings cohort and the down-list is led by retail dispersion. Mega-cap tech led (MSFT +6.27, META +5.11, AAPL +3.35, AMZN +3.02) while NVDA managed only +1.32% on a 106%-growth print and SMH fell 1.30%: software over semis."
+  },
+  "weekly_technicals": [
+    {
+      "feature": "SPY INSIDE WEEK (predicate: inside_week; basis: full-5d weeks n=26; fwd = w_close[t+1]/w_close[t]-1)",
+      "value": "FIRED - the first and only inside week in the panel (1/26). H 775.29 < 776.78, L 762.08 > 762.04 by 4 cents.",
+      "would_signal": "Compression / pending range expansion",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT (>=2yr, >=30 weekly obs/arm, cross-regime sign-stable, BH FDR 0.10). ZERO prior observations - no forward evidence exists in either direction."
+    },
+    {
+      "feature": "IWM extreme low close (predicate: lower_low & close_pos<0.15)",
+      "value": "FIRED. close_pos 0.017 = lowest weekly close position in the 26-week panel (0th percentile), body 0.805.",
+      "would_signal": "Capitulation / trend continuation down",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. Fires 3/26; 2 prior resolved: -1.71%, +4.01% (mean +1.15%). n=2, non-informative."
+    },
+    {
+      "feature": "QQQ failed follow-through (predicate: ~follow_through)",
+      "value": "FIRED. Made a lower low and still closed +0.95%.",
+      "would_signal": "Trend indecision",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. Fires 12/26; 11 resolved: mean -0.52%, median -1.60%."
+    },
+    {
+      "feature": "SPY failed follow-through (predicate: ~follow_through)",
+      "value": "FIRED. cpos 0.550, body 0.346.",
+      "would_signal": "Trend indecision",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. Fires 7/26; 6 resolved: mean +0.43%, median +0.52% - OPPOSITE SIGN to QQQ's identical arm."
+    },
+    {
+      "feature": "reversal-after-catalyst - Tier-1 MACRO arm",
+      "value": "DID NOT FIRE. PCE Wed 08-26 printed hot (3.7% vs 3.6% expected) and SPY closed +0.02%; no reversal.",
+      "would_signal": "Event-conditioned bearish reversal",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. Accrues 1 macro-arm observation (first since W33), recorded as a NULL reaction."
+    },
+    {
+      "feature": "reversal-after-catalyst - Fed-COMMUNICATION arm (separate; must not be pooled with the macro arm)",
+      "value": "FIRED. Warsh keynote Fri 08-28: SPY rallied to the week's high 775.29 and closed 769.35, cpos 0.15; QQQ cpos 0.15; IWM cpos 0.02.",
+      "would_signal": "Bearish arm of the event-conditioned feature",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. 2 obs total (W34 FOMC minutes, W35 Warsh keynote). Same precedent W34 set for the minutes."
+    },
+    {
+      "feature": "repair-gap tracker (gap to panel-peak weekly close)",
+      "value": "DIVERGED for the first time. QQQ narrowed -3.67% -> -3.27% (vs the 06-15 peak 740.62); SPY -1.37% -> -0.90% and QQQ -2.41% -> -2.00% vs the 08-10 full-week peak; but IWM WIDENED -1.68% -> -3.06%.",
+      "would_signal": "Failed repair = distribution at the highs",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. First within-tracker divergence since tracking began in W31."
+    },
+    {
+      "feature": "index structure divergence",
+      "value": "FIRED, 2nd observation. SPY inside week / QQQ lower-low-but-closed-up / IWM lower-low-and-closed-on-it at the panel's lowest close_pos.",
+      "would_signal": "Damage rotating down the cap scale",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. New arm from W34, 2 obs."
+    },
+    {
+      "feature": "candle-pattern arms (outside_week / hammer_or_hanging / star_or_inverted)",
+      "value": "NONE FIRED on SPY, QQQ or IWM.",
+      "would_signal": "Nothing this week",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. SPY's arms remain unreachable at this accrual rate (outside 1/26, hammer 3/26, star 1/26)."
+    },
+    {
+      "feature": "LAYER-3 DISCIPLINE DEFECT (recorded as a pre-registration item, not a market feature)",
+      "value": "W34's Section-3 base rates DO NOT REPRODUCE under any predicate/basis combination tested (3 predicate variants x 2 panel bases = 6 candidate value sets; none matches W34's reported lists for either the SPY failed-ft arm or the QQQ outside-week arm; only a single value, +0.57, appears anywhere in both).",
+      "would_signal": "That the arm predicates and panel basis have never been written down, so Layer-3 accrual has not been auditable for five weeks",
+      "conviction_points": 0,
+      "status": "PRE-REGISTERED",
+      "pre_reg_bar": "PR-WT. ACTION: each arm needs a stored predicate (exact column expression), a fixed panel basis and a fixed forward-return definition committed to the repo. Until then all pre-W35 Section-3 base rates are non-auditable; W35's are the first reproducible from a stated basis."
+    }
+  ],
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "NO_NAME_CLEARED",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "note": "ZERO candidates for a second consecutive session, and the weekly horizon PROVABLY cannot change it. Funnel: 5,370 tickers with OI rows -> 3,616 with a full 5-day window (1,754 dropped fail-closed) -> 1,296 past the tiny-base floors -> top-15 by oi_rel_build -> 0 survivors (-8 liquidity floor, -3 ETPs FTEC/NBIZ/BTCZ, -1 listing age HONA 51 trading days, -2 persistence>0.85 DCI 0.991 and DKS 1.143, -1 invalidation BZ 80.4% single-day concentration plus last_call_net negative). ALL 15 report between 10-29 and 12-03, outside BOTH hz_end(10)=09-12 and hz_end(21)=09-27, so the earnings gate - the only horizon-dependent gate - never engages; the h10 and h21 top-15 sets are BIT-IDENTICAL. The weekly disposition equals the daily one by construction, not coincidence. APPLICABLE CELL: plain CHOP -0.0010 (n=344, 23 exit-days, t=-0.13, p=0.898), indistinguishable from zero; the CHOP/REBOUND-THRUST stratum reads +0.0098 and must NOT be pooled. SELECTION-RULE MISMATCH IS NOW THREE-WAY and was verified directly, not taken from the lane: harness raw top-15 via fire(T,'raw') = BABA/SPCX/INTC/NVDA/PBR/SOFI/META/WULF/GOOGL/AAPL/WMT/TSLA/PCG/IREN/ASST (pure mega-cap beta, the documented artifact), overlap with the live cohort 0/15; harness LIVE variant via fire(T,'live') returns NOTHING AT ALL; and the lane's third construction (same rule, filter order changed) yields a near-disjoint third top-15. 8th+ consecutive period carried undecided.",
+      "candidates": [],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.0,
+      "note": "Basket/watch only, NEVER sizes. Funnel reproduced independently: 1,871 liquid -> 392 within 5% of the 52w high -> 185 after issue_type Common/ADR (207 ETPs cut at source; ZERO NULL issue_type, so no fail-closed drops) -> 181 at h10 -> 180 at h21. THE LANE'S OWN FUNNEL FIGURE WAS WRONG (it reported 185 -> 20 at h21; the gate cuts 5 names, not 165) and its stated reason was self-contradictory. ESTC IS CUT AS A FALSE LONG: the screener ranked it #1 with close/week_52_high = 1.04 (close ABOVE the recorded high - the out-of-range signature), but its true Yahoo 52w high is 108.00 set on 08-28 itself, so at 99.91 it is 7.5% below and FAILS the lane's own 0.95 gate (0.95 x 108.00 = 102.60). The long-leg mirror of the pct_52w_range defect. The other 14 Yahoo-verified genuine (11 set their 52w high this week). SECTOR CAP BREACHED: Technology 6/15 = 40.0% vs the 33% cap, still 35.7% after cutting ESTC - and the tilt is toward XLK, this week's #2 sector. SECOND consecutive week the tilt mirrors the week's winning sector (Healthcare/Energy in W34), i.e. the basket is materially sector-beta in disguise. Sizing barred regardless: plain-CHOP excess -0.0266, 24 exit-days, t=-2.51, p=0.012 - the one lane with a SIGNIFICANTLY NEGATIVE excess in this cell. TECH remains deal-pinned.",
+      "candidates": [
+        "TEAM",
+        "DINO",
+        "ZETA",
+        "FRSH",
+        "DK",
+        "MPC",
+        "GEN",
+        "BOX",
+        "APGE",
+        "CRNX",
+        "VLO",
+        "SEIC",
+        "DBRG",
+        "TECH"
+      ],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "note": "Basket/watch only, NEVER sizes - the one recorded invariant-6 exception (knowingly negative). Funnel: 1,871 -> 86 within 2% of the 52w low -> 24 after issue_type (62 ETPs cut; 0 NULL) -> 23 at BOTH h10 and h21. CRASH GUARD NOT FIRED: s1_standdown FALSE all five sessions; ret5 +0.470% is 2.03pts short of the +2.5% up-thrust bar and dd15 -1.77% fails the >=2% dip precondition, with the dip leg the wrong sign entirely. Lane ran ungated and still sizes nothing on baseline grounds alone (plain-CHOP -0.0220, 24 exit-days, t=-1.93; harness pooled -0.0130). THE LANE'S REPORTED EXCESS OF +2.29% IS SIGN-INVERTED AND WAS NOT USED. MIDD stays cut: screener range 110.82-180.13 vs Yahoo 89.16-148.55, both legs ~1.22x - an unadjusted corporate action; at 112.75 it is 1.26x its true 52w low. The lane's separate '10 stale names' framing was REJECTED: for TJX (134.17 vs 133.55) and APTV (45.28 vs 44.88) the screener's week_52_low simply has not absorbed a low set that same session, which makes it CONSERVATIVE and unable to manufacture a false short - the opposite failure mode from MIDD's. SECTOR CAP BREACHED: Utilities 6/15 = 40% (FRVO, TLN, NRG, CMS, PEG, BEPC). STRUCTURALLY BLIND to the week's actual dispersion - DKS -26.3%, BURL -16.4%, DY -25.1% are nowhere near 52-week lows.",
+      "candidates": [
+        "VISN",
+        "INIO",
+        "FRVO",
+        "TLN",
+        "ESAB",
+        "CRUS",
+        "NRG",
+        "CMS",
+        "VICI",
+        "TJX",
+        "OLN",
+        "PEG",
+        "APTV",
+        "ONON",
+        "BEPC"
+      ],
+      "cluster_id": null
+    }
+  ]
+}
