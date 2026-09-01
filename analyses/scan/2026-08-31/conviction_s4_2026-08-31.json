@@ -1,0 +1,20 @@
+{
+  "report_date": "2026-08-31",
+  "regime": "CHOP",
+  "S4_lanes_fired": {
+    "S4_pcr_fade": {
+      "status": "ADVISORY_ONLY",
+      "n_candidates": 15,
+      "horizon": 5,
+      "direction": "long",
+      "note": "Hit\u2212base negative; right-tail only."
+    },
+    "ivrank_tilt": {
+      "status": "ADVISORY_ONLY",
+      "n_candidates": 10,
+      "horizon": 3,
+      "direction": "long",
+      "note": "3-regime stable factor (t=+5.2). Orthogonal to PCR."
+    }
+  }
+}

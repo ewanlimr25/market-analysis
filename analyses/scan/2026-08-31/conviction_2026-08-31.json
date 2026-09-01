@@ -1,0 +1,34 @@
+{
+  "conviction_date": "2026-08-31",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-08-31 market-scan, persisted for the next run's held-position reconciliation. Sub-agents do not carry open positions -- the orchestrator reconciles this file with scripts/held_book.py at the start of the next scan.",
+  "source_decision_envelope": "analyses/scan/2026-08-31/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": 0,
+    "detail": "FLAT for a 16th consecutive session. No lane in this repo sizes since OI_FADE's 2026-08-22 demotion to advisory and its 2026-08-29 stand-down to diary-only. Phase D (risk-sizer) was VACUOUS and not spawned; fundamentals-gate was correctly not spawned -- it runs only on names about to be sized.",
+    "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-08-28/conviction_2026-08-28.json read 0 positions (0 open, 0 closed) with SPY -0.30% on the day. Verified NOT the known EXIT-substring bug by reading the prior file directly: book_state.positions == 0 and the 08-28 envelope's calls[] was empty. The empty result is genuine."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "ret5": 0.0047,
+    "ret10": -0.0073,
+    "dd15": -0.013,
+    "vix": 14.92,
+    "vol_state": "VIX 14.92, +3.40% on the day (NOT at a 10-day low -- that was 08-28's 14.43; the S4 lane carried that stale). LOW tercile on zerodte_setup.py's own trailing-60 definition; Phase A's MID reading used a non-canonical 1-month window and is superseded. SPY VRP -0.06pp FAIR; QQQ VRP -4.39pp with realized (21.05%) above implied (16.67%). BOTH SPY and QQQ dealer SHORT gamma, derived from the per-strike book: SPY cum-to-spot -8.19e8 with no flip in the listed 742-791 range; QQQ cum-to-spot -2.30e8 with the flip at strike 720 against spot 716.17. Phase A's 'QQQ long gamma' read the aggregate total_gex sign (+197M), the documented error mode in zerodte_setup.py:14, and is corrected.",
+    "breadth": "27.04% green (136 adv / 362 dec / 5 unch), median -0.69%, concordant with SPY -0.30%.",
+    "tape": "SPY 767.05 -0.30% | QQQ 716.76 +0.05% | IWM 293.93 -0.62%. Ten-session: QQQ -1.80%, SPY -0.73%, IWM -3.33%."
+  },
+  "carry_forward": {
+    "open_call_rows": "FDX/GEN/BSY/ITRI (OI_FADE short, entered 2026-08-14) matured at h10 on 2026-08-28 -- CLAUDE.md records '~08-31' but the trading-day count gives 08-28. AS (entered 2026-08-19) matures 2026-09-02. All five resolvable at the 2026-09-05 audit.",
+    "pre_registered_recheck_fired": "OI_FADE_LIVE reached exactly 30 lane-exit-day tonight, the bar set in docs/regression-gate.md. Mean -0.0094, iid-clustered t=-2.41 p=0.016 (pre-registered outcome #1 on the current method) but Newey-West(9) t=-1.52 p=0.128 and only 2/10 non-overlapping block offsets significant. Sign robust (negative on 9/10 offsets; -0.0071 p~0.057 ex-MSTR/CELH/MARA). STAND-DOWN STANDS; the significance claim does not survive the overlap correction and must not be promoted to a BH-surviving formal STOP on the iid p-value alone.",
+    "methodological_defect": "Repo-wide for h10 lanes: lane-exit-day clustering does not correct for consecutive exit-days sharing 9 of 10 return days, and every exit-day is base-pinned by construction (15 names, one horizon, one shared SPY window). Newey-West(9) roughly halves every h10 t-stat. This also applies to the 2026-08-29 p=0.028 that justified the stand-down.",
+    "do_not_rebaseline": "Exits <=2026-08-21 reproduce the recorded baseline (OI_FADE +0.0013 n=1177 and S4 +0.0024 n=1304 exact; MOM_SHORT -0.0137 n=828, MOM_LONG -0.0122 n=1209, S2 +0.0016 n=1259). The 99-day pooled moves are entirely the new maturity-edge cohort: 6 exit-days 08-24->08-31 with base pinned 0.00 long / 1.00 short (SPY fell in 100% of the new h10 windows), all five lanes negative in it. Pre-registered unwind: on a mirror increment expect OI_FADE to recover toward +0.0013 and MOM_SHORT to give back its +0.0009 -- neither decay nor a fix.",
+    "watch_cohort": "MOM_SHORT names printing FRESH 52-week lows on 2026-08-31, Yahoo-verified: PCG 3.0%, KRMN 0.0%, WYNN 0.9%, LII 0.4%, MLM 0.5%, VICI 0.5%, NRG 1.9%, ESAB 1.1%. Earnings gate 23/23 pass. Watch-only, never sizes.",
+    "vol_book": "0DTE STAND ASIDE on both SPY and QQQ (short gamma). MDT is an advisory earnings sell-vol candidate: IV rank 97.9, 09-01 print, 09-04 bracketing expiry, ATM-straddle median-IV floor 6.8% vs the tool's 4.72%. NTAP skipped -- no expiry brackets its 09-02 print."
+  },
+  "next_actions": [
+    "2026-09-05 calibration-audit: resolve all five open OI_FADE rows and settle the OI_FADE_LIVE re-check with an overlap-corrected statistic.",
+    "Do not re-cite the 2026-08-22 suppression result (did not replicate).",
+    "Crash-guard and fundamentals-veto tests remain DORMANT, not accruing -- no guard-day since 08-07, veto/confirm N unchanged since 08-15."
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-08-31",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": 0.0047,
+    "ret10": -0.0073,
+    "vol_state": "VIX 14.92 (+3.40% on the day), LOW tercile on zerodte_setup.py's own trailing-60 definition. SPY VRP -0.06pp (FAIR); QQQ VRP -4.39pp (iv30d 16.67% vs realized 21.05%). Dealer gamma derived from the per-strike book (spot-vs-flip, NOT the aggregate sign): SPY cum-to-spot -8.19e8, no flip in 742-791 -> SHORT gamma; QQQ cum-to-spot -2.30e8, flip at strike 720 vs spot 716.17 -> SHORT gamma. The CLI regime field read POSITIVE for BOTH (corrupted, SPY total_gex -1.034B) and zero_gamma_level was garbage on both (305.49 / 212.59 vs spot 767 / 717).",
+    "breadth_pct_green": 27.04,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "JOLTS (Jul)",
+        "date": "2026-09-01",
+        "tier": "Tier-2",
+        "inside_h10": true
+      },
+      {
+        "event": "Nonfarm Payrolls (Aug)",
+        "date": "2026-09-04",
+        "tier": "Tier-1",
+        "inside_h10": true
+      },
+      {
+        "event": "PPI (Aug)",
+        "date": "2026-09-10",
+        "tier": "Tier-1",
+        "inside_h10": true
+      },
+      {
+        "event": "CPI (Aug)",
+        "date": "2026-09-11",
+        "tier": "Tier-1",
+        "inside_h10": true
+      },
+      {
+        "event": "FOMC convenes (decision 09-16)",
+        "date": "2026-09-15",
+        "tier": "Tier-1",
+        "inside_h10": false
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "note": "Diary-only since 2026-08-29; emits no candidates and no watch list. Funnel 1,667 liquid -> 1,612 earnings gate -> 1,298 issue_type -> 463 build floors -> 437 listing age -> 299 persistence. Diary-only top ranks CPAY/VSNT/FRT/HRI/RSI (not suggestions). THE PRE-REGISTERED RE-CHECK FIRED TONIGHT: OI_FADE_LIVE reached exactly 30 lane-exit-day, mean -0.0094, iid-clustered t=-2.41 p=0.016 -> satisfies pre-registered outcome #1 on the repo's current method. But consecutive h10 exit-days share 9 of 10 return days; Newey-West(9) gives t=-1.52 p=0.128 and only 2/10 non-overlapping block offsets are significant. The SIGN is robust (negative on 9/10 offsets; -0.0071 p~0.057 ex-MSTR/CELH/MARA) so the stand-down stands, but the significance claim does not survive the overlap correction and must not be promoted to a BH-surviving formal STOP on the iid p-value alone at the 09-05 audit. The 2026-08-29 p=0.028 was computed the same way. Sub-cohort exits <=08-07 read -0.0014, 14 exit-days, p~0.83.",
+      "candidates": [],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "note": "Watch-only, never sizes; the one recorded negative-excess exception. Crash guard NOT firing (s1_standdown=false). CHOP cell -0.0177 (282 rows, 24 lane-exit-day, t=-1.93) -- NOTE the lane agent reported -2.20%, which is the whole-book exit-session figure, not this cell. Earnings gate 23/23 pass. Cohort is names printing FRESH 52-week lows TODAY (Yahoo-verified): PCG 3.0%, KRMN 0.0%, WYNN 0.9%, LII 0.4%, MLM 0.5%, VICI 0.5%, NRG 1.9%, ESAB 1.1%. The out-of-range screener readings are same-day staleness that VALIDATES the short tag, not the known in-range-but-wrong class that manufactures false shorts. Lane leaked ETPs again (SCHR/BNDX/IEF/BIV all issue_type=ETF) -- cut here.",
+      "candidates": [
+        "PCG",
+        "KRMN",
+        "WYNN",
+        "LII",
+        "INIO",
+        "MLM",
+        "VICI",
+        "ESAB",
+        "NRG",
+        "LVS",
+        "RUN",
+        "APTV",
+        "ONON",
+        "MIDD",
+        "AMRZ",
+        "POWL",
+        "HDB",
+        "TLN",
+        "ROL",
+        "QXO",
+        "TJX",
+        "CMS",
+        "CPRI"
+      ],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 0.0,
+      "note": "Basket/watch only, never sizes. CHOP cell -0.0265 (354 rows, 24 lane-exit-day, t=-2.51) -- significantly negative; the lane agent's -2.66% checks out. ~140 names after issue_type and earnings filters. Energy (SLB/VLO/DINO/MPC/PSX) and software (CRWD/TEAM/DT/OKTA) lead. APGE and CRNX flagged for a deal-pinned check: both sit at the 52w high on near-flat realized vol (~0.03%/day).",
+      "candidates": [
+        "SLB",
+        "UBS",
+        "VLO",
+        "DINO",
+        "MPC",
+        "DK",
+        "CRWD",
+        "ZETA",
+        "CRNX",
+        "APGE",
+        "DT",
+        "PSX",
+        "TEAM",
+        "PAA",
+        "FRSH",
+        "DBRG",
+        "TECH",
+        "ATKR",
+        "ITGR",
+        "OKTA"
+      ],
+      "cluster_id": null
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile",
+      "net_expectancy": 0.00042,
+      "stand_aside_reason": "Derived dealer gamma is SHORT (cumulative net gex at strikes <= spot = -8.19e8, no flip anywhere in the listed 742-791 range) despite the CLI regime field reading POSITIVE against total_gex -1.034B. zerodte_setup.py trusted that field and emitted sell_premium=TRUE with flip=305.49 -- the known gamma-sign bug firing live; overridden. The LOW-tercile conditional net (+0.042%/day after ~0.10% round-trip) is stratified by VIX only, NOT by gamma regime, and the short-gamma trend-acceleration left tail is unsampled in the Mar-May validation window.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile",
+      "net_expectancy": 0.00102,
+      "stand_aside_reason": "Derived dealer gamma SHORT: cumulative net gex at strikes <= spot = -2.30e8 with the zero-gamma flip at strike 720 and spot at 716.17 -- spot sits BELOW the flip. The aggregate total_gex is +197M, and reading the regime off that sign is the documented error mode (zerodte_setup.py:14); Phase A made exactly that error and is corrected here. Second independent reason: VRP -4.39pp, realized (21.05%) running well above implied (16.67%).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "MDT",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "rich, IV rank 97.9",
+      "implied_move": 0.068,
+      "suggested_structure": "Defined-risk iron fly / wide-wing short strangle on the 2026-09-04 expiry (4 DTE, brackets the 09-01 print cleanly). Wings set well beyond the 6.8% floor -- size for realized running 1.3-1.5x it.",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "NTAP",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "IV rank 94.1",
+      "stand_aside_reason": "No listed expiry brackets the 2026-09-02 print -- the nearest is 2026-09-18, 16 days past it, so any structure prices two weeks of unrelated macro and theta rather than the earnings binary. Inverse of the bracketing-expiry trap.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "OI_FADE_LIVE hit its pre-registered 30 lane-exit-day re-check bar tonight. Resolve at the 2026-09-05 audit using an overlap-corrected statistic, not the iid-clustered p-value.",
+    "Overlapping-window defect is repo-wide for h10 lanes: lane-exit-day clustering does not correct for consecutive exit-days sharing 9 of 10 return days. Newey-West(9) roughly halves every h10 t: OI_FADE_LIVE 0.016->0.128, MOM_SHORT 0.025->0.178, MOM_LONG 0.050->0.198.",
+    "Do NOT re-baseline on the 99-day panel. Exits <=2026-08-21 reproduce the recorded baseline (OI_FADE +0.0013 n=1177 and S4 +0.0024 n=1304 are exact). The increment is 6 exit-days with base pinned 0.00 long / 1.00 short -- SPY fell in 100% of the new h10 windows -- and all five lanes are negative in it.",
+    "Pre-registering the unwind: on a mirror increment (SPY up across its h10 windows, base pinned 1.00 long / 0.00 short) expect OI_FADE to recover toward +0.0013 and MOM_SHORT to give back its +0.0009. Neither will be decay nor a fix.",
+    "Open call rows: FDX/GEN/BSY/ITRI matured at h10 on 2026-08-28 (CLAUDE.md records ~08-31; the trading-day count says 08-28). AS matures 2026-09-02. All five resolvable at the 09-05 audit.",
+    "Screener hygiene: issue_type is NULL for SUNB and MAIR, both genuine operating common stocks, so both fail closed out of OI_FADE.",
+    "S4 INFY carries PCR 20.68 on 251 calls against a floor of 250 -- the denominator-artifact class one contract over the line. Only RCL has a book deep enough for its PCR to be meaningful."
+  ],
+  "report_path": "analyses/scan/2026-08-31/report.md"
+}
