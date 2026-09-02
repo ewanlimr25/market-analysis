@@ -1,0 +1,189 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-09-01",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": -0.0054,
+    "ret10": -0.0074,
+    "vol_state": "VIX 16.34 (+9.52% on the day), MID tercile on the trailing-60 bounds [15.8,17.3]; SPY VRP +1.06pp FAIR, QQQ VRP -2.54pp FAIR; BOTH SPY and QQQ dealer SHORT gamma (hand-derived from cumulative per-strike net GEX, twice, independently -- the CLI regime field was corrupted on QQQ). Vol-state only; never a direction.",
+    "breadth_pct_green": 0.2402,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "date": "2026-09-04",
+        "event": "NFP (August jobs report)",
+        "tier": 1,
+        "inside_h10": true
+      },
+      {
+        "date": "2026-09-07",
+        "event": "Labor Day -- market closed",
+        "tier": null,
+        "inside_h10": true
+      },
+      {
+        "date": "2026-09-10",
+        "event": "PPI",
+        "tier": 1,
+        "inside_h10": true
+      },
+      {
+        "date": "2026-09-11",
+        "event": "CPI",
+        "tier": 1,
+        "inside_h10": true
+      },
+      {
+        "date": "2026-09-16",
+        "event": "FOMC decision + SEP dot plot (meeting convenes 09-15)",
+        "tier": 1,
+        "inside_h10": true
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "OI_FADE",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "candidates": [],
+      "note": "STOOD DOWN to diary-only since 2026-08-29; emits no candidates and no watch list. Funnel 1810 liquid -> 1757 earnings -> 1349 issue_type -> 597 build floors -> 588 listing age -> 354 persistence. Diary-only top ranks (NOT suggestions): VSNT 0.969/0.79, CPAY 0.919/0.50, RSI 0.824/0.61, HRI 0.764/0.52, XE 0.702/0.42. Re-signal dedup confirmed again (4 of 5 recur from 08-31); FRT exited at the build-floor gate this time (net_5d +828 < 1000) rather than persistence. PRE-REGISTERED RE-CHECK: count is still 30 COMPLETE lane-exit-days, NOT 31 -- the forming 2026-09-01 exit-day has only 4 of 15 names resolved and counting it moves p from 0.0297 to 0.0651, across the pre-registered line. On the 30 complete days: mean -0.0086, iid t=-2.17 p=0.0297, Newey-West(9) t=-1.39 p=0.165, ex-MSTR/CELH/MARA -0.0063 p=0.0933, negative on 8/10 non-overlapping block offsets. The SAME 30-day cohort read -0.0094/p=0.016 on 08-31 with no new rows (prices.parquet was rebuilt tonight; non-idempotent vendor feed). Recommendation for the 09-05 audit: CONFIRMED on sign, NOT DURABLE on significance; do not record as a BH-surviving formal STOP."
+    },
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "candidates": [
+        "BLDR",
+        "MLM",
+        "QXO",
+        "CPRI",
+        "AMRZ",
+        "ONON",
+        "CRH",
+        "RUN",
+        "LII",
+        "INIO",
+        "JMKE",
+        "CCL",
+        "ESAB",
+        "KRMN",
+        "WYNN",
+        "VICI",
+        "BEPC",
+        "NKE",
+        "FDXF"
+      ],
+      "cluster_id": "construction-materials + consumer-cyclical",
+      "note": "Watch-only, never sizes; the one recorded negative-excess exception. 19 names, ALL orchestrator-verified via chart.py --52w as printing NEW 52-week lows on 2026-09-01 (class-b: fresh low validates the short tag, opposite of the stale-w52h false-short class). All 19 issue_type='Common Stock' -- zero ETP leakage, unlike 2026-08-31. All 19 pass the h10 earnings gate. POWL cut as a genuine class-a artifact (screener pct_52w_range -3.32% vs Yahoo +36.16%, w52_low_date 2025-09-02). Plain-CHOP cell: -0.0212 row-level (n=288), -0.0164 across 25 lane-exit-day, clustered t=-1.85 p=0.065 (the lane reported t=-4.27, which is the ROW-level t, not clustered). Correlation: 10/19 sit in Industrials+Basic Materials (construction/building products), 6/19 Consumer Cyclical -- two themes, not 19 names."
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "candidates": [],
+      "note": "Basket/watch only, never sizes; carries a separate DURABLE-N bar. 147 names after liquidity + issue_type + h10 earnings gates. Energy leads (+1.82%), Healthcare -1.83% and Technology -3.59% lag; no sector above the one-third cap. Plain-CHOP cell: -0.0260 row-level (n=358), -0.0244 across 25 lane-exit-day, clustered t=-2.36 p=0.019 (the lane reported t=-4.43 = row-level). hit-base -0.346 in CHOP."
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "MID VIX tercile; dealer SHORT gamma",
+      "delta_neutral": true,
+      "net_expectancy": 0.00102,
+      "stand_aside_reason": "Dealer gamma SHORT, hand-derived from cumulative per-strike net GEX (total_gex -1.597B; negative at every listed strike 737-786; no flip below spot 761.49). The MID-tercile backtest bucket is stratified by VIX tercile ONLY, not by gamma regime -- the short-gamma trend-acceleration left tail is unsampled by the Mar-May validation window. Net figure shown is gross 0.202%/day less ~0.10% round-trip and is NOT the basis for standing aside."
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "MID VIX tercile; dealer SHORT gamma",
+      "delta_neutral": true,
+      "net_expectancy": 0.00226,
+      "stand_aside_reason": "OVERRIDES zerodte_setup.py, which emitted sell_premium=true / dealer_gamma_regime=LONG / gamma_source=cli for QQQ off a CORRUPTED CLI regime field reading POSITIVE against total_gex -1.064B, with zero_gamma_level=235.03 vs spot 707.58 (~472 points below spot, entirely outside the listed 685-730 strike range). Hand-derived cumulative net GEX is negative at every listed strike; flip sits ~719-720, above spot => SHORT gamma. The script's own gamma_disagreement check returned FALSE and did not catch a flip level outside the listed strikes. Same unsampled short-gamma left tail as SPY."
+    },
+    {
+      "symbol": "NTAP",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "BACKWARDATION 1.299 (73.9%/56.9%)",
+      "delta_neutral": true,
+      "implied_move": 0.1043,
+      "expected_range": 0.145,
+      "suggested_structure": "Defined-risk iron fly on the 2026-09-18 expiry (17 DTE, brackets the 09-02 print), body ATM ~181, wings ~155/210 (~14-15% OTM). Advisory only; wings sized at ~1.4x the floor.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "AGX",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "BACKWARDATION 1.205 (104.2%/86.4%)",
+      "delta_neutral": true,
+      "implied_move": 0.1506,
+      "expected_range": 0.21,
+      "suggested_structure": "Defined-risk iron fly on 2026-09-18 (brackets the 09-02 print), body ATM ~406, wings ~325/490 (~20% OTM). Advisory only.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "OLLI",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "BACKWARDATION 1.261 (72.8%/57.7%)",
+      "delta_neutral": true,
+      "implied_move": 0.103,
+      "expected_range": 0.14,
+      "suggested_structure": "Defined-risk iron fly on 2026-09-18 (brackets the 09-02 print), body ATM ~73, wings ~63/84 (~14% OTM). Advisory only.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "VSXY",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "BACKWARDATION 1.272 (94.4%/74.2%)",
+      "delta_neutral": true,
+      "implied_move": 0.1385,
+      "expected_range": 0.195,
+      "suggested_structure": "Defined-risk iron fly on 2026-09-18 (brackets the 09-03 print), body ATM ~84, wings ~68/101 (~19% OTM). SIZE DOWN -- back months carry only 20-21 contracts.",
+      "stand_aside_reason": null
+    },
+    {
+      "symbol": "BIOX",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "INSUFFICIENT_DATA",
+      "delta_neutral": true,
+      "stand_aside_reason": "Single-contract IV surface: expiry_count=1, contract_count=1, implied_move_perc=424% is an artifact, not a tradeable surface."
+    }
+  ],
+  "watchlist_write_back": [
+    "BLDR",
+    "MLM",
+    "QXO",
+    "CPRI",
+    "AMRZ",
+    "ONON",
+    "CRH",
+    "RUN",
+    "LII",
+    "INIO",
+    "JMKE",
+    "CCL",
+    "ESAB",
+    "KRMN",
+    "WYNN",
+    "VICI",
+    "BEPC",
+    "NKE",
+    "FDXF"
+  ],
+  "report_path": "analyses/scan/2026-09-01/report.md"
+}

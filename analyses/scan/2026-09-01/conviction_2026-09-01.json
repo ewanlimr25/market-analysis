@@ -1,0 +1,110 @@
+{
+  "conviction_date": "2026-09-01",
+  "purpose": "Top conviction (held + near-the-line watch) names from the 2026-09-01 market-scan, persisted for the next run's held-position reconciliation. Sub-agents do not carry open positions -- the orchestrator reconciles this file with scripts/held_book.py at the start of the next scan.",
+  "source_decision_envelope": "analyses/scan/2026-09-01/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": 0,
+    "detail": "FLAT for a 17th consecutive session. No lane in this repo sizes since OI_FADE's 2026-08-22 demotion to advisory and its 2026-08-29 stand-down to diary-only. Phase D (risk-sizer) was VACUOUS and not spawned; fundamentals-gate was correctly not spawned -- it runs only on names about to be sized.",
+    "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-08-31/conviction_2026-08-31.json read 0 positions (0 open, 0 closed) with SPY -0.69% on the day. Verified NOT the known EXIT-substring bug by reading the prior file directly: book_state.positions == 0. The empty result is genuine."
+  },
+  "regime_carry": {
+    "regime": "CHOP",
+    "sub_state": "plain CHOP, NOT CHOP/REBOUND-THRUST -- use the plain-CHOP row for any lane table lookup",
+    "ret5": -0.0054,
+    "ret10": -0.0074,
+    "dd15": -0.0074,
+    "vix": 16.34,
+    "vol_state": "VIX 16.34, +9.52% on the day (a real pop off 08-31's 14.92); MID tercile on zerodte_setup.py's trailing-60 bounds [15.8,17.3] -- yesterday was LOW. SPY VRP +1.06pp FAIR, QQQ VRP -2.54pp FAIR. BOTH SPY and QQQ dealer SHORT gamma, hand-derived twice independently.",
+    "breadth": "1409 adv / 4457 dec (n=5932 non-index), median -1.01%, mean -1.27%; fz breadth 31.4% green. Concordant with a red tape -- not a distribution tell. Median stock fell harder than SPY: broad-based, not narrow mega-cap weakness.",
+    "tape": "SPY 761.78 (-0.687%), QQQ 707.64 (-1.272%), IWM 290.57 (-1.143%). 10d: QQQ -1.38%, SPY -0.74%, IWM -3.22%.",
+    "s1_standdown": false,
+    "directional_tradable": true
+  },
+  "open_call_rows": {
+    "count": 5,
+    "detail": "FDX/GEN/BSY/ITRI (entered 08-14) matured at h10 on 2026-08-28, verified against the SPY trading calendar. AS (entered 08-19) matures 2026-09-02 -- one session away, confirmed NOT yet reached. All five resolvable at the 2026-09-05 audit."
+  },
+  "carry_forward_for_next_scan": [
+    "CRITICAL for the 2026-09-05 audit: OI_FADE_LIVE is at 30 COMPLETE lane-exit-days, not 31. The forming 2026-09-01 exit-day has only 4 of 15 names resolved; counting it moves iid p from 0.0297 to 0.0651, across the pre-registered line. Exclude the forming exit-day or the lane will be misgraded. This is the mirror of the partial-window artifact banned on the lookback side at the 08-22 re-baseline.",
+    "OI_FADE_LIVE's 30-day cohort read -0.0094/p=0.016 on 08-31 and -0.0086/p=0.0297 tonight with NO new rows -- prices.parquet was rebuilt at the top of this scan. Non-idempotent vendor feed. Record the re-check as CONFIRMED on sign, NOT DURABLE on significance; do NOT record it as a BH-surviving formal STOP.",
+    "Baseline reproduces exactly on the exit<=2026-08-21 cohort: OI_FADE +0.0013 (n=1177) and S4 +0.0024 (n=1304) bit-exact. No code drift. Do NOT re-baseline -- the maturity-edge cohort is 7 lane-exit-days, all base-pinned, and its last three days have flipped positive (the pre-registered unwind starting).",
+    "The signal-date cut is the WRONG isolation for this panel: restricting signal dates <=08-21 leaves the h10 lanes bit-identical to the full panel because nothing signalled after 08-21 has matured. Cut by EXIT date.",
+    "zerodte_setup.py's gamma corruption is NOT symbol-stable: it hit SPY on 08-31 and QQQ on 09-01. Its own gamma_disagreement check returned FALSE while zero_gamma_level sat outside the listed strike range -- that range check is the fix worth writing.",
+    "Bracketing-expiry standard clarified: the documented trap is an expiry BEFORE the print (implied_move reads a no-catalyst window). An expiry well AFTER the print captures the event and merely dilutes it, correctable by variance isolation. 08-31's NTAP skip was over-strict; tonight's handling is the correct one."
+  ],
+  "watch_lists": {
+    "MOM_SHORT": {
+      "status": "watch-only, never sizes",
+      "n": 19,
+      "names": [
+        "BLDR",
+        "MLM",
+        "QXO",
+        "CPRI",
+        "AMRZ",
+        "ONON",
+        "CRH",
+        "RUN",
+        "LII",
+        "INIO",
+        "JMKE",
+        "CCL",
+        "ESAB",
+        "KRMN",
+        "WYNN",
+        "VICI",
+        "BEPC",
+        "NKE",
+        "FDXF"
+      ],
+      "note": "All 19 orchestrator-verified as printing NEW 52-week lows on 2026-09-01 (class-b, validates the short tag). All issue_type='Common Stock'. All pass the h10 earnings gate. POWL cut as a class-a stale-data artifact. Correlation: 10/19 construction/building-products, 6/19 consumer cyclical."
+    },
+    "MOM_LONG": {
+      "status": "basket/watch only, never sizes",
+      "n": 147,
+      "note": "Energy leads; Healthcare and Technology lag. No sector above the one-third cap."
+    },
+    "S2": {
+      "status": "advisory, never sizes",
+      "n": 11,
+      "names": [
+        "MA",
+        "TEL",
+        "OWL",
+        "FLUT",
+        "BX",
+        "SW",
+        "PPL",
+        "CHTR",
+        "VSH",
+        "VMRK",
+        "RY"
+      ],
+      "note": "HASI cut on the $50M ADV floor ($35.9M); ADP/XEL/ROST cut on blocking priors. Plain-CHOP cell -0.0005 row-level / -0.0004 across 30 lane-exit-day, t=-0.09 -- indistinguishable from zero."
+    },
+    "S4": {
+      "status": "advisory, right-tail only, never sizes",
+      "n": 26,
+      "note": "Plain-CHOP cell +0.0046 row-level (n=434) / +0.0045 across 30 lane-exit-day, t=+1.01. hit-base -0.030 in CHOP, -0.056 pooled: no hit-rate edge. NINE names sit just above the 250-contract call floor; HBAN's PCR 26.27 rests on a 3.7% call share and its rank is noise. Only WBD/AGNC/NVS/HWM/PSKY/VFC carry deep enough books."
+    },
+    "OI_FADE": {
+      "status": "STOOD DOWN -- diary-only, emits nothing",
+      "n": 0,
+      "diary_only_ranks": [
+        "VSNT",
+        "CPAY",
+        "RSI",
+        "HRI",
+        "XE"
+      ],
+      "note": "NOT suggestions. Funnel 1810->1757->1349->597->588->354. Four of five recur from 08-31 (re-signal dedup). VSNT's build is one-day-dominated (79% on 08-31) and its last call_net is already negative."
+    }
+  },
+  "lane_defects_this_cycle": [
+    "S4 reported a plain-CHOP cell of -0.0008 on n=1064 rows -- arithmetically impossible, since only 584 of its 1396 panel rows carry ANY CHOP label. True cell: +0.0046 (n=434). The lane inverted the sign of its own regime cell.",
+    "Momentum labelled ROW-level t-stats as lane-exit-day clustered (-4.27 / -4.43); the genuine clustered t's are -1.85 and -2.36, before any overlap correction. Its means and hit/base reproduced exactly -- only the clustering unit was wrong.",
+    "S2 cited the 08-31 report's CHOP cell instead of computing one (29 exit-days quoted vs 30 actual).",
+    "S4 shipped ROST at rank 5 while reporting only 6 blocking priors; prior_verdicts.py flags ROST as blocking and the S2 lane independently cut it. Two lanes disagreed on the same name in the same scan."
+  ]
+}
