@@ -1,0 +1,217 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-09-02",
+ "report_kind": "market-scan",
+ "regime": "CHOP",
+ "regime_context": {
+  "regime_label": "CHOP",
+  "ret5": -0.0012,
+  "ret10": -0.0051,
+  "vol_state": "VIX 15.20, -6.98% on the day (full round-trip of 09-01's +9.52% pop to 16.34); LOW tercile on zerodte_setup.py trailing-60 bounds [15.8,17.1] -- yesterday was MID. SPY VRP +0.46pp FAIR, QQQ VRP -2.64pp (IV underpricing realized). BOTH SPY and QQQ dealer SHORT gamma, hand-derived twice independently; QQQ's CLI regime field reads POSITIVE against total_gex -304.9M -- corrupted for the second consecutive night.",
+  "breadth_pct_green": 69.55,
+  "directional_tradable": true,
+  "s1_standdown": false,
+  "event_risk": [
+   {
+    "event": "NFP (August jobs report)",
+    "date": "2026-09-04",
+    "impact": "Tier-1"
+   },
+   {
+    "event": "PPI",
+    "date": "2026-09-10",
+    "impact": "Tier-1"
+   },
+   {
+    "event": "CPI (August)",
+    "date": "2026-09-11",
+    "impact": "Tier-1"
+   },
+   {
+    "event": "FOMC decision + SEP/dot-plot",
+    "date": "2026-09-16",
+    "impact": "Tier-1"
+   },
+   {
+    "event": "Labor Day -- market closed",
+    "date": "2026-09-07",
+    "impact": "holiday"
+   },
+   {
+    "event": "NOTE",
+    "date": "2026-09-02",
+    "impact": "Four Tier-1 macro events sit inside the 10-trading-day horizon; any h10 lane opened today carries all four."
+   }
+  ]
+ },
+ "calls": [],
+ "lane_status": [
+  {
+   "lane": "OI_FADE",
+   "disposition": "STOOD_DOWN",
+   "direction": "short",
+   "regime_fit": 0.0,
+   "candidates": [],
+   "note": "DIARY-ONLY since 2026-08-29; emits no candidates and no watch list. OI_FADE_LIVE now measures -0.0083 across 31 COMPLETE lane-exit-days, t=-2.166, p(iid)=0.0303 -- above the 30-unit bar for the first time. CONFIRMED on sign, NOT DURABLE on significance: the h10 overlap defect (9/10 shared days) roughly halves this t under Newey-West, and the same rows read p=0.016/0.0297/0.0303 on three consecutive nights with no new data. Funnel 6291->1818 liquid->1768 earnings->1351 issue_type->1278 full-window->594 floors->593 age->361 persistence. Diary top ranks (NOT suggestions): RSI 0.981/0.49, VSNT 0.934/0.81, PSNL 0.697/0.24, EMBJ 0.683/0.69, FRVO 0.676/0.62. FIRST live M&A-gate test case: PSNL is a pending ALL-STOCK Tempus AI acquisition (announced 07-20), smooth 5-day build (persistence 0.238) so it does not trip the one-day-dominated trigger, and 5d realized vol 1.86%/day means it is not deal-pinned -- the gate's 'cash deal' language may need widening. Gate-of-death detail: CPAY died at build floors (net_5d +994, six contracts under the 1000 floor); HRI the mirror (net +4076 but persistence flipped 0.52->1.061); HONA died at listing age with the board's highest rel_build 2.206 (Honeywell Aerospace spinoff, IPO 2026-06-16, ~55-57 trading days vs a 60-day floor). AS re-signalled at rank 19/361 on the day its 08-19 row matured."
+  },
+  {
+   "lane": "MOM_SHORT",
+   "disposition": "BASKET_WATCH",
+   "direction": "short",
+   "regime_fit": 1.0,
+   "candidates": [
+    "AS",
+    "TJX",
+    "LOW",
+    "CPRI",
+    "XPEV",
+    "NKE",
+    "ROL",
+    "KRMN",
+    "BLDR",
+    "FDXF",
+    "ONON",
+    "ESAB",
+    "LII",
+    "APTV",
+    "BEPC",
+    "MCD",
+    "HONA",
+    "AAON",
+    "AZO",
+    "SARO",
+    "LHX",
+    "VFC",
+    "RBA",
+    "VICI",
+    "XYL",
+    "BYD",
+    "QNT",
+    "TXT",
+    "JMKE",
+    "CMS",
+    "CRH",
+    "AMRZ",
+    "PEG"
+   ],
+   "note": "Watch-only, never sizes; crash guard NOT fired (s1_standdown=false). 33 names after ORCHESTRATOR Yahoo-verification -- the lane returned 35 and asserted all verified clean. POWL and VMRK cut as hard class-(a) artifacts: POWL's screener week_52_high 612.50 is un-split-adjusted (Yahoo 84.64-328.00), making close/w52_low 0.997 read as a fresh low while the stock sits 2.01x its true 52w low (pct_range 35.3%) -- the SAME name with the SAME defect that 09-01 cut and documented. VMRK's screener range 63.68-68.62 vs Yahoo 57.57-71.50 is too narrow, true range position 52.7%. Fourteen names made NEW 52-week lows on 09-02 (valid class-b, validates the short tag). Sector: Consumer Cyclical 40%, Industrials 37%."
+  },
+  {
+   "lane": "MOM_LONG",
+   "disposition": "BASKET_WATCH",
+   "direction": "long",
+   "regime_fit": 1.0,
+   "candidates": [],
+   "note": "Basket/watch only, never sizes. 171 names after liquidity + issue_type + h10 earnings gate (VOD cut). Sector distribution Healthcare 26.3%, Energy 21.1%, Financial Services 18.7% -- no sector above the 1/3 cap. Not enumerated in candidates[] (basket, not per-name)."
+  }
+ ],
+ "vol_book": [
+  {
+   "symbol": "SPY",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "delta_neutral": true,
+   "vol_state": "LOW tercile, VIX 15.20",
+   "implied_move": 0.0077,
+   "expected_range": 0.0107,
+   "net_expectancy": null,
+   "stand_aside_reason": "Dealers net SHORT gamma (total_gex -233.7M; CLI regime field FULLY_NEGATIVE agrees tonight; zero_gamma_level null, flip not computed). The 60-day backtest is stratified by VIX tercile ONLY, not by gamma regime, so tonight's short-gamma trend-acceleration state has an unsampled left tail whichever tercile it sits in. || implied_move 0.77% / expected_range 1.07% are the short-gamma figures. net_expectancy left null deliberately: the LOW-tercile conditional cannot be quoted because the backtest is not stratified by gamma regime."
+  },
+  {
+   "symbol": "QQQ",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "delta_neutral": true,
+   "vol_state": "LOW tercile, VIX 15.20",
+   "implied_move": 0.0111,
+   "expected_range": 0.0179,
+   "net_expectancy": null,
+   "stand_aside_reason": "CLI regime field reads POSITIVE while total_gex is -304.9M and net_gex_0_45d is -4299.57; zero_gamma_level 256.43 is not a plausible strike against spot 709 and a 686-731 book. Hand-derived SHORT gamma, overriding the tool's sell_premium=true. SECOND CONSECUTIVE NIGHT the corruption hit QQQ (SPY 08-31, QQQ 09-01, QQQ 09-02); zerodte_setup.py's own gamma_disagreement check returned FALSE because it reads the same corrupted field on both sides. || implied_move 1.11% / expected_range 1.79% are the short-gamma figures, hand-derived. net_expectancy left null deliberately: the LOW-tercile pooled figure is long-gamma-contaminated."
+  },
+  {
+   "symbol": "VSXY",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "delta_neutral": true,
+   "vol_state": "rich, IV-rank 100",
+   "implied_move": 0.1594,
+   "expected_range": 0.239,
+   "suggested_structure": "defined-risk iron fly on the 09-18 bracket expiry",
+   "net_expectancy": null,
+   "stand_aside_reason": "none -- prints 09-03, book liquid at 1866 contracts || implied_move is the raw 15.94%; variance isolation cross-checks at 14.8%. expected_range 23.9% is the upper wing (1.5x). Treat as a FLOOR requiring ATM confirmation -- all IVs here are the CLI's mean-across-strikes, not an ATM/median straddle."
+  },
+  {
+   "symbol": "AEO",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "delta_neutral": true,
+   "vol_state": "rich, IV-rank 83",
+   "implied_move": 0.137,
+   "expected_range": 0.205,
+   "suggested_structure": "defined-risk iron fly on the 09-11 bracket expiry",
+   "net_expectancy": null,
+   "stand_aside_reason": "none, but note the genuine before-print trap: the nearest listed expiry 09-04 falls BEFORE the 09-09 print, so the CLI's own front-end IV ratio of 2.41 reads a no-catalyst window and is unusable. Bracketing on 09-11 and isolating event variance gives 13.7%, against a raw 2.74% that is impossible for a 123%-annualized 9-day option (theoretical straddle move ~19%). || implied_move 13.7% is VARIANCE-ISOLATED; the raw implied_move_perc of 2.74% is discarded as internally impossible for a 123%-annualized 9-day option (theoretical straddle move ~19%). expected_range 20.5% is the upper wing. FLOOR requiring ATM confirmation."
+  },
+  {
+   "symbol": "SUNB",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "delta_neutral": true,
+   "vol_state": "rich, IV-rank 92.5",
+   "implied_move": 0.103,
+   "expected_range": 0.155,
+   "suggested_structure": "defined-risk iron fly on 09-18",
+   "net_expectancy": null,
+   "stand_aside_reason": "SIZE DOWN -- front leg only 26 contracts || implied_move is the raw 10.3% used as the floor (variance isolation reads lower at 9.0%). expected_range 15.5% is the upper wing. FLOOR requiring ATM confirmation."
+  },
+  {
+   "symbol": "SHOE",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "delta_neutral": true,
+   "vol_state": "rich, IV-rank 100",
+   "implied_move": 0.234,
+   "expected_range": 0.351,
+   "suggested_structure": "defined-risk iron fly on 09-18",
+   "net_expectancy": null,
+   "stand_aside_reason": "SIZE DOWN MATERIALLY -- back month is 5 contracts, so the variance isolation is low-confidence and execution slippage likely exceeds any net-of-cost edge || implied_move 23.4% is variance-isolated against a raw 13.7% -- a ~1.7x disagreement. expected_range 35.1% is 1.5x the higher figure. FLOOR requiring ATM confirmation."
+  },
+  {
+   "symbol": "ODD",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "delta_neutral": true,
+   "vol_state": "IV-rank 99.9",
+   "implied_move": null,
+   "stand_aside_reason": "SKIP -- 18-contract front leg / 9-contract back leg; a >5x disagreement between raw and isolated is a thin-book mean-IV artifact (far-OTM strikes dominating the average), not signal. Its near expiry 09-04 also falls before the 09-09 print. || Raw implied_move_perc reads 5.7% against a variance-isolated ~34%; both are left null here because neither is usable.",
+   "expected_range": null,
+   "net_expectancy": null
+  },
+  {
+   "symbol": "CGNT",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "delta_neutral": true,
+   "vol_state": "IV-rank 92.0",
+   "stand_aside_reason": "SKIP -- 6-contract front leg / 2-contract back leg; BIOX-class insufficient-data risk despite expiry_count=4 || No usable implied move -- left null.",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null
+  }
+ ],
+ "watchlist_write_back": [
+  "LANE_STATUS[S2_dp_revert] -- recorded here for the same no-schema-slot reason as prior cycles (the lane_status enum admits only MOM_SHORT/MOM_LONG/OI_FADE). disposition=NO_NAME_CLEARED, direction=long, final_size=watch. candidates: UTHR, NSC, WIX, ITW, CI, AIG, NDAQ, ACGL, BMY, SLAB, ACM, HNGE, ZTS, CNI, PCOR, CORZ, GEO, BPOP, INDV, AMCR, CBZ, L, AER, ONC, HESM, CNK, ALV, SLF, PFG, BTG. Advisory-only, never sizes. 60 names cleared every gate -- the LANE RETURNED 0 and was materially WRONG (second occurrence of the identical failure; 2026-08-24 recorded S2 returning '25 raw -> 4 -> 0, lane empty' against 105 ground-truth names). It cited NVDA 54.8%/MU 55.6%/SNDK 60.8%/DELL 52.8% as evidence nothing cleared -- those are the top names by dark-pool VOLUME, not concentration; it ranked the wrong column and inspected four mega-caps instead of screening the panel. Orchestrator ground truth: 141 names at dp_oneside>=0.90; 62 also clear dp_prem>=$10M + Common Stock + price>=$5; all 62 pass the $50M ADV floor; 60 after the h5 earnings gate (ASO 09-09 and PVH 09-02 blocked). candidates[] lists the top 30 by DP premium; 30 further names cleared. Plain-CHOP cell remains indistinguishable from zero.",
+  "LANE_STATUS[S4_pcr_fade] -- recorded here for the same no-schema-slot reason as prior cycles (the lane_status enum admits only MOM_SHORT/MOM_LONG/OI_FADE). disposition=NO_NAME_CLEARED, direction=long, final_size=watch. candidates: WMB, CNM, FAST, EXE, PWR, EVRG, ZION, DBX, UBS, APH, TMO, BTU, ARES, GXO, SRE, PRU, EQNR, INFY, AMRZ. Advisory-only, never sizes; RIGHT-TAIL ONLY -- hit-base is -0.030 in CHOP and -0.056 pooled, so the lane has NEVER had a hit-rate edge on this panel. Reproduced by the orchestrator at the SHIPPED 250-contract call floor: the lane applied a 350 floor on its own authority and separately omitted CNM (PCR 12.42 on 1302 calls, prior_verdicts clean) with no stated reason. Six names sit in the 250-350 noise zone where PCR rank is not meaningful and are excluded here: DT 313, BAM 317, WIX 332, EXPE 331, PNC 313, BUD 291. AMRZ is simultaneously on tonight's MOM_SHORT watch list -- cross-lane contradiction, NOTED NEVER NETTED. The lane's 5 'prior blocking' cuts (ZION/DBX/AMRZ/GXO/INFY) were mostly false flags from the prior_verdicts.py defect recorded in the report; INFY's real 08-31 flag (PCR 20.68 on 251 calls) no longer applies -- it has 660 calls tonight.",
+  "OI_FADE_LIVE re-check now stands at 31 COMPLETE lane-exit-days: -0.0083, t=-2.166, p(iid)=0.0303. Above the 30-unit bar. CONFIRMED on sign, NOT DURABLE on significance -- do NOT record as a BH-surviving formal STOP.",
+  "PARTIAL-EXIT-DAY TRAP RECURRED, one day later. 2026-09-02 is forming at 10/15 resolved and reads +0.0226; including it moves p 0.0303 -> 0.0557, across the pre-registered line. Last night the 09-01 day was forming at 4/15; it has now COMPLETED at 15/15 and reads +0.0083, so excluding it was correct and barely changed the result. Exclude forming exit-days BY RULE, not by nightly judgment -- the resolved fraction at the maturity edge is systematically the fast half of the cohort.",
+  "All 5 open call rows are now matured: AS (entered 08-19) reached h10 on 2026-09-02, verified against the SPY trading calendar. Open-call count goes to ZERO at the 2026-09-05 audit.",
+  "BASELINE COHORT NO LONGER REPRODUCES BIT-EXACTLY ON ROW COUNTS, only on means. exit<=2026-08-21: MOM_LONG -4, MOM_SHORT -4, S2 -12, S4 -1; OI_FADE bit-exact for a second night. Cause is the spine contracting to 2443 priced tickers (28 UNPRICED) against the baseline's 2471 -- the documented non-idempotent vendor feed, with EQR again unresolvable. Means unchanged to 4dp, so this is attrition, not decay. Do NOT re-baseline.",
+  "prior_verdicts.py DEFECT (new): reports FALSE blocking verdicts, two heads. (1) Single-letter tickers defeat the word-boundary matcher -- ticker L matches \\bL\\b inside 'P&L' because & is a non-word char. (2) The blocking keyword is scoped to the PASSAGE, not the ticker, so any name in a sentence vetoing some OTHER name inherits a false block: DBX was flagged off a passage that explicitly CLEARS DBX while vetoing AVB/BAH. This cost S4 five names tonight. Fix: scope the keyword search to the ticker's own clause, and require len(ticker)>=2 for free-text matching.",
+  "earnings_gate.py has no lower bound (elif ned <= end), so a print on or before the signal date blocks with a reason string naming a forward window that does not contain the date (PVH 09-02 'inside h5 (09-03..09-10)'). Conservative outcome, mislabeled reason; a STALE past next_earnings_date would over-block silently.",
+  "S2 lane returned 0 against a ground truth of 60 -- SECOND occurrence of the identical failure mode (2026-08-24 was the first). It ranks by dark-pool VOLUME and inspects a few mega-caps instead of screening dp_oneside across the panel. Consider whether this lane's output should be orchestrator-reproduced by default.",
+  "MOM_SHORT lane re-admitted POWL, the exact name 09-01 cut and documented as an un-split-adjusted week_52_high artifact, and asserted it Yahoo-verified clean. The correct verification is SCREENER BOUNDS vs YAHOO BOUNDS, not a pct_range threshold -- a threshold alone would have wrongly cut five valid fresh-low names (JMKE/CMS/CRH/AMRZ/PEG).",
+  "FIRST live M&A-gate test case since the gate shipped 2026-08-01: PSNL, a PENDING ALL-STOCK Tempus AI acquisition. The gate's language targets a CASH deal pinned at the deal price; PSNL's 5d realized vol is 1.86%/day so it is not pinned, and its smooth build (persistence 0.238) does not trip the one-day-dominated trigger. Gate-design question for the audit: widen 'cash' to 'any definitive agreement'?",
+  "zerodte_setup.py gamma corruption hit QQQ for the SECOND consecutive night (SPY 08-31, QQQ 09-01, QQQ 09-02). Its own gamma_disagreement check returns FALSE because it reads the same corrupted field on both sides. The range check on zero_gamma_level (256.43 against a 686-731 strike book) remains the fix worth writing."
+ ],
+ "report_path": "analyses/scan/2026-09-02/report.md"
+}
