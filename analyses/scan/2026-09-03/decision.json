@@ -1,0 +1,231 @@
+{
+  "schema_version": "2.0",
+  "report_date": "2026-09-03",
+  "report_kind": "market-scan",
+  "regime": "CHOP",
+  "regime_context": {
+    "regime_label": "CHOP",
+    "ret5": 0.00268,
+    "ret10": 0.01386,
+    "vol_state": "LOW (VIX 14.32, trailing-60 tercile bounds [15.8, 17.1]). Dealer gamma hand-derived LONG/positive on BOTH SPY and QQQ from total_gex + per-strike ladder (SPY +1.070B total_gex, 17/19 near-money strikes positive; QQQ +360M, 20/21 positive). The uw gex `regime` FIELD is corrupted on SPY tonight -- it reads NEGATIVE against its own positive total_gex, the 4th consecutive night of field corruption and the first in the INVERTED direction. QQQ's `regime` field is correct but its zero_gamma_level (276.37 vs a 696-739 ladder) is garbage for a 3rd consecutive night.",
+    "breadth_pct_green": 67.4,
+    "directional_tradable": true,
+    "s1_standdown": false,
+    "event_risk": [
+      {
+        "event": "NFP",
+        "date": "2026-09-04",
+        "impact": "Tier-1",
+        "note": "tomorrow"
+      },
+      {
+        "event": "Labor Day",
+        "date": "2026-09-07",
+        "impact": "market holiday",
+        "note": "market closed; eats a session out of every h3/h5/h10 window opened today"
+      },
+      {
+        "event": "PPI",
+        "date": "2026-09-10",
+        "impact": "Tier-1",
+        "note": ""
+      },
+      {
+        "event": "CPI",
+        "date": "2026-09-11",
+        "impact": "Tier-1",
+        "note": ""
+      },
+      {
+        "event": "FOMC decision + dot-plot",
+        "date": "2026-09-16",
+        "impact": "Tier-1",
+        "note": "an h10 window opened today (09-04..09-18) carries all four Tier-1 events"
+      }
+    ]
+  },
+  "calls": [],
+  "lane_status": [
+    {
+      "lane": "MOM_SHORT",
+      "disposition": "BASKET_WATCH",
+      "direction": "short",
+      "regime_fit": 1.0,
+      "note": "Watch-only, never sizes. s1_standdown=false so the leg is NOT crash-gated tonight. 19 names after the orchestrator REBUILT the funnel: the lane returned 17, of which 2 were bond ETFs it leaked (SPHY, USFR -- issue_type=ETF in the screener) and it wrongly CUT 4 valid names (XPEV, AS, FDXF, MCD) by inverting the artifact test. All four made a NEW 52-week low on 2026-09-03, Yahoo-verified per name: the screener w52l sits above Yahoo's BECAUSE of the new low, which is the documented fresh-low class that VALIDATES the short tag, not the stale-w52h class that manufactures false shorts. Funnel: 6292 screener -> 284 at close<=1.02*w52l -> 79 Common/ADR (205 ETPs cut) -> 50 at close>=$5 -> 19 at the $50M 20d $-ADV floor -> 19 after the h10 earnings gate (0 blocked). Sector: Consumer Cyclical 42.1%, Industrials 36.8% (79% in two sectors). Near-misses at the liquidity floor: JMKE $49.8M, OLN $47.5M, SNN $46.7M, BILI $43.6M.",
+      "candidates": [
+        "AMTM",
+        "AS",
+        "BEPC",
+        "CCL",
+        "ESAB",
+        "FDXF",
+        "KRMN",
+        "LHX",
+        "LOW",
+        "MCD",
+        "MLM",
+        "PEG",
+        "RBA",
+        "ROL",
+        "TJX",
+        "TXT",
+        "VFC",
+        "VICI",
+        "XPEV"
+      ],
+      "cluster_id": null
+    },
+    {
+      "lane": "MOM_LONG",
+      "disposition": "BASKET_WATCH",
+      "direction": "long",
+      "regime_fit": 1.0,
+      "note": "Basket/watch only, never sizes. 201 names, NOT the 310 the lane returned -- it cut only 56 names as ETPs when the true issue_type cut is 203, leaking 147 non-Common names. Two independent paths converge on 201: screener path 1416 at close>=0.95*w52h -> 421 Common/ADR -> 413 at close>=$5 -> 201 post-liquidity; features path 404 candidates -> 201 Common/ADR. CCEP and VOD are FALSE earnings blocks and ARE counted in the 201: earnings_gate.py blocked them citing prints of 2026-08-04 and 2026-07-27, both in the PAST, with the reason string 'inside h10 (2026-09-04..2026-09-18)' -- a window containing neither date. That is the documented no-lower-bound defect firing on a stale next_earnings_date. Sector: Financial Services 24.9%, Healthcare 23.9%, Energy 14.4%, Technology 13.9% -- all within the 1/3 cap.",
+      "candidates": [],
+      "cluster_id": null
+    },
+    {
+      "lane": "OI_FADE",
+      "disposition": "STOOD_DOWN",
+      "direction": "short",
+      "regime_fit": 0.0,
+      "note": "STOOD DOWN to diary-only since 2026-08-29. ZERO candidates, ZERO watch list, empty slate to the sizer. The pre-registered re-check now stands at 32 COMPLETE lane-exit-day (no partial days tonight): mean -0.0080, t=-2.141, p(iid)=0.0402, versus 31 days / -0.0083 / p=0.0303 last night. p has drifted 0.016 -> 0.0297 -> 0.0303 -> 0.0402 across four nights on substantially the same rows, and the last three complete exit-days read -0.0102, +0.0098, +0.0136 (two of three positive) -- the pre-registered unwind showing up in the lane's own evidence. CONFIRMED on sign and above the 30-unit bar, but NOT durable on significance: the h10 overlap defect (9/10 shared days) roughly halves this t under Newey-West. Do NOT record a BH-surviving formal STOP. Partial-day bias confirmed a THIRD time and its direction is now measured: the 09-02 exit-day read +0.0226 at 10/15 and +0.0136 complete at 15/15, so the fast-resolving half is systematically the better half for a short lane. A COMPLETED exit-day also moved overnight (09-01: +0.0083 -> +0.0098 at 15/15 both nights), the non-idempotent vendor feed now touching a frozen unit. Funnel: 6292 -> 1814 liquidity -> 1774 earnings -> 1358 issue_type -> 1281 full-5d-window -> 599 build floors -> 576 listing age -> 360 persistence. Diary-only top ranks by oi_rel_build (NOT suggestions): AGX 0.956/0.809, RSI 0.893/0.519, WSC 0.756/0.413, FRVO 0.635/0.630, ESI 0.400/0.693.",
+      "candidates": [],
+      "cluster_id": null
+    }
+  ],
+  "vol_book": [
+    {
+      "symbol": "SPY",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile (VIX 14.32, bounds [15.8, 17.1]); dealer gamma LONG/positive (total_gex +1.070B, ladder sum +1.305B, 17/19 near-money strikes positive)",
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "STAND ASIDE. The 09-02 rationale (short-gamma trend-acceleration, unsampled left tail) does NOT apply -- SPY is long gamma tonight, a vol-SUPPRESSING lean. What binds is the standing structural objection: zerodte_setup.py's 60-day backtest is stratified by VIX tercile ONLY, never by gamma regime, so its LOW-tercile conditional mean pools long- and short-gamma sessions. No conditional statistic exists for tonight's actual (LOW-VIX x long-gamma) state, and quoting the pooled one would cite a different regime than the live one. zerodte_setup.py independently returns size_scalar=0.0. Note the vol-book lane read this backwards, concluding SHORT gamma by treating zero_gamma_level (774.24) as ground truth over total_gex; arbitrated by the orchestrator from the raw per-strike ladder.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "QQQ",
+      "lane": "vol_0dte",
+      "sell_premium": false,
+      "vol_state": "LOW tercile; dealer gamma LONG/positive (total_gex +360M, 20/21 near-money strikes positive)",
+      "net_expectancy": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "STAND ASIDE. Same VIX-tercile-only stratification objection as SPY. Separately, zero_gamma_level reads 276.37 against a 696-739 strike ladder -- an impossible value and the 3rd consecutive night of corruption in that specific field. zerodte_setup.py returns size_scalar=0.0 and its own gamma_disagreement fires.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "AEO",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "print 2026-09-09; bracketing expiry 09-11 (259 contracts), next leg 09-18 (187)",
+      "implied_move": 0.138,
+      "suggested_structure": "advisory sell-vol, iron fly on 09-11, wings >=1.4x the 13.8% floor",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "JMKE",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "print 2026-09-09; bracketing expiry 09-18 (207 contracts), next leg 10-16 (78). New tonight; best book depth of the cohort, raw 9.1% and isolated 7.9% converge (ratio 1.15)",
+      "implied_move": 0.079,
+      "suggested_structure": "advisory sell-vol, iron fly/short strangle on 09-18",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "SUNB",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "print 2026-09-09; bracketing expiry 09-18 (134 contracts), next leg 10-16 (32)",
+      "implied_move": 0.119,
+      "suggested_structure": "advisory, SIZE DOWN -- only one usable near expiry, 6 days of pre-event decay",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "SHOE",
+      "lane": "vol_earnings",
+      "sell_premium": true,
+      "vol_state": "print 2026-09-10; bracketing expiry 09-18 (81 contracts), next leg 10-16 (33)",
+      "implied_move": 0.236,
+      "suggested_structure": "advisory, SIZE DOWN MATERIALLY -- ~1.7x internal disagreement (13.7% vs 23.6%) persists; wing to the higher number",
+      "stand_aside_reason": null,
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ODD",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "print 2026-09-09",
+      "implied_move": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "SKIP -- thin-book mean-IV artifact: 16-contract bracketing leg (09-11), 3-contract next-out. Raw implied_move_perc 4.2% also sits under the bracketing-expiry trap (nearest expiry 09-04 precedes the print).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "CGNT",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "print 2026-09-09",
+      "implied_move": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "SKIP -- 4-contract front leg (09-18), 1-contract next-out (11-20). Thinner tonight than 09-02's 6/2.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ZUMZ",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "print 2026-09-10",
+      "implied_move": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "SKIP -- 1-contract front leg (09-18).",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "ANIX",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "print 2026-09-09",
+      "implied_move": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "SKIP -- 3-contract front leg (09-18), 5-contract next-out.",
+      "delta_neutral": true
+    },
+    {
+      "symbol": "MNY",
+      "lane": "vol_earnings",
+      "sell_premium": false,
+      "vol_state": "print 2026-09-11",
+      "implied_move": null,
+      "suggested_structure": null,
+      "stand_aside_reason": "EXCLUDED -- raw implied_move_perc 172.8% is impossible for a listed name; zero bullish/bearish premium and zero OI change. Zero-book artifact.",
+      "delta_neutral": true
+    }
+  ],
+  "watchlist_write_back": [
+    "AMTM",
+    "AS",
+    "BEPC",
+    "CCL",
+    "ESAB",
+    "FDXF",
+    "KRMN",
+    "LHX",
+    "LOW",
+    "MCD",
+    "MLM",
+    "PEG",
+    "RBA",
+    "ROL",
+    "TJX",
+    "TXT",
+    "VFC",
+    "VICI",
+    "XPEV"
+  ],
+  "report_path": "analyses/scan/2026-09-03/report.md"
+}

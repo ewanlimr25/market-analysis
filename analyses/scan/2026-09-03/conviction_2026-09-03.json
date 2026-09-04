@@ -1,0 +1,84 @@
+{
+  "conviction_date": "2026-09-03",
+  "purpose": "Carry-forward state for the next /market-scan. Sub-agents do not carry open positions; the orchestrator reconciles this file at the top of the next run via scripts/held_book.py --prior.",
+  "source_decision_envelope": "analyses/scan/2026-09-03/decision.json",
+  "book_state": {
+    "positions": 0,
+    "all_shorts": 0,
+    "detail": "FLAT for a 19th consecutive session. No lane in this repo sizes since OI_FADE's 2026-08-22 demotion to advisory and its 2026-08-29 stand-down to diary-only. Phase D (risk-sizer) was VACUOUS and not spawned; fundamentals-gate was correctly not spawned -- it runs only on names about to be sized.",
+    "prior_reconciliation": "scripts/held_book.py --prior analyses/scan/2026-09-02/conviction_2026-09-02.json read 0 positions (0 open, 0 closed). Verified NOT the known EXIT-substring bug by reading the prior file directly: book_state.positions == 0 at source. NOTE: held_book.py printed 'as of 2026-09-02 (SPY +0.44% on the day)' -- that is 09-02's move, because the script reads the daily-bar panel which never received a 09-03 bar (see data_integrity)."
+  },
+  "regime_carry": {
+    "label": "CHOP",
+    "ret5": 0.00268,
+    "ret10": 0.01386,
+    "dd15": -0.00108,
+    "s1_standdown": false,
+    "directional_tradable": true,
+    "spy_close": 773.17,
+    "qqq_close": 717.67,
+    "iwm_close": 295.19,
+    "vix_close": 14.32,
+    "warning": "These figures are HAND-COMPUTED from a reconstructed 09-03 close, not from regime_check.py, which returns a STALE 09-02 answer tonight. The reimplementation reproduces the shipped _regime.classify_regime bit-exactly on 09-02, which is what licenses it. ret10 +1.386% is only 11bp under the +1.5% UPTREND threshold -- one more up-session flips the regime label and with it every lane's regime_fit, and for OI_FADE the SIGN of its regime-conditional prior (plain CHOP -0.0010 vs CHOP/REBOUND-THRUST +0.0098)."
+  },
+  "open_call_rows": {
+    "count": 0,
+    "detail": "Zero open call rows. All five (FDX/GEN/BSY/ITRI matured 08-28; AS matured 09-02) are resolvable at the 2026-09-05 audit."
+  },
+  "data_integrity": {
+    "headline": "Yahoo's DAILY-bar array was never backfilled for 2026-09-03, and preflight.py cleared it anyway.",
+    "detail": "build_prices.py wrote 2,443 tickers but only 8 with a 09-03 bar (ADEA, APH, FXO, HUBB, JMST, PHYS, SHEL, VCX). prices.parquet, chart.py, held_book.py and regime_check.py all therefore still read 09-02. preflight.py reported '[ok] prices.parquet -> 2026-09-03' and printed 'clear' because it checks max(date) across ALL tickers -- 8 backfilled names out of 2,443 were enough to pass. This is a FALSE CLEAR on the one check that exists to stop a lane reading a stale panel. Proposed fix: scope the check to ticker='SPY', or require a coverage fraction.",
+    "session_recovered_from": "meta.regularMarketPrice (regularMarketTime 20:00 UTC = 16:00 ET official close) AND the 5-minute array (range=2d&interval=5m, 79 bars). Both agree EXACTLY on SPY/QQQ/IWM. ^VIX's daily bar IS populated (14.32), which is how the daily/intraday split was isolated.",
+    "not_patched": "prices.parquet was deliberately NOT patched with reconstructed bars -- that would contaminate the regression gate's own history to fix a one-session display lag.",
+    "hz_end_impact": "_calendar.hz_end builds its grid from SPY in prices.parquet, so the grid ends 09-02 and every horizon from 09-03 is EXTRAPOLATED on a 5-day week. Verified against the true NYSE calendar incl. Labor Day 09-07: h5 -> 2026-09-11 CORRECT, h10 -> 2026-09-18 CORRECT (the +1 outward rounding happens to absorb the holiday), but h3 -> 2026-09-08 against a true 2026-09-09, i.e. ONE SESSION SHORT and FAILING OPEN. Nothing gated on h3 tonight so no name leaked, but this is a live fail-open whenever a holiday sits inside an h3 window while the panel edge lags.",
+    "exit_grid_impact": "The 09-03 exit day is missing from the exit-day grid entirely (dates jump 09-02 -> 09-04) and extrapolated exit dates include SATURDAYS (09-05, 09-12). Both are confined to unresolved future rows, which are excluded from every statistic, so the clustering key is sound for every row that enters a number."
+  },
+  "carry_forward_for_next_scan": [
+    "FIRST: re-run preflight AND check SPY's own last bar (`select max(date) from prices.parquet where ticker='SPY'`). Tonight preflight printed 'clear' while SPY was a full session stale. Do not trust the bare 'clear'.",
+    "OI_FADE_LIVE's re-check now stands at 32 COMPLETE lane-exit-day (zero partial days tonight): -0.0080, t=-2.141, p(iid)=0.0402. p has drifted 0.016 -> 0.0297 -> 0.0303 -> 0.0402 across four nights on substantially the same rows, and the last three complete exit-days read -0.0102, +0.0098, +0.0136 (two of three positive). CONFIRMED on sign and above the 30-unit bar; NOT durable on significance -- the h10 overlap defect (9/10 shared days) roughly halves this t under Newey-West. Do NOT record a BH-surviving formal STOP.",
+    "THE PARTIAL-EXIT-DAY BIAS IS NOW CONFIRMED THREE TIMES AND ITS DIRECTION IS MEASURED. The 09-02 exit-day read +0.0226 at 10/15 resolved and +0.0136 complete at 15/15 -- admitting the slow half pulled it DOWN, so the fast-resolving half is systematically the BETTER half for a short lane. Same as 09-01 and 08-31. Write the exclusion into the harness rather than re-catching it nightly.",
+    "A COMPLETED exit-day moved overnight: 09-01 read +0.0083 last night at 15/15 and +0.0098 tonight at 15/15. The non-idempotent vendor feed is now visibly touching a FROZEN, fully-resolved unit, not just dropping rows from the baseline cohort.",
+    "Regression-gate row attrition has nearly STOPPED. vs last night: MOM_LONG 1209 -> 1208 (-1); MOM_SHORT 826, S2 1257, S4 1303, OI_FADE 1177 all UNCHANGED. Spine held at 2,443 with the same 28 unpriced names. Means reproduce to 4dp on every lane. Attrition, not decay -- and decelerating.",
+    "The `base` PINNING IS AN h10 PHENOMENON, NOT A WHOLE-PANEL ONE, and S2/S4 are the control that proves it. On exit>08-21: MOM_LONG base 0.00 and every short h10 lane base 1.00 (SPY down in 100% of new h10 windows), but S2 (h3-5) base 0.37 and S4 (h5-10) base 0.38 -- not pinned. Prior write-ups described this as a panel-wide property; it is a property of the h10 window set.",
+    "REGIME IS 11bp FROM FLIPPING. ret10 +1.386% against the +1.5% UPTREND threshold. A flip changes every lane's regime_fit and inverts the SIGN of OI_FADE's regime-conditional prior. Check this first tomorrow.",
+    "momentum lane FAILED verification in three ways and its self-attestation was false. (1) It CUT four valid names -- XPEV, AS, FDXF, MCD -- by inverting the artifact test; all four made a NEW 52-week low on 09-03 (Yahoo-verified), the fresh-low class that VALIDATES the short tag. Last night it under-cut and admitted two artifacts; tonight it over-corrected. (2) It leaked two bond ETFs (SPHY, USFR) into its 'final verified' MOM_SHORT list while claiming features.parquet 'lacks issue_type' -- the SCREENER has it. (3) MOM_LONG: cut 56 as ETPs against a true issue_type cut of 203, leaking 147 non-Common names into a 310-name list whose correct size is 201. It claimed '17 of 17 and 310 of 310 Yahoo-verified' inside 19 total tool calls.",
+    "vol-book lane INVERTED the SPY gamma sign, concluding 'the regime field is NOT corrupted tonight' by treating zero_gamma_level (774.24) as ground truth over total_gex. SPY's field reads NEGATIVE against its own +1.070B total_gex, +1.305B ladder sum and 17/19 positive near-money strikes -- corruption by definition, 4th consecutive night, and the FIRST in the inverted direction (prior nights claimed POSITIVE over a negative total_gex). Its stand-aside verdict was still right, on a rationale that inverts the tape.",
+    "NEW DEFECT -- the OI lane's listing-age gate is not measuring listing age. It cut 23 names tonight (vs 0-1 prior nights) via an nrows>=60 floor that counts FEATURES-PANEL ROWS, not sessions since IPO. NVAX is the clean proof: 20 rows spanning the ENTIRE 102-date panel, first row on the panel's very first day -- a name present from day one cannot be a recent listing. DLB (listed 2005) carried the highest raw oi_rel_build on the board, 4.418, and died here. Only HONA among the 23 is genuinely young.",
+    "PSNL -- the carried-forward M&A-gate test case -- never reached the M&A gate for a THIRD cycle, dying at that same spurious listing-age gate. The 'cash' vs 'any definitive agreement' language question is still unresolved and is now blocked by an unrelated defect rather than by judgment.",
+    "catalyst_split.py's `>=` print-day boundary bug FIRED LIVE tonight on the lane's #1 name (first live instance in three nights). AGX printed 09-02 and 80.9% of its 5-day net (+4,275 of +5,287) landed on the print day: `>=` gives post-share 84.9% -> LIVE_BUILD, strict `>` gives 4.1% -> RESOLVED_PRE_PRINT. Opposite verdicts, verified from the raw OI panel.",
+    "earnings_gate.py's no-lower-bound defect now has LIVE VICTIMS: CCEP and VOD were blocked from MOM_LONG citing prints of 2026-08-04 and 2026-07-27 -- both in the PAST -- with the reason string 'inside h10 (2026-09-04..2026-09-18)', a window containing neither date. Stale next_earnings_date + no lower bound = silent over-blocking. Both are counted in the corrected 201.",
+    "S2 and S4 both PASSED verification tonight. S2's funnel reproduced EXACTLY (159 at dp_oneside>=0.90 -> 107 -> 91 -> 91), its first clean run after wrong 'lane empty' returns on 08-24 and 09-02. S4 used the shipped 250-contract floor (it wrongly applied 350 on 09-02) and correctly refused all six false prior_verdicts flags. Its 'all 1,814 pass liquidity' claim checks out -- build_features.py applies that floor at build time.",
+    "Cross-lane contradictions to carry (noted, NEVER netted): XPEV, VFC, ROL are simultaneously on the MOM_SHORT watch list and in the S4 long pool; PCOR and WIX appear in both S4 and S2.",
+    "Dealer gamma is LONG on BOTH indices tonight -- a vol-suppressing lean, NOT the short-gamma trend-acceleration state of the prior three sessions. The 09-02 stand-aside rationale does not transfer; what binds is that zerodte_setup.py's backtest is stratified by VIX tercile ONLY, never by gamma regime, so no conditional statistic exists for tonight's (LOW-VIX x long-gamma) state.",
+    "RSI is top-5 in the OI diary for a THIRD consecutive night (rank 3 -> 1 -> 2). Structural re-signal dedup / forward-N cap, not fresh evidence.",
+    "Next audit due 2026-09-05 (two sessions away, and 09-04 is the last session before it). Zero open call rows; the suppressed-candidate cohort is the only one that grows."
+  ],
+  "watch_lists": {
+    "MOM_SHORT": ["AMTM","AS","BEPC","CCL","ESAB","FDXF","KRMN","LHX","LOW","MCD","MLM","PEG","RBA","ROL","TJX","TXT","VFC","VICI","XPEV"],
+    "MOM_SHORT_note": "19 names, orchestrator-rebuilt. Watch-only, never sizes. 79% Consumer Cyclical + Industrials.",
+    "MOM_LONG_count": 201,
+    "MOM_LONG_note": "Basket/watch only. Financial Services 24.9%, Healthcare 23.9%, Energy 14.4%, Technology 13.9% -- all within the 1/3 cap.",
+    "S2_count": 91,
+    "S2_top": ["UNH","ADP","WULF","CB","AMGN"],
+    "S4_count": 31,
+    "S4_top": ["BURL","HBAN","MDLN","ECHO","LUV","CPNG","FAST","XPEV","VFC","JCI"],
+    "S4_noise_zone": ["MDLN","PCOR","FRPT","KVUE","TWST","TSEM"],
+    "OI_FADE": [],
+    "OI_FADE_note": "STOOD DOWN, diary-only. Zero candidates, zero watch list, by design."
+  },
+  "lane_defects_this_cycle": {
+    "failed_verification": ["momentum", "vol-book"],
+    "passed_verification": ["regime-classifier", "oi-flow-fade", "liquidity-reversion", "sentiment-contrarian"],
+    "tooling_defects": [
+      "preflight.py: global-max false clear (NEW) -- 8 of 2,443 backfilled tickers cleared the stale-panel gate",
+      "_calendar.hz_end: h3 fails OPEN across a holiday at the panel edge (NEW) -- 09-08 vs a true 09-09",
+      "OI listing-age gate measures features-panel coverage, not listing age (NEW) -- 23 names cut, ~1 genuinely young",
+      "catalyst_split.py `>=` print-day boundary FIRED LIVE (known, first live instance in three nights)",
+      "earnings_gate.py no-lower-bound over-blocking on stale dates (known, first live victims: CCEP, VOD)",
+      "uw gex `regime` field corrupted on SPY, INVERTED direction (4th consecutive night, new instrument)",
+      "uw gex `zero_gamma_level` corrupted on QQQ: 276.37 vs a 696-739 ladder (3rd consecutive night)",
+      "uw risk market-regime broken outright: spy.current=0, change_30d_pct=-100",
+      "uw historical vrp realised_vol unusable (~290% annualized, non-monotonic in the window parameter)"
+    ]
+  }
+}
