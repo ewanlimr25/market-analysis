@@ -1,0 +1,196 @@
+{
+ "schema_version": "w1.0",
+ "report_kind": "weekly-review",
+ "iso_week": "2026-W36",
+ "report_date": "2026-09-04",
+ "report_path": "analyses/weekly/2026-W36/report.md",
+ "week_context": {
+  "weekly_candles": [
+   {
+    "symbol": "SPY",
+    "w_open": 767.33,
+    "w_high": 774.03,
+    "w_low": 759.48,
+    "w_close": 770.19,
+    "w_ret": 0.003727,
+    "close_pos": 0.736,
+    "body_frac": 0.197,
+    "structure_vs_prior": "lower_low (undercut 08-24's 762.08 low) then closed ABOVE last week's close -- undercut-and-reclaim. hammer/hanging: lower wick 7.85 vs body 2.86. follow_through=True. n_days=5."
+   },
+   {
+    "symbol": "QQQ",
+    "w_open": 715.17,
+    "w_high": 721.86,
+    "w_low": 704.66,
+    "w_close": 718.96,
+    "w_ret": 0.005299,
+    "close_pos": 0.831,
+    "body_frac": 0.22,
+    "structure_vs_prior": "INSIDE week (held both 08-24 extremes 702.70/724.13) -- diverges from SPY/IWM which made lower lows. hammer/hanging. follow_through=True."
+   },
+   {
+    "symbol": "IWM",
+    "w_open": 295.09,
+    "w_high": 296.18,
+    "w_low": 289.97,
+    "w_close": 296.01,
+    "w_ret": 0.003118,
+    "close_pos": 0.973,
+    "body_frac": 0.148,
+    "structure_vs_prior": "lower_low, closed at the very top of the weekly range (cpos 0.97). hammer/hanging, lower wick 5.12 vs body 0.92. follow_through=False (reverses last week's -1.27%)."
+   }
+  ],
+  "catalysts": [
+   {
+    "event": "ISM Manufacturing PMI (Aug) 54.6, -1.0pt from Jul 55.6, 8th straight expansion",
+    "date": "2026-09-02",
+    "weekday": "Wed",
+    "price_reaction": "SPY +0.44%, QQQ +0.23%, IWM +1.18% -- first up-day of the week, off Tuesday's weekly low."
+   },
+   {
+    "event": "ADP private payrolls (Aug) +38K, weakest since January, vs +47K expected",
+    "date": "2026-09-02",
+    "weekday": "Wed",
+    "price_reaction": "Soft labour print read dovish; combined with ISM it turned the tape. Set up Thursday's rally."
+   },
+   {
+    "event": "NFP (Aug) +162K vs +53K expected -- 3x consensus; unemployment 4.1% unchanged; Jun/Jul revised UP",
+    "date": "2026-09-04",
+    "weekday": "Fri",
+    "price_reaction": "REVERSAL-AFTER-CATALYST: SPY -0.39%, Dow -0.51%, Nasdaq -0.29%. Treasury yields jumped; Sept rate-HIKE odds reset to ~63%. Friday retraced 26% of the Wed+Thu +1.49% dovish rally. The week's high (774.03) was made Thursday, the day BEFORE the print."
+   }
+  ],
+  "regime_trajectory": "CHOP all five sessions (regime_check.py --range 2026-08-31:2026-09-04). ret10 -0.730% (Mon) -> +0.580% (Fri); dd15 -1.300% -> -0.510%. s1_standdown=False every day, so the crash guard never armed. Path: down Mon-Tue (SPY -0.30%, -0.69%; weekly low 759.48 on Tue), up Wed-Thu (+0.44%, +1.05%; weekly high 774.03 Thu), fade Fri (-0.39%) on the hot NFP. VOL-STATE: VIX 14.53, term structure in clean contango (VIX9D 11.97 < VIX 14.53 < VIX3M 17.61 < VIX6M 19.89). SPY dealer GEX -1.170B (FULLY_NEGATIVE, field self-consistent); QQQ total_gex -237M but the CLI's regime field reported 'POSITIVE' -- the known field-corruption defect, sign DERIVED by hand from per-strike (largest print strike 718 at -242M, sitting on spot 718.32) = net SHORT gamma at the money. Both indices vol-amplifying, not mean-reverting. BREADTH DIVERGENCE: index green on the week but only 34.8% of S&P names green (fz), 35.4% bullish (uw) -- narrow tape, strength concentrated in Technology/semis while the median name was red.",
+  "sector_leadership": "Leaders SMH +2.51%, XLE +2.20%, XLK +0.86%, XLU +0.82%. Laggards XLY -1.96%, XLB -1.39%, XLRE -1.24%, XLI -1.06%, XLP -1.02%. Semis+energy led; consumer discretionary and rate-sensitive real estate lagged, consistent with the rate-hike repricing -- but XLU +0.82% does NOT fit that read, so the rate story is only a partial explanation. All 12 sector series and SPY verified to reach 2026-09-04; no stale-window mismatch.",
+  "notable_flow": "Dark-pool premium (diary, 0 signal): SPY $44.7B / NVDA $40.8B / SNDK $32.0B / MU $30.7B / QQQ $29.1B / IVV $24.5B / TSLA $21.1B. Memory-chip complex (SNDK, MU) printed 3rd and 4th ahead of QQQ, matching SMH's +2.51% sector lead."
+ },
+ "weekly_technicals": [
+  {
+   "feature": "weekly hammer/hanging (SPY,QQQ,IWM all printed one)",
+   "value": "All three indices: long lower wick, small body. SPY wick 7.85 vs body 2.86; IWM cpos 0.97, body_frac 0.148.",
+   "would_signal": "Bullish reversal IF read as a hammer. But the panel tag hammer_or_hanging does NOT distinguish hammer (bullish, after a decline) from hanging man (bearish, after an advance), and SPY sits mid-range -- 1.2% off its 08-10 high, not at an extreme -- so the tag alone does not even fix its own sign.",
+   "conviction_points": 0,
+   "status": "PRE-REGISTERED",
+   "pre_reg_bar": "PR-WT (>=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH FDR 0.10). NOT MET -- panel is 33 weekly observations (2026-01-19..2026-08-31), ~7.5 months. MEASURED on this panel: fwd-2wk excess +0.0003 vs +0.0020 for all other weeks (diff -0.0017, t_wk +0.05, 6,902 rows / 31 weeks); fwd-4wk excess -0.0030 vs +0.0052 (diff -0.0082, t_wk -0.33, 6,425 rows / 29 weeks). The week's most eye-catching structure is the WORST of the six arms at 4 weeks and has no forward excess at either horizon."
+  },
+  {
+   "feature": "undercut-and-reclaim (lower_low AND close_pos >= 0.70)",
+   "value": "SPY yes (undercut 762.08 -> 759.48, closed 770.19 above last week's 769.35, cpos 0.736). IWM yes (cpos 0.973). QQQ no -- inside week.",
+   "would_signal": "Weekly spring / failed breakdown; would signal continuation higher.",
+   "conviction_points": 0,
+   "status": "PRE-REGISTERED",
+   "pre_reg_bar": "PR-WT (>=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH FDR 0.10). NOT MET -- panel is 33 weekly observations (2026-01-19..2026-08-31), ~7.5 months. MEASURED: fwd-2wk excess +0.0009 vs +0.0014 (diff -0.0005, t_wk +0.15, 7,734 rows / 30 weeks); fwd-4wk +0.0017 vs +0.0035 (diff -0.0018, t_wk +0.17). No edge; point estimate negative at both horizons."
+  },
+  {
+   "feature": "inside_week (QQQ only)",
+   "value": "QQQ held both of 08-24's extremes (702.70 / 724.13) while SPY and IWM made lower lows -- a genuine index divergence.",
+   "would_signal": "Compression/coil; would signal an expansion move, direction unspecified.",
+   "conviction_points": 0,
+   "status": "PRE-REGISTERED",
+   "pre_reg_bar": "PR-WT (>=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH FDR 0.10). NOT MET -- panel is 33 weekly observations (2026-01-19..2026-08-31), ~7.5 months. MEASURED: fwd-2wk excess +0.0025 vs +0.0026 (diff -0.0001, t_wk +0.73); fwd-4wk +0.0043 vs +0.0062 (diff -0.0019, t_wk +0.82). No edge."
+  },
+  {
+   "feature": "follow_through (confirms prior week's direction)",
+   "value": "SPY True, QQQ True, IWM False.",
+   "would_signal": "Trend persistence at the weekly scale; would signal staying with the prior week's direction.",
+   "conviction_points": 0,
+   "status": "PRE-REGISTERED",
+   "pre_reg_bar": "PR-WT (>=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH FDR 0.10). NOT MET -- panel is 33 weekly observations (2026-01-19..2026-08-31), ~7.5 months. MEASURED: fwd-2wk excess +0.0024 vs +0.0030 (diff -0.0006, t_wk +0.90); fwd-4wk +0.0052 vs +0.0059 (diff -0.0007, t_wk +1.59). Highest t of the six arms and STILL under 2, on the largest cohort (34,333 rows). Negative point estimate vs the rest at both horizons."
+  },
+  {
+   "feature": "outside_week",
+   "value": "None of the three indices this week (SPY/IWM lower_low without a higher high; QQQ inside).",
+   "would_signal": "Expansion/engulfing; would signal a decisive weekly reversal.",
+   "conviction_points": 0,
+   "status": "PRE-REGISTERED",
+   "pre_reg_bar": "PR-WT (>=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH FDR 0.10). NOT MET -- panel is 33 weekly observations (2026-01-19..2026-08-31), ~7.5 months. MEASURED: fwd-2wk excess +0.0004 vs +0.0026 (diff -0.0023, t_wk +0.09); fwd-4wk +0.0045 vs +0.0060 (diff -0.0016, t_wk +0.78). No edge."
+  },
+  {
+   "feature": "star_or_inverted",
+   "value": "None of the three indices this week.",
+   "would_signal": "Exhaustion top; would signal a fade.",
+   "conviction_points": 0,
+   "status": "PRE-REGISTERED",
+   "pre_reg_bar": "PR-WT (>=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH FDR 0.10). NOT MET -- panel is 33 weekly observations (2026-01-19..2026-08-31), ~7.5 months. MEASURED: fwd-2wk excess +0.0050 vs +0.0014 (diff +0.0036, t_wk +1.07); fwd-4wk +0.0022 vs +0.0049 (diff -0.0027, t_wk +0.31). THE SIGN FLIPS between the two horizons -- exactly the cross-regime/cross-horizon instability PR-WT is designed to reject."
+  },
+  {
+   "feature": "reversal-after-catalyst (NFP Friday 2026-09-04)",
+   "value": "Hot NFP (+162K vs +53K) reversed 26% of the Wed+Thu dovish rally: SPY +0.44%, +1.05%, then -0.39%. The weekly high was set the day BEFORE the print. Rate-hike odds reset to ~63% for September.",
+   "would_signal": "Event-conditioned fade of a pre-catalyst rally; would signal shorting into a rally that a Tier-1 print contradicts.",
+   "conviction_points": 0,
+   "status": "PRE-REGISTERED",
+   "pre_reg_bar": "PR-WT (>=2yr / >=30 weekly obs per arm / cross-regime sign-stable / BH FDR 0.10). NOT MET -- panel is 33 weekly observations (2026-01-19..2026-08-31), ~7.5 months. NOT MEASURABLE on this panel. The macro arm requires per-event conditioning and this panel holds 33 weeks total (2026-01-19..2026-08-31), which contains a handful of NFP weeks -- far below the >=30-obs-per-arm floor, let alone >=2 years. Accrues one observation, nothing more."
+  }
+ ],
+ "calls": [],
+ "lane_status": [
+  {
+   "lane": "MOM_SHORT",
+   "disposition": "BASKET_WATCH",
+   "direction": "short",
+   "regime_fit": null,
+   "candidates": [
+    "MCD",
+    "LHX",
+    "VICI",
+    "XYL",
+    "KRMN",
+    "ROL",
+    "NKE",
+    "TXT",
+    "AMTM",
+    "STZ",
+    "TJX",
+    "ONON",
+    "PEG",
+    "TSN",
+    "GLPI",
+    "CCL",
+    "CMS",
+    "JOBY"
+   ],
+   "note": "Watch-only, crash-gated, NEVER sizes -- the one recorded invariant-6 exception (knowingly negative, harness -0.0138 n=830). CRASH GUARD NOT FIRED: s1_standdown=False all five sessions. ORCHESTRATOR REBUILT THE COHORT -- the lane returned 15 names; the true full cohort is 20 and the verified watch list is 18. Funnel reproduced independently from stock-screener-2026-09-04.parquet: 6,293 rows -> 1,824 past the $50M ADV floor -> 1,410 after issue_type in (Common Stock, ADR) -> 20 at close <= 1.02*week_52_low. 11 liquid rows carry NULL issue_type and were dropped fail-closed; NONE of them was near a 52w low, so the drop cost nothing. LANE DEFECT REPEATED: it again applied a top-15 truncation plus an invented 33% sector cap -- neither is in the lane specification, and the 2026-09-04 scan flagged the identical pair one day earlier. Its 'sector concentration breach: 40% Utilities' is also false; Utilities are 2 of 18 (11%). ALL 20 Yahoo-verified individually with chart.py --52w. TWO CUT, for DIFFERENT reasons: (1) MIDD is a genuine DATA ARTIFACT -- screener range 109.68-180.13 vs Yahoo 89.16-148.55, both legs ~1.22x, un-split-adjusted; true pct_52w_range is 38.0%, not 2.94%, so it is nowhere near its low. This is the same false short caught on 2026-08-28. (2) LULU is NOT an artifact -- it made a real NEW 52-week low (97.99) on 09-04 during a -17.4% earnings collapse, but closed at 100.61, i.e. 2.7% above it, failing the 2% proximity gate on true data. Distinguishing these two matters: one is bad data, the other is a real fresh low that simply closed too far off it. KRMN is a BOUNDARY case, kept and flagged: it fails close <= 1.02*low by 0.0011 (39.980 vs 39.9789) but sits at 1.0% of its true 52w range. MCD and LHX belong IN the cohort, not beside it: both printed fresh 52-week lows on 09-04 (Yahoo 255.49 and 256.05), the out-of-range class that VALIDATES a short tag rather than falsifying it -- the screener's w52l simply lags a day. prior_verdicts.py flags MCD and LHX as PRIOR BLOCKING; on reading the matched passages both are the known false-blocking defect -- the passages are the 09-03/09-04 scans recording that the momentum lane WRONGLY CUT these names, i.e. they exonerate them. Nothing here is a trade."
+  },
+  {
+   "lane": "MOM_LONG",
+   "disposition": "BASKET_WATCH",
+   "direction": "long",
+   "regime_fit": null,
+   "candidates": [
+    "TARS",
+    "CNH",
+    "MRX",
+    "MT",
+    "INSW",
+    "VOD",
+    "DHT",
+    "NSIT",
+    "FRO",
+    "ITGR",
+    "HPQ",
+    "ING",
+    "SBLK",
+    "RPRX",
+    "JXN"
+   ],
+   "note": "Basket/watch only, NEVER sizes (separate DURABLE-N bar; 57 resolved calls in the ledger, none ever sized). Cohort reproduced independently: 1,410 liquid Common/ADR -> 182 at close >= 0.95*week_52_high (the lane reported 179; the 3-name gap is unexplained and the lane's figure is the one that does not reproduce). candidates[] lists the top 15 by proximity to the high, not the whole 182. Five of the 13 claimed fresh-highs Yahoo-verified: ITGR 126.80, DHT 21.09, MT 78.78, HPQ 32.78, CNH 14.46 -- ALL genuine new 52-week highs made 2026-09-04, pct_52w_range 97.9-99.9%. These print close ABOVE the screener's stale week_52_high, the exact mirror of the fresh-low class on the short leg, and they VALIDATE the long tag. LANE ERROR: it again surfaced ESTC and called it a 'FALSE LONG' data artifact. It is neither -- ESTC's screener week_52_high (108.00) matches Yahoo EXACTLY, so there is no data defect; ESTC is simply 15.0% off its high (pct_52w_range 75.4%) and never enters the cohort under the canonical >= 0.95*high filter. That is a lane FILTER leak, not a data artifact, and the distinction matters because the fix is different. The lane's regime claim (CHOP -0.0266, t=-2.51) is NOT adopted here: per the pooled-vs-regime-conditional rule the CHOP cell collapses plain CHOP with CHOP/REBOUND-THRUST and the t must be exit-day-clustered; it was quoted unclustered. Irrelevant to sizing either way -- this lane cannot size."
+  },
+  {
+   "lane": "OI_FADE",
+   "disposition": "STOOD_DOWN",
+   "direction": "short",
+   "regime_fit": null,
+   "candidates": [
+    "DLB",
+    "JAN",
+    "SUNB",
+    "STEP",
+    "RSI",
+    "AGX",
+    "FRVO",
+    "SBLK"
+   ],
+   "note": "STOOD DOWN to diary-only since 2026-08-29. Emits NO watch list and NO tradeable names; candidates[] exists so the suppression cohort keeps accruing. Ranking UNCHANGED (oi_rel_build + persistence). METRIC CONFIRMED net call-MINUS-put: verified per-day against oi_build.py (AGX 09-02 call_net 4652 - put_net 377 = net 4275), not the call-only read that has sign-flipped prints before. RANKING DIVERGENCE STILL TOTAL: the raw oi_net_5d top-25 is EWZ/VIX/TLT/PCG/AMZN/IBIT/SLV/INTC-style mega-cap and ETF beta and shares ZERO names with the relative-build survivors, whose raw ranks are #87-#413 of 5,269 -- so the historical raw-rank prior still grades a rule the engine does not run. Of 8 survivors, 4 were CUT by the gate stack: SUNB (earnings 2026-09-09 inside the hold), STEP (persistence 1.014 -- a single unexplained 09-02 block, not organic building), AGX and FRVO. AGX IS THE HEADLINE DATA-INTEGRITY FINDING and reproduces exactly: catalyst_split's LIVE '>=' read counts the 09-02 print day itself as post-catalyst and returns 87.1% (LIVE_BUILD, a crowd to fade); the STRICT '>' re-sum returns 679 of 5,688 = 11.9%, below the 0.15 threshold (RESOLVED_PRE_PRINT, nothing to fade) -- OPPOSITE verdicts on the same rows. The 09-02 print day alone is +4,275 of the +5,688 ten-day build (75.2%), an earnings-day options spike. Cut fail-closed. FRVO exposes a SCOPE gap rather than a boundary bug: 68% of its build lands on 09-01/09-02 immediately after the Fervo-Google 396MW geothermal PPA, a real landed commercial catalyst -- catalyst_split only inspects EARNINGS, so it returned 'no-cat' and the 7-gate stack saw nothing. Same class as the AZN M&A-rumor leak, generalized beyond M&A. Clean passes had the lane been live: DLB, RSI, SBLK (+JAN with a near-floor oi base of 1,011 and an early unwind tail, last_call_net -65). Deal-pinning gate found no cash-acquisition target among the 8 and remains UNTESTED. CROSS-LANE CONTRADICTION (noted, never netted, invariant #2): SBLK sits in this short-direction diary AND in the MOM_LONG cohort at 100.1% of its 52-week range on a fresh high made 09-04 -- two orthogonal lanes pointing opposite ways on one name. Neither sizes."
+  }
+ ]
+}
