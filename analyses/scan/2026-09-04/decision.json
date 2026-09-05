@@ -1,0 +1,283 @@
+{
+ "schema_version": "2.0",
+ "report_date": "2026-09-04",
+ "report_kind": "market-scan",
+ "regime": "CHOP",
+ "regime_context": {
+  "regime_label": "CHOP",
+  "ret5": 0.0011,
+  "ret10": 0.0058,
+  "vol_state": "LOW (VIX 14.53, LOW trailing-60 tercile). Dealer gamma SHORT/negative on BOTH SPY and QQQ -- a FLIP from 09-03's long-gamma read. Derived by the orchestrator from total_gex + the per-strike ladder: SPY total_gex -1,169,874,208, ladder(745-794) sum -901.6M, near-money +/-1.2% net -793.4M driven by the ATM 770 strike alone at -904.1M -- decisively short, and the CLI `regime` field (FULLY_NEGATIVE) agrees for once; SPY zero_gamma_level came back NULL. QQQ total_gex -237,296,111 but its displayed ladder(697-740) sums POSITIVE +32.5M and the near-money band nets only -2.8M on 14 positive vs 7 negative strikes -- negative on the full book, knife-edge near spot; both Phase-B agents overstated it (-6.3M and -24.3M). QQQ `regime` field reads POSITIVE = corrupted, 5th consecutive night; QQQ zero_gamma_level 243.37 against a 697-740 ladder = garbage, 4th consecutive night. zerodte_setup.py computed its own net_gex_0_45d for QQQ as -3,303.24 (negative) and still emitted dealer_gamma_regime LONG / sell_premium true, overriding its own arithmetic with the corrupted field.",
+  "breadth_pct_green": 52.2,
+  "directional_tradable": true,
+  "s1_standdown": false,
+  "event_risk": [
+   {
+    "event": "NFP",
+    "date": "2026-09-04",
+    "impact": "Tier-1",
+    "note": "landed today, pre-dates the h10 window"
+   },
+   {
+    "event": "Labor Day",
+    "date": "2026-09-07",
+    "impact": "market holiday",
+    "note": "market CLOSED; next session Tuesday 09-08. Sits inside every h3/h5/h10 window opened today and is what breaks _calendar.hz_end tonight."
+   },
+   {
+    "event": "PPI",
+    "date": "2026-09-10",
+    "impact": "Tier-1",
+    "note": ""
+   },
+   {
+    "event": "CPI",
+    "date": "2026-09-11",
+    "impact": "Tier-1",
+    "note": ""
+   },
+   {
+    "event": "FOMC decision + dot plot",
+    "date": "2026-09-16",
+    "impact": "Tier-1",
+    "note": "Retail Sales stacked the same morning; the h10 window 09-08..09-21 carries three Tier-1 events"
+   }
+  ]
+ },
+ "calls": [],
+ "lane_status": [
+  {
+   "lane": "MOM_SHORT",
+   "disposition": "BASKET_WATCH",
+   "direction": "short",
+   "regime_fit": 1.0,
+   "note": "Watch-only, never sizes. s1_standdown=false so the leg is NOT crash-gated tonight. 20 names, NOT the 14 the lane returned: it applied a top-15-by-proximity truncation and then an invented sector cap (cutting ONON), neither of which is in the lane specification -- MOM_SHORT is a full-cohort watch list. Stages 1-5 of its funnel reproduced EXACTLY against the orchestrator's own query, so the screening was right and only the presentation was truncated. Funnel: 6293 screener -> 5936 with close+w52l -> 264 at close<=1.02*w52l -> 63 Common/ADR (201 cut: 195 ETF, 4 null, 2 Structured Product) -> 48 at close>=$5 -> 20 at the $50M 20d $-ADV floor -> 20 after the h10 earnings gate (0 blocked). Yahoo-verified the top 5 individually: LULU (Yahoo w52l 97.99), LHX (256.05) and MCD (255.49) all made FRESH 52-week lows TODAY 2026-09-04 -- the class-(c) fresh-low case that VALIDATES the short tag; VICI and XYL match the screener bound exactly. The 09-03 failure, where this lane inverted the artifact test and cut four genuine fresh lows, did NOT recur. LULU's low is a -17.38% earnings gap, the tape's worst large-cap mover. Sector: Consumer Cyclical 7, Industrials 7 (70% in two sectors), Real Estate 2, Consumer Defensive 2, Utilities 2. Near-misses at the liquidity floor: SNN $47.3M, BILI $43.1M, FLO $42.3M, PZZA $38.4M, MZTI $37.6M.",
+   "candidates": [
+    "LULU",
+    "LHX",
+    "MCD",
+    "VICI",
+    "XYL",
+    "KRMN",
+    "ROL",
+    "NKE",
+    "TXT",
+    "AMTM",
+    "STZ",
+    "TJX",
+    "ONON",
+    "PEG",
+    "TSN",
+    "GLPI",
+    "CCL",
+    "CMS",
+    "MIDD",
+    "JOBY"
+   ],
+   "cluster_id": null
+  },
+  {
+   "lane": "MOM_LONG",
+   "disposition": "BASKET_WATCH",
+   "direction": "long",
+   "regime_fit": 1.0,
+   "note": "Basket/watch only, never sizes. 181 names, NOT the 16 the lane returned -- same unspecified top-15 truncation as the short leg. Funnel: 6293 -> 1417 at close>=0.95*w52h -> 419 Common/ADR (998 cut) -> 410 at close>=$5 -> 181 post-liquidity -> 181 after the earnings gate. VOD is a FALSE earnings block and IS counted in the 181: earnings_gate.py blocked it on a next_earnings_date of 2026-07-27, five weeks in the PAST, while claiming the print is inside h10 -- the documented no-lower-bound defect (elif ned.isoformat() <= end), third consecutive night. CCEP, the other 09-03 victim, is NOT affected tonight: it left the pool on the signal (93.04% of its 52w high, below the 95% threshold), not on the gate. Sector shares all under the 1/3 cap: Financial Services 27.6%, Healthcare 22.7%, Energy 13.3%, Technology 10.5%. Top by proximity: TARS 106.5% of its 52w high, CNH 103.7%, MRX 103.3%, MT 102.6%, INSW 101.4%.",
+   "candidates": [
+    "TARS",
+    "CNH",
+    "MRX",
+    "MT",
+    "INSW",
+    "VOD",
+    "DHT",
+    "NSIT",
+    "FRO",
+    "ITGR",
+    "HPQ",
+    "ING",
+    "SBLK",
+    "RPRX",
+    "JXN"
+   ],
+   "cluster_id": null
+  },
+  {
+   "lane": "OI_FADE",
+   "disposition": "STOOD_DOWN",
+   "direction": "short",
+   "regime_fit": 0.0,
+   "note": "STOOD DOWN to diary-only since 2026-08-29. Zero candidates, zero watch list, empty slate to the sizer -- candidates[] is deliberately EMPTY. HEADLINE: the pre-registered re-check has FIRED, and it fired the OTHER way. OI_FADE_LIVE is now at 34 complete lane-exit-day (zero partial, every one 15/15) reading -0.0065, t=-1.730, p_iid=0.0929 -- it NO LONGER clears 0.05 and NO LONGER survives BH(0.10) across the three OI variants (RAWPOOL p=0.0148 survives at thr 0.0333; LIVE p=0.0929 fails at thr 0.0667). Newey-West L=9 for the 9/10 h10 window overlap: t=-1.057, p=0.298. The decay is monotone across seven consecutive units (k=28 p=0.0202, 29 0.0280, 30 0.0227, 31 0.0290, 32 0.0402, 33 0.0457, 34 0.0929) and the newest exit-day alone (09-04, +0.0315) moved p from 0.0457 to 0.0929. The crypto-robustness argument that distinguished LIVE from RAWPOOL on 08-29 has also eroded: LIVE ex-MSTR/CELH/MARA was -0.0070 then and is -0.0045 (p=0.2182) now, while RAWPOOL ex-those-three collapses to -0.0042 (p=0.3421) -- so the 08-29 diagnosis of RAWPOOL was right and remains right; it is LIVE's own robustness that decayed. Mechanism matches pre-registered outcome 2 exactly: the maturity-edge base has unpinned 1.00 -> 0.80 for shorts, LIVE's exit>08-21 mean is -0.0024 against -0.0081 on the baseline cohort, and 5 of the last 10 exit-days are positive. Per the pre-registration this means the lane RETURNS TO ADVISORY -- but that is the 2026-09-05 audit's call, not this scan's, and CLAUDE.md and the lane status are deliberately left UNCHANGED tonight. Favourable data-quality note: the three completed exit-days comparable night-over-night (08-31 -0.0102, 09-01 +0.0098, 09-02 +0.0136) reproduced BIT-IDENTICALLY vs 09-03; the vendor drift that moved a completed unit last night did not recur. Funnel: 6293 -> 1802 liquidity -> 1776 earnings (26 blocked) -> 1366 issue_type (410 cut) -> 1293 full 5-day window (73 partial failed closed) -> 606 build floors -> 583 listing age (23 cut) -> 343 persistence (240 cut). Diary-only ranks by oi_rel_build (persistence), NOT suggestions: RSI 1.036/0.432, AGX 0.987/0.748, FRVO 0.887/0.432, WSC 0.689/0.382, BURL 0.673/0.802. Raw-rank pool for contrast: PCG, AMZN, INTC, NU, AVGO, META, SMCI, NOK, WULF, PBR, CORZ, NKE, SOFI, BSX, RKLB -- overlap with the relative-ranked top-15 is 0 of 15, total divergence (09-03 had one, PBR). catalyst_split.py's >= boundary bug fired on THREE names: AGX (87.1% -> LIVE_BUILD vs strict-> 11.9% RESOLVED_PRE_PRINT, 2nd consecutive night), BURL (58.6% vs -70.3%, a SIGN FLIP caused by a 10d-vs-5d window mismatch layered on the boundary bug) and PL (18.2% vs 14.2%, a genuine straddle of the 0.15 threshold). The listing-age gate cut 23 names of which only SPCX (IPO 2026-06-12) and SKHY (2026-07-10) are genuinely young; DLB is misclassified for a 2nd night carrying rel_build 3.869, 3.7x tonight's actual #1, and PSNL dies here for a 4TH consecutive cycle without ever reaching the M&A gate despite being a confirmed live M&A situation (Tempus AI named suitor 08-20) at rel_build 0.481. CCC's Copart rumour is still unconfirmed with no update past 08-19 and it has fallen from rank 15 to 32/343. FRVO exposes a scope gap: its build coincides with a real NON-earnings catalyst (Google geothermal PPA 09-01/02) that neither earnings_gate.py nor catalyst_split.py can see, both being earnings-only; the verdict is unchanged here only by luck. Re-signal dedup: all five of 09-03's top names repeat and RSI's rank sequence is now 3->1->2->1 across four nights -- structural forward-N cap, not fresh evidence. No wash-builds (last_call_net positive on all 15 survivors); several names show sharply negative PUT-side net on 09-04 (RSI -4,991, BURL -3,221) consistent with Friday weekly-expiry roll-off, which mechanically inflates call-minus-put net without incremental call demand.",
+   "candidates": [],
+   "cluster_id": null
+  }
+ ],
+ "vol_book": [
+  {
+   "symbol": "SPY",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "LOW VIX tercile x SHORT gamma",
+   "implied_move": 0.36,
+   "expected_range": 0.99,
+   "net_expectancy": 0.00118,
+   "suggested_structure": null,
+   "stand_aside_reason": "Dealers net SHORT gamma -- total_gex -1.170B, ladder sum -901.6M, near-money net -793.4M with the ATM 770 strike alone at -904.1M. That is the trend-acceleration / unsampled-left-tail state this sleeve cannot underwrite. size_scalar=0.0. The quoted net_expectancy is the LOW-VIX-tercile bucket net of the 0.10% assumed round-trip and is recorded for completeness only -- it is MOOT, because zerodte_setup.py stratifies by VIX tercile ONLY and never by gamma regime, so no conditional statistic exists for tonight's actual (LOW-VIX x SHORT-gamma) state.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "QQQ",
+   "lane": "vol_0dte",
+   "sell_premium": false,
+   "vol_state": "LOW VIX tercile x SHORT gamma (knife-edge near spot)",
+   "implied_move": null,
+   "expected_range": 1.63,
+   "net_expectancy": 0.00253,
+   "suggested_structure": null,
+   "stand_aside_reason": "OVERRIDDEN to stand-aside. The engine emitted sell_premium=true on a CORRUPTED CLI `regime` field (POSITIVE) while its own net_gex_0_45d computed -3,303.24, negative. total_gex is -237.3M so the full book is short gamma, though the near-money band is only -2.8M on 14 positive vs 7 negative strikes -- negative overall, balanced near spot. zero_gamma_level 243.37 against a 697-740 ladder is garbage. size_scalar forced to 0.0. Same VIX-tercile-only stratification objection as SPY.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "AEO",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "print 09-09; bracketing expiry 09-11 (2,576 contracts), next leg 09-18 (405)",
+   "implied_move": 14.63,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly on 09-11, wings sized to 14.6% -- NOT to the raw 1.58%",
+   "stand_aside_reason": null,
+   "delta_neutral": true
+  },
+  {
+   "symbol": "ODD",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "print 09-09; bracketing expiry 09-11 (168), next leg 09-18 (74)",
+   "implied_move": 21.57,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly on 09-11, wings to 21.6% -- NOT the raw 2.67%",
+   "stand_aside_reason": null,
+   "delta_neutral": true
+  },
+  {
+   "symbol": "JMKE",
+   "lane": "vol_earnings",
+   "sell_premium": true,
+   "vol_state": "print 09-09; bracketing expiry 09-18 (210), next leg 10-16 (30); IV rank 100, backwardation ratio 1.23",
+   "implied_move": 12.13,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "Defined-risk iron fly on 09-18, wings to ~12%, not the raw 9.51%",
+   "stand_aside_reason": null,
+   "delta_neutral": true
+  },
+  {
+   "symbol": "KR",
+   "lane": "vol_earnings",
+   "sell_premium": null,
+   "vol_state": "print 09-11 falls ON the 09-11 bracketing expiry (395 contracts)",
+   "implied_move": 5.64,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "Treat 5.6% as a LOWER BOUND",
+   "stand_aside_reason": "Date-boundary ambiguity: the print lands on the expiry date. Confirm KR reports PRE-market, or the 09-11 expiry settles before the reaction and the true bracket is 09-18. Raw implied_move_perc 0.61% is unusable (near_dte_actual=0).",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "SUNB",
+   "lane": "vol_earnings",
+   "sell_premium": null,
+   "vol_state": "print 09-09; bracketing expiry 09-18 (155), next leg 10-16 (118)",
+   "implied_move": 16.79,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": "If traded, wing to the HIGHER number (raw 16.8%), reduced size",
+   "stand_aside_reason": "Data-quality anomaly, not a crush read: the ATM put quote is MISSING entirely at the 70 strike. Put-call-parity synthetic gives ~11.4% and a 65-strike straddle ~12.0% -- i.e. the variance-isolated estimate comes in BELOW raw, reversing every other name tonight. One-sided illiquid ATM leg; trust neither number cleanly.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "SHOE",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": "print 09-10; bracketing expiry 09-18 has only 17 contracts",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "SKIP -- thin book. Contract count has fallen to 17, the same thin-book class as ODD's 16 on 09-03 which was correctly skipped. The ~1.3-1.7x internal disagreement persists (raw 16.8% vs rebuilt ~21.3%) but the book is too thin to trust either number.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "ZUMZ",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": "print 09-10; bracketing expiry 09-18 has 6 contracts",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "SKIP -- thin-book artifact.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "ANIX",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": "print 09-09; NO expiry brackets the print, nearest is 10-16 at 42dte (4 contracts)",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "SKIP -- thin AND non-bracketing.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "MNY",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": "raw implied_move_perc 170.96%",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "EXCLUDED -- internally impossible value; iv-term-structure errors 'no IV data'. Zero-book artifact, second consecutive night.",
+   "delta_neutral": true
+  },
+  {
+   "symbol": "YRD",
+   "lane": "vol_earnings",
+   "sell_premium": false,
+   "vol_state": "raw implied_move_perc 136.1%",
+   "implied_move": null,
+   "expected_range": null,
+   "net_expectancy": null,
+   "suggested_structure": null,
+   "stand_aside_reason": "EXCLUDED -- iv-term-structure errors 'no IV data'; no tradable book.",
+   "delta_neutral": true
+  }
+ ],
+ "watchlist_write_back": [
+  "LULU",
+  "LHX",
+  "MCD",
+  "VICI",
+  "XYL",
+  "KRMN",
+  "ROL",
+  "NKE",
+  "TXT",
+  "AMTM",
+  "STZ",
+  "TJX",
+  "ONON",
+  "PEG",
+  "TSN",
+  "GLPI",
+  "CCL",
+  "CMS",
+  "MIDD",
+  "JOBY"
+ ],
+ "report_path": "analyses/scan/2026-09-04/report.md"
+}
