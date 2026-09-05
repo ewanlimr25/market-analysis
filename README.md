@@ -45,7 +45,7 @@ Five commitments follow from that, and they are enforced in code, not just prose
 
 | Lane | Direction | Horizon | What it fires on |
 |---|---|---|---|
-| `oi-flow-fade` | short | h10 | heavy multi-day **net call** open-interest build → subsequent underperformance. ⛔ **Stood down to diary-only 2026-08-29** — the shipped rule measures significantly *negative* excess, so the lane runs and is journalled but emits no candidates |
+| `oi-flow-fade` | short | h10 | heavy multi-day **net call** open-interest build → subsequent underperformance. **Advisory (watch-only) since 2026-09-05** — the shipped rule still measures *negative* excess, just no longer significantly so, so the lane emits a watch list but never sizes |
 | `momentum` (long leg) | long | h10 | near-52-week-high, basket only — **never sizes per-name** |
 | `momentum` (short leg) | short | h10 | near-52-week-low, crash-regime-gated, watch-only cap |
 | `liquidity-reversion` | long | h3–5 | extreme one-sided dark-pool dollar concentration, news-gated |
@@ -57,9 +57,13 @@ Per-lane measured excess, sample sizes, and the caveats attached to each live in
 in [`docs/lanes.md`](docs/lanes.md)) and are re-baselined on every audit cycle. They are **historical-panel
 priors**; the forward book is graded separately and can disagree.
 
-**As of 2026-08-29 no lane sizes and `oi-flow-fade` emits nothing** — a lane is stood down when its
-measured edge does not survive, and an engine whose honest output is an empty book is working as
-designed. A lane appearing in this table means it is implemented and graded, not that it is firing.
+**No lane has sized since 2026-08-22** — a lane is capped, stood down or restored strictly by what its
+measured edge does, and an engine whose honest output is an empty book is working as designed. A lane
+appearing in this table means it is implemented and graded, not that it is firing. `oi-flow-fade` is the
+worked example in both directions: stood down to diary-only on 2026-08-29 when its shipped rule measured
+significantly negative, and restored to a watch list on 2026-09-05 when the pre-registered re-check found
+that significance had not held — and that the original figure had never been corrected for overlapping
+horizons in the first place.
 
 This is deliberately **not** a microstructure options-flow engine. Raw flow was measured here and came
 back as beta, so it is used as a filter and cut from scoring.

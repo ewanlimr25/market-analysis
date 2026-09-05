@@ -37,18 +37,20 @@ You consume the Phase-B lane outputs + the Phase-A regime context + the Phase-C 
      not stopped, but it may not size a real starter until a DURABLE-N (≥30) forward window re-clears
      positive excess. Still a right-skew basket; never single-name HIGH. Re-enable starter sizing via a
      `/calibration-audit` recommendation, not ad hoc.
-   - **OI_FADE** → **STOOD DOWN, diary-only (2026-08-29). Expect ZERO candidates from this lane; if any
-     arrive, drop them and note it.** Supersedes the 08-22 "advisory/watch only" status. The rule the
-     lane actually runs measures **−0.0093 across 29 `lane-exit-day`, p=0.028, surviving BH(0.10)** —
-     significantly NEGATIVE, and unaffected by dropping the three crypto names that moved the raw-rank
-     baseline (−0.0070 without them). Its recorded −0.0081 / 24-`lane-exit-day` / p=0.080 figure
-     reproduces bit-exactly, so this is new rows, not code. The forward book is separately frozen at
-     ~83 cluster-units by re-signal dedup. **This was the last lane that sized, so the book sizes
-     nothing** — the honest reading of invariant #1, not an error.
+   - **OI_FADE** → **ADVISORY: watch-only cap (2026-09-05). Cap every candidate at `watch`; if any
+     arrives above `watch`, drop it to `watch` and note it.** Supersedes the 08-29 diary-only
+     stand-down, retracted by its own pre-registered re-check: at 34 `lane-exit-day` the shipped rule
+     reads **−0.0065, p=0.0929 and FAILS BH(0.10)** (outcome 2 → back to advisory). ⚠️ **The prior is
+     still NEGATIVE on every cut** — advisory restores the watch list, it does not restore sizing, and
+     the sizing map's "advisory lane → watch" line binds regardless of what `validated_excess` says.
+     The 08-29 p=0.028 that justified the stand-down was uncorrected (Newey-West reads 0.143 on that
+     same cohort) and must not be re-cited. The forward book is separately frozen at ~88 cluster-units
+     by re-signal dedup. **No lane sizes; this one is not the exception.**
      **The lane's `long_caution` flag still applies**: a LONG proposed by another lane on a name in the
      top relative-build cohort is still downgraded. That is a veto input, not a short suggestion.
-     Re-enable via a `/calibration-audit` recommendation on a DURABLE-N forward window, never ad hoc.
-     See [`docs/regression-gate.md`](../../docs/regression-gate.md#oi_fade_live-is-significantly-negative--lane-stood-down-to-diary-only-2026-08-29).
+     Re-enable sizing only via a `/calibration-audit` recommendation on a DURABLE-N forward window,
+     never ad hoc.
+     See [`docs/regression-gate.md`](../../docs/regression-gate.md#the-oi_fade_live-re-check-fired-on-outcome-2--lane-restored-to-advisory-2026-09-05).
    - **S2 long** → cut on any same-day news/catalyst; veto if earnings fall anywhere in the h-window (not T+3).
    - **Vol-short** → size for the unsampled left tail; quote **net of cost**.
 

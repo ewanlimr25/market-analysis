@@ -55,17 +55,28 @@ For each lane × regime stratum with decided-N ≥ 10:
 
 ## Step 3 — The regression gate (the one hard rule)
 **Any lane whose realized excess goes ≤ 0 over a DURABLE-N forward window is flagged STOP** — recommend pausing
-new entries on that lane until re-validated. This is the forward version of `retro_harness.py --all` (no lane
+new entries on that lane until re-validated. **At h10, report Newey-West (L = h−1) beside every clustered
+p before calling anything significant** [added 2026-09-05]: `lane-exit-day` clustering fixes the unit, not
+the 9/10-day overlap between consecutive h10 windows, so the clustered t is an upper bound on
+significance. Skipping it stood `OI_FADE_LIVE` down on a p=0.028 that reads **0.143** under the correction
+— on the very same cohort. This binds in both directions: it must not manufacture a STOP, and it must not
+be reached for only when a result is unwelcome. This is the forward version of `retro_harness.py --all` (no lane
 negative). Cross-check by re-running `python3 scripts/retro_harness.py --all` and noting any divergence between
 the historical backtest and the realized forward book.
 
 ## Step 4 — Gate effectiveness (does the discipline help?)
 - **Suppressed candidates: run `python3 scripts/suppression_resolve.py` — do NOT resolve them off the audit's
-  own bars cache.** That cache is built from `calls[]` tickers, and a suppressed name is by definition one
+  own bars cache.** Fold the result into the suppression ledger when the cycle closes
+  (`python3 scripts/resolved_ledger.py --update-suppressions <out.json>`); the tool restores retracted
+  rows automatically on the next run. [added 2026-09-05] That cache is built from `calls[]` tickers, and a suppressed name is by definition one
   that never became a call, so it has no bars and silently prints "unresolved" — indistinguishable from a
   window that has not matured. Every audit through 2026-08-08 under-reported gate evidence this way (fetching
   the missing names recovered ACVA at −3.03%). The script fetches them and reports RESOLVED / OPEN / PENDING /
-  INCONCLUSIVE separately, clustered by lane-period. It lives in `scripts/` because `analyses/audit/` is
+  INCONCLUSIVE separately, clustered by lane-period. **Every INCONCLUSIVE row carries an
+  `inconclusive_kind`** — `DELISTED` (a trailing stop with no interior hole) vs `VENDOR_HOLE` (an
+  interior gap, i.e. a retraction that recovers). **A `VENDOR_HOLE` is a data bug, never a delisting**;
+  on 2026-09-05 both INCONCLUSIVE rows were labelled "delisted/halted?" and neither name was delisted.
+  [added 2026-09-05] It lives in `scripts/` because `analyses/audit/` is
   gitignored and a fix made only in an audit dir does not survive the cycle. [added 2026-08-08]
 - **Crash guard:** on `s1_standdown` days, did suppressed MOM_SHORT names actually rip (gate saved a loss) or
   fall (gate cost edge)? Report downgrade-effectiveness with decided-N; advisory below N=10.
@@ -91,10 +102,24 @@ Accrue resolved evidence toward each open pre-registration and report progress v
   BH(0.10) across the five bands tested** and the band was chosen after seeing the result, so it is in-sample
   by construction. Bar: it must clear on data postdating 2026-08-22, cross-regime, BH. **Do not re-cut the
   live lane to it before then** ([`docs/regression-gate.md`](../../docs/regression-gate.md#pr-10--the-rank-band-pre-registered-2026-08-22-not-scored)).
-  **Accrual as of 2026-08-29: 0 out-of-sample rows, and none was possible** — a post-registration signal
-  needs 10 sessions to mature and the panel edge was 08-28, so the earliest PR-10 evidence exits
-  ~2026-09-08. Do not re-derive this before then; the absence is arithmetic, not a null result.
+  **Accrual as of 2026-09-05: still 0 out-of-sample rows, and none was possible** — the return-panel edge
+  is 09-04, so the last signal date with a matured h10 window is 08-21, while the first signal postdating
+  registration is 08-24. Earliest PR-10 evidence exits ~2026-09-08. **Compute this arithmetic, do not
+  assert it from a prior cycle's panel edge**; the absence is arithmetic, not a null result.
+- **PR-MOMLONG-SUP** (MOM_LONG suppression, registered 2026-09-05): the MOM_LONG leg of gate discipline
+  reads **15 baskets, −1.78%, p=0.028, BH-SIGNIF** while the pooled result has failed two re-tests
+  (−1.74%/p=0.008 at 21 → −0.89%/p=0.054 at 33 → −0.53%/p=0.194 at 49). Bar: **re-check at 25 baskets,
+  evaluated at the FIRST cycle at which the basket count reaches 25.** Both outcomes are written down in
+  [`docs/regression-gate.md`](../../docs/regression-gate.md#the-mom_long-suppression-leg--pre-registered-re-check-at-25-baskets-2026-09-05).
 - A pre-registration graduates to a scored lane ONLY when its bar is cleared on data that postdates its registration.
+- **A bar stated as a COUNT must name a COUNT trigger.** [added 2026-09-05] Write the evaluation point as
+  *"the first cycle at which k ≥ N"*, or state an explicit window (*"the first N units, later ones
+  excluded"*), or require the result to hold at every cycle past the bar. **Never "re-check at N units, at
+  the next audit"** — those are two different events, and the audit arrives after the bar by however long
+  the calendar says. `OI_FADE_LIVE` is the worked case: its 30-`lane-exit-day` bar was crossed at p=0.023
+  and adjudicated four units later at p=0.093, so the tape between the bar and the audit picked the
+  outcome. Audit every open PR-* item against this and re-state any bar that fails it.
+  ([`docs/regression-gate.md`](../../docs/regression-gate.md#the-re-checks-form-was-the-defect-not-the-lane))
 
 ## Step 6 — Recommendations (propose-only) + SUMMARY
 `analyses/audit/<date>/SUMMARY.md` (≤300 words): lane calibration table, any STOP flags, gate-effectiveness,

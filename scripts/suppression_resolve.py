@@ -15,7 +15,19 @@ Reports four states, never a bare "unresolved":
   RESOLVED     window matured, excess computed
   OPEN         h-window has not matured against the current session grid
   PENDING      no entry session has traded yet (the final Friday book on a weekend run)
-  INCONCLUSIVE genuinely unresolvable (no bars, delisted mid-window)
+  INCONCLUSIVE unresolvable -- ALWAYS sub-classified, see below
+
+INCONCLUSIVE is split by `inconclusive_kind`, because conflating the two hid a data bug for a full
+cycle [added 2026-09-05]:
+  DELISTED     a TRAILING stop with no interior hole -- the name really stopped trading
+  VENDOR_HOLE  an INTERIOR gap -- a vendor retraction, which recovers; NOT a delisting
+On 2026-09-05 both INCONCLUSIVE rows (WBS, CRNX) were labelled "delisted/halted?" and neither was
+delisted: CRNX had lost 25 contiguous interior sessions and WBS served 13 bars with holes. The
+delisting signature is a trailing stop, never an interior hole -- the same rule /calibration-audit
+already states as a hard rule, now enforced by the tool that produces the evidence.
+
+Resolved rows are folded through `resolved_ledger.py` under the SUPPRESSION schema, so a matured
+suppression measurement cannot be un-made by a later retraction the way CRNX's was.
 
 Excess is path-aware vs the conditional benchmark on the trading-day grid, adjusted closes:
     excess = sign * ( tk[exit]/tk[entry] - 1  -  spy[exit]/spy[entry] - 1 )
@@ -37,6 +49,7 @@ import statistics as st
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import resolved_ledger  # noqa: E402
 from chart import bars  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -79,6 +92,25 @@ def harvest(since: str | None = None) -> list[dict]:
     return rows
 
 
+def classify_missing(bars_: list[dict], grid: list[str], want: list[str]) -> tuple[str, str]:
+    """Distinguish a delisting from a vendor retraction. Returns (kind, why).
+
+    The delisting signature is a TRAILING stop with no interior hole; an interior gap is the feed
+    retracting sessions it previously served, and it recovers. Never let one be booked as the other.
+    """
+    have = {x["date"] for x in bars_}
+    lo, hi = min(have), max(have)
+    interior = [d for d in grid if lo < d < hi and d not in have]
+    missing = [d for d in want if d not in have]
+    trailing = all(d > hi for d in missing)
+
+    if trailing and not interior:
+        return "DELISTED", (f"no bar on {missing[0]}; last bar {hi}, no interior hole "
+                            f"-- trailing stop (delisted/halted)")
+    return "VENDOR_HOLE", (f"no bar on {missing[0]}; {len(interior)} interior hole(s) in "
+                           f"{lo}..{hi} -- vendor retraction, not a delisting")
+
+
 def resolve(rows: list[dict]) -> list[dict]:
     tickers = sorted({r["ticker"] for r in rows} | {BENCH})
     px: dict[str, list[dict] | None] = {}
@@ -110,13 +142,13 @@ def resolve(rows: list[dict]) -> list[dict]:
             rec["why"] = f"h{h} window not matured (last {grid[-1]})"
         elif not b:
             rec["status"] = "INCONCLUSIVE"
-            rec["why"] = "no bars"
+            rec["inconclusive_kind"], rec["why"] = "NO_BARS", "no bars returned for the ticker"
         else:
             ix = {x["date"]: i for i, x in enumerate(b)}
             ed, xd = grid[ei], grid[ei + h]
             if ed not in ix or xd not in ix:
                 rec["status"] = "INCONCLUSIVE"
-                rec["why"] = f"no bar on {ed if ed not in ix else xd} (delisted/halted?)"
+                rec["inconclusive_kind"], rec["why"] = classify_missing(b, grid, [ed, xd])
             else:
                 sign = -1.0 if direction == "short" else 1.0
                 tr = b[ix[xd]]["adj"] / b[ix[ed]]["adj"] - 1
@@ -133,6 +165,17 @@ def resolve(rows: list[dict]) -> list[dict]:
 def report(res: list[dict]) -> None:
     print(f"\nsuppressed candidate-rows: {len(res)}  "
           f"{dict(collections.Counter(r['status'] for r in res))}")
+
+    bad = [r for r in res if r["status"] == "INCONCLUSIVE"]
+    if bad:
+        kinds = collections.Counter(r.get("inconclusive_kind", "UNCLASSIFIED") for r in bad)
+        print(f"INCONCLUSIVE by kind: {dict(kinds)}")
+        for r in bad:
+            print(f"  {r.get('inconclusive_kind'):<12}{str(r['period']):<12}{r['lane']:<14}"
+                  f"{r['ticker']:<8}{r['why']}")
+        if kinds.get("VENDOR_HOLE") or kinds.get("NO_BARS"):
+            print("  ^^ these are DATA BUGS, not delistings -- they recover, and until they do they "
+                  "silently shrink the gate cohort. Restore from the suppression ledger.")
 
     done = [r for r in res if r["status"] == "RESOLVED"]
     if not done:
@@ -177,6 +220,17 @@ def main() -> None:
         print("no lane_status[] candidates found -- nothing to resolve")
         return
     res = resolve(rows)
+
+    # A matured suppression cannot un-happen either. Same contract as the call book: restore any
+    # row the live feed has since retracted, and REPORT every conflict -- never silently repair.
+    ledger = resolved_ledger.load(resolved_ledger.DEFAULT_SUPPRESSION_LEDGER)
+    res, conflicts = resolved_ledger.apply(ledger, res, resolved_ledger.SUPPRESSION)
+    print(f"suppression ledger: {len(ledger)} prior measurements, {len(conflicts)} conflict(s)")
+    for c in conflicts:
+        print(f"  !! {c['kind']:<10} {c['key']}  was {c['was']} now {c['now']}  -- {c['why']}")
+    restored = sum(1 for r in res if r.get("from_ledger"))
+    if restored:
+        print(f"  rows restored from ledger: {restored}")
 
     if a.out:
         os.makedirs(os.path.dirname(a.out), exist_ok=True)

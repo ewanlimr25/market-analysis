@@ -34,8 +34,14 @@ post-patch** — isolation check (c) passing.
 > any change with them, and do not read OI_FADE's −0.0025 as decay: it is
 > [artifact removal](#solid-the-baseline-carried-a-panel-edge-artifact-fixed-re-baselined).
 
-> ⚠️ **OI_FADE no longer sizes** (demoted to advisory 2026-08-22). Its corrected +0.0013 is
-> indistinguishable from zero (79 exit-days, p=0.767), so **no lane in the book currently sizes.**
+> ⚠️ **OI_FADE no longer sizes** (demoted to advisory 2026-08-22; stood down to diary-only 08-29;
+> **restored to advisory 2026-09-05** when its re-check fired on outcome 2). Its corrected +0.0013 is
+> indistinguishable from zero (79 `lane-exit-day`, p=0.767), so **no lane in the book currently sizes.**
+
+> ⚠️ **The spine this baseline was measured on (2,471) is retired.** The live priced spine is 2,443 as
+> of 2026-09-02. The baseline is deliberately not re-pointed; see [the spine
+> move](#the-spine-moved-again-2471--2443-priced-2026-09-05) for the attribution and for why check (c)
+> must be re-run before citing any pre-09-02 lane *or gate* figure.
 
 ### Prior baseline (2,471-ticker spine, panel→08-17, 89 days, superseded 2026-08-22)
 
@@ -436,6 +442,13 @@ before then, and the absence of evidence is arithmetic, not a null result.**
 
 ## OI_FADE_LIVE is significantly NEGATIVE — lane stood down to diary-only (2026-08-29)
 
+> **SUPERSEDED 2026-09-05.** The re-check below fired on **outcome 2**: at 34 `lane-exit-day`
+> `OI_FADE_LIVE` reads −0.0065, p=0.0929, and **fails BH(0.10)**. The lane is back to **advisory**.
+> Two things here did not survive and must not be re-cited: the p=0.028 headline (it was an
+> **uncorrected** statistic — Newey-West reads 0.143 on this very cohort), and the ex-trio robustness
+> claim (−0.0070 → −0.0045, p=0.218). Kept for the diagnosis of the *raw pool*, which still holds.
+> → [the re-check](#the-oi_fade_live-re-check-fired-on-outcome-2--lane-restored-to-advisory-2026-09-05)
+
 The 2026-08-22 cycle demoted OI_FADE from sizing to advisory on "no variant has a validated positive
 edge". One cycle later the finding is stronger and its sign is no longer ambiguous: **the rule the
 engine actually runs is significantly negative.**
@@ -484,6 +497,10 @@ Do not re-cut the ranking in the meantime; see PR-10 below.
 
 ## The 2026-08-22 suppression result did not replicate (2026-08-29)
 
+> **Extended 2026-09-05:** it failed a *second* re-test — 49 lane-periods, −0.53%, **p=0.194**. The
+> trajectory is monotone toward zero. → [the MOM_LONG
+> leg](#the-mom_long-suppression-leg--pre-registered-re-check-at-25-baskets-2026-09-05)
+
 Recorded 08-22: gate discipline was "**significantly** negative for the first time" at **21 lane-periods,
 −1.74%, p=0.008 [PROVISIONAL]**. At 57% more baskets it is **33 lane-periods, −0.89%, p=0.054**, and no
 lane survives BH: MOM_LONG 11 baskets −1.62% (p=0.124), MOM_SHORT 12, −0.67% (p=0.338), OI_FADE 10,
@@ -494,3 +511,144 @@ flattering — it is 59% at 5× the sample" — and then leaned on the pooled p=
 effectiveness result at PROVISIONAL N is a hypothesis, and this one did not survive its first re-test.**
 Gate discipline remains directionally right (negative at every N measured so far) and no gate should be
 removed on it; it is simply not significant, and the 08-22 figure must not be re-cited.
+
+## The `OI_FADE_LIVE` re-check fired on OUTCOME 2 — lane restored to advisory (2026-09-05)
+
+The 2026-08-29 stand-down pre-registered a re-check at **30 `lane-exit-day`** with two outcomes. The
+2026-09-05 audit adjudicated it. **Outcome 2 fired: `OI_FADE_LIVE` is no longer BH-significant, and the
+lane returns to advisory** (watch-list only — advisory has never sized, and no lane sizes).
+
+**Partial-window check first**, because this lane has already had a `lane-exit-day` count move its p
+across the pre-registered line once (2026-09-01). `OI_FADE_LIVE` and `OI_FADE_RAWPOOL` are at **34
+complete units, ZERO partial** — every unit resolved 15/15, verified fired-vs-resolved. (Raw `OI_FADE`
+carries 8 partial units at 14/15; all are historic — May and late June — not the maturity edge.)
+
+103-day panel (2026-03-13 → 09-04), `retro_harness.py --all --oi-variant both`:
+
+| variant | n | pooled | `lane-exit-day` | p | **NW p (L=9)** | ex-trio | ex-trio p | baseline cohort (exit ≤ 08-21) |
+|---|---|---|---|---|---|---|---|---|
+| `OI_FADE` (raw rank, full pool) | 1327 | −0.0014 | 81 | 0.506 | 0.714 | **+0.0005 — flips** | 0.916 | −0.0003 / 71 |
+| **`OI_FADE_LIVE`** (shipped) | 510 | **−0.0065** | **34** | **0.0929** | **0.290** | −0.0045 | 0.218 | **−0.0081 / 24 / p 0.080 ✅ bit-exact** |
+| `OI_FADE_RAWPOOL` | 510 | −0.0133 | 34 | 0.0148 | 0.025 | −0.0042 | 0.342 | −0.0093 / 24 |
+
+**BH(0.10) across the three variants: only `RAWPOOL` survives** (0.0148 ≤ 0.0333). `OI_FADE_LIVE` fails
+at rank 2 (0.0929 > 0.0667) — the exact test the stand-down cited. `RAWPOOL` is **not** the shipped rule
+and does not govern.
+
+Three supports for outcome 2:
+
+1. **Monotone decay across seven consecutive units**, recomputed from the panel rather than quoted from
+   the nightlies: k=28 p=0.0202 · **k=29 (stand-down) p=0.0280** · k=30 p=0.0227 · k=31 0.0290 ·
+   k=32 0.0402 · k=33 0.0457 · **k=34 (now) 0.0929**. Five of the last ten complete units are positive;
+   09-04 alone (+0.0315) moved p from 0.0457 to 0.0929.
+2. **The crypto-robustness argument has eroded.** The 08-29 record's key claim was that `LIVE`, unlike
+   the raw pool, did not depend on a few names (ex-MSTR/CELH/MARA −0.0070). It now reads **−0.0045,
+   p=0.218**. The 08-29 diagnosis of the *raw pool* still holds and still must not be re-baselined:
+   dropping the trio returns pooled `OI_FADE` to **+0.0017**, and those three carry 92% / 77% / 54% of
+   the pooled sum on 19 increment rows.
+3. **The mechanism matches the pre-registration.** Outcome 2 predicted p=0.028 was the pinned-base
+   increment leaking in. The increment's short `base` has unpinned 1.00 → 0.80, and `LIVE`'s
+   post-baseline mean is −0.0024 against −0.0081 on the baseline cohort.
+
+**The sign is unchanged and stays visible.** Every cut is still negative. Outcome 2 says the lane is not
+*significantly* negative; it does not say the lane is good. Advisory = watch list, never sizing.
+
+### `OI_FADE_LIVE` never survived the h10 overlap correction — at any k
+
+The stand-down rested on "significantly negative and survives BH(0.10)" at p=0.028. That p is
+**uncorrected**. h10 windows share 9/10 of their days, and `lane-exit-day` clustering does not fix window
+overlap — only the unit. Newey-West (L=9) on the exit-day mean series gives:
+
+| k | uncorrected p | **NW p** |
+|---|---|---|
+| 29 (the stand-down) | 0.0280 | **0.143** |
+| 30 (the bar) | 0.0227 | **0.128** |
+| 34 (now) | 0.0929 | **0.290** |
+
+`OI_FADE_LIVE` was **never** BH-significant under the correction this repo already documents — not at the
+stand-down, not at the bar, not now. **The evidence the lane was stood down on did not survive it.**
+Report NW alongside the clustered p for every h10 lane figure from here; the clustered t is an upper
+bound on significance, not the answer.
+
+### The re-check's form was the defect, not the lane
+
+The bar was a **count** (30 `lane-exit-day`) but the evaluation was a **date** ("at the next audit"),
+which arrived four units later. At k=30 — exit-day 08-31, the session the bar was actually crossed — the
+same test read **p=0.0227 and outcome 1 would have fired.** A fixed-k bar adjudicated on a drifting
+calendar lets the tape between the bar and the audit pick the answer, and it is optional stopping in
+whichever direction that tape moved.
+
+**Standing rule (2026-09-05): a pre-registration whose bar is a COUNT must name a count trigger.** Write
+the evaluation point as *"the first cycle at which k ≥ N"*, or state an explicit window (*"evaluated on
+the first 30 units, later units excluded"*), or state that the test is re-run at every cycle past the bar
+and requires the result to hold at all of them. Never *"re-check at N units, at the next audit"* — those
+are two different events and they disagreed here by a factor of four in p. Applies to every open PR-* item.
+
+Outcome 2 is nevertheless the right call, because the NW reading above is **independent of where you
+stop**: the lane fails at k=29, k=30 and k=34 alike.
+
+## The MOM_LONG suppression leg — pre-registered re-check at 25 baskets (2026-09-05)
+
+Pooled suppression discipline has now weakened at **two consecutive re-tests**:
+
+| cycle | lane-periods | mean avoided exc | p |
+|---|---|---|---|
+| 2026-08-22 | 21 | −1.74% | **0.008** |
+| 2026-08-29 | 33 | −0.89% | 0.054 |
+| **2026-09-05** | **49** | **−0.53%** | **0.194** |
+
+Monotone toward zero at 2.3× the original sample; 158/335 rows correct (47%, from 52%). The 08-22 figure
+is now twice-failed and must not be re-cited in any form.
+
+**One leg moved the other way, and it is a hypothesis, not a finding.** Per lane at 2026-09-05:
+
+| lane | baskets | mean avoided exc | p | BH(0.10) |
+|---|---|---|---|---|
+| **MOM_LONG** | 15 | **−1.78%** | **0.028** | **SIGNIF** |
+| MOM_SHORT | 18 | −0.53% | 0.269 | ns |
+| **OI_FADE** | 16 | **+0.65%** | 0.433 | ns — suppression has **COST edge** |
+
+MOM_LONG went 11 baskets/−1.62%/p=0.124 → 15 baskets/−1.78%/p=0.028. It is **PROVISIONAL at 15 baskets**
+and falls under exactly the rule that has now killed the pooled result twice.
+
+**Pre-registered: re-check MOM_LONG suppression at 25 baskets, evaluated at the FIRST cycle at which the
+basket count reaches 25** (the count trigger required above — not "at some later audit"). Outcomes:
+
+- **Still negative and BH-significant at ≥25 baskets** → the first replicated gate-effectiveness result in
+  the repo; record it as evidence the MOM_LONG basket suppression is doing real work.
+- **Reverts to non-significant** → the same PROVISIONAL-N mirage as the 08-22 pooled result, twice over,
+  and the pooled trajectory is the honest read.
+
+Either way, **no gate is removed on this** — a gate's value is insurance against the regime not yet in the
+data, and OI_FADE's +0.65% is the reason to keep reporting the legs separately rather than pooling them.
+
+## The spine moved again: 2,471 → 2,443 priced (2026-09-05)
+
+Isolation check (c) was **not** required at 08-29 (spine unchanged) and **was** required this cycle:
+
+- **priced spine 2,471 → 2,443** (`prices.parquet` / `returns.parquet`)
+- **features spine 2,471 → 2,499** (`features.parquet`)
+- **56 tickers are in `features` but not in `prices`** — they are selected into a lane's top-15 off
+  features, then fail to resolve against returns, so they silently drop out of the aggregate.
+
+Cause is the documented non-idempotent vendor feed, not a screener/universe decision. Selection-level
+attribution reconciles the baseline-cohort deficit **exactly**, which is what makes it attrition rather
+than decay:
+
+| lane | selected in baseline window | − lost to the 56 unpriced | − other unresolved | = resolved now | recorded baseline |
+|---|---|---|---|---|---|
+| MOM_LONG | 1245 | 24 | 13 | **1208** | 1213 |
+| MOM_SHORT | 832 | 2 | 4 | **826** | 830 |
+| OI_FADE | 1185 | 8 | 0 | **1177** | **1177 ✅ bit-exact** |
+| S2 | 1315 | 14 | 44 | **1257** | 1269 |
+| S4 | 1320 | 9 | 8 | **1303** | 1304 |
+
+Means moved ≤4bp; OI_FADE and S4 reproduce exactly. **Not a regression, and the baseline is NOT
+re-pointed** — the recorded baseline keeps its own 2,471 spine, which is precisely why the spine must be
+stated next to it.
+
+⚠️ **Any lane or gate figure measured before 2026-09-02 carries the retired 2,471 spine.** Re-run check
+(c) before citing one, exactly as the [2026-08-15 gate-vs-spine worked
+example](#worked-example-2026-08-15-a-gate-result-that-was-a-spine-artifact) requires. Spine changes are
+now recurring rather than one-off, so treat "the spine is unchanged" as something to verify each cycle,
+not to assume.

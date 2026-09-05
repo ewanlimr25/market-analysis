@@ -111,3 +111,65 @@ class TestApply:
         fresh = [row(status="INCONCLUSIVE", exc=None)]
         L.apply(led, fresh)
         assert fresh[0]["T1_status"] == "INCONCLUSIVE"
+
+
+def sup_row(period="2026-W33", rd="2026-08-14", tk="CRNX", lane="MOM_LONG", h=10,
+            status="RESOLVED", exc=-3.21, **kw):
+    """A `suppression_resolve.py` row -- the SAME problem, different field names."""
+    return {"period": period, "report_date": rd, "ticker": tk, "lane": lane, "horizon": h,
+            "status": status, "excess_pct": exc, "gate_correct": (exc or 0) < 0,
+            "entry": kw.get("entry", "2026-08-17"), "exit": kw.get("exit", "2026-08-31")}
+
+
+class TestSuppressionSchema:
+    """Suppressions were uncovered until 2026-09-05, and the gap bit.
+
+    CRNX lost 25 contiguous sessions to a vendor retraction that cycle. Its four `calls[]` rows
+    were restored from the call ledger; its suppression row had no such record and vanished from
+    the gate-effectiveness cohort. A gate that suppresses its own evidence cannot also afford to
+    lose it to the feed.
+    """
+
+    def test_a_matured_suppression_survives_a_later_retraction(self):
+        # Arrange -- the measurement was taken while the feed still served the bars
+        led, _ = L.merge({}, [sup_row(exc=-3.21)], L.SUPPRESSION)
+
+        # Act -- a later cycle cannot resolve it at all
+        fresh = [sup_row(status="INCONCLUSIVE", exc=None)]
+        out, conflicts = L.apply(led, fresh, L.SUPPRESSION)
+
+        # Assert -- the recorded measurement IS the record
+        assert out[0]["status"] == "RESOLVED"
+        assert out[0]["excess_pct"] == -3.21
+        assert out[0]["gate_correct"] is True
+        assert out[0]["from_ledger"] is True
+        assert [c["kind"] for c in conflicts] == ["RETRACTED"]
+
+    def test_only_resolved_suppressions_enter_the_ledger(self):
+        led, conflicts = L.merge({}, [sup_row(status="OPEN", exc=None)], L.SUPPRESSION)
+        assert led == {}
+        assert conflicts == []
+
+    def test_period_is_part_of_the_identity(self):
+        """A weekly and a daily envelope can suppress the same name+lane in the same week."""
+        led, _ = L.merge({}, [sup_row(period="2026-W33"), sup_row(period="2026-08-14")],
+                         L.SUPPRESSION)
+        assert len(led) == 2
+
+    def test_suppression_keys_cannot_collide_with_call_keys(self):
+        call_k = L.key({"report_date": "2026-08-14", "ticker": "CRNX",
+                        "lane": "MOM_LONG", "horizon": 10})
+        sup_k = L.key(sup_row(), L.SUPPRESSION)
+        assert call_k != sup_k
+        assert sup_k.startswith("sup|")
+
+    def test_call_keys_are_unchanged_by_the_schema_split(self):
+        """The 475-row call ledger on disk must stay addressable."""
+        assert L.key({"report_date": "2026-07-09", "ticker": "EQR",
+                      "lane": "OI_FADE", "horizon": 10}) == "2026-07-09|EQR|OI_FADE|10"
+
+    def test_a_disagreeing_re_derivation_is_reported_not_overwritten(self):
+        led, _ = L.merge({}, [sup_row(exc=-3.21)], L.SUPPRESSION)
+        led2, conflicts = L.merge(led, [sup_row(exc=+1.00)], L.SUPPRESSION)
+        assert [c["kind"] for c in conflicts] == ["CHANGED"]
+        assert led2[L.key(sup_row(), L.SUPPRESSION)]["excess_pct"] == -3.21
