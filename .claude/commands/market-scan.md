@@ -7,6 +7,12 @@ defaults:
   out_of_regime_cap: half
 ---
 
+> **FROZEN 2026-09-05 (findings `DECISIONS.md` D1, D11).** Do not run this command. The nightly
+> fan-out is retired: its five directional lanes measured −1.2% to +0.14% excess gross of costs and no
+> lane can clear DURABLE-N on this panel (`findings/market-analysis/RESEARCH/10`). The replacement is the
+> deterministic `make daily DATE=YYYY-MM-DD` (see `engine/README.md`). The journal under `analyses/scan/`
+> stays as the public record. If invoked anyway: stop, print this notice, and exit.
+
 # /market-scan — regime-first, excess-validated
 
 Supersedes `/daily-analysis` + `/weekly-analysis`. Built from the clean-room evidence in

@@ -6,6 +6,13 @@ Most equity "signals" are beta wearing a costume. This repo exists to keep only 
 survive being measured against a **conditional same-day SPY benchmark**, and to publish the running
 record — including the many days the honest answer was *no edge today*.
 
+> **Status 2026-09-05.** The nightly `/market-scan` and the weekly Layer-2 lanes are **frozen**: the
+> directional lanes measured −1.2% to +0.14% excess gross of costs and cannot clear their own bar on this
+> panel (`~/Development/findings/market-analysis/`). The replacement is a deterministic options-premium
+> engine in [`engine/`](engine/README.md) (`make daily`). Its first strategy, earnings short-vol on
+> mid-caps, was backtested with real marks on 2026-09-05 and is **net negative after measured costs**
+> (`findings/market-analysis/RESEARCH/45`); it does not launch. The journal below stays as the record.
+
 > **Not investment advice.** This is a personal research log. Every number here is a measurement on a
 > short historical panel, published so the method can be checked, not so it can be followed. Nothing in
 > `analyses/` is a recommendation. Past measured excess is not a forecast.

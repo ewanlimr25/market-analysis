@@ -1,5 +1,10 @@
 # CLAUDE.md — market-analysis
 
+> **2026-09-05: `/market-scan` and weekly Layer 2 are FROZEN** (see the banners in `.claude/commands/`). The
+> decision tool is now `make daily` from `engine/` (`engine/README.md`); its S-A parameters are frozen by
+> `tests/test_frozen_params.py` until the Season 3 read on 2026-12-01. The invariants below describe the
+> frozen engine and remain the record of why it stopped.
+
 Excess-scored, regime-first market analysis. Built from the hindsight-validated clean-room research in
 `research/` (panel 2026-03-13→06-26) — **read `research/00-orientation.md` before changing any lane's
 logic or gates.** Full doc index, including the history behind every rule below: [`docs/README.md`](docs/README.md).

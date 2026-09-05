@@ -6,6 +6,10 @@ defaults:
   weekly_technical_status: PRE-REGISTERED   # documented, 0 points, until cross-year validation
 ---
 
+> **LAYER 2 FROZEN 2026-09-05 (findings `DECISIONS.md` D1, D11).** Phase B (the validated weekly lanes)
+> must not be run or scored; the lanes are retired as live inputs. Layer 1 (the documentation diary) may
+> continue as a journal. The replacement decision tool is `make daily` (see `engine/README.md`).
+
 # /weekly-review — the week in review (documentation + validated weekly lanes + pre-registered technicals)
 
 This is the weekly companion to `/market-scan`. It exists because the daily scan optimizes for *tonight's*

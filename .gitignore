@@ -6,3 +6,5 @@ analyses/audit/*
 __pycache__/
 *.pyc
 archive/
+data/mart/
+data/backtest/
