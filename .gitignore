@@ -7,4 +7,5 @@ __pycache__/
 *.pyc
 archive/
 data/mart/
-data/backtest/
+data/backtest/*
+!data/backtest/*.md

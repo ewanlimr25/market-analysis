@@ -59,7 +59,7 @@ nothing touches real money before 2026-12-01. Sections 1 to 7 below are the deta
 | `ledger/sb/` new rows | Friday, only if the gate is ON | up to four paper positions (SPY and QQQ, put spread and condor): strikes, expiry, credit, cost, max loss, one-contract sizing |
 | `ledger/sb/` graded rows | the Friday a position expires (~3 weeks after entry) | net P&L per position from the official close, with `settle_source` |
 | S-A ledger rows | from 2026-10-01, any night with a qualifying print | earnings candidates emitted and graded next morning; measurement only |
-| `data/backtest/sb_report.md`, `sb_*.parquet` | weekend | proxy extended by one week, marked run re-done, the §8 go/no-go table as of that date |
+| `data/backtest/sb_report.md`, `sb_*.parquet` | weekend | proxy extended by one week, marked run re-done, the §8 go/no-go table as of that date (the `.md` reports are committed; the parquet stays local) |
 | `data/backtest/report.md` | weekend, from October | S-A Season 3 tables accruing |
 | `make test` result | weekend | 269 green, which also certifies no frozen parameter moved |
 | six commits, pushed | five nightly, one weekly | the public, append-only record |
