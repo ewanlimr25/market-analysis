@@ -10,6 +10,9 @@ make mart                    # rebuild data/mart/{daily_contract,earnings_events
 make backtest                # S-A over the whole mart -> data/backtest/{trades,suppressed,dropped}.parquet
 make report                  # season table, BH, DSR, PBO, tail, robustness, go/no-go -> data/backtest/report.md
 make test                    # the unit suite (no panel needed)
+make backtest-sb             # S-B: three-year proxy + marked panel run -> data/backtest/sb_*.parquet (REFRESH=1 refetches inputs)
+make report-sb               # S-B: sleeve tables, BH, DSR, PBO, month rule, tail, overlap, go/no-go -> data/backtest/sb_report.md
+make index-vol               # refresh data/mart/index_vol/ from the CBOE public CSVs (the nightly does this itself)
 ```
 
 | module | what |
@@ -29,7 +32,14 @@ make test                    # the unit suite (no panel needed)
 | `validation/stats.py` | clustered t, BH, Sharpe deflation, CSCV PBO |
 | `validation/harness.py`, `validation/run_report.py` | season split, tail, robustness, go/no-go, §4.3 reproduction; the markdown report |
 | `ledger.py`, `daily.py`, `report.py` | forward ledger (`ledger/`, committed, never re-derived), `make daily`, templated `report.md` |
+| `mart/index_vol.py` | CBOE VIX / VIX3M / VXN / VIX9D closes, cached in `data/mart/index_vol/`, artifact fallback (S-B, DESIGN/80 §1.1) |
+| `strategies/sb_gate.py` | the S-B gate: contango and level above the 20-session median, read at the prior close (DESIGN/80 §2) |
+| `strategies/sb_structures.py` | Friday-type expiry nearest 21 days, σ unit, tier-1 strike band, PS / IC legs, max loss, sizing, open cap (DESIGN/80 §3-§4) |
+| `strategies/sb_proxy.py`, `strategies/sb.py`, `strategies/sb_data.py`, `backtest_sb.py` | the three-year proxy at the panel's smile multipliers; the marked run on `daily_contract`; the driver |
+| `validation/sb_harness.py`, `validation/run_sb_report.py` | NW and expiry-clustered t, BH, deflated Sharpe (two benchmarks), PBO, month rule, tail, overlap, gate modes, go/no-go (DESIGN/80 §6) |
+| `sb_daily.py` | the S-B nightly step: CBOE refresh (fail-soft), gate tonight and next session, entries on the last session of the week, grading at expiry into `ledger/sb/` (DESIGN/80 §7) |
 
-The forward ledger opens 2026-10-01; before that `make daily` writes `analyses/daily/<date>/` but does
-not touch `ledger/` unless `--force-ledger` is passed. The backtest write-up lives in
-`~/Development/findings/market-analysis/RESEARCH/45-sa-backtest.md`.
+The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 2026-09-11; before those dates
+`make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.
+The backtest write-ups live in `~/Development/findings/market-analysis/RESEARCH/45-sa-backtest.md` (S-A) and
+`RESEARCH/46-sb-backtest.md` (S-B); the S-B parameters are frozen by `tests/test_sb_frozen_params.py`.

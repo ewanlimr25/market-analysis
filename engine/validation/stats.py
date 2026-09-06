@@ -151,3 +151,25 @@ def pbo(pnl: pd.DataFrame, block_ids) -> dict:
     logits = np.asarray(logits)
     return {"pbo": float((logits < 0).mean()), "mean_logit": float(logits.mean()),
             "n_combinations": int(len(logits)), "n_configs": int(n_cfg), "n_blocks": int(n_blocks)}
+
+
+def nw_t(x, lag: int) -> dict:
+    """Mean and Newey-West (Bartlett kernel) t of an ordered series with `lag` autocorrelation
+    lags; p from Student t on n - 1 df. NaN for fewer than three observations."""
+    x = np.asarray(x, dtype=float)
+    x = x[np.isfinite(x)]
+    n = len(x)
+    if n < 3:
+        return {"n": int(n), "mean": np.nan, "se": np.nan, "t": np.nan, "p": np.nan, "median": np.nan, "hit": np.nan}
+    mu = x.mean()
+    e = x - mu
+    s = float((e * e).sum())
+    for k in range(1, min(lag, n - 1) + 1):
+        w = 1 - k / (lag + 1)
+        s += 2 * w * float((e[k:] * e[:-k]).sum())
+    var = s / n ** 2
+    se = math.sqrt(var) if var > 0 else float("nan")
+    t = mu / se if se and se > 0 else float("nan")
+    p = float(2 * sps.t.sf(abs(t), df=n - 1)) if np.isfinite(t) else float("nan")
+    return {"n": int(n), "mean": float(mu), "se": float(se), "t": float(t), "p": p,
+            "median": float(np.median(x)), "hit": float((x > 0).mean())}

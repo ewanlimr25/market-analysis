@@ -1,6 +1,7 @@
 """`make daily DATE=YYYY-MM-DD` (DESIGN/70 §5): preflight, append the mart, tonight's S-A
-candidates with every filter's verdict, grade yesterday's signals into the forward ledger, and
-write analyses/daily/<date>/signals.json + report.md. Deterministic; no model call.
+candidates with every filter's verdict, grade yesterday's signals into the forward ledger, then the
+S-B step (DESIGN/80 §7, `engine/sb_daily.py`), and write analyses/daily/<date>/signals.json +
+report.md. Deterministic; no model call; the only network use is the CBOE refresh, fail-soft.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ from engine import ledger as L
 from engine import marking as M
 from engine import portfolio
 from engine import report as R
+from engine import sb_daily as SD
 from engine.config import ANALYSES_DAILY, LEDGER_DIR, SA_PARAMS, SCRIPTS, SIZING
 from engine.mart import daily_contract, earnings_events
 from engine.strategies import sa, sa_data
@@ -148,7 +150,7 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
                "dropped": _jsonable(pd.concat([cands.dropped, dropped]) if len(dropped) or len(cands.dropped) else pd.DataFrame()),
                "graded": _jsonable(graded), "season_running": running,
                "ledger": {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open},
-               "sb_state": None}
+               "sb_state": SD.nightly(con, d, force_ledger)}
     out_dir = os.path.join(out_root, d.isoformat())
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "signals.json"), "w") as fh:

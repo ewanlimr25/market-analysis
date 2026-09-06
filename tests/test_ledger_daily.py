@@ -120,7 +120,7 @@ def test_report_renders_candidates_suppressed_and_graded():
     md = R.render(signals)
     assert md.startswith("# S-A daily") and "2026-10-14" in md
     assert "XYZ" in md and "BIG" in md and "F3" in md and "OLD" in md
-    assert "A1" in md and "not implemented" in md.lower()          # S-B state placeholder
+    assert "A1" in md and "## S-B state" in md                      # S-B section (DESIGN/80 §7)
 
 
 def test_report_says_so_when_no_event_clears():

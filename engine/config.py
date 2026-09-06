@@ -93,3 +93,76 @@ BH_FDR = 0.10
 GO_T_MIN = 2.5
 GO_MIN_EVENTS = 60
 GO_WORST_TO_MEAN_WIN_MAX = 4.0
+
+
+# =============================================================================================
+# S-B: index vol premium with a VIX gate (DESIGN/80; frozen 2026-09-05). Do not tune before the
+# 2026-12-01 read. Nothing above this line changed when S-B was added.
+# =============================================================================================
+LEDGER_SB_DIR = os.path.join(LEDGER_DIR, "sb")
+INDEX_VOL_DIR = os.path.join(MART, "index_vol")
+INDEX_VOL_FILE = os.path.join(INDEX_VOL_DIR, "index_vol.parquet")
+INDEX_VOL_FALLBACK = os.path.expanduser(
+    "~/Development/findings/market-analysis/artifacts/sb-backtest/index_vol_cboe_2026-09-05.parquet")
+PROXY_PRICES_FALLBACK = os.path.expanduser(
+    "~/Development/findings/market-analysis/artifacts/sb-backtest/spy_qqq_yahoo_2026-09-05.parquet")
+CBOE_HISTORY_URL = "https://cdn.cboe.com/api/global/us_indices/daily_prices/{index}_History.csv"
+CBOE_INDICES = ("VIX", "VIX3M", "VXN", "VIX9D")
+
+
+@dataclass(frozen=True)
+class SBParams:
+    """S-B pre-registered gate, expiry, strike and structure parameters (DESIGN/80 §2-§3)."""
+    target_dte_cal: int = 21                     # §3.2 expiry nearest entry + 21 calendar days
+    dte_cal_min: int = 7                         # §3.2
+    dte_cal_max: int = 30                        # §3.2
+    short_sigma: float = 1.0                     # §3.4 short legs at S(1 -/+ m)
+    wing_sigma: float = 2.0                      # §3.4 wings at S(1 -/+ 2m)
+    strike_band_sigma: float = 0.25              # §3.4 nearest tier-1 strike within +/- 0.25m
+    leg_size_min: int = 5                        # §3.4 tier-1 late print on every leg
+    short_spread_max: float = 0.10               # §3.6 (the S-A F6 value, reused)
+    median_window: int = 20                      # §2 G2: sessions t-21 .. t-2
+    take_profit_frac: float = 0.50               # §8 Alt-2 only
+
+
+@dataclass(frozen=True)
+class SBSizing:
+    """DESIGN/80 §4."""
+    equity: float = 100_000.0
+    max_loss_frac: float = 0.03                  # max loss <= 3% of equity per position
+    max_open_per_sleeve: int = 3                 # one per week of a three-week hold
+
+
+SB_PARAMS = SBParams()
+SB_SIZING = SBSizing()
+SB_FROZEN_ON = date(2026, 9, 5)
+SB_LEDGER_OPENS = date(2026, 9, 11)              # §5.3
+SB_UNDERLYINGS = ("SPY", "QQQ")
+SB_VOL_INDEX = {"SPY": "vix", "QQQ": "vxn"}      # §2 G2 / §3.3 the X series per underlying
+SB_STRUCTURES = ("PS", "IC")
+# Windows on the entry session (§6.4)
+SB_WINDOWS = {
+    "P1": (date(2023, 9, 8), date(2024, 8, 30)),
+    "P2": (date(2024, 9, 6), date(2025, 8, 29)),
+    "P3": (date(2025, 9, 5), date(2026, 11, 6)),
+}
+SB_MARKED_WINDOW = (date(2026, 3, 13), date(2026, 11, 6))
+# Proxy smile: median IV / index per (underlying, leg), measured 2026-09-05 (§1.3, §5.1)
+SB_PROXY_IV_MULT = {
+    ("SPY", "p1"): 1.07, ("SPY", "p2"): 1.35, ("SPY", "c1"): 0.65, ("SPY", "c2"): 0.74,
+    ("QQQ", "p1"): 1.08, ("QQQ", "p2"): 1.34, ("QQQ", "c1"): 0.76, ("QQQ", "c2"): 0.79,
+}
+# Proxy cost: median late relative NBBO spread per (underlying, leg), measured 2026-09-05 (§1.3)
+SB_PROXY_SPREAD = {
+    ("SPY", "p1"): 0.0076, ("SPY", "p2"): 0.0132, ("SPY", "c1"): 0.0225, ("SPY", "c2"): 0.222,
+    ("QQQ", "p1"): 0.0086, ("QQQ", "p2"): 0.0132, ("QQQ", "c1"): 0.0121, ("QQQ", "c2"): 0.0314,
+}
+SB_PROXY_STRIKE_STEP = 1.0                       # SPY and QQQ strikes on the $1 grid
+# Bar (§6.7)
+SB_PRIMARY_TESTS = 4                             # 2 underlyings x 2 structures
+SB_DSR_TRIALS = 6                                # 4 primary + Alt-1 + Alt-2 (§8)
+SB_NW_LAG = 2                                    # three-deep overlap of weekly entries
+SB_GO_T_MIN = 2.0
+SB_GO_MONTH_LOSS_MULT = 3.0                      # worst month >= -3 x median month
+SB_SCALE_MIN_POSITIONS = 40                      # forward ledger count trigger for scaling up
+SB_PBO_BLOCKS = 16

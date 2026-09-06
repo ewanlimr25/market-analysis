@@ -2,7 +2,8 @@
 
 > **2026-09-05: `/market-scan` and weekly Layer 2 are FROZEN** (see the banners in `.claude/commands/`). The
 > decision tool is now `make daily` from `engine/` (`engine/README.md`); its S-A parameters are frozen by
-> `tests/test_frozen_params.py` until the Season 3 read on 2026-12-01. The invariants below describe the
+> `tests/test_frozen_params.py` and its S-B parameters (DESIGN/80, added 2026-09-05 evening) by
+> `tests/test_sb_frozen_params.py`, both until the read on 2026-12-01. The invariants below describe the
 > frozen engine and remain the record of why it stopped.
 
 Excess-scored, regime-first market analysis. Built from the hindsight-validated clean-room research in

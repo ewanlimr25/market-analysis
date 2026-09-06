@@ -52,5 +52,54 @@ def render(signals: dict) -> str:
     led = signals.get("ledger", {})
     parts += ["", f"Ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), graded {led.get('graded', 0)}; "
                   f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-10-01; nothing written)'}."]
-    parts += ["", "## S-B state", "_not implemented in this cycle (DESIGN/70 §0)._", ""]
+    parts += ["", "## S-B state", render_sb(signals.get("sb_state")), ""]
+    return "\n".join(parts)
+
+
+SB_CANDIDATE_COLS = ["underlying", "structure", "expiry", "k_p1", "k_p2", "k_c1", "k_c2", "credit_entry", "max_loss_usd", "n", "entry_tier_max"]
+SB_GRADED_COLS = ["underlying", "structure", "entry", "expiry", "settle_close", "net_usd", "ror"]
+SB_RUNNING_COLS = ["sleeve", "n", "mean_ror", "nw_t", "net_usd_total"]
+SB_SKIPPED_COLS = ["underlying", "structure", "reason"]
+PCT_COLS.update({"ror", "mean_ror"})
+
+
+def _gate_line(label: str, gates: dict) -> str:
+    if not gates:
+        return f"{label}: no gate evaluated"
+    bits = []
+    for u, g in gates.items():
+        vals = f" (VIX {g.get('vix')}, VIX3M {g.get('vix3m')}, X {g.get('x')} vs median {g.get('x_median')})" if g.get("known") else ""
+        bits.append(f"{u} {g.get('reason')}{vals}")
+    first = next(iter(gates.values()))
+    return f"{label} ({first.get('date')}, from {first.get('asof') or 'n/a'} closes): " + " · ".join(bits)
+
+
+def render_sb(state: dict | None) -> str:
+    if not state:
+        return "_no S-B state (step not run)._"
+    if state.get("error"):
+        return f"**{state['error']}**"
+    parts = [_gate_line("Gate", state.get("gate", {})), "", _gate_line("Next session", state.get("gate_next", {})), ""]
+    refresh = state.get("refresh")
+    if refresh is not None:
+        parts += [f"CBOE refresh: {'ok through ' + str(refresh.get('through')) if refresh.get('ok') else 'FAILED (' + str(refresh.get('error')) + '); using the file on disk'}"
+                  + f"; index-vol through {state.get('index_vol_through')}", ""]
+    parts.append(f"Entry day: {'yes' if state.get('is_entry_day') else 'no'}.")
+    cands = state.get("candidates", [])
+    parts += ["", f"### S-B positions tonight ({len(cands)})", table(cands, SB_CANDIDATE_COLS) if cands else "_none_"]
+    skipped = state.get("skipped", [])
+    if skipped:
+        parts += ["", f"### S-B skipped ({len(skipped)})", table(skipped, SB_SKIPPED_COLS)]
+    graded = state.get("graded", [])
+    parts += ["", f"### S-B graded at expiry today ({len(graded)})", table(graded, SB_GRADED_COLS) if graded else "_none due_"]
+    unsettled = state.get("unsettled", [])
+    if unsettled:
+        parts += ["", f"_{len(unsettled)} position(s) due today have no settlement close yet; they stay pending._"]
+    open_ = state.get("open_positions", {})
+    parts += ["", "Open positions: " + (", ".join(f"{k} {v}" for k, v in open_.items()) if open_ else "none")]
+    running = state.get("running", [])
+    parts += ["", "### S-B forward ledger to date", table(running, SB_RUNNING_COLS) if running else "_ledger empty_"]
+    led = state.get("ledger", {})
+    parts += ["", f"S-B ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), graded {led.get('graded', 0)}; "
+                  f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-09-11; nothing written)'}."]
     return "\n".join(parts)
