@@ -1,5 +1,7 @@
 # engine/ — the deterministic options-premium engine
 
+Operator's guide (what to run nightly, how to read the report, the calendar): [`../docs/OPERATING.md`](../docs/OPERATING.md).
+
 Built 2026-09-05 from `~/Development/findings/market-analysis/DESIGN/70-backtest-spec.md`. No model
 call anywhere; every number comes from a query or a pure function, and the S-A parameters are frozen
 (`tests/test_frozen_params.py` fails if one moves before the Season 3 read).

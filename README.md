@@ -191,6 +191,8 @@ is published unedited, alongside the days that worked and the days that did not.
 
 ## Cadence
 
+> **Running the engine day to day:** see [`docs/OPERATING.md`](docs/OPERATING.md). The commands below describe the frozen Claude Code workflows; the live routine is `make daily`.
+
 | When | Command | Emits |
 |---|---|---|
 | Nightly, after the EOD export | `/market-scan` | `analyses/scan/<date>/` |

@@ -1,0 +1,170 @@
+{
+ "date": "2026-09-04",
+ "season": "S2",
+ "preflight": {
+  "date": "2026-09-04",
+  "panel": {
+   "All Options": {
+    "present": true,
+    "rows": 12046761
+   },
+   "Dark pool": {
+    "present": true,
+    "rows": 445912
+   },
+   "Hot Option Chains": {
+    "present": true,
+    "rows": 28676
+   },
+   "OI changes": {
+    "present": true,
+    "rows": 271395
+   },
+   "Stock Screener": {
+    "present": true,
+    "rows": 6293
+   }
+  },
+  "truth_set": {
+   "prices": {
+    "max_date": "2026-09-04",
+    "stale_vs_trade_date": false
+   },
+   "returns": {
+    "max_date": "2026-09-04",
+    "stale_vs_trade_date": false
+   },
+   "features": {
+    "max_date": "2026-09-04",
+    "stale_vs_trade_date": false
+   }
+  },
+  "ok": true,
+  "warnings": []
+ },
+ "mart": {
+  "daily_contract_rows": 329536,
+  "earnings_events_rows": 0
+ },
+ "candidates": [],
+ "suppressed": [],
+ "dropped": [],
+ "graded": [],
+ "season_running": [],
+ "ledger": {
+  "emitted": 0,
+  "skipped": 0,
+  "graded": 0,
+  "ledger_open": false
+ },
+ "sb_state": {
+  "date": "2026-09-04",
+  "index_vol_through": "2026-09-04",
+  "is_entry_day": true,
+  "gate": {
+   "SPY": {
+    "date": "2026-09-04",
+    "asof": "2026-09-03",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 14.32,
+    "vix3m": 17.42,
+    "x": 14.32,
+    "x_median": 15.17
+   },
+   "QQQ": {
+    "date": "2026-09-04",
+    "asof": "2026-09-03",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 14.32,
+    "vix3m": 17.42,
+    "x": 20.16,
+    "x_median": 21.875
+   }
+  },
+  "gate_next": {
+   "SPY": {
+    "date": "2026-09-08",
+    "asof": "2026-09-04",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 14.53,
+    "vix3m": 17.61,
+    "x": 14.53,
+    "x_median": 15.16
+   },
+   "QQQ": {
+    "date": "2026-09-08",
+    "asof": "2026-09-04",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 14.53,
+    "vix3m": 17.61,
+    "x": 20.04,
+    "x_median": 21.65
+   }
+  },
+  "candidates": [],
+  "skipped": [
+   {
+    "ticker": "SPY",
+    "underlying": "SPY",
+    "entry": "2026-09-04",
+    "E": "2026-09-04",
+    "variant": "B1",
+    "structure": "PS",
+    "reason": "OFF:G2",
+    "gate_reason": "OFF:G2"
+   },
+   {
+    "ticker": "SPY",
+    "underlying": "SPY",
+    "entry": "2026-09-04",
+    "E": "2026-09-04",
+    "variant": "B1",
+    "structure": "IC",
+    "reason": "OFF:G2",
+    "gate_reason": "OFF:G2"
+   },
+   {
+    "ticker": "QQQ",
+    "underlying": "QQQ",
+    "entry": "2026-09-04",
+    "E": "2026-09-04",
+    "variant": "B1",
+    "structure": "PS",
+    "reason": "OFF:G2",
+    "gate_reason": "OFF:G2"
+   },
+   {
+    "ticker": "QQQ",
+    "underlying": "QQQ",
+    "entry": "2026-09-04",
+    "E": "2026-09-04",
+    "variant": "B1",
+    "structure": "IC",
+    "reason": "OFF:G2",
+    "gate_reason": "OFF:G2"
+   }
+  ],
+  "graded": [],
+  "unsettled": [],
+  "open_positions": {},
+  "running": [],
+  "ledger": {
+   "emitted": 0,
+   "skipped": 0,
+   "graded": 0,
+   "ledger_open": false
+  },
+  "refresh": {
+   "ok": true,
+   "through": "2026-09-04"
+  }
+ }
+}
