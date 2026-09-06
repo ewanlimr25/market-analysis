@@ -5,6 +5,50 @@ off, and the dates that matter. Design and evidence live in `~/Development/findi
 (`DESIGN/70` for S-A, `DESIGN/80` for S-B, `RESEARCH/45` and `46` for the backtests). Module map:
 `engine/README.md`._
 
+## 0. The routine at a glance
+
+**Every trading day (Mon to Fri), after the 8 PM export**
+
+```
+cd ~/Development/market-analysis
+make daily DATE=YYYY-MM-DD                       # the session that just closed; ~2 s
+git add analyses/daily ledger && git commit -m "daily: YYYY-MM-DD" && git push
+```
+
+Then read `analyses/daily/YYYY-MM-DD/report.md` (one page). On most nights the two lines that matter
+are `no event tonight clears the filters` and the S-B gate verdict. Two nights carry extra meaning:
+**Thursday**, where the `Next session` line previews Friday's gate; **Friday**, the entry night, where
+a gate ON lists the SPY/QQQ put spreads and condors and the ledger gains rows, and a gate OFF lists the
+four sleeves as skipped. The command is the same either way. Skip weekends and holidays; if the export
+has not landed, wait.
+
+**Every weekend**
+
+```
+make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the marked backtest -> data/backtest/sb_report.md (read §8)
+make test                                        # 269 unit tests; also proves no frozen parameter moved
+make backtest && make report                     # S-A, from October once Season 3 events exist
+git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
+```
+
+**Dates where the routine changes**
+
+| Date | Change |
+|---|---|
+| Mon 2026-09-08 | Routine starts |
+| Fri 2026-09-11 | S-B ledger opens; first possible paper entry |
+| Thu 2026-10-01 | S-A ledger opens (automatic) |
+| Fri 2026-10-02 | First S-B expiry; first graded rows |
+| Fri 2026-11-06 | Last S-B entry that counts toward the read |
+| Tue 2026-12-01 | The read: run both backtest pairs, then a Claude session with the prompt in `findings/.../NEXT-SESSION.md` writes the verdict |
+
+**Commands you never run on your own:** `make mart` (full rebuild, only for a corrupted partition),
+`make index-vol` (only if the nightly says the CBOE refresh failed two sessions running),
+`--force-ledger` (testing only). `/market-scan`, `/weekly-review` and `/calibration-audit` stay frozen.
+
+That is the entire job: one command and a commit on trading nights, three commands on weekends, and
+nothing touches real money before 2026-12-01. Sections 1 to 7 below are the detail.
+
 ## 1. Every trading day, after the 8 PM export lands
 
 ```
