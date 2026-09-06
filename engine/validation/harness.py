@@ -99,7 +99,7 @@ def tail_report(trades: pd.DataFrame, variant: str, structure: str, season: str)
     worst_share = float(x[:decile][x[:decile] < 0].sum() / losses.sum()) if losses.sum() < 0 else 0.0
     wins = x[x > 0]
     risk_col = "stress_loss_usd" if structure == "SS" else "max_loss_usd"
-    breaches = int((sub.net_usd <= -sub[risk_col] * sub.n).sum()) if risk_col in sub else 0
+    breaches = int((sub.net_usd <= -sub[risk_col] * sub.contracts).sum()) if risk_col in sub else 0
     return {"variant": variant, "structure": structure, "season": season, "n": len(x),
             "mean_net_pct": float(x.mean()), "worst_event_pct": float(x.min()), "best_event_pct": float(x.max()),
             "mean_win_pct": float(wins.mean()) if len(wins) else np.nan,

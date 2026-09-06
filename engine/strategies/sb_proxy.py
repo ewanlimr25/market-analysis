@@ -82,7 +82,7 @@ def position_row(underlying: str, structure: str, entry: date, expiry: date, spo
             "k_p1": strikes.get(SB.LEG_P1), "k_p2": strikes.get(SB.LEG_P2),
             "k_c1": strikes.get(SB.LEG_C1) if structure == SB.STRUCTURE_IC else None,
             "k_c2": strikes.get(SB.LEG_C2) if structure == SB.STRUCTURE_IC else None,
-            "width": w, **priced, "n": n, "max_loss_usd": max_loss, "risk_usd": risk,
+            "width": w, **priced, "contracts": n, "max_loss_usd": max_loss, "risk_usd": risk,
             "ror": priced["net_usd"] / risk, "credit_over_width": credit / w if w else float("nan"),
             "cost_over_credit": priced["cost_usd"] / (credit * M.CONTRACT_MULTIPLIER * n) if credit > 0 else float("nan"),
             "window": window_of(entry), "entry_month": entry.strftime("%Y-%m"), "month": expiry.strftime("%Y-%m")}

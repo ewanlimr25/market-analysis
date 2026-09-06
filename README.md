@@ -167,7 +167,7 @@ analyses/
 data/                  the truth set — see above                            (local-only)
 docs/                  regression-gate and per-lane detail behind CLAUDE.md's index
 research/              the clean-room study the engine was built from
-schemas/               JSON Schema for the decision envelope (v2) and the weekly review
+schemas/               JSON Schema for the decision envelope (v2), the weekly review, and the engine's nightly signals.json (d1.0)
 scripts/               helper scripts + the regression harness
   truthset/            truth-set builders and the canonical excess resolver
 tests/                 pytest; unit and integration markers

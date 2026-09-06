@@ -49,7 +49,7 @@ def test_entry_candidates_build_ps_and_ic_with_every_leg_at_tier_one():
     assert ps["p1_entry_tier"] == 1 and ps["p2_entry_tier"] == 1 and ps["entry_tier_max"] == 1
     assert ps["credit_entry"] == pytest.approx(2.5 - 0.8)
     assert ps["max_loss_usd"] == pytest.approx((5.0 - 1.7) * 100)
-    assert ps["n"] == max(1, int(SB_SIZING.max_loss_frac * SB_SIZING.equity // ps["max_loss_usd"]))
+    assert ps["contracts"] == max(1, int(SB_SIZING.max_loss_frac * SB_SIZING.equity // ps["max_loss_usd"]))
     assert ps["ticker"] == "SPY" and ps["variant"] == "B1" and ps["pre"] == ENTRY and ps["post"] == EXP
     assert ps["gate_reason"] == "ON" and ps["window"] == "P3" and ps["graded"] is False
     assert pd.isna(ps["net_usd"]) and pd.isna(ps["ror"])
@@ -86,7 +86,7 @@ def test_no_friday_expiry_in_range_skips_with_no_expiry():
 def test_grade_position_settles_at_intrinsic_and_prices_costs_by_hand():
     ps = sb.entry_candidates("SPY", ENTRY, _rows(), _on(), X, SB_PARAMS, SB_SIZING, cal.is_trading_day).trades[0]
     g = sb.grade_position(ps, settle_close=92.0, settle_source="prices")
-    n = ps["n"]
+    n = ps["contracts"]
     assert g["graded"] is True and g["debit_exit"] == pytest.approx(3.0) and g["exit_tier_max"] == 4
     entry_cost = n * ((0.5 * 0.01 * 2.5 * 100 + COMMISSION_PER_CONTRACT) + (0.5 * 0.01 * 0.8 * 100 + COMMISSION_PER_CONTRACT))
     net = (1.7 - 3.0) * 100 * n - entry_cost - 2 * n * COMMISSION_PER_CONTRACT

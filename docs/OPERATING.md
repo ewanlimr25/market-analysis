@@ -85,7 +85,10 @@ git add analyses/daily ledger && git commit -m "daily: YYYY-MM-DD"
 ```
 
 Then open `analyses/daily/YYYY-MM-DD/report.md`. Read it top to bottom; it is under a page. The
-machine copy is `signals.json` in the same folder.
+machine copy is `signals.json` in the same folder; its shape is pinned by `schemas/signals.schema.json`
+(`schema_version d1.0`, `report_kind engine-daily`), and the command's last line reads
+`signals.json: VALID`. A `WARN ... does not match` line means a key drifted: the file is still the
+record, but tell the next session so the schema (not the ledger) is fixed.
 
 Do not run for a date with no export (weekends, holidays). If the export has not landed, wait; do
 not run the previous date twice (it is harmless, the ledger writes are idempotent, but it wastes a
@@ -100,7 +103,8 @@ out-of-sample test)**.
 
 **Tonight's candidates:** earnings events that clear every S-A filter tonight. Each row gives the name,
 structure (SS short straddle, IC iron condor), strikes and expiry, credit at the late-window market,
-spread cost, max or stress loss, and contracts sized to the risk limit. On most nights outside earnings
+spread cost, max or stress loss, and `contracts` sized to the risk limit (the column is named
+`contracts` everywhere; `n` in the running tables is a count of positions). On most nights outside earnings
 season it reads `no event tonight clears the filters`. **S-A is a measurement only:** its backtest
 failed the bar on Seasons 1 and 2 (`RESEARCH/45`), so these rows are never traded; they are graded
 into the ledger to see whether Season 3 agrees.
@@ -197,4 +201,5 @@ is information, not a reason to change anything before the read.
 | `data/mart/index_vol/`, `data/mart/vix/` | CBOE and VIX series |
 | `data/backtest/` | the two backtests' outputs and reports |
 | `engine/config.py` | every frozen parameter, with the section of the spec it comes from |
+| `schemas/signals.schema.json` | the contract for `signals.json`; `make validate DATE=...` checks one night by hand |
 | `~/Development/findings/market-analysis/` | why all of this exists, and the hand-off note `NEXT-SESSION.md` |

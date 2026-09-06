@@ -35,7 +35,7 @@ def _positions(sleeve_rors: dict, start=date(2024, 1, 5), n=60, risk=2500.0):
             expiry = entry + timedelta(days=21)
             ror = rors[i % len(rors)]
             rows.append({"underlying": u, "structure": s, "entry": entry, "expiry": expiry, "ror": ror,
-                         "net_usd": ror * risk, "risk_usd": risk, "max_loss_usd": risk, "n": 1,
+                         "net_usd": ror * risk, "risk_usd": risk, "max_loss_usd": risk, "contracts": 1,
                          "cost_usd": 20.0, "credit_entry": 2.0, "width": 30.0, "credit_over_width": 2 / 30,
                          "cost_over_credit": 0.1, "x": 18.0, "window": "P1" if entry < date(2024, 9, 6) else "P2",
                          "month": expiry.strftime("%Y-%m"), "gate_mode": "both", "gate_reason": "ON"})

@@ -55,7 +55,7 @@ def test_put_spread_priced_by_hand_and_settled_inside_the_wings():
     max_loss = (k1 - k2 - credit) * 100
     assert row["max_loss_usd"] == pytest.approx(max_loss)
     n = max(1, math.floor(SB_SIZING.max_loss_frac * SB_SIZING.equity / max_loss))
-    assert row["n"] == n
+    assert row["contracts"] == n
     entry_cost = n * ((0.5 * SB_PROXY_SPREAD[("SPY", "p1")] * p1 * 100 + COMMISSION_PER_CONTRACT)
                       + (0.5 * SB_PROXY_SPREAD[("SPY", "p2")] * p2 * 100 + COMMISSION_PER_CONTRACT))
     assert row["entry_cost_usd"] == pytest.approx(entry_cost)
@@ -71,7 +71,7 @@ def test_settlement_beyond_the_wing_loses_the_full_width_and_above_keeps_the_cre
     assert beyond["debit_exit"] == pytest.approx(5.0)
     assert beyond["ror"] == pytest.approx(-1.0 - beyond["cost_usd"] / beyond["risk_usd"])
     kept, _ = _hand_position("PS", close=104.0)
-    assert kept["debit_exit"] == 0.0 and kept["gross_usd"] == pytest.approx(kept["credit_entry"] * 100 * kept["n"])
+    assert kept["debit_exit"] == 0.0 and kept["gross_usd"] == pytest.approx(kept["credit_entry"] * 100 * kept["contracts"])
 
 
 def test_iron_condor_adds_the_call_side_and_uses_the_larger_width():
@@ -101,5 +101,5 @@ def test_run_proxy_is_deterministic_gated_and_carries_the_gate_fields():
     assert len(off) >= len(on) and set(off.gate_mode) == {"off"}
     # the first 21 sessions cannot be gated (window not filled): UNKNOWN fails closed in every mode
     assert on.entry.min() > inputs.sessions[21]
-    for col in ("window", "ror", "net_usd", "max_loss_usd", "n", "credit_entry", "k_p1", "k_p2", "entry_cost_usd", "exit_cost_usd"):
+    for col in ("window", "ror", "net_usd", "max_loss_usd", "contracts", "credit_entry", "k_p1", "k_p2", "entry_cost_usd", "exit_cost_usd"):
         assert col in on.columns

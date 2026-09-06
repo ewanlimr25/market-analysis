@@ -5,7 +5,7 @@ from typing import Any
 
 NO_EVENT = "no event tonight clears the filters"
 CANDIDATE_COLS = ["ticker", "variant", "structure", "expiry", "k", "k_up", "k_dn", "credit_entry",
-                  "credit_net_pct", "risk_usd", "n", "entry_tier_max", "cap_pass"]
+                  "credit_net_pct", "risk_usd", "contracts", "entry_tier_max", "cap_pass"]
 SUPPRESSED_COLS = ["ticker", "variant", "first_fail"]
 GRADED_COLS = ["ticker", "variant", "structure", "net_pct", "net_usd", "exit_tier_max", "model_exit"]
 RUNNING_COLS = ["variant", "structure", "n", "dates", "mean_net_pct", "t", "net_usd_total"]
@@ -56,7 +56,7 @@ def render(signals: dict) -> str:
     return "\n".join(parts)
 
 
-SB_CANDIDATE_COLS = ["underlying", "structure", "expiry", "k_p1", "k_p2", "k_c1", "k_c2", "credit_entry", "max_loss_usd", "n", "entry_tier_max"]
+SB_CANDIDATE_COLS = ["underlying", "structure", "expiry", "k_p1", "k_p2", "k_c1", "k_c2", "credit_entry", "max_loss_usd", "contracts", "entry_tier_max"]
 SB_GRADED_COLS = ["underlying", "structure", "entry", "expiry", "settle_close", "net_usd", "ror"]
 SB_RUNNING_COLS = ["sleeve", "n", "mean_ror", "nw_t", "net_usd_total"]
 SB_SKIPPED_COLS = ["underlying", "structure", "reason"]

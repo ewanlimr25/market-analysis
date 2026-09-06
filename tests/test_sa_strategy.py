@@ -164,7 +164,7 @@ def test_wing_strikes_at_two_times_implied():
 def test_short_straddle_pnl_and_costs_by_hand():
     res = sa.evaluate_event(_event(), _pre_rows(), _resolver(), SA_PARAMS, SIZING)
     ss = [t for t in res.trades if t["structure"] == "SS" and t["variant"] == "A1"][0]
-    assert ss["n"] == 1                                            # stress 1640 > 1% of equity -> min 1
+    assert ss["contracts"] == 1                                            # stress 1640 > 1% of equity -> min 1
     assert ss["credit_entry"] == pytest.approx(7.6)
     assert ss["debit_exit"] == pytest.approx(2.2)
     assert ss["gross_usd"] == pytest.approx(540.0)
@@ -187,7 +187,7 @@ def test_iron_condor_wings_and_max_loss():
     assert ic["model_exit"] is True
     width = 15.0
     assert ic["max_loss_usd"] == pytest.approx((width - ic["credit_entry"]) * 100)
-    assert ic["n"] == max(1, int(SIZING.ic_max_loss_frac * SIZING.equity // ic["max_loss_usd"]))
+    assert ic["contracts"] == max(1, int(SIZING.ic_max_loss_frac * SIZING.equity // ic["max_loss_usd"]))
     assert ic["credit_entry"] < 7.6                                # wings cost premium
     assert ic["n_touches"] == 8
 

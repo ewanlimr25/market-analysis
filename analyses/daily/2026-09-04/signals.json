@@ -1,4 +1,6 @@
 {
+ "schema_version": "d1.0",
+ "report_kind": "engine-daily",
  "date": "2026-09-04",
  "season": "S2",
  "preflight": {

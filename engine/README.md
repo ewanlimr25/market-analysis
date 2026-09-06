@@ -12,6 +12,7 @@ make mart                    # rebuild data/mart/{daily_contract,earnings_events
 make backtest                # S-A over the whole mart -> data/backtest/{trades,suppressed,dropped}.parquet
 make report                  # season table, BH, DSR, PBO, tail, robustness, go/no-go -> data/backtest/report.md
 make test                    # the unit suite (no panel needed)
+make validate DATE=2026-10-14 # check that night's signals.json against schemas/signals.schema.json (make daily does this itself)
 make backtest-sb             # S-B: three-year proxy + marked panel run -> data/backtest/sb_*.parquet (REFRESH=1 refetches inputs)
 make report-sb               # S-B: sleeve tables, BH, DSR, PBO, month rule, tail, overlap, go/no-go -> data/backtest/sb_report.md
 make index-vol               # refresh data/mart/index_vol/ from the CBOE public CSVs (the nightly does this itself)
@@ -34,6 +35,7 @@ make index-vol               # refresh data/mart/index_vol/ from the CBOE public
 | `validation/stats.py` | clustered t, BH, Sharpe deflation, CSCV PBO |
 | `validation/harness.py`, `validation/run_report.py` | season split, tail, robustness, go/no-go, §4.3 reproduction; the markdown report |
 | `ledger.py`, `daily.py`, `report.py` | forward ledger (`ledger/`, committed, never re-derived), `make daily`, templated `report.md` |
+| `schema.py` | the `signals.json` contract: `schema_version` / `report_kind` stamp, strict JSON (no NaN), validation against `schemas/signals.schema.json` (`d1.0`); `scripts/validate_signals.py` wraps it |
 | `mart/index_vol.py` | CBOE VIX / VIX3M / VXN / VIX9D closes, cached in `data/mart/index_vol/`, artifact fallback (S-B, DESIGN/80 §1.1) |
 | `strategies/sb_gate.py` | the S-B gate: contango and level above the 20-session median, read at the prior close (DESIGN/80 §2) |
 | `strategies/sb_structures.py` | Friday-type expiry nearest 21 days, σ unit, tier-1 strike band, PS / IC legs, max loss, sizing, open cap (DESIGN/80 §3-§4) |

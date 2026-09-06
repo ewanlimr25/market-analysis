@@ -2,10 +2,13 @@
 PY ?= python3
 DATE ?= $(shell date +%F)
 
-.PHONY: daily mart backtest report test test-unit test-integration
+.PHONY: daily validate mart backtest report test test-unit test-integration
 
 daily:            ## preflight, append mart, candidates, grade, signals.json + report.md
 	$(PY) -m engine.daily --date $(DATE)
+
+validate:         ## check analyses/daily/$(DATE)/signals.json against schemas/signals.schema.json
+	$(PY) scripts/validate_signals.py --file analyses/daily/$(DATE)/signals.json
 
 mart:             ## rebuild both materialized tables (daily_contract ~3 min, earnings_events ~5 s)
 	$(PY) -m engine.mart.daily_contract --rebuild

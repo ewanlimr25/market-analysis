@@ -26,7 +26,7 @@ def _signal(ticker="XYZ", variant="A1", structure="SS", legs=None, **kw):
          "expiry": "2026-10-16", "side": -1, "entry_price": 3.6, "entry_spread": 0.07, "entry_tier": 1, "entry_source": "print_vwap"},
     ]
     row = {"ticker": ticker, "E": POST, "pre": PRE, "post": POST, "variant": variant, "structure": structure,
-           "n": 1, "notional_usd": 10_000.0, "spot": 100.0, "implied": 0.08, "credit_entry": 7.6,
+           "contracts": 1, "notional_usd": 10_000.0, "spot": 100.0, "implied": 0.08, "credit_entry": 7.6,
            "entry_cost_usd": 25.9, "stress_loss_usd": 1640.0, "max_loss_usd": None, "risk_usd": 1640.0,
            "credit_net_pct": 0.07341, "cap_pass": True, "cap_rank": 1, "sector": "Industrials",
            "season": "S3", "month": "2026-10", "legs_json": json.dumps(legs), "expiry": date(2026, 10, 16), "k": 100.0}

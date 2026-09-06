@@ -20,6 +20,7 @@ from engine import ledger as L
 from engine import marking as M
 from engine import portfolio
 from engine import report as R
+from engine import schema as SCH
 from engine import sb_daily as SD
 from engine.config import ANALYSES_DAILY, LEDGER_DIR, SA_PARAMS, SCRIPTS, SIZING
 from engine.mart import daily_contract, earnings_events
@@ -93,7 +94,7 @@ def grade_rows(signals: pd.DataFrame, resolver: M.MarkResolver) -> tuple[pd.Data
         if legs is None:
             dropped.append({k: sig[k] for k in L.KEY} | {"reason": "unmarkable_exit"})
             continue
-        priced = ST.price_legs(legs, int(sig["n"]))
+        priced = ST.price_legs(legs, int(sig["contracts"]))
         notional = float(sig["notional_usd"])
         graded.append({**sig, **priced, "net_pct": priced["net_usd"] / notional, "gross_pct": priced["gross_usd"] / notional,
                        "cost_pct": priced["cost_usd"] / notional, "exit_tier_max": max(l.exit.tier for l in legs),
@@ -145,19 +146,35 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
     emitted = L.emit(ledger_dir, cands.trades, d) if is_open and len(cands.trades) else (0, 0)
     n_graded = L.grade(ledger_dir, graded, d)[0] if is_open and len(graded) else 0
     running = season_running(L.read_ledger(ledger_dir), earnings_events.season_of(d))
-    signals = {"date": d.isoformat(), "season": earnings_events.season_of(d), "preflight": pf, "mart": mart,
-               "candidates": _jsonable(cands.trades), "suppressed": _jsonable(cands.suppressed),
-               "dropped": _jsonable(pd.concat([cands.dropped, dropped]) if len(dropped) or len(cands.dropped) else pd.DataFrame()),
-               "graded": _jsonable(graded), "season_running": running,
-               "ledger": {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open},
-               "sb_state": SD.nightly(con, d, force_ledger)}
-    out_dir = os.path.join(out_root, d.isoformat())
+    signals = assemble(d, pf, mart, cands, graded, dropped, running,
+                       {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open},
+                       SD.nightly(con, d, force_ledger))
+    write_outputs(signals, os.path.join(out_root, d.isoformat()))
+    return signals
+
+
+def assemble(d: date, pf: dict, mart: dict, cands: sa.RunResult, graded: pd.DataFrame, dropped: pd.DataFrame,
+             running: list[dict], ledger_counts: dict, sb_state: dict) -> dict:
+    """The `signals.json` document (schemas/signals.schema.json): stamped, strict-JSON clean."""
+    both_dropped = pd.concat([cands.dropped, dropped]) if len(dropped) or len(cands.dropped) else pd.DataFrame()
+    body = {"date": d.isoformat(), "season": earnings_events.season_of(d), "preflight": pf, "mart": mart,
+            "candidates": _jsonable(cands.trades), "suppressed": _jsonable(cands.suppressed),
+            "dropped": _jsonable(both_dropped), "graded": _jsonable(graded), "season_running": running,
+            "ledger": ledger_counts, "sb_state": sb_state}
+    return SCH.clean(SCH.stamp(body))
+
+
+def write_outputs(signals: dict, out_dir: str) -> list[str]:
+    """Write signals.json (strict JSON) and report.md; returns the schema violations (empty = valid)."""
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "signals.json"), "w") as fh:
-        json.dump(signals, fh, indent=1, default=str)
+        fh.write(SCH.dumps(signals))
     with open(os.path.join(out_dir, "report.md"), "w") as fh:
         fh.write(R.render(signals))
-    return signals
+    try:
+        return SCH.validate(signals)
+    except Exception as exc:  # the schema file or jsonschema itself; never blocks the nightly
+        return [f"validation could not run: {exc}"]
 
 
 def main() -> int:
@@ -174,6 +191,13 @@ def main() -> int:
     sig = run_daily(d, a.ledger_dir, a.out_root, force_ledger=a.force_ledger)
     print(f"{d}: {len(sig['candidates'])} candidates, {len(sig['suppressed'])} suppressed, "
           f"{len(sig['graded'])} graded; report at {os.path.join(a.out_root, d.isoformat(), 'report.md')}")
+    errors = SCH.validate(sig)
+    if errors:
+        print(f"WARN signals.json does not match schemas/signals.schema.json ({len(errors)}):", file=sys.stderr)
+        for e in errors[:20]:
+            print(f"  {e}", file=sys.stderr)
+    else:
+        print(f"signals.json: VALID ({SCH.REPORT_KIND} {SCH.SCHEMA_VERSION})")
     return 0
 
 

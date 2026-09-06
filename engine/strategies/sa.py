@@ -148,7 +148,7 @@ def _trade_row(event, sel: Selection, structure: str, legs: list[ST.Leg], n: int
     row = {**_event_keys(event), "structure": structure, "expiry": sel.expiry, "k": sel.pair.strike,
            "k_up": sel.k_up if structure == ST.STRUCTURE_IC else None,
            "k_dn": sel.k_dn if structure == ST.STRUCTURE_IC else None,
-           "n": n, "notional_usd": notional, **priced,
+           "contracts": n, "notional_usd": notional, **priced,
            "gross_pct": priced["gross_usd"] / notional, "cost_pct": priced["cost_usd"] / notional,
            "net_pct": priced["net_usd"] / notional,
            "credit_net_pct": (priced["credit_entry"] * CONTRACT_MULTIPLIER * n - priced["entry_cost_usd"]) / notional,

@@ -143,7 +143,7 @@ def grade_position(sig: Mapping[str, Any], settle_close: float, settle_source: s
     strikes = {rec["name"]: float(rec["strike"]) for rec in records}
     exits = SB.settle_marks(strikes, sig["structure"], settle_close)
     legs = [ST.leg_from_record(rec, sig["underlying"], exits[rec["name"]]) for rec in records]
-    n = int(sig["n"])
+    n = int(sig["contracts"])
     priced = ST.price_legs(legs, n)
     risk = float(sig["max_loss_usd"]) * n
     credit = priced["credit_entry"]
