@@ -49,6 +49,33 @@ git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
 That is the entire job: one command and a commit on trading nights, three commands on weekends, and
 nothing touches real money before 2026-12-01. Sections 1 to 7 below are the detail.
 
+### What one week of the routine produces
+
+| Artifact | When | What it holds |
+|---|---|---|
+| `analyses/daily/<date>/report.md` + `signals.json` ×5 | each night | preflight, S-A candidates and suppressions, S-B gate tonight and next session, positions entered / skipped / graded, running ledger stats |
+| `data/mart/daily_contract/date=<date>/` ×5 | each night | ~330,000 per-contract marks per day, the priced history the strategies read |
+| `data/mart/index_vol/`, `data/mart/vix/` | each night | CBOE and VIX series extended through the day |
+| `ledger/sb/` new rows | Friday, only if the gate is ON | up to four paper positions (SPY and QQQ, put spread and condor): strikes, expiry, credit, cost, max loss, one-contract sizing |
+| `ledger/sb/` graded rows | the Friday a position expires (~3 weeks after entry) | net P&L per position from the official close, with `settle_source` |
+| S-A ledger rows | from 2026-10-01, any night with a qualifying print | earnings candidates emitted and graded next morning; measurement only |
+| `data/backtest/sb_report.md`, `sb_*.parquet` | weekend | proxy extended by one week, marked run re-done, the §8 go/no-go table as of that date |
+| `data/backtest/report.md` | weekend, from October | S-A Season 3 tables accruing |
+| `make test` result | weekend | 269 green, which also certifies no frozen parameter moved |
+| six commits, pushed | five nightly, one weekly | the public, append-only record |
+
+**What accumulates.** At most four S-B positions a week, and the gate has been ON about 40% of
+Fridays, so expect one to two new positions a week and a graded result for each about three weeks
+later. Between 09-11 and the last counting entry on 11-06 there are nine Fridays, so the 12-01 read
+will rest on roughly three or four gate-on weeks (about fourteen paper positions across four sleeves):
+enough to check that live marks match the backtest, not enough to prove the premium, which is why the
+verdict is on the three-year proxy with the forward ledger beside it. The scale-up trigger (40 graded
+positions per sleeve) is about two years away at that rate.
+
+**What a week does not produce:** a trade instruction, a realized dollar, or a change to any
+parameter. The one weekly judgment is whether the go/no-go table's four criteria still read as they
+did the week before.
+
 ## 1. Every trading day, after the 8 PM export lands
 
 ```
