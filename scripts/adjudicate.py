@@ -5,6 +5,8 @@
   run       --policy sb-c1 [--as-of YYYY-MM-DD]            challenger vs champion, paired, once
   champion  --strategy sb --n-required 26 [--as-of]         champion vs its bar (t part; the report holds the rest)
   gate      --strategy sb --min-effect 0.01 --n-required 20 [--as-of]   gate-ON vs gate-OFF on the exploration book
+  basket    --policy wb-1.0 [--basket LONG|SHORT|VOL] [--as-of]   the watch-basket read (DESIGN/110 §6); omit
+                                                                   --basket to read all three
 """
 from __future__ import annotations
 
@@ -21,9 +23,13 @@ from engine import ledger as L                                   # noqa: E402
 from engine import policy as POL                                 # noqa: E402
 from engine.config import LEDGER_DIR                             # noqa: E402
 from engine.improve import adjudicate as A                       # noqa: E402
+from engine.improve import basket_read as BR                     # noqa: E402
 from engine.improve import power as PW                           # noqa: E402
 from engine.improve.spec import spec                             # noqa: E402
+from engine.watch.wb_ledger import read_ledger as read_wb_ledger  # noqa: E402
 from power import champion_series                                # noqa: E402
+
+WB_POLICY_ID = "wb-1.0"
 
 
 def _ledger(strategy: str, root: str) -> pd.DataFrame:
@@ -110,6 +116,26 @@ def cmd_gate(a) -> int:
     return 0
 
 
+def cmd_basket(a) -> int:
+    if a.policy != WB_POLICY_ID:
+        raise SystemExit(f"basket only knows policy {WB_POLICY_ID!r}, got {a.policy!r}")
+    as_of = date.fromisoformat(a.as_of)
+    ledger = read_wb_ledger(os.path.join(a.ledger_dir, "wb"))
+    baskets = [a.basket] if a.basket else list(BR.BASKETS)
+    for basket in baskets:
+        result = BR.read(ledger, basket, as_of)
+        payload = {"policy_id": WB_POLICY_ID, "kind": "basket", "basket": basket, "as_of": result["as_of"],
+                   "verdict": result["verdict"], "reason": result["reason"], "n_episodes": result["n_episodes"],
+                   "projected_date": result.get("projected_date"), "stats": result.get("stats", {})}
+        print(json.dumps(payload, indent=1, default=str))
+        if result["verdict"] == BR.NOT_DUE:
+            print(f"{basket}: NOT_DUE, nothing written")
+            continue
+        path = A.write_adjudication(a.ledger_dir, f"{WB_POLICY_ID}-{basket}", payload)
+        print(f"{basket} -> {path}")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ledger-dir", default=LEDGER_DIR)
@@ -125,6 +151,8 @@ def main() -> int:
     c.add_argument("--as-of", default=date.today().isoformat()); c.set_defaults(fn=cmd_champion)
     g = sub.add_parser("gate"); g.add_argument("--strategy", required=True); g.add_argument("--min-effect", type=float, required=True)
     g.add_argument("--n-required", type=int, required=True); g.add_argument("--as-of", default=date.today().isoformat()); g.set_defaults(fn=cmd_gate)
+    k = sub.add_parser("basket"); k.add_argument("--policy", required=True); k.add_argument("--basket", choices=list(BR.BASKETS), default=None)
+    k.add_argument("--as-of", default=date.today().isoformat()); k.set_defaults(fn=cmd_basket)
     a = ap.parse_args()
     return a.fn(a)
 
