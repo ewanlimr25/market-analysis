@@ -62,6 +62,14 @@ index-vol-ext:    ## refresh data/mart/index_vol_ext/index_vol_ext.parquet (VVIX
 
 sb-challengers:   ## proxy challenger table -> data/backtest/g10_sb_challengers.*  (add DRAFTS=1 for registration drafts)
 	$(PY) scripts/sb_challengers.py $(if $(DRAFTS),--drafts,)
+# ---- S-G (findings/market-analysis DESIGN/91, backtest-only research spec) ---------------------
+.PHONY: backtest-sg report-sg
+
+backtest-sg:      ## pre-earnings ramp (day -3 / -5 long straddle/strangle) -> data/backtest/g3_*.parquet
+	$(PY) -m engine.backtest_sg
+
+report-sg:        ## season table, BH, DSR, PBO, tail, spread halves, ramp decomposition, go/no-go -> data/backtest/g3_report.md
+	$(PY) -m engine.validation.run_report_sg
 
 # ---- Improvement process (findings/market-analysis DESIGN/100, D22) ---------------------------
 .PHONY: power adjudicate

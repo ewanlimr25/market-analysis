@@ -169,6 +169,29 @@ SB_PBO_BLOCKS = 16
 
 
 # =============================================================================================
+# S-G: pre-earnings ramp, backtest-only research pre-registration (findings/market-analysis
+# DESIGN/91; written 2026-09-07). Not a champion: no frozen-params test, no forward ledger, no
+# `make daily` step. F1..F4, F7, F8 are reused unchanged from SA_PARAMS via sa_filters.cheap_filters;
+# only F5/F6 (contract availability, spread) are re-evaluated at the entry day instead of `pre`.
+# =============================================================================================
+@dataclass(frozen=True)
+class SGParams:
+    """S-G pre-registered entry offsets and sizing risk fraction (DESIGN/91 §1-§3)."""
+    entry_offsets: tuple[int, ...] = (3, 5)       # G3a (day -3), G3b (day -5); trading sessions before E
+    leg_size_min: int = 10                        # F5 reused: size_late >= 10 on both legs at entry_day
+    risk_frac: float = 0.010                      # n = floor(risk_frac * equity / premium_paid_per_contract)
+
+
+SG_PARAMS = SGParams()
+SG_EQUITY = 100_000.0
+SG_PRIMARY_TESTS = 4                              # 2 entry offsets x 2 structures (LS, LG), DESIGN/91 §4
+SG_DSR_TRIALS = DSR_TRIALS + SG_PRIMARY_TESTS     # S-A's 6 + S-G's 4 = 10 (DESIGN/91 §4)
+SG_BH_FDR = BH_FDR                                # reuse S-A's 0.10
+SG_GO_T_MIN = 2.0                                 # DESIGN/91 §4 bar
+SG_PBO_BLOCKS = 16
+
+
+# =============================================================================================
 # Improvement process (findings/market-analysis DESIGN/100, D22; adopted 2026-09-06). The champion
 # policy id bumps only when an adjudication promotes a challenger, together with the frozen test.
 # =============================================================================================

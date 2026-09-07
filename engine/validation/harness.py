@@ -38,32 +38,38 @@ def _pair(trades: pd.DataFrame, variant: str, structure: str, season: str | None
     return sub
 
 
-def _block(sub: pd.DataFrame, variant: str, structure: str, season: str) -> dict:
-    ct = S.cluster_t(sub.net_pct, sub.pre)
+def _block(sub: pd.DataFrame, variant: str, structure: str, season: str, cluster_col: str = "pre") -> dict:
+    """Clustered mean/t/p for one (variant, structure, season) slice. `cluster_col` names the
+    independent-unit column (S-A: `pre`, the print date; S-G: `entry_day`, DESIGN/91 §4) — the one
+    generic hook other strategies' harnesses reuse this function through."""
+    ct = S.cluster_t(sub.net_pct, sub[cluster_col])
     return {"variant": variant, "structure": structure, "season": season, "n": ct["n"], "dates": ct["G"],
             "mean_net_pct": ct["mean"], "median_net_pct": ct["median"], "hit": ct["hit"], "se": ct["se"],
             "t": ct["t"], "p": ct["p"],
             "mean_gross_pct": float(sub.gross_pct.mean()) if len(sub) else np.nan,
             "mean_cost_pct": float(sub.cost_pct.mean()) if len(sub) else np.nan,
-            "straddle_over_implied": float(sub.straddle_over_implied.mean()) if len(sub) else np.nan,
+            "straddle_over_implied": float(sub.straddle_over_implied.mean()) if "straddle_over_implied" in sub and len(sub) else np.nan,
             "net_usd_total": float(sub.net_usd.sum()) if len(sub) else 0.0}
 
 
-def primary_table(trades: pd.DataFrame, seasons: tuple[str, ...] = PRIMARY_SEASONS) -> pd.DataFrame:
+def primary_table(trades: pd.DataFrame, seasons: tuple[str, ...] = PRIMARY_SEASONS,
+                  pairs: list[tuple[str, str]] = PAIRS, cluster_col: str = "pre") -> pd.DataFrame:
     present = [s for s in seasons if (trades.season == s).any()] + [POOLED]
-    rows = [_block(_pair(trades, v, s, sea), v, s, sea) for sea in present for v, s in PAIRS]
+    rows = [_block(_pair(trades, v, s, sea), v, s, sea, cluster_col) for sea in present for v, s in pairs]
     return pd.DataFrame(rows)
 
 
-def bh_table(trades: pd.DataFrame, season: str, fdr: float = BH_FDR) -> pd.DataFrame:
-    rows = [_block(_pair(trades, v, s, season), v, s, season) for v, s in PAIRS]
+def bh_table(trades: pd.DataFrame, season: str, fdr: float = BH_FDR, pairs: list[tuple[str, str]] = PAIRS,
+            cluster_col: str = "pre") -> pd.DataFrame:
+    rows = [_block(_pair(trades, v, s, season), v, s, season, cluster_col) for v, s in pairs]
     tab = pd.DataFrame(rows)
     pvals = tab.p.fillna(1.0).tolist()
     return tab.assign(bh_pass=S.bh_reject(pvals, fdr), fdr=fdr)
 
 
-def dsr_table(trades: pd.DataFrame, season: str, n_trials: int = DSR_TRIALS) -> pd.DataFrame:
-    series = {(v, s): _pair(trades, v, s, season).net_pct.to_numpy() for v, s in PAIRS}
+def dsr_table(trades: pd.DataFrame, season: str, n_trials: int = DSR_TRIALS,
+             pairs: list[tuple[str, str]] = PAIRS) -> pd.DataFrame:
+    series = {(v, s): _pair(trades, v, s, season).net_pct.to_numpy() for v, s in pairs}
     srs = [S.sharpe(x) for x in series.values() if len(x) > 2]
     var_sharpe = float(np.nanvar(srs, ddof=1)) if len(srs) > 1 else 0.0
     rows = []
@@ -73,15 +79,15 @@ def dsr_table(trades: pd.DataFrame, season: str, n_trials: int = DSR_TRIALS) -> 
     return pd.DataFrame(rows)
 
 
-def _daily_config_pnl(trades: pd.DataFrame, season: str) -> pd.DataFrame:
+def _daily_config_pnl(trades: pd.DataFrame, season: str, cluster_col: str = "pre") -> pd.DataFrame:
     sub = trades[trades.season == season] if season != POOLED else trades
-    daily = sub.groupby(["pre", "variant", "structure"]).net_pct.mean().unstack(["variant", "structure"])
+    daily = sub.groupby([cluster_col, "variant", "structure"]).net_pct.mean().unstack(["variant", "structure"])
     daily.columns = [f"{v}-{s}" for v, s in daily.columns]
     return daily.fillna(0.0).sort_index()
 
 
-def pbo_report(trades: pd.DataFrame, season: str, n_blocks: int = 16) -> dict:
-    daily = _daily_config_pnl(trades, season)
+def pbo_report(trades: pd.DataFrame, season: str, n_blocks: int = 16, cluster_col: str = "pre") -> dict:
+    daily = _daily_config_pnl(trades, season, cluster_col)
     if daily.shape[1] < 2 or len(daily) < n_blocks:
         return {"pbo": np.nan, "n_configs": int(daily.shape[1]), "n_dates": int(len(daily)), "note": "too few dates"}
     blocks = np.floor(np.arange(len(daily)) * n_blocks / len(daily)).astype(int)

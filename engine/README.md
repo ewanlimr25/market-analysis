@@ -19,6 +19,8 @@ make index-vol               # refresh data/mart/index_vol/ from the CBOE public
 make cboe-chain               # fetch+store the full SPY/QQQ (+ SYMBOLS=...) CBOE option chain -> data/mart/cboe_chain/ (RESEARCH/47 G8; standalone, not part of `make daily`)
 make short-interest DATE=2026-09-07  # FINRA short interest (full universe) + Reg SHO + IBKR borrow (RESEARCH/47 G9; standalone, not part of `make daily`)
 make sb-challengers           # G10: VIX-family challenger table on the S-B proxy -> data/backtest/g10_sb_challengers.* (DRAFTS=1 for registration drafts)
+make backtest-sg             # S-G: pre-earnings ramp, day -3/-5 long straddle/strangle -> data/backtest/g3_*.parquet (backtest-only research spec)
+make report-sg                # S-G: season table, BH, DSR, PBO, tail, spread halves, ramp decomposition, go/no-go -> data/backtest/g3_report.md
 ```
 
 | module | what |
@@ -52,8 +54,20 @@ make sb-challengers           # G10: VIX-family challenger table on the S-B prox
 | `mart/finviz_short.py` | `short_float(ticker)`, a thin fail-soft wrapper on `fz quote --agent`, on-demand single-ticker use only (RESEARCH/47 G9) |
 | `features/short_side.py` | `join_short_side`: attaches `short_interest`, `days_to_cover`, `si_change_pct` (point-in-time) and `borrow_fee` onto a screener spine -- the control column G4 needs (RESEARCH/47 G4/G9) |
 | `mart/index_vol_ext.py`, `improve/sb_challengers.py` | G10: CBOE VVIX/SKEW + VIX9D/VIX and VIX/VIX3M ratios (`data/mart/index_vol_ext/`); the CBOE vol-index family as additional conditions on the frozen S-B gate, backtested on the proxy; registration drafts (RESEARCH/47-edge-gaps.md §2) |
+| `strategies/sg_filters.py` | entry/exit day arithmetic (`engine.calendar`), one-strike-out strangle selection; F1..F4, F7, F8 reused from `sa_filters.cheap_filters`, F5/F6 reused at the entry day (DESIGN/91 §1) |
+| `strategies/sg_structures.py` | LS / LG legs as `sa_structures.Leg` with `side=LONG`, premium-paid sizing (DESIGN/91 §2-§3) |
+| `strategies/sg_decomposition.py` | finite-difference delta/vega off `bs.price`; the gross ramp decomposition (delta vs vega vs residual, DESIGN/91 §4) |
+| `strategies/sg.py`, `strategies/sg_data.py`, `backtest_sg.py` | `evaluate_event` / `run` over both pre-registered entry offsets; entry-day/exit-day mart access reusing `sa_data`'s loaders |
+| `validation/sg_harness.py`, `validation/run_report_sg.py` | entry-day-clustered t, BH, ten-trial deflated Sharpe, PBO, tail, spread halves, decomposition summary, go/no-go (DESIGN/91 §4) |
 
 The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 2026-09-11; before those dates
 `make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.
 The backtest write-ups live in `~/Development/findings/market-analysis/RESEARCH/45-sa-backtest.md` (S-A) and
 `RESEARCH/46-sb-backtest.md` (S-B); the S-B parameters are frozen by `tests/test_sb_frozen_params.py`.
+
+S-G (`findings/market-analysis/DESIGN/91-sg-spec.md`) is a **backtest-only research pre-registration**,
+not a champion: no `make daily` step, no forward ledger, no book caps, and therefore no frozen-params
+test (`tests/test_sg_params.py` pins only the derived DSR trial count). It reuses S-A's filters F1..F4,
+F7, F8 unchanged and F5/F6 at the entry day instead of `pre`; its own trial count (4) is added to S-A's
+(6) for a 10-trial deflated-Sharpe charge. Results live in
+`~/Development/findings/market-analysis/artifacts/edge-gaps/g3/results.md`.
