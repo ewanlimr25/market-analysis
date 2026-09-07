@@ -127,3 +127,9 @@ loaders:           ## nightly (cron, weekdays): CBOE chain SPY/QQQ, Reg SHO, IBK
 
 loaders-weekly:    ## weekly (cron, Saturday): FINRA short interest, full universe, new settlements only
 	-$(PY) -m engine.mart.short_interest --refresh
+
+# ---- Watch basket (findings/market-analysis DESIGN/110-watch-basket.md; exploration-only, R1) --
+.PHONY: watch-retro
+
+watch-retro:       ## R1 retrospective: 17 conditions x panel -> data/backtest/wb_conditions.parquet, wb_retro.json
+	$(PY) scripts/watch_retro.py

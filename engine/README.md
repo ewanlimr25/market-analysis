@@ -24,6 +24,7 @@ make report-sg                # S-G: season table, BH, DSR, PBO, tail, spread ha
 make intraday-rv             # build data/mart/intraday_rv (IRV_DATE=<d> for one day, else the whole panel; DAYS=N caps it)
 make earnings-history        # build data/mart/earnings_history/{events,summary}.parquet (LIMIT=N caps the ticker set)
 make cross-section           # weekly IV-spread/skew/O-S cross-section -> data/backtest/g4_factors.parquet, g4_results.json (RESEARCH/47 G4/G5; standalone, not part of `make daily`)
+make watch-retro              # watch-basket R1 retrospective: 17 conditions x panel -> data/backtest/wb_conditions.parquet, wb_retro.json (DESIGN/110; standalone, not part of `make daily`)
 ```
 
 | module | what |
@@ -74,6 +75,16 @@ The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 202
 `make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.
 The backtest write-ups live in `~/Development/findings/market-analysis/RESEARCH/45-sa-backtest.md` (S-A) and
 `RESEARCH/46-sb-backtest.md` (S-B); the S-B parameters are frozen by `tests/test_sb_frozen_params.py`.
+
+| `watch/bars.py` | cached daily OHLCV, reusing `mart/earnings_history/bars/` read-only, falling back to its own cache `data/mart/watch/bars/` via `scripts/chart.py`; weekly resample |
+| `watch/indicators.py` | Wilder RSI/ATR series, ATR-zigzag pivots (2x reversal), swing structure, anchored VWAP, crossed-within, 60-session/50-bin volume profile (POC + 70% value area), RSI bullish divergence |
+| `watch/conditions.py` | the 17 watch-basket conditions as null-safe pure predicates, thresholds as module constants (DESIGN/110 §2) |
+| `watch/basket.py` | `stacks`/`baskets` (LONG/SHORT/VOL/CONFLICT, DESIGN/110 §3) and `assign_episodes`/`episode_count` (the 21-session re-entry rule, §4), generic over baskets, conditions and counts |
+| `watch/universe.py` | the nightly universe: `issue_type`, marketcap >= $1B, close >= $10, `daily_contract` coverage (DESIGN/110 §1) |
+| `watch/tier1.py` | the tier-1 ATM pair (C-VOL), reusing S-C's F7/F8 verbatim (DESIGN/90-sc-spec.md) |
+| `watch/flows.py` | C-LEAP and C-DP as daily DuckDB sums over the raw All Options / Dark Pool exports |
+| `watch/series.py` | per-ticker point-in-time evaluation of the bar-derived conditions, built once per ticker over its cached history and evaluated online (no lookahead) at every panel night |
+| `watch/retro.py`, `watch/retro_tables.py` | the R1 retrospective panel builder and its five descriptive tables (DESIGN/110 §5); `scripts/watch_retro.py` / `make watch-retro` -> `data/backtest/wb_conditions.parquet`, `wb_retro.json` |
 
 S-G (`findings/market-analysis/DESIGN/91-sg-spec.md`) is a **backtest-only research pre-registration**,
 not a champion: no `make daily` step, no forward ledger, no book caps, and therefore no frozen-params
