@@ -71,6 +71,13 @@ backtest-sg:      ## pre-earnings ramp (day -3 / -5 long straddle/strangle) -> d
 report-sg:        ## season table, BH, DSR, PBO, tail, spread halves, ramp decomposition, go/no-go -> data/backtest/g3_report.md
 	$(PY) -m engine.validation.run_report_sg
 
+
+# ---- G2: intraday flow event study (findings/market-analysis RESEARCH/47 §2 G2) ---------------
+.PHONY: intraday-flow
+
+intraday-flow:    ## whole-panel G2 build + analysis -> data/backtest/g2_*/, findings/.../g2/results.{md,json}
+	$(PY) scripts/intraday_flow.py $(if $(DAYS),--days $(DAYS),) $(if $(FORCE),--force,)
+
 # ---- Improvement process (findings/market-analysis DESIGN/100, D22) ---------------------------
 .PHONY: power adjudicate
 

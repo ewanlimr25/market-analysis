@@ -45,6 +45,50 @@ def cluster_t(x, clusters) -> dict:
             "median": float(np.median(x)), "hit": float((x > 0).mean())}
 
 
+def _cluster_group_var(resid: np.ndarray, clusters) -> tuple[float, int]:
+    """Liang-Zeger cluster variance of a residual's mean, and the cluster count G. `clusters` is
+    any 1-D array of hashable labels (a combined "a||b" key stands in for a two-way intersection)."""
+    _, inv = np.unique(np.asarray(clusters), return_inverse=True)
+    G = int(inv.max()) + 1
+    gsum = np.bincount(inv, weights=resid, minlength=G)
+    var = (gsum ** 2).sum() / len(resid) ** 2
+    if G > 1:
+        var *= G / (G - 1)
+    return float(var), G
+
+
+def two_way_cluster_t(x, cluster_a, cluster_b) -> dict:
+    """Cameron-Gelbach-Miller (2011) two-way cluster-robust t of a sample mean:
+    Var = Var_a + Var_b - Var_(a,b), floored at 0 (the intersection cluster removes the
+    double-counted covariance). Used for G2's "clustered by (underlying, day)" requirement,
+    where neither dimension alone is the right unit: same-day prints across underlyings share a
+    market-wide shock, and same-underlying prints across days share a name-specific one.
+    """
+    x = np.asarray(x, dtype=float)
+    a = np.asarray(cluster_a)
+    b = np.asarray(cluster_b)
+    ok = np.isfinite(x)
+    x, a, b = x[ok], a[ok], b[ok]
+    n = len(x)
+    if n == 0:
+        return {"n": 0, "Ga": 0, "Gb": 0, "mean": np.nan, "se": np.nan, "t": np.nan, "p": np.nan,
+                "median": np.nan, "hit": np.nan}
+    mu = x.mean()
+    resid = x - mu
+    var_a, Ga = _cluster_group_var(resid, a)
+    var_b, Gb = _cluster_group_var(resid, b)
+    inter = np.array([f"{ai}||{bi}" for ai, bi in zip(a, b)], dtype=object)
+    var_ab, Gab = _cluster_group_var(resid, inter)
+    var = max(var_a + var_b - var_ab, 0.0)
+    se = math.sqrt(var) if var > 0 else float("nan")
+    t = mu / se if se and se > 0 else float("nan")
+    df = max(min(Ga, Gb) - 1, 1)
+    p = float(2 * sps.t.sf(abs(t), df=df)) if np.isfinite(t) else float("nan")
+    return {"n": int(n), "Ga": int(Ga), "Gb": int(Gb), "Gab": int(Gab), "mean": float(mu),
+            "se": float(se), "t": float(t), "p": p, "median": float(np.median(x)),
+            "hit": float((x > 0).mean())}
+
+
 def bh_reject(pvals, fdr: float) -> list[bool]:
     """Benjamini-Hochberg step-up: which hypotheses are rejected at the given FDR."""
     p = np.asarray(list(pvals), dtype=float)

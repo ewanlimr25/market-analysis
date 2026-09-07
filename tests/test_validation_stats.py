@@ -136,3 +136,55 @@ def test_mcnemar_test_symmetric_discordance_is_not_significant():
 def test_mcnemar_test_no_discordant_pairs_is_nan():
     r = S.mcnemar_test(b=0, c=0)
     assert r["n"] == 0 and np.isnan(r["p"])
+
+
+# ----------------------------------------------------------------------------- two_way_cluster_t
+# G2 (RESEARCH/47-edge-gaps.md §2): a t clustered by (underlying, day) simultaneously, since
+# neither dimension alone is the right independence unit for an intraday-print panel.
+
+
+def test_two_way_cluster_t_matches_var_a_plus_var_b_minus_var_ab_by_construction():
+    rng = np.random.default_rng(5)
+    n = 240
+    a = rng.integers(0, 12, size=n)          # "underlying"
+    b = rng.integers(0, 20, size=n)          # "day"
+    x = rng.normal(0.001, 0.02, size=n)
+    r = S.two_way_cluster_t(x, a, b)
+    mu = x.mean()
+    resid = x - mu
+    var_a, Ga = S._cluster_group_var(resid, a)
+    var_b, Gb = S._cluster_group_var(resid, b)
+    inter = np.array([f"{ai}||{bi}" for ai, bi in zip(a, b)], dtype=object)
+    var_ab, _ = S._cluster_group_var(resid, inter)
+    expected_var = max(var_a + var_b - var_ab, 0.0)
+    assert r["mean"] == pytest.approx(mu)
+    assert r["se"] == pytest.approx(np.sqrt(expected_var))
+    assert r["Ga"] == Ga and r["Gb"] == Gb
+    assert r["t"] == pytest.approx(mu / np.sqrt(expected_var))
+
+
+def test_two_way_cluster_t_se_is_at_least_as_large_as_either_one_way_cluster_se():
+    # Clustering on two correlated dimensions should not understate uncertainty relative to
+    # clustering on either one alone, once both carry genuine within-cluster correlation.
+    rng = np.random.default_rng(9)
+    n_underlyings, n_days = 8, 15
+    day_shock = rng.normal(0, 0.02, size=n_days)
+    name_shock = rng.normal(0, 0.02, size=n_underlyings)
+    rows = [(u, d, 0.001 + day_shock[d] + name_shock[u] + rng.normal(0, 0.001))
+            for u in range(n_underlyings) for d in range(n_days)]
+    a = np.array([r[0] for r in rows])
+    b = np.array([r[1] for r in rows])
+    x = np.array([r[2] for r in rows])
+    two_way = S.two_way_cluster_t(x, a, b)
+    by_underlying = S.cluster_t(x, a)
+    by_day = S.cluster_t(x, b)
+    assert two_way["se"] >= by_underlying["se"] * 0.999
+    assert two_way["se"] >= by_day["se"] * 0.999
+
+
+def test_two_way_cluster_t_handles_nan_and_empty():
+    r = S.two_way_cluster_t(np.array([np.nan, np.nan]), np.array([1, 2]), np.array(["a", "b"]))
+    assert r["n"] == 0 and np.isnan(r["t"])
+    r = S.two_way_cluster_t(np.array([0.1, np.nan, 0.3]), np.array([1, 1, 2]),
+                            np.array(["a", "a", "b"]))
+    assert r["n"] == 2 and r["Ga"] == 2 and r["Gb"] == 2
