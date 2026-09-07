@@ -27,3 +27,18 @@ gate is ON, graded once at expiry from the underlying's close (tier-4 intrinsic)
 session, `post` the expiry, `variant` is `B1`. From 2026-09-11 the same file also holds the **exploration
 book** (`role = exploration`): one contract per sleeve on every entry day regardless of the gate, with the
 gate's verdict on the row, so the gate is graded at the 12-01 read (`DESIGN/100 §6`).
+
+## `wb/` — the watch-basket forward ledger (opens 2026-09-08)
+
+`findings/market-analysis/DESIGN/110-watch-basket.md`, R2/R3. Exploration-only, paper rows, `policy_id =
+"wb-1.0"`, `role = exploration` always -- this book has no champion or gate to compare against. A single
+file, `forward_signals.parquet` (row key `ticker, date, basket, policy_id, role`), one row per (name,
+night, basket) for LONG/SHORT/VOL that basket-qualified that night (CONFLICT is logged in `signals.json`
+only, never written here, DESIGN/110 §3); `gate_verdict` is `"<basket>:<bull>/<bear>:<comma-separated true
+condition ids>"`. Unlike every other ledger file, a row here is not append-only end to end: it is written
+once with `excess_h5`/`excess_h10`/`excess_h21` all null, and `engine.watch.nightly.grade_open_rows` fills
+one of those three cells in place, once, the first night its horizon's session has closed (a filled cell is
+never touched again). `episode` is `false` on a re-entry into the same basket within 21 sessions
+(DESIGN/110 §4) -- a continuation, still written, but not counted as a new independent unit by the R3 read
+(`engine/improve/basket_read.py`, `make adjudicate ARGS="basket --policy wb-1.0"`). The read itself writes
+to `ledger/adjudications/wb-1.0-<basket>.json`, same as every other verdict above.

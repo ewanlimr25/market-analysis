@@ -118,6 +118,11 @@ Optionally, `make cboe-chain` fetches the full SPY/QQQ option chain from CBOE's 
 (RESEARCH/47 G8) into `data/mart/cboe_chain/`; it is a standalone target, not part of `make daily`,
 and touches no S-A/S-B number.
 
+`make daily` also runs the watch-basket step after S-B (DESIGN/110 R2, report.md's "Watch basket"
+section, `ledger/wb/`) -- a pre-registered, exploration-only paper book of 17 stacked technical/flow
+conditions, adding roughly 20-25 s to the run; it is **not** a signal, a filter on S-A/S-B, or
+anything traded before its own 2026-12-01-or-100-episode read (`DESIGN/110` §6).
+
 ## 2. Reading the report
 
 **Header:** `S-A daily — <date> (<season>)`. Seasons: S1 Apr–Jun 2026, S2 Jul–Sep, **S3 Oct–Nov (the
@@ -262,6 +267,18 @@ The weekly audit loops of the two retired fleets re-tuned prompts on n < 30 and 
 6. **Kill rules** (`DESIGN/100 §8`): three consecutive FAILs close a strategy's idea ledger for a season;
    four season reads without a launched champion make the engine a measurement tool, and that is written
    down too.
+
+**The watch-basket read** (`DESIGN/110 §6`, its own book, not the champion/challenger loop above): once
+per basket, `make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"` counts independent
+episodes (`episode = true` rows, `DESIGN/110 §4`) with `excess_h21` resolved. Before the later of
+2026-12-01 and 100 episodes it prints `NOT_DUE` (the count and, at the trailing-30-session accrual rate, a
+projected date) and writes nothing. On the date it computes the hit rate at h21 against the universe base
+of the *same nights* (live from the screener spine, never the ledger), a two-sided binomial p, and the
+mean SPY excess with a name-clustered t; `CLEARS` needs the hit rate at least 10 points above the base
+(p < 0.05) and a positive mean excess (t >= 2), else `FAILS`. The verdict is written once to
+`ledger/adjudications/wb-1.0-<basket>.json` and appended to `LOG.md`, exactly like the other verdicts; a
+basket that clears becomes a registered challenger candidate for a sleeve, and one that fails twice in a
+row is retired (rows stay as history).
 
 Every ledger row carries `policy_id`, `role` and `gate_verdict`; rows are never pooled across them. The
 exploration books (S-B from 09-11, S-A from 10-01) are what make step 5 possible: one paper contract per

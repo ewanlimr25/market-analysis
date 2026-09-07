@@ -25,6 +25,7 @@ make intraday-rv             # build data/mart/intraday_rv (IRV_DATE=<d> for one
 make earnings-history        # build data/mart/earnings_history/{events,summary}.parquet (LIMIT=N caps the ticker set)
 make cross-section           # weekly IV-spread/skew/O-S cross-section -> data/backtest/g4_factors.parquet, g4_results.json (RESEARCH/47 G4/G5; standalone, not part of `make daily`)
 make watch-retro              # watch-basket R1 retrospective: 17 conditions x panel -> data/backtest/wb_conditions.parquet, wb_retro.json (DESIGN/110; standalone, not part of `make daily`)
+make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"   # the wb-1.0 read (DESIGN/110 §6, R3); NOT_DUE before the later of 2026-12-01 and 100 episodes
 ```
 
 | module | what |
@@ -85,6 +86,9 @@ The backtest write-ups live in `~/Development/findings/market-analysis/RESEARCH/
 | `watch/flows.py` | C-LEAP and C-DP as daily DuckDB sums over the raw All Options / Dark Pool exports |
 | `watch/series.py` | per-ticker point-in-time evaluation of the bar-derived conditions, built once per ticker over its cached history and evaluated online (no lookahead) at every panel night |
 | `watch/retro.py`, `watch/retro_tables.py` | the R1 retrospective panel builder and its five descriptive tables (DESIGN/110 §5); `scripts/watch_retro.py` / `make watch-retro` -> `data/backtest/wb_conditions.parquet`, `wb_retro.json` |
+| `watch/live.py` | R2's live replacements for the five conditions R1 read from `features.parquet`: `pct_52w_range` from the screener spine, the 5-day net call-OI build from the OI-changes files, unsigned total-premium/marketcap crowding from the All Options tape, the 5-day IV-rank change from the screener, and `load_closes` (screener-spine closes for h5/h10/h21 grading); `flows.py`/`tier1.py` are already live and unchanged |
+| `watch/nightly.py`, `watch/wb_ledger.py` | the R2 nightly step: universe -> 17 conditions -> stacks/baskets -> one row per (name, night, basket) for LONG/SHORT/VOL (CONFLICT logged only, DESIGN/110 §3), the 21-session episode rule, `ledger/wb/forward_signals.parquet` (write-once + in-place grade-cell fill, `wb_ledger.py`), h5/h10/h21 SPY-excess grading; fail-soft (`available: false` + `reason` on any exception); called from `make daily` after the S-B step |
+| `improve/basket_read.py` | R3, the wb-1.0 read (DESIGN/110 §6): independent-episode count with `excess_h21` resolved, NOT_DUE before the later of 2026-12-01 and 100 episodes (with a trailing-30-session projected date), hit rate vs the universe base of the same nights (live from the screener spine, never the ledger), two-sided binomial p, name-clustered t; `scripts/adjudicate.py basket --policy wb-1.0 [--basket LONG\|SHORT\|VOL]` writes the verdict once via `engine.improve.adjudicate.write_adjudication` |
 
 S-G (`findings/market-analysis/DESIGN/91-sg-spec.md`) is a **backtest-only research pre-registration**,
 not a champion: no `make daily` step, no forward ledger, no book caps, and therefore no frozen-params
