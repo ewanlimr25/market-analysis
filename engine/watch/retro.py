@@ -68,20 +68,20 @@ def load_returns(path: str = RETURNS_PATH) -> pd.DataFrame:
 
 def _decile_flag(series: pd.Series) -> pd.Series:
     """Top-decile flag within one night's values: `rank(pct=True) >= 0.9` among non-null values,
-    `None` (via NaN -> later `.astype(object)` conversion) where the value itself is null."""
+    `None` (object dtype throughout, so it never collides with pandas' bool-dtype NA handling)
+    where the value itself is null."""
     ranked = series.rank(pct=True, method="average")
-    return ranked >= 0.9
+    flag = (ranked >= 0.9).astype(object)
+    flag[series.isna()] = None
+    return flag
 
 
 def add_cross_sectional_deciles(universe: pd.DataFrame) -> pd.DataFrame:
-    """Adds `c_oibuild_raw`/`c_crowd_raw` (`bool`/`NaN`) -- the top decile of `oi_net_5d` and of
-    `netprem_mcap` computed PER NIGHT across the universe (DESIGN/110 §2)."""
+    """Adds `c_oibuild_raw`/`c_crowd_raw` (`True`/`False`/`None`, object dtype) -- the top decile
+    of `oi_net_5d` and of `netprem_mcap` computed PER NIGHT across the universe (DESIGN/110 §2)."""
     out = universe.copy()
     out["c_oibuild_raw"] = out.groupby("date")["oi_net_5d"].transform(_decile_flag)
     out["c_crowd_raw"] = out.groupby("date")["netprem_mcap"].transform(_decile_flag)
-    # rows where the underlying value is null must not inherit a spurious True/False decile flag
-    out.loc[out["oi_net_5d"].isna(), "c_oibuild_raw"] = pd.NA
-    out.loc[out["netprem_mcap"].isna(), "c_crowd_raw"] = pd.NA
     return out
 
 
