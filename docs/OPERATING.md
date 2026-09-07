@@ -97,6 +97,10 @@ Do not run for a date with no export (weekends, holidays). If the export has not
 not run the previous date twice (it is harmless, the ledger writes are idempotent, but it wastes a
 commit).
 
+Optionally, `make cboe-chain` fetches the full SPY/QQQ option chain from CBOE's free delayed API
+(RESEARCH/47 G8) into `data/mart/cboe_chain/`; it is a standalone target, not part of `make daily`,
+and touches no S-A/S-B number.
+
 ## 2. Reading the report
 
 **Header:** `S-A daily — <date> (<season>)`. Seasons: S1 Apr–Jun 2026, S2 Jul–Sep, **S3 Oct–Nov (the

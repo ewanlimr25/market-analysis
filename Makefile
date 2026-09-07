@@ -40,6 +40,14 @@ backtest-sb:      ## proxy (3y) + marked (panel) S-B runs -> data/backtest/sb_*.
 report-sb:        ## sleeve tables, BH, DSR, PBO, month rule, tail, overlap, gate modes, go/no-go -> data/backtest/sb_report.md
 	$(PY) -m engine.validation.run_sb_report
 
+# ---- G8: CBOE full option chain (RESEARCH/47 §2 G8) -------------------------------------------
+# Standalone, not part of `make daily`: a full chain is a multi-MB fetch per symbol and the nightly
+# must stay fast and never touch S-A/S-B numbers. Run by hand, or on your own cron, after the close.
+.PHONY: cboe-chain
+
+cboe-chain:        ## fetch+store the full CBOE option chain for SPY, QQQ and SYMBOLS=... -> data/mart/cboe_chain/
+	$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ $(SYMBOLS)
+
 # ---- Improvement process (findings/market-analysis DESIGN/100, D22) ---------------------------
 .PHONY: power adjudicate
 

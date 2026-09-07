@@ -16,6 +16,7 @@ make validate DATE=2026-10-14 # check that night's signals.json against schemas/
 make backtest-sb             # S-B: three-year proxy + marked panel run -> data/backtest/sb_*.parquet (REFRESH=1 refetches inputs)
 make report-sb               # S-B: sleeve tables, BH, DSR, PBO, month rule, tail, overlap, go/no-go -> data/backtest/sb_report.md
 make index-vol               # refresh data/mart/index_vol/ from the CBOE public CSVs (the nightly does this itself)
+make cboe-chain               # fetch+store the full SPY/QQQ (+ SYMBOLS=...) CBOE option chain -> data/mart/cboe_chain/ (RESEARCH/47 G8; standalone, not part of `make daily`)
 ```
 
 | module | what |
@@ -42,6 +43,7 @@ make index-vol               # refresh data/mart/index_vol/ from the CBOE public
 | `strategies/sb_proxy.py`, `strategies/sb.py`, `strategies/sb_data.py`, `backtest_sb.py` | the three-year proxy at the panel's smile multipliers; the marked run on `daily_contract`; the driver |
 | `validation/sb_harness.py`, `validation/run_sb_report.py` | NW and expiry-clustered t, BH, deflated Sharpe (two benchmarks), PBO, month rule, tail, overlap, gate modes, go/no-go (DESIGN/80 §6) |
 | `sb_daily.py` | the S-B nightly step: CBOE refresh (fail-soft), gate tonight and next session, entries on the last session of the week, grading at expiry into `ledger/sb/` (DESIGN/80 §7) |
+| `mart/cboe_chain.py`, `mart/cboe_chain_derived.py` | the full option chain from CBOE's free delayed API, stored write-once at `data/mart/cboe_chain/symbol=<SYM>/date=<date>/`; GEX, 25-delta skew, ATM IV, put-call OI ratio (RESEARCH/47 G8; `make cboe-chain`, standalone) |
 
 The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 2026-09-11; before those dates
 `make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.
