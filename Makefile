@@ -93,3 +93,11 @@ adjudicate:       ## register / run / champion / gate: make adjudicate ARGS='cha
 expiry-pinning:   ## build g6_pins.parquet + rate tables/verdict -> findings artifacts/edge-gaps/g6
 	$(PY) scripts/expiry_pinning.py build
 	$(PY) scripts/expiry_pinning.py report
+# ---- G1: fill-price model from the panel's own NBBO (findings/market-analysis RESEARCH/47 §2) --
+.PHONY: g1-fills g1-remark
+
+g1-fills:         ## fill-quality over 103 days of All Options -> data/backtest/g1_fills.parquet + summary.md
+	$(PY) scripts/fills.py
+
+g1-remark:        ## re-mark the frozen S-A rows (a / b1 / b2 / ab1 / ab2) -> data/backtest/g1_remarked.parquet
+	$(PY) scripts/g1_remark.py

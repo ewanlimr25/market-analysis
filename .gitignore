@@ -9,3 +9,4 @@ archive/
 data/mart/
 data/backtest/*
 !data/backtest/*.md
+.tmp/
