@@ -77,6 +77,14 @@ report-sg:        ## season table, BH, DSR, PBO, tail, spread halves, ramp decom
 
 intraday-flow:    ## whole-panel G2 build + analysis -> data/backtest/g2_*/, findings/.../g2/results.{md,json}
 	$(PY) scripts/intraday_flow.py $(if $(DAYS),--days $(DAYS),) $(if $(FORCE),--force,)
+# ---- G7: intraday realized vol + earnings jump history (findings/RESEARCH/47-edge-gaps.md §2 G7)
+.PHONY: intraday-rv earnings-history
+
+intraday-rv:      ## build data/mart/intraday_rv for IRV_DATE=<d> (else the whole panel; DAYS=N limits to the N most recent panel days)
+	$(PY) -m engine.mart.intraday_rv $(if $(IRV_DATE),--date $(IRV_DATE),--rebuild $(if $(DAYS),--days $(DAYS),))
+
+earnings-history:  ## build data/mart/earnings_history/{events,summary}.parquet (LIMIT=N caps the ticker set)
+	$(PY) -m engine.mart.earnings_history --rebuild $(if $(LIMIT),--limit $(LIMIT),) $(if $(FINNHUB_SAMPLE),--finnhub-sample $(FINNHUB_SAMPLE),)
 
 # ---- Improvement process (findings/market-analysis DESIGN/100, D22) ---------------------------
 .PHONY: power adjudicate

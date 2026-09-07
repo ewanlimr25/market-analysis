@@ -21,6 +21,8 @@ make short-interest DATE=2026-09-07  # FINRA short interest (full universe) + Re
 make sb-challengers           # G10: VIX-family challenger table on the S-B proxy -> data/backtest/g10_sb_challengers.* (DRAFTS=1 for registration drafts)
 make backtest-sg             # S-G: pre-earnings ramp, day -3/-5 long straddle/strangle -> data/backtest/g3_*.parquet (backtest-only research spec)
 make report-sg                # S-G: season table, BH, DSR, PBO, tail, spread halves, ramp decomposition, go/no-go -> data/backtest/g3_report.md
+make intraday-rv             # build data/mart/intraday_rv (IRV_DATE=<d> for one day, else the whole panel; DAYS=N caps it)
+make earnings-history        # build data/mart/earnings_history/{events,summary}.parquet (LIMIT=N caps the ticker set)
 ```
 
 | module | what |
@@ -59,6 +61,9 @@ make report-sg                # S-G: season table, BH, DSR, PBO, tail, spread ha
 | `strategies/sg_decomposition.py` | finite-difference delta/vega off `bs.price`; the gross ramp decomposition (delta vs vega vs residual, DESIGN/91 §4) |
 | `strategies/sg.py`, `strategies/sg_data.py`, `backtest_sg.py` | `evaluate_event` / `run` over both pre-registered entry offsets; entry-day/exit-day mart access reusing `sa_data`'s loaders |
 | `validation/sg_harness.py`, `validation/run_report_sg.py` | entry-day-clustered t, BH, ten-trial deflated Sharpe, PBO, tail, spread halves, decomposition summary, go/no-go (DESIGN/91 §4) |
+| `mart/intraday_rv.py` | one row per (underlying, day): RV5, Parkinson and Garman-Klass from the 5-minute `underlying_price` path, open/close and close-to-close returns, quality flag (G7, `findings/RESEARCH/47-edge-gaps.md` §2 G7) |
+| `mart/earnings_history.py` | per-name realized earnings-move history: Yahoo 10y bars joined to `earnings_events`' dates on its AMC/BMO alignment, plus a point-in-time trailing summary; a **verified blocker** limits Finnhub's own historical depth, see the module docstring (G7) |
+| `scripts/g7_rv_comparison.py` | the S-C-universe comparison of RV5 / close-to-close / Parkinson realized vol and the implied-minus-realized premium under each (G7 task 2; not consumed anywhere until `DESIGN/90` is edited) |
 
 The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 2026-09-11; before those dates
 `make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.
