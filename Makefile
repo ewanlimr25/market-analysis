@@ -114,3 +114,16 @@ g1-remark:        ## re-mark the frozen S-A rows (a / b1 / b2 / ab1 / ab2) -> da
 
 cross-section:     ## weekly IV-spread/skew/O-S cross-section -> data/backtest/g4_factors.parquet, g4_results.json
 	$(PY) scripts/cross_section.py $(ARGS)
+
+# ---- O4 (findings DECISIONS D23, 2026-09-07): the standalone loaders, run from cron, never from `make daily`.
+# Each loader is write-once and fail-soft; the leading `-` lets a holiday or a dead endpoint log and move on.
+.PHONY: loaders loaders-weekly
+
+loaders:           ## nightly (cron, weekdays): CBOE chain SPY/QQQ, Reg SHO, IBKR borrow, VVIX/SKEW -> data/mart/*
+	-$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ
+	-$(PY) -m engine.mart.regsho --refresh --date $(DATE)
+	-$(PY) -m engine.mart.borrow --refresh --date $(DATE)
+	-$(MAKE) -s index-vol-ext
+
+loaders-weekly:    ## weekly (cron, Saturday): FINRA short interest, full universe, new settlements only
+	-$(PY) -m engine.mart.short_interest --refresh

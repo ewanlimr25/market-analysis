@@ -93,6 +93,23 @@ machine copy is `signals.json` in the same folder; its shape is pinned by `schem
 `signals.json: VALID`. A `WARN ... does not match` line means a key drifted: the file is still the
 record, but tell the next session so the schema (not the ledger) is fixed.
 
+### The loaders run from cron, not from `make daily` (D23, 2026-09-07)
+
+The G7 to G10 mart tables (`cboe_chain`, `regsho`, `borrow`, `index_vol_ext`, `short_interest`) are
+refreshed by two `make` targets that cron runs on this machine; `make daily` never calls them and no
+schema changed for them. Installed 2026-09-07 (`crontab -l` to see it; `crontab -r` removes it):
+
+```
+30 16 * * 1-5  cd ~/Development/market-analysis && make -s loaders        >> data/logs/loaders.log 2>&1
+0  9  * * 6    cd ~/Development/market-analysis && make -s loaders-weekly >> data/logs/loaders.log 2>&1
+```
+
+16:30 local is after CBOE's 15-minute delay on the close; the weekly FINRA pull (about 2,500 requests)
+runs Saturday morning. cron does not catch up after sleep: if the Mac was asleep at 16:30 the chain for
+that day is missing, and `make loaders` by hand the same evening still stores it under the payload's own
+date. A holiday logs one `already exists` / `no file` line per loader and nothing else. `data/logs/` is
+gitignored; glance at it weekly.
+
 Do not run for a date with no export (weekends, holidays). If the export has not landed, wait; do
 not run the previous date twice (it is harmless, the ledger writes are idempotent, but it wastes a
 commit).
@@ -220,7 +237,10 @@ The weekly audit loops of the two retired fleets re-tuned prompts on n < 30 and 
    CBOE vol-index family (VIX floor, VIX9D/VIX, VVIX, SKEW, VIX/VIX3M) on the S-B proxy and writes
    registration drafts under `ledger/challengers/drafts/` (`registered: "PENDING-2026-12-01"`, invisible to
    `open_challengers`) to carry into the real registration:
-   `make adjudicate ARGS="register --strategy sb --policy-id sb-c1 --idea 'VIX floor 15' --param vix_floor=15 --min-effect 0.01"`.
+   `make adjudicate ARGS="register --strategy sb --policy-id sb-c-vixfloor-abs --idea 'VIX floor, absolute (VIX>=14 SPY / VXN>=17.5 QQQ)' --param vix_floor_abs=SPY:14,QQQ:17.5 --min-effect 0.01"`
+   (the first registration, decided 2026-09-07 as D23/O1: the draft `ledger/challengers/drafts/sb-c-vixfloor-abs.json`,
+   `n_required 15`, adjudication about 2026-12-25; register it on 2026-12-01 after the champion read, then build its
+   shadow runner).
    `n_required` comes from `make power` (the champion's realised sd, inflated for the Newey-West lag) and
    fixes the adjudication date; the file lands in `ledger/challengers/` with a hash of the adjudication
    script. Commit it before the first shadow night. One open challenger per strategy.

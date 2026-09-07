@@ -10,3 +10,4 @@ data/mart/
 data/backtest/*
 !data/backtest/*.md
 .tmp/
+data/logs/
