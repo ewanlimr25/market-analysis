@@ -98,6 +98,18 @@ def _row_from_window(win_row) -> dict:
             "last_nbbo_bid": win_row.last_bid, "last_nbbo_ask": win_row.last_ask}
 
 
+def window_lookup(win: pd.DataFrame) -> dict:
+    """(option_chain_id, python date) -> row, from `build_window_rows`'s output. DuckDB's `DATE`
+    columns round-trip into pandas as `Timestamp`, while `trades['post']` is a plain python
+    `date` (parquet round-trip of the original `datetime.date` values) — normalizing here is
+    what makes the two comparable; without it every `.get()` below misses silently and every leg
+    falls through to the tier-3 model fallback (regression: b1 and b2 produced identical marks)."""
+    if not len(win):
+        return {}
+    normalized = win.assign(date=pd.to_datetime(win["date"]).dt.date)
+    return {(r.option_chain_id, r.date): r for r in normalized.itertuples()}
+
+
 def build_new_exit_marks(con, trades: pd.DataFrame, window: str, stocks: str = STOCKS) -> dict:
     """row index -> {leg: Mark | None} for every present leg, marked inside `window` on that
     row's `post` date. Tier 1-2 from real prints (`marking.print_mark`); tier 3 (no print in the
@@ -105,7 +117,7 @@ def build_new_exit_marks(con, trades: pd.DataFrame, window: str, stocks: str = S
     ids, dates = _needed_ids_and_dates(trades)
     files = _files_for_dates(dates, stocks)
     win = build_window_rows(con, files, ids, window)
-    by_key = {(r.option_chain_id, r.date): r for r in win.itertuples()}
+    by_key = window_lookup(win)
 
     inputs = load_inputs(con)
     model_inputs = sa_data.build_model_inputs(inputs["prices"], inputs["iv30d"], inputs["spreads"],
