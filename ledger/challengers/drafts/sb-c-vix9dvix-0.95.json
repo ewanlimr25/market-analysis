@@ -1,0 +1,20 @@
+{
+ "policy_id": "sb-c-vix9dvix-0.95",
+ "strategy": "sb",
+ "champion": "sb-1.0",
+ "idea": "VIX9D/VIX <= 0.95 (RESEARCH/47-edge-gaps.md G10; DESIGN/80 \u00a78 idea ledger)",
+ "params_diff": {
+  "vix9d_vix_ratio_max": 0.95
+ },
+ "registered": "PENDING-2026-12-01",
+ "n_required": 15,
+ "unit": "post",
+ "adjudicate_on": "2026-12-25",
+ "test": "paired difference in net excess per unit risk, challenger minus champion, on matched entry nights; one-sided t with Newey-West lag = overlap; alpha 0.05",
+ "min_effect": 0.01,
+ "kill": "if after n_required/2 units the paired mean is below -min_effect, stop early and record FAIL",
+ "script_sha256": "aca3167ce0659e127a16d90cc4a5e4fb2410de7e637e979664b5873d86003b01",
+ "draft": true,
+ "sleeve": "SPY-IC",
+ "power_note": "n_required from min_effect and the champion's realised sd at registration (backtest data/backtest/sb_marked.parquet (n=24), NW lag 2 inflation 1.000); shared across every G10 challenger of this strategy"
+}

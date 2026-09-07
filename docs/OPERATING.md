@@ -216,7 +216,10 @@ The weekly audit loops of the two retired fleets re-tuned prompts on n < 30 and 
 1. **Measure weekly, in code, and change nothing.** `make report-sb`, `make report`, the desk tables. No
    parameter, cap, gate or status moves outside step 4.
 2. **Register one challenger** from the strategy's idea ledger (`DESIGN/80 §8`, `70 §7.4`), one parameter,
-   after the champion's season read (the first is 2026-12-01):
+   after the champion's season read (the first is 2026-12-01). `make sb-challengers DRAFTS=1` backtests the
+   CBOE vol-index family (VIX floor, VIX9D/VIX, VVIX, SKEW, VIX/VIX3M) on the S-B proxy and writes
+   registration drafts under `ledger/challengers/drafts/` (`registered: "PENDING-2026-12-01"`, invisible to
+   `open_challengers`) to carry into the real registration:
    `make adjudicate ARGS="register --strategy sb --policy-id sb-c1 --idea 'VIX floor 15' --param vix_floor=15 --min-effect 0.01"`.
    `n_required` comes from `make power` (the champion's realised sd, inflated for the Newey-West lag) and
    fixes the adjudication date; the file lands in `ledger/challengers/` with a hash of the adjudication

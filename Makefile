@@ -54,6 +54,14 @@ short-interest:    ## refresh FINRA short interest (full universe) + Reg SHO + I
 	$(PY) -m engine.mart.short_interest --refresh --universe data/universe.json
 	$(PY) -m engine.mart.regsho --refresh --date $(DATE)
 	$(PY) -m engine.mart.borrow --refresh --date $(DATE)
+# ---- G10: S-B challengers from the CBOE vol-index family (findings/market-analysis RESEARCH/47 §2) --
+.PHONY: index-vol-ext sb-challengers
+
+index-vol-ext:    ## refresh data/mart/index_vol_ext/index_vol_ext.parquet (VVIX, SKEW, two vol-index ratios)
+	$(PY) -m engine.mart.index_vol_ext --refresh
+
+sb-challengers:   ## proxy challenger table -> data/backtest/g10_sb_challengers.*  (add DRAFTS=1 for registration drafts)
+	$(PY) scripts/sb_challengers.py $(if $(DRAFTS),--drafts,)
 
 # ---- Improvement process (findings/market-analysis DESIGN/100, D22) ---------------------------
 .PHONY: power adjudicate

@@ -175,3 +175,17 @@ SB_PBO_BLOCKS = 16
 SA_POLICY_ID = "sa-1.0"
 SB_POLICY_ID = "sb-1.0"
 
+
+# =============================================================================================
+# G10: S-B challengers from the CBOE vol-index family (findings/market-analysis
+# RESEARCH/47-edge-gaps.md §2; DESIGN/80 §8 idea ledger). Read-only additions: nothing above this
+# line moved. `index_vol_ext` never writes into `INDEX_VOL_DIR`; it is its own mart table.
+# =============================================================================================
+INDEX_VOL_EXT_DIR = os.path.join(MART, "index_vol_ext")
+INDEX_VOL_EXT_FILE = os.path.join(INDEX_VOL_EXT_DIR, "index_vol_ext.parquet")
+INDEX_VOL_EXT_FALLBACK = os.path.expanduser(
+    "~/Development/findings/market-analysis/artifacts/edge-gaps/g10/index_vol_ext_2026-09-07.parquet")
+CBOE_EXT_INDICES = ("VVIX", "SKEW")              # single-value CSVs: DATE,<INDEX> (not OHLC/CLOSE)
+CBOE_EXT_VALUE_COLUMN = {"VVIX": "VVIX", "SKEW": "SKEW"}
+CBOE_EXT_INDEX_COLUMN = {"VVIX": "vvix", "SKEW": "skew"}
+

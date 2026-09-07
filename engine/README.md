@@ -18,6 +18,7 @@ make report-sb               # S-B: sleeve tables, BH, DSR, PBO, month rule, tai
 make index-vol               # refresh data/mart/index_vol/ from the CBOE public CSVs (the nightly does this itself)
 make cboe-chain               # fetch+store the full SPY/QQQ (+ SYMBOLS=...) CBOE option chain -> data/mart/cboe_chain/ (RESEARCH/47 G8; standalone, not part of `make daily`)
 make short-interest DATE=2026-09-07  # FINRA short interest (full universe) + Reg SHO + IBKR borrow (RESEARCH/47 G9; standalone, not part of `make daily`)
+make sb-challengers           # G10: VIX-family challenger table on the S-B proxy -> data/backtest/g10_sb_challengers.* (DRAFTS=1 for registration drafts)
 ```
 
 | module | what |
@@ -50,6 +51,7 @@ make short-interest DATE=2026-09-07  # FINRA short interest (full universe) + Re
 | `mart/regsho.py` | FINRA Reg SHO daily short volume, `data/mart/regsho/date=<date>/`; facilitation volume, control variable only, never a signal (RESEARCH/30 §5, RESEARCH/47 G9) |
 | `mart/finviz_short.py` | `short_float(ticker)`, a thin fail-soft wrapper on `fz quote --agent`, on-demand single-ticker use only (RESEARCH/47 G9) |
 | `features/short_side.py` | `join_short_side`: attaches `short_interest`, `days_to_cover`, `si_change_pct` (point-in-time) and `borrow_fee` onto a screener spine -- the control column G4 needs (RESEARCH/47 G4/G9) |
+| `mart/index_vol_ext.py`, `improve/sb_challengers.py` | G10: CBOE VVIX/SKEW + VIX9D/VIX and VIX/VIX3M ratios (`data/mart/index_vol_ext/`); the CBOE vol-index family as additional conditions on the frozen S-B gate, backtested on the proxy; registration drafts (RESEARCH/47-edge-gaps.md §2) |
 
 The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 2026-09-11; before those dates
 `make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.
