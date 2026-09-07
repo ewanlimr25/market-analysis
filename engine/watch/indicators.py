@@ -32,29 +32,38 @@ def _nan(x) -> bool:
 # =============================================================================================
 
 
-def _rsi_from_avg(avg_gain: float, avg_loss: float) -> float:
+def rsi_from_state(avg_gain: float, avg_loss: float) -> float:
     if avg_loss == 0:
         return 100.0
     rs = avg_gain / avg_loss
     return 100.0 - 100.0 / (1.0 + rs)
 
 
-def wilder_rsi_series(closes: list[float], n: int = RSI_PERIOD) -> list[float | None]:
-    """One Wilder RSI value per close, index-aligned; `None` before there are `n` deltas (i.e.
-    fewer than `n + 1` closes). Matches `scripts/chart.py:rsi14`'s formula on the last value."""
-    out: list[float | None] = [None] * len(closes)
+def wilder_state_series(closes: list[float], n: int = RSI_PERIOD) -> list[tuple[float, float] | None]:
+    """One `(avg_gain, avg_loss)` Wilder smoothing state per close, index-aligned; `None` before
+    there are `n` deltas. Exposed (not just `wilder_rsi_series`) so a caller with a fixed
+    completed-history prefix and a single new observation (`series.py`'s point-in-time weekly
+    evaluation) can apply one more incremental step without recomputing the whole series --
+    Wilder's recursion depends only on the running state and the next delta, never on the future."""
+    out: list[tuple[float, float] | None] = [None] * len(closes)
     if len(closes) <= n:
         return out
     gains = [max(closes[i] - closes[i - 1], 0.0) for i in range(1, len(closes))]
     losses = [max(closes[i - 1] - closes[i], 0.0) for i in range(1, len(closes))]
     avg_gain = sum(gains[:n]) / n
     avg_loss = sum(losses[:n]) / n
-    out[n] = _rsi_from_avg(avg_gain, avg_loss)
+    out[n] = (avg_gain, avg_loss)
     for i in range(n, len(gains)):
         avg_gain = (avg_gain * (n - 1) + gains[i]) / n
         avg_loss = (avg_loss * (n - 1) + losses[i]) / n
-        out[i + 1] = _rsi_from_avg(avg_gain, avg_loss)
+        out[i + 1] = (avg_gain, avg_loss)
     return out
+
+
+def wilder_rsi_series(closes: list[float], n: int = RSI_PERIOD) -> list[float | None]:
+    """One Wilder RSI value per close, index-aligned; `None` before there are `n` deltas (i.e.
+    fewer than `n + 1` closes). Matches `scripts/chart.py:rsi14`'s formula on the last value."""
+    return [rsi_from_state(*s) if s is not None else None for s in wilder_state_series(closes, n)]
 
 
 def wilder_atr_series(highs: list[float], lows: list[float], closes: list[float],
