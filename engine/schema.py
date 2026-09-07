@@ -1,4 +1,4 @@
-"""The `signals.json` contract (schemas/signals.schema.json, `d1.1`; `d1.0` files stay valid).
+"""The `signals.json` contract (schemas/signals.schema.json, `d1.2`; `d1.0`/`d1.1` files stay valid).
 
 `make daily` stamps every run with `schema_version` and `report_kind`, writes strict JSON (no NaN,
 no Infinity), and validates the file it just wrote. Validation never blocks the nightly: a drift is
@@ -17,8 +17,8 @@ import jsonschema
 
 from engine.config import REPO
 
-SCHEMA_VERSIONS = ("d1.0", "d1.1")     # every version a committed nightly may carry
-SCHEMA_VERSION = SCHEMA_VERSIONS[-1]    # what tonight is stamped with (d1.1: policy columns, exploration)
+SCHEMA_VERSIONS = ("d1.0", "d1.1", "d1.2")   # every version a committed nightly may carry
+SCHEMA_VERSION = SCHEMA_VERSIONS[-1]    # what tonight is stamped with (d1.2: optional watch_basket, DESIGN/110 R2)
 REPORT_KIND = "engine-daily"
 SCHEMA_PATH = os.path.join(REPO, "schemas", "signals.schema.json")
 

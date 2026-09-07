@@ -23,8 +23,10 @@ from engine import sb_daily as SD
 from engine import schema as SCH
 from engine.config import REPO, SA_PARAMS, SIZING
 from engine.strategies import sa
+from engine.watch import nightly as WBN
 from test_sa_strategy import _event, _model_inputs, _post_rows, _pre_rows, _resolver
 from test_sb_strategy import ENTRY, EXP, _index_vol, _rows
+from test_watch_nightly import LONG_IDS, _cond_row, _evaluate_fn
 
 pytestmark = pytest.mark.unit
 
@@ -113,6 +115,59 @@ def test_full_nightly_document_from_real_builders_validates(tmp_path):
     assert list(doc)[:2] == ["schema_version", "report_kind"]
     assert {c["contracts"] for c in doc["candidates"]} and "n" not in doc["candidates"][0]
     assert doc["sb_state"]["running"][0]["n"] == 1                     # a count, kept as `n`
+
+
+# ---- d1.2: the optional watch_basket object (DESIGN/110 R2) ---------------------------------------
+
+def test_schema_version_defaults_to_d1_2_and_d1_0_d1_1_docs_stay_valid():
+    assert SCH.SCHEMA_VERSION == "d1.2" and SCH.SCHEMA_VERSIONS == ("d1.0", "d1.1", "d1.2")
+    for old in ("d1.0", "d1.1"):
+        # a document from before the watch basket existed: no `watch_basket` key at all
+        base = {"schema_version": old, "report_kind": SCH.REPORT_KIND, "date": SESSION.isoformat(), "season": "S2",
+                "preflight": {"ok": True, "warnings": []}, "mart": {"daily_contract_rows": 0, "earnings_events_rows": 0},
+                "candidates": [], "suppressed": [], "dropped": [], "graded": [], "season_running": [],
+                "ledger": {"emitted": 0, "skipped": 0, "graded": 0, "ledger_open": False},
+                "sb_state": {"date": SESSION.isoformat(), "gate": {}, "candidates": [], "graded": [], "refresh": {"ok": True}}}
+        assert SCH.validate(base) == []
+
+
+def test_document_with_a_real_watch_basket_state_validates(tmp_path):
+    run, graded, dropped_grade, running = _sa_pieces(str(tmp_path / "sa"))
+    sb = _sb_state(str(tmp_path / "sb"), ENTRY)
+    counts = {"emitted": 0, "skipped": 0, "graded": 0, "ledger_open": False}
+    rows = [_cond_row("LONGCO", SESSION, LONG_IDS)]
+    wb = WBN.nightly(None, SESSION, force_ledger=True, ledger_dir=str(tmp_path / "wb"), evaluate_fn=_evaluate_fn(rows))
+    assert wb["available"] is True and wb["wb_emitted"] == 1
+    doc = D.assemble(SESSION, _preflight_ok(), {"daily_contract_rows": 1, "earnings_events_rows": 0},
+                     run, graded, dropped_grade, running, counts, sb, wb)
+    assert doc["schema_version"] == "d1.2"
+    assert SCH.validate(doc) == []
+    text = SCH.dumps(doc)
+    assert SCH.validate(json.loads(text, **STRICT)) == []
+    assert doc["watch_basket"]["long"][0]["ticker"] == "LONGCO"
+
+
+def test_watch_basket_unavailable_shape_validates():
+    wb = WBN.nightly(None, SESSION, force_ledger=True, ledger_dir="/nonexistent",
+                     evaluate_fn=lambda d: (_ for _ in ()).throw(RuntimeError("boom")))
+    assert wb["available"] is False
+    empty = sa.RunResult(pd.DataFrame(), pd.DataFrame(), pd.DataFrame())
+    counts = {"emitted": 0, "skipped": 0, "graded": 0, "ledger_open": False}
+    sb_error = {"date": SESSION.isoformat(), "error": "S-B step failed: boom", "candidates": [], "graded": [], "gate": {},
+                "refresh": {"ok": False, "error": "timeout"}}
+    doc = D.assemble(SESSION, {"ok": False, "warnings": ["preflight failed: timeout"]}, {"daily_contract_rows": 0, "earnings_events_rows": 0},
+                     empty, pd.DataFrame(), pd.DataFrame(), [], counts, sb_error, wb)
+    assert SCH.validate(doc) == []
+
+
+def test_watch_basket_omitted_keeps_the_document_valid(tmp_path):
+    """`wb_state=None` (the default): no `watch_basket` key at all, still a valid d1.2 document."""
+    run, graded, dropped_grade, running = _sa_pieces(str(tmp_path / "sa"))
+    counts = {"emitted": 0, "skipped": 0, "graded": 0, "ledger_open": False}
+    doc = D.assemble(SESSION, _preflight_ok(), {"daily_contract_rows": 1, "earnings_events_rows": 0},
+                     run, graded, dropped_grade, running, counts, _sb_state(str(tmp_path / "sb"), ENTRY))
+    assert "watch_basket" not in doc
+    assert SCH.validate(doc) == []
 
 
 def test_failure_shapes_validate(tmp_path):

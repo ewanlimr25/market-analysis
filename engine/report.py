@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from engine.watch.conditions import ALL_CONDITIONS as WB_CONDITION_IDS
+
 NO_EVENT = "no event tonight clears the filters"
 CANDIDATE_COLS = ["ticker", "variant", "structure", "expiry", "k", "k_up", "k_dn", "credit_entry",
                   "credit_net_pct", "risk_usd", "contracts", "entry_tier_max", "cap_pass"]
@@ -59,6 +61,7 @@ def render(signals: dict) -> str:
                   f"(skipped {led.get('exploration_skipped', 0)}), graded {led.get('graded', 0)}; "
                   f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-10-01; nothing written)'}."]
     parts += ["", "## S-B state", render_sb(signals.get("sb_state")), ""]
+    parts += ["", "## Watch basket (wb-1.0, exploration, paper only)", render_wb(signals.get("watch_basket")), ""]
     return "\n".join(parts)
 
 
@@ -114,4 +117,48 @@ def render_sb(state: dict | None) -> str:
     parts += ["", f"S-B ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), exploration {led.get('exploration_emitted', 0)} "
                   f"(skipped {led.get('exploration_skipped', 0)}), graded {led.get('graded', 0)}; "
                   f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-09-11; nothing written)'}."]
+    return "\n".join(parts)
+
+
+# ---- watch basket (DESIGN/110-watch-basket.md §7 R2) ----------------------------------------------
+
+WB_BASKET_COLS = ["ticker", "bull", "bear", "episode", *WB_CONDITION_IDS]
+WB_READ_SENTENCE = ("Paper rows; read on the later of 2026-12-01 and 100 LONG episodes (DESIGN/110 "
+                     "§6); nothing here is a trade.")
+
+
+def _wb_dist_line(label: str, dist: dict) -> str:
+    if not dist:
+        return f"{label}: n/a"
+    return f"{label}: " + ", ".join(f"{k}:{v}" for k, v in sorted(dist.items(), key=lambda kv: int(kv[0])))
+
+
+def _wb_row_for_table(entry: dict) -> dict:
+    """One basket-list entry as a table row: ticker/bull/bear/episode plus a tick column per
+    condition id ("x" true, "?" null, blank false -- DESIGN/110 §3's "individually and
+    collectively" made visible per name, not just per stack count)."""
+    true_ids, null_ids = set(entry.get("true_ids", [])), set(entry.get("null_ids", []))
+    out = {"ticker": entry["ticker"], "bull": entry["bull"], "bear": entry["bear"], "episode": entry["episode"]}
+    out.update({cid: ("x" if cid in true_ids else ("?" if cid in null_ids else "")) for cid in WB_CONDITION_IDS})
+    return out
+
+
+def render_wb(state: dict | None) -> str:
+    if not state:
+        return "_no watch-basket state (step not run)._"
+    if not state.get("available"):
+        return f"**unavailable: {state.get('reason')}**"
+    dist = state.get("count_distribution", {})
+    parts = [f"Universe: {state.get('universe_n', 0)} names.",
+             _wb_dist_line("Bull counts", dist.get("bull", {})),
+             _wb_dist_line("Bear counts", dist.get("bear", {})), ""]
+    for label, key in (("LONG", "long"), ("SHORT", "short"), ("VOL", "vol")):
+        rows = state.get(key, [])
+        parts += [f"### {label} ({len(rows)})",
+                  table([_wb_row_for_table(r) for r in rows], WB_BASKET_COLS) if rows else "_none_", ""]
+    parts.append(f"CONFLICT (logged only, never a basket, DESIGN/110 §3): {len(state.get('conflict', []))}.")
+    led_line = (f"Ledger: emitted {state.get('wb_emitted', 0)} (skipped {state.get('wb_skipped', 0)}), "
+                f"graded {state.get('wb_graded', 0)}; "
+                f"ledger {'open' if state.get('ledger_open') else 'CLOSED (before 2026-09-08; nothing written)'}.")
+    parts += ["", led_line, "", WB_READ_SENTENCE]
     return "\n".join(parts)

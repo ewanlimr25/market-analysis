@@ -1,7 +1,9 @@
 """`make daily DATE=YYYY-MM-DD` (DESIGN/70 §5): preflight, append the mart, tonight's S-A
 candidates with every filter's verdict, grade yesterday's signals into the forward ledger, then the
-S-B step (DESIGN/80 §7, `engine/sb_daily.py`), and write analyses/daily/<date>/signals.json +
-report.md. Deterministic; no model call; the only network use is the CBOE refresh, fail-soft.
+S-B step (DESIGN/80 §7, `engine/sb_daily.py`) and the watch-basket step (DESIGN/110 §7 R2,
+`engine/watch/nightly.py`, exploration-only paper rows, fail-soft), and write
+analyses/daily/<date>/signals.json + report.md. Deterministic; no model call; the only network use
+is the CBOE refresh, fail-soft.
 """
 from __future__ import annotations
 
@@ -30,6 +32,7 @@ from engine.strategies import sa_filters as F
 from engine.strategies import sa_structures as ST
 from engine.validation import stats as S
 from engine.backtest_sa import LOAD_MCAP_HI, LOAD_MCAP_LO
+from engine.watch import nightly as WB
 
 LEDGER_OPENS = date(2026, 10, 1)      # Season 3 ledger opens (DESIGN/70 §7 P7)
 
@@ -41,6 +44,12 @@ def ledger_open(d: date) -> bool:
 def sb_ledger_dir(ledger_dir: str) -> str:
     """The S-B ledger lives beside the S-A one: `<ledger_dir>/sb` (the default is `LEDGER_SB_DIR`)."""
     return os.path.join(ledger_dir, "sb")
+
+
+def wb_ledger_dir(ledger_dir: str) -> str:
+    """The watch-basket ledger lives beside the S-A one: `<ledger_dir>/wb` (default `LEDGER_WB_DIR`,
+    DESIGN/110-watch-basket.md §7 R2)."""
+    return os.path.join(ledger_dir, "wb")
 
 
 def preflight(d: date) -> dict:
@@ -162,23 +171,30 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
     explored = L.emit(ledger_dir, cands.exploration, d) if is_open and len(cands.exploration) else (0, 0)
     n_graded = L.grade(ledger_dir, graded, d)[0] if is_open and len(graded) else 0
     running = season_running(L.read_ledger(ledger_dir), earnings_events.season_of(d))
+    sb_state = SD.nightly(con, d, force_ledger, sb_ledger_dir(ledger_dir))
+    wb_state = WB.nightly(con, d, force_ledger, wb_ledger_dir(ledger_dir))
     signals = assemble(d, pf, mart, cands, graded, dropped, running,
                        {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open,
-                        "exploration_emitted": explored[0], "exploration_skipped": explored[1]},
-                       SD.nightly(con, d, force_ledger, sb_ledger_dir(ledger_dir)))
+                        "exploration_emitted": explored[0], "exploration_skipped": explored[1],
+                        "wb_emitted": wb_state.get("wb_emitted", 0), "wb_graded": wb_state.get("wb_graded", 0)},
+                       sb_state, wb_state)
     write_outputs(signals, os.path.join(out_root, d.isoformat()))
     return signals
 
 
 def assemble(d: date, pf: dict, mart: dict, cands: sa.RunResult, graded: pd.DataFrame, dropped: pd.DataFrame,
-             running: list[dict], ledger_counts: dict, sb_state: dict) -> dict:
-    """The `signals.json` document (schemas/signals.schema.json): stamped, strict-JSON clean."""
+             running: list[dict], ledger_counts: dict, sb_state: dict, wb_state: dict | None = None) -> dict:
+    """The `signals.json` document (schemas/signals.schema.json): stamped, strict-JSON clean.
+    `wb_state` is optional (schema `d1.2`; `d1.0`/`d1.1` documents never carried it) so existing
+    call sites that predate the watch basket keep working."""
     both_dropped = pd.concat([cands.dropped, dropped]) if len(dropped) or len(cands.dropped) else pd.DataFrame()
     body = {"date": d.isoformat(), "season": earnings_events.season_of(d), "preflight": pf, "mart": mart,
             "candidates": _jsonable(cands.trades), "suppressed": _jsonable(cands.suppressed),
             "dropped": _jsonable(both_dropped), "graded": _jsonable(graded), "season_running": running,
             "exploration": _jsonable(cands.exploration), "exploration_dropped": _jsonable(cands.exploration_dropped),
             "ledger": ledger_counts, "sb_state": sb_state}
+    if wb_state is not None:
+        body["watch_basket"] = wb_state
     return SCH.clean(SCH.stamp(body))
 
 
@@ -209,6 +225,11 @@ def main() -> int:
     sig = run_daily(d, a.ledger_dir, a.out_root, force_ledger=a.force_ledger)
     print(f"{d}: {len(sig['candidates'])} candidates, {len(sig['suppressed'])} suppressed, "
           f"{len(sig['graded'])} graded; report at {os.path.join(a.out_root, d.isoformat(), 'report.md')}")
+    wb = sig.get("watch_basket") or {}
+    print(f"watch_basket: available={wb.get('available')} universe_n={wb.get('universe_n', 0)} "
+          f"long={len(wb.get('long', []))} short={len(wb.get('short', []))} vol={len(wb.get('vol', []))} "
+          f"conflict={len(wb.get('conflict', []))} emitted={wb.get('wb_emitted', 0)} graded={wb.get('wb_graded', 0)} "
+          f"elapsed_s={wb.get('elapsed_s')}")
     errors = SCH.validate(sig)
     if errors:
         print(f"WARN signals.json does not match schemas/signals.schema.json ({len(errors)}):", file=sys.stderr)

@@ -212,3 +212,13 @@ CBOE_EXT_INDICES = ("VVIX", "SKEW")              # single-value CSVs: DATE,<INDE
 CBOE_EXT_VALUE_COLUMN = {"VVIX": "VVIX", "SKEW": "SKEW"}
 CBOE_EXT_INDEX_COLUMN = {"VVIX": "vvix", "SKEW": "skew"}
 
+
+# =============================================================================================
+# Watch basket (findings/market-analysis DESIGN/110-watch-basket.md; R1 2026-09-07, R2 nightly).
+# Exploration-only, paper rows, `policy_id = "wb-1.0"`: nothing above this line moved, and the
+# 17 conditions/thresholds stay in `engine/watch/conditions.py`, not here.
+# =============================================================================================
+LEDGER_WB_DIR = os.path.join(LEDGER_DIR, "wb")
+LEDGER_WB_OPEN = date(2026, 9, 8)                # DESIGN/110 §7 R2; before this, nothing is written
+                                                  # to ledger/wb/ unless --force-ledger
+

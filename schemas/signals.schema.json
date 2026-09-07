@@ -1,7 +1,7 @@
 {
  "$schema": "http://json-schema.org/draft-07/schema#",
  "title": "engine-daily signals (d1.1)",
- "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 \u00a75, DESIGN/80 \u00a77). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 \u00a74). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*.",
+ "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 \u00a75, DESIGN/80 \u00a77). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 \u00a74). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*. d1.2 (2026-09-08, DESIGN/110 R2): optional top-level watch_basket object (exploration-only, paper rows, policy wb-1.0); ledger_counts.wb_emitted/wb_graded.",
  "type": "object",
  "additionalProperties": false,
  "required": [
@@ -23,7 +23,8 @@
   "schema_version": {
    "enum": [
     "d1.0",
-    "d1.1"
+    "d1.1",
+    "d1.2"
    ]
   },
   "report_kind": {
@@ -113,6 +114,9 @@
    "items": {
     "$ref": "#/$defs/sa_dropped"
    }
+  },
+  "watch_basket": {
+   "$ref": "#/$defs/watch_basket"
   }
  },
  "$defs": {
@@ -949,6 +953,12 @@
     },
     "exploration_skipped": {
      "type": "integer"
+    },
+    "wb_emitted": {
+     "type": "integer"
+    },
+    "wb_graded": {
+     "type": "integer"
     }
    }
   },
@@ -1712,6 +1722,256 @@
     },
     "error": {
      "type": "string"
+    }
+   }
+  },
+  "wb_bull_distribution": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "properties": {
+    "0": {
+     "type": "integer"
+    },
+    "1": {
+     "type": "integer"
+    },
+    "2": {
+     "type": "integer"
+    },
+    "3": {
+     "type": "integer"
+    },
+    "4": {
+     "type": "integer"
+    },
+    "5": {
+     "type": "integer"
+    },
+    "6": {
+     "type": "integer"
+    }
+   }
+  },
+  "wb_bear_distribution": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+   ],
+   "properties": {
+    "0": {
+     "type": "integer"
+    },
+    "1": {
+     "type": "integer"
+    },
+    "2": {
+     "type": "integer"
+    },
+    "3": {
+     "type": "integer"
+    },
+    "4": {
+     "type": "integer"
+    },
+    "5": {
+     "type": "integer"
+    },
+    "6": {
+     "type": "integer"
+    },
+    "7": {
+     "type": "integer"
+    }
+   }
+  },
+  "wb_count_distribution": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "bull",
+    "bear"
+   ],
+   "properties": {
+    "bull": {
+     "$ref": "#/$defs/wb_bull_distribution"
+    },
+    "bear": {
+     "$ref": "#/$defs/wb_bear_distribution"
+    }
+   }
+  },
+  "wb_top_entry": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "one of the top 20 names by bull or bear count (DESIGN/110 R2)",
+   "required": [
+    "ticker",
+    "true_ids"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "bull": {
+     "type": "integer"
+    },
+    "bear": {
+     "type": "integer"
+    },
+    "true_ids": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "wb_basket_entry": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "one name in the LONG/SHORT/VOL/CONFLICT list tonight (DESIGN/110 R2)",
+   "required": [
+    "ticker",
+    "bull",
+    "bear",
+    "true_ids",
+    "null_ids",
+    "episode"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "bull": {
+     "type": "integer"
+    },
+    "bear": {
+     "type": "integer"
+    },
+    "true_ids": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "null_ids": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    },
+    "episode": {
+     "type": "boolean",
+     "description": "DESIGN/110 \u00a74: false on a re-entry within 21 sessions"
+    }
+   }
+  },
+  "watch_basket": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "The watch-basket nightly step (DESIGN/110-watch-basket.md \u00a77 R2). Exploration-only, paper rows, policy_id wb-1.0. Optional: d1.0/d1.1 documents (before 2026-09-08) never carried it.",
+   "required": [
+    "available",
+    "reason",
+    "universe_n",
+    "count_distribution",
+    "top_bull",
+    "top_bear",
+    "long",
+    "short",
+    "vol",
+    "conflict",
+    "ledger_open",
+    "wb_emitted",
+    "wb_skipped",
+    "wb_graded",
+    "elapsed_s"
+   ],
+   "properties": {
+    "available": {
+     "type": "boolean"
+    },
+    "reason": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "set only when available is false"
+    },
+    "universe_n": {
+     "type": "integer"
+    },
+    "count_distribution": {
+     "$ref": "#/$defs/wb_count_distribution"
+    },
+    "top_bull": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/wb_top_entry"
+     }
+    },
+    "top_bear": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/wb_top_entry"
+     }
+    },
+    "long": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/wb_basket_entry"
+     }
+    },
+    "short": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/wb_basket_entry"
+     }
+    },
+    "vol": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/wb_basket_entry"
+     }
+    },
+    "conflict": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/wb_basket_entry"
+     },
+     "description": "DESIGN/110 \u00a73: logged only, never written to the ledger"
+    },
+    "ledger_open": {
+     "type": "boolean"
+    },
+    "wb_emitted": {
+     "type": "integer"
+    },
+    "wb_skipped": {
+     "type": "integer"
+    },
+    "wb_graded": {
+     "type": "integer"
+    },
+    "elapsed_s": {
+     "type": "number"
     }
    }
   }
