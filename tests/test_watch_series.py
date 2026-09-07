@@ -15,6 +15,7 @@ import pytest
 from engine.watch import bars as B
 from engine.watch import indicators as I
 from engine.watch import series as S
+from engine.watch.series import _poc_anchored_flags
 
 pytestmark = pytest.mark.unit
 
@@ -159,6 +160,18 @@ def test_poc_and_avwap_are_none_with_too_little_history():
     ts = S.build_ticker_series("X", daily=daily)
     out = S.evaluate_bar_conditions(ts, daily["date"].iloc[-1])
     assert out["poc_accept"] is None and out["poc_loss"] is None
+    assert out["poc_a_accept"] is None and out["poc_a_loss"] is None  # too little history for even a zigzag pivot
+
+
+def test_evaluate_bar_conditions_wires_poc_a_flags_through():
+    daily = _synthetic_daily(200)
+    ts = S.build_ticker_series("X", daily=daily)
+    idx = 150
+    asof = daily["date"].iloc[idx]
+    out = S.evaluate_bar_conditions(ts, asof)
+    want_accept, want_loss = _poc_anchored_flags(ts, idx)
+    assert out["poc_a_accept"] == want_accept
+    assert out["poc_a_loss"] == want_loss
 
 
 def test_avwap_reclaim_true_after_a_clean_recovery_above_the_low_anchor():
@@ -180,3 +193,165 @@ def test_avwap_reclaim_true_after_a_clean_recovery_above_the_low_anchor():
     ts = S.build_ticker_series("X", daily=daily)
     out = S.evaluate_bar_conditions(ts, dates[-1])
     assert out["avwap_reclaim"] is True
+
+
+# =============================================================================================
+# C-POC-A / C-POC-A-LOSS: anchored volume profile, most recent confirmed pivot L / H
+# (DESIGN/110 §2). `_poc_anchored_flags` is exercised directly against a hand-built `TickerSeries`
+# (bypassing `build_ticker_series`/`zigzag_pivots`) so the confirmed pivot and the bar data are
+# both fully controlled -- the only two inputs the function reads.
+# =============================================================================================
+
+
+def _ticker_series(highs, lows, closes, volumes, pivots) -> S.TickerSeries:
+    n = len(closes)
+    dates = [d.date() for d in pd.bdate_range("2024-01-01", periods=n)]
+    return S.TickerSeries(
+        ticker="X", dates=dates, highs=highs, lows=lows, closes=closes, volumes=volumes,
+        atr_series=[None] * n, daily_rsi=[None] * n, pivots=pivots,
+        weekly_week_ids=[], weekly_closes=[], weekly_states=[], weekly_rsi=[],
+    )
+
+
+def test_poc_a_accept_true_after_a_tight_base_above_a_confirmed_pivot_low():
+    # index 0: the confirmed pivot LOW (price 95.0, bar range [95.0, 96.0]). Indices 1-19: 19
+    # identical "base" bars ([99.5, 100.5], volume 100 each) -- 20 sessions total, exactly
+    # POC_ANCHOR_MIN_SESSIONS. Anchor's own volume (10) is negligible next to the base's 1,900, so
+    # the profile's POC/value-area sit inside the tight base band: hand-computed (`I.volume_profile`
+    # on this exact window) value_area_high = 100.28; the last two closes (100.45) clear it and the
+    # range (100.5-95.0)/100.45 = 5.5% is well under the 25% cap.
+    highs = [96.0] + [100.5] * 19
+    lows = [95.0] + [99.5] * 19
+    closes = [95.5] + [100.0] * 17 + [100.45, 100.45]
+    vols = [10.0] + [100.0] * 19
+    idx = len(closes) - 1
+    pivots = [{"index": 0, "date": None, "type": "L", "price": 95.0}]
+    ts = _ticker_series(highs, lows, closes, vols, pivots)
+
+    profile = I.volume_profile(pd.DataFrame({"high": highs, "low": lows, "close": closes, "volume": vols}),
+                                n_bins=I.VOLUME_PROFILE_BINS, value_area_fraction=I.VALUE_AREA_FRACTION)
+    assert profile["value_area_high"] == pytest.approx(100.28, abs=0.01)
+    assert all(c > profile["value_area_high"] for c in closes[-2:])
+    assert (profile["range_high"] - profile["range_low"]) / closes[-1] <= 0.25
+
+    accept, loss = _poc_anchored_flags(ts, idx)
+    assert accept is True
+    assert loss is None    # no confirmed pivot H at all
+
+
+def test_poc_a_loss_true_after_a_tight_base_below_a_confirmed_pivot_high():
+    # Mirror: index 0 is the confirmed pivot HIGH (price 104.5), 19 base bars below it, and the
+    # last two closes (99.45) fall below the hand-computed value_area_low (99.5).
+    highs = [105.0] + [100.5] * 19
+    lows = [104.0] + [99.5] * 19
+    closes = [104.5] + [100.0] * 17 + [99.45, 99.45]
+    vols = [10.0] + [100.0] * 19
+    idx = len(closes) - 1
+    pivots = [{"index": 0, "date": None, "type": "H", "price": 104.5}]
+    ts = _ticker_series(highs, lows, closes, vols, pivots)
+
+    profile = I.volume_profile(pd.DataFrame({"high": highs, "low": lows, "close": closes, "volume": vols}),
+                                n_bins=I.VOLUME_PROFILE_BINS, value_area_fraction=I.VALUE_AREA_FRACTION)
+    assert profile["value_area_low"] == pytest.approx(99.5, abs=0.01)
+    assert all(c < profile["value_area_low"] for c in closes[-2:])
+
+    accept, loss = _poc_anchored_flags(ts, idx)
+    assert accept is None   # no confirmed pivot L at all
+    assert loss is True
+
+
+def test_poc_a_none_when_no_confirmed_pivot_of_either_type_exists():
+    n = 30
+    highs, lows, closes, vols = [100.0] * n, [99.0] * n, [99.5] * n, [10.0] * n
+    ts = _ticker_series(highs, lows, closes, vols, pivots=[])
+    accept, loss = _poc_anchored_flags(ts, n - 1)
+    assert accept is None and loss is None
+
+
+def test_poc_a_none_when_the_anchored_window_is_shorter_than_the_minimum():
+    # 25 bars; the confirmed pivot L sits at index 19 -> window through idx 24 is only 6 sessions,
+    # short of POC_ANCHOR_MIN_SESSIONS (20).
+    n = 25
+    highs, lows, closes, vols = [100.0] * n, [99.0] * n, [99.5] * n, [10.0] * n
+    pivots = [{"index": 19, "date": None, "type": "L", "price": 99.0}]
+    ts = _ticker_series(highs, lows, closes, vols, pivots)
+    accept, loss = _poc_anchored_flags(ts, n - 1)
+    assert accept is None
+
+
+def test_poc_a_none_when_the_anchored_window_is_longer_than_the_maximum():
+    # 300 bars; the only confirmed pivot L is at index 0 -> window through the last bar is 300
+    # sessions, past POC_ANCHOR_MAX_SESSIONS (252).
+    n = 300
+    highs, lows, closes, vols = [100.0] * n, [99.0] * n, [99.5] * n, [10.0] * n
+    pivots = [{"index": 0, "date": None, "type": "L", "price": 99.0}]
+    ts = _ticker_series(highs, lows, closes, vols, pivots)
+    accept, loss = _poc_anchored_flags(ts, n - 1)
+    assert accept is None
+
+
+def test_poc_a_window_boundaries_are_inclusive_at_20_and_252_sessions():
+    # Exactly POC_ANCHOR_MIN_SESSIONS (20) must NOT be rejected as "too short".
+    n = 20
+    highs, lows, closes, vols = [96.0] + [100.5] * (n - 1), [95.0] + [99.5] * (n - 1), \
+        [95.5] + [100.0] * (n - 2) + [100.45], [10.0] + [100.0] * (n - 1)
+    pivots = [{"index": 0, "date": None, "type": "L", "price": 95.0}]
+    ts = _ticker_series(highs, lows, closes, vols, pivots)
+    accept, _ = _poc_anchored_flags(ts, n - 1)
+    assert accept is not None      # not rejected purely on window length
+
+    # Exactly POC_ANCHOR_MAX_SESSIONS (252) must NOT be rejected as "too long" either.
+    n2 = 252
+    highs2 = [96.0] + [100.5] * (n2 - 1)
+    lows2 = [95.0] + [99.5] * (n2 - 1)
+    closes2 = [95.5] + [100.0] * (n2 - 2) + [100.45]
+    vols2 = [10.0] + [100.0] * (n2 - 1)
+    pivots2 = [{"index": 0, "date": None, "type": "L", "price": 95.0}]
+    ts2 = _ticker_series(highs2, lows2, closes2, vols2, pivots2)
+    accept2, _ = _poc_anchored_flags(ts2, n2 - 1)
+    assert accept2 is not None
+
+    # One session past the ceiling (253) must fall back to None.
+    n3 = 253
+    highs3 = [96.0] + [100.5] * (n3 - 1)
+    lows3 = [95.0] + [99.5] * (n3 - 1)
+    closes3 = [95.5] + [100.0] * (n3 - 2) + [100.45]
+    vols3 = [10.0] + [100.0] * (n3 - 1)
+    pivots3 = [{"index": 0, "date": None, "type": "L", "price": 95.0}]
+    ts3 = _ticker_series(highs3, lows3, closes3, vols3, pivots3)
+    accept3, _ = _poc_anchored_flags(ts3, n3 - 1)
+    assert accept3 is None
+
+
+def test_poc_a_picks_the_most_recent_confirmed_pivot_of_each_type():
+    # Two confirmed L pivots and one H pivot; the anchor must be the LAST L (index 15), not the
+    # first (index 0) -- proven by a window-length check: anchoring at index 0 would give a
+    # 30-session window, anchoring at index 15 gives 15 (too short, so accept must be None here).
+    n = 30
+    highs, lows, closes, vols = [100.0] * n, [99.0] * n, [99.5] * n, [10.0] * n
+    pivots = [
+        {"index": 0, "date": None, "type": "L", "price": 90.0},
+        {"index": 8, "date": None, "type": "H", "price": 110.0},
+        {"index": 15, "date": None, "type": "L", "price": 95.0},
+    ]
+    ts = _ticker_series(highs, lows, closes, vols, pivots)
+    accept, _ = _poc_anchored_flags(ts, n - 1)
+    assert accept is None   # anchored at index 15 (the most recent L): window is 15 sessions, < 20
+
+
+def test_poc_a_ignores_pivots_not_yet_confirmed_at_idx():
+    # A confirmed L at index 0 and a LATER L at index 25 that has not happened yet as of idx=19 --
+    # evaluate_bar_conditions/​_poc_anchored_flags must only see pivots with index <= idx.
+    n = 30
+    highs = [96.0] + [100.5] * 19 + [100.0] * 10
+    lows = [95.0] + [99.5] * 19 + [99.0] * 10
+    closes = [95.5] + [100.0] * 17 + [100.45, 100.45] + [99.5] * 10
+    vols = [10.0] * n
+    pivots = [
+        {"index": 0, "date": None, "type": "L", "price": 95.0},
+        {"index": 25, "date": None, "type": "L", "price": 50.0},
+    ]
+    ts = _ticker_series(highs, lows, closes, vols, pivots)
+    idx = 19  # before index 25's pivot is confirmed
+    accept, _ = _poc_anchored_flags(ts, idx)
+    assert accept is True   # anchored at index 0 (the only pivot visible at idx=19), window 20

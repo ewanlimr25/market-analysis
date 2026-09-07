@@ -48,6 +48,24 @@ def _evaluate_fn(rows: list[dict], universe_n: int = 100):
     return fn
 
 
+# ---- evaluate_conditions wiring (live path) ------------------------------------------------------
+
+def test_evaluate_conditions_wires_poc_a_through_to_bar_derived_keys():
+    d = date(2026, 6, 9)
+    universe = pd.DataFrame([{
+        "ticker": "X", "date": d, "pct_52w_range": 0.9, "days_to_cover": None,
+        "borrow_fee_pct": None, "c_oibuild_raw": True, "c_crowd_raw": False,
+        "ivrank_chg_5d": 15.0, "iv30d": 0.5, "marketcap": 5e9, "has_tier1_atm_pair": True,
+        "next_earnings_date": None, "c_leap_raw": True, "c_dp_raw": True,
+    }])
+    # no bars for X -> every bar-derived condition, including the new anchored-POC pair, is None
+    out = N.evaluate_conditions(universe, series_map={})
+    row = out.to_dict("records")[0]
+    assert row["C-POC-A"] is None
+    assert row["C-POC-A-LOSS"] is None
+    assert row["C-POC"] is None and row["C-POC-LOSS"] is None   # unchanged sibling behaviour
+
+
 # ---- row contract -------------------------------------------------------------------------------
 
 def test_run_emits_one_row_per_basket_with_policy_columns_and_gate_verdict(tmp_path):

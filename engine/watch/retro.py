@@ -1,6 +1,6 @@
 """The watch-basket retrospective panel builder (`DESIGN/110-watch-basket.md` §1, §5; R1 build,
 §7; C-DIV-D added 2026-09-07 evening, re-run into this same panel). Assembles, for every (ticker,
-night) in the §1 universe over the panel 2026-03-13 to 2026-09-04, every one of the 18 condition
+night) in the §1 universe over the panel 2026-03-13 to 2026-09-04, every one of the 20 condition
 values, the `bull`/`bear`/`vol` stacks and the LONG/SHORT/VOL/CONFLICT basket flags --
 `data/backtest/wb_conditions.parquet`. The five descriptive tables of §5 are built from that frame
 in `retro_tables.py`; `scripts/watch_retro.py` is the CLI entry point that calls `run()` and writes
@@ -17,7 +17,7 @@ Source mapping (documented again in `results.md` for the owner):
       condition is `None` on almost every panel night unless FINRA alone already decides `True`).
   C-VOL          <- screener `iv30d`/`marketcap`/`next_earnings_date` (universe frame) plus
       `tier1.build_tier1_flags` (S-C's F7/F8 tier-1 ATM pair).
-  C-RSI, C-DIV, C-DIV-D, C-AVWAP(-LOSS), C-POC(-LOSS), C-SWING(-LOSS)  <- `series.py` on the
+  C-RSI, C-DIV, C-DIV-D, C-AVWAP(-LOSS), C-POC(-LOSS), C-POC-A(-LOSS), C-SWING(-LOSS)  <- `series.py` on the
       G7/own-cache Yahoo daily bars, one `TickerSeries` per unique ticker in the panel's universe.
   C-LEAP, C-DP   <- `flows.py`, one DuckDB scan per session of the raw All Options / Dark Pool
       exports (note C-DP is also usable from `features.parquet`'s `dp_prem`; this build uses the
@@ -144,7 +144,7 @@ EVAL_COLUMNS = ("ticker", "date", "pct_52w_range", "days_to_cover", "borrow_fee_
 
 
 def evaluate_conditions(universe: pd.DataFrame, series_map: dict[str, S.TickerSeries | None]) -> pd.DataFrame:
-    """Evaluates the 18 conditions for every row of `universe` (already carrying every raw input
+    """Evaluates the 20 conditions for every row of `universe` (already carrying every raw input
     column this module's `attach_*`/`add_cross_sectional_deciles` functions produce). Returns a
     frame with `ticker`, `date` and one column per condition id (`True`/`False`/`None`).
 
@@ -178,6 +178,8 @@ def evaluate_conditions(universe: pd.DataFrame, series_map: dict[str, S.TickerSe
             "C-AVWAP-LOSS": C.c_avwap_loss(bar["avwap_loss"]),
             "C-POC": C.c_poc(bar["poc_accept"]),
             "C-POC-LOSS": C.c_poc_loss(bar["poc_loss"]),
+            "C-POC-A": C.c_poc_a(bar["poc_a_accept"]),
+            "C-POC-A-LOSS": C.c_poc_a_loss(bar["poc_a_loss"]),
             "C-SWING": C.c_swing(bar["swing_up"]),
             "C-SWING-LOSS": C.c_swing_loss(bar["swing_down"]),
             "C-LEAP": C.c_leap(bool(cols["c_leap_raw"][i])),

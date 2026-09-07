@@ -1,7 +1,7 @@
 {
  "$schema": "http://json-schema.org/draft-07/schema#",
  "title": "engine-daily signals (d1.1)",
- "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 \u00a75, DESIGN/80 \u00a77). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 \u00a74). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*. d1.2 (2026-09-08, DESIGN/110 R2): optional top-level watch_basket object (exploration-only, paper rows, policy wb-1.0); ledger_counts.wb_emitted/wb_graded. d1.3 (2026-09-07 evening, DESIGN/110 \u00a72/\u00a78): C-DIV-D (daily RSI bullish divergence) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound from 0..6 to 0..7; key \"7\" is optional (not required) so d1.2 documents, which never emit it, stay valid.",
+ "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 \u00a75, DESIGN/80 \u00a77). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 \u00a74). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*. d1.2 (2026-09-08, DESIGN/110 R2): optional top-level watch_basket object (exploration-only, paper rows, policy wb-1.0); ledger_counts.wb_emitted/wb_graded. d1.3 (2026-09-07 evening, DESIGN/110 \u00a72/\u00a78): C-DIV-D (daily RSI bullish divergence) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound from 0..6 to 0..7; key \"7\" is optional (not required) so d1.2 documents, which never emit it, stay valid. d1.4 (2026-09-07 evening, DESIGN/110 \u00a72/\u00a78): C-POC-A and C-POC-A-LOSS (anchored volume-profile acceptance) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound to 0..8 and .bear's bound to 0..8; keys \"8\" (bull) and \"8\" (bear) are optional (not required) so d1.0-d1.3 documents, which never emit them, stay valid.",
  "type": "object",
  "additionalProperties": false,
  "required": [
@@ -25,7 +25,8 @@
     "d1.0",
     "d1.1",
     "d1.2",
-    "d1.3"
+    "d1.3",
+    "d1.4"
    ]
   },
   "report_kind": {
@@ -1729,7 +1730,7 @@
   "wb_bull_distribution": {
    "type": "object",
    "additionalProperties": false,
-   "description": "bull count 0..6 always present; \"7\" is optional (d1.3, C-DIV-D) so d1.2 documents, which never had a 7th bull condition to count, stay valid without it.",
+   "description": "bull count 0..6 always present; \"7\" is optional (d1.3, C-DIV-D) so d1.2 documents, which never had a 7th bull condition to count, stay valid without it; \"8\" is optional (d1.4, C-POC-A) so d1.0-d1.3 documents, which never had an 8th bull condition to count, stay valid without it.",
    "required": [
     "0",
     "1",
@@ -1763,12 +1764,16 @@
     },
     "7": {
      "type": "integer"
+    },
+    "8": {
+     "type": "integer"
     }
    }
   },
   "wb_bear_distribution": {
    "type": "object",
    "additionalProperties": false,
+   "description": "bear count 0..7 always present; \"8\" is optional (d1.4, C-POC-A-LOSS) so d1.0-d1.3 documents, which never had an 8th bear condition to count, stay valid without it.",
    "required": [
     "0",
     "1",
@@ -1802,6 +1807,9 @@
      "type": "integer"
     },
     "7": {
+     "type": "integer"
+    },
+    "8": {
      "type": "integer"
     }
    }

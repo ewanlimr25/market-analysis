@@ -19,6 +19,13 @@ The daily divergence (C-DIV-D, DESIGN/110 §2) needs no such splicing: `TickerSe
 already a full-history, index-aligned Wilder RSI-14 on the daily closes themselves (online by
 construction, like `atr_series`), so `_daily_divergence` just slices the trailing window up to
 `idx` and calls the same `indicators.bullish_divergence` C-DIV uses.
+
+C-POC-A / C-POC-A-LOSS (DESIGN/110 §2) reuse the same point-in-time `active_pivots` list
+`swing_structure`/`swing_structure_loss` already build (confirmed pivots only, `index <= idx`):
+`_poc_anchored_flags` picks the most recent confirmed pivot of type `L` (long anchor) / `H` (short
+anchor), builds the window from that pivot's bar index through `idx` inclusive, and reuses
+`indicators.volume_profile` unchanged over that window -- no new algorithm, just a different
+window than the fixed 60-session `_poc_flags`.
 """
 from __future__ import annotations
 
@@ -124,6 +131,49 @@ def _poc_flags(ts: TickerSeries, idx: int) -> tuple[bool | None, bool | None]:
     return bool(range_ok and above), bool(range_ok and below)
 
 
+def _poc_anchored_accept(ts: TickerSeries, anchor: dict | None, idx: int, want_above: bool) -> bool | None:
+    """One side of `_poc_anchored_flags`: `None` when there is no anchor pivot yet, or the window
+    from the anchor's bar index through `idx` (inclusive) is shorter than `POC_ANCHOR_MIN_SESSIONS`
+    or longer than `POC_ANCHOR_MAX_SESSIONS`; otherwise the same range rule and two-session
+    acceptance test as `_poc_flags`, over the anchored window instead of the fixed 60-session one."""
+    if anchor is None:
+        return None
+    start = anchor["index"]
+    window_n = idx - start + 1
+    if window_n < C.POC_ANCHOR_MIN_SESSIONS or window_n > C.POC_ANCHOR_MAX_SESSIONS:
+        return None
+    window = pd.DataFrame({"high": ts.highs[start:idx + 1], "low": ts.lows[start:idx + 1],
+                            "close": ts.closes[start:idx + 1], "volume": ts.volumes[start:idx + 1]})
+    profile = I.volume_profile(window, n_bins=I.VOLUME_PROFILE_BINS,
+                                value_area_fraction=I.VALUE_AREA_FRACTION)
+    if profile is None:
+        return None
+    close_now = ts.closes[idx]
+    if not close_now:
+        return None
+    range_frac = (profile["range_high"] - profile["range_low"]) / close_now
+    range_ok = range_frac <= C.C_POC_MAX_RANGE_FRACTION
+    n_accept = C.C_POC_ACCEPTANCE_SESSIONS
+    recent = ts.closes[idx - n_accept + 1: idx + 1]
+    if want_above:
+        return bool(range_ok and all(c > profile["value_area_high"] for c in recent))
+    return bool(range_ok and all(c < profile["value_area_low"] for c in recent))
+
+
+def _poc_anchored_flags(ts: TickerSeries, idx: int) -> tuple[bool | None, bool | None]:
+    """C-POC-A / C-POC-A-LOSS (DESIGN/110 §2): from the point-in-time `active_pivots` (confirmed
+    pivots with `index <= idx`), the most recent confirmed pivot of type `L` anchors C-POC-A
+    (acceptance above) and the most recent confirmed pivot of type `H` anchors C-POC-A-LOSS
+    (acceptance below). Returns `(poc_a_accept, poc_a_loss)`, each `None` when its own anchor type
+    has no confirmed pivot yet or the anchored window fails the length bounds."""
+    active_pivots = [p for p in ts.pivots if p["index"] <= idx]
+    last_low = next((p for p in reversed(active_pivots) if p["type"] == "L"), None)
+    last_high = next((p for p in reversed(active_pivots) if p["type"] == "H"), None)
+    poc_a_accept = _poc_anchored_accept(ts, last_low, idx, want_above=True)
+    poc_a_loss = _poc_anchored_accept(ts, last_high, idx, want_above=False)
+    return poc_a_accept, poc_a_loss
+
+
 def _weekly_rsi_and_divergence(ts: TickerSeries, idx: int, asof: date) -> tuple[float | None, bool | None]:
     week_id = _iso_week_id(asof)
     prev_idx = bisect.bisect_left(ts.weekly_week_ids, week_id) - 1  # last COMPLETED week before asof's week
@@ -160,11 +210,12 @@ def _daily_divergence(ts: TickerSeries, idx: int) -> bool | None:
 
 
 def evaluate_bar_conditions(ts: TickerSeries | None, asof: date) -> dict:
-    """`{rsi_last, div_flag, div_d_flag, avwap_reclaim, avwap_loss, poc_accept, poc_loss, swing_up,
-    swing_down}`, every value `None` when `ts` is `None` or has no bar exactly on `asof`."""
+    """`{rsi_last, div_flag, div_d_flag, avwap_reclaim, avwap_loss, poc_accept, poc_loss,
+    poc_a_accept, poc_a_loss, swing_up, swing_down}`, every value `None` when `ts` is `None` or has
+    no bar exactly on `asof`."""
     out = {"rsi_last": None, "div_flag": None, "div_d_flag": None, "avwap_reclaim": None,
-           "avwap_loss": None, "poc_accept": None, "poc_loss": None, "swing_up": None,
-           "swing_down": None}
+           "avwap_loss": None, "poc_accept": None, "poc_loss": None, "poc_a_accept": None,
+           "poc_a_loss": None, "swing_up": None, "swing_down": None}
     if ts is None:
         return out
     idx = bisect.bisect_left(ts.dates, asof)
@@ -183,6 +234,7 @@ def evaluate_bar_conditions(ts: TickerSeries | None, asof: date) -> dict:
     out["avwap_loss"] = _avwap_flag(ts, high_anchor, idx, want_above=False)
 
     out["poc_accept"], out["poc_loss"] = _poc_flags(ts, idx)
+    out["poc_a_accept"], out["poc_a_loss"] = _poc_anchored_flags(ts, idx)
     out["rsi_last"], out["div_flag"] = _weekly_rsi_and_divergence(ts, idx, asof)
     out["div_d_flag"] = _daily_divergence(ts, idx)
     return out

@@ -119,7 +119,7 @@ Optionally, `make cboe-chain` fetches the full SPY/QQQ option chain from CBOE's 
 and touches no S-A/S-B number.
 
 `make daily` also runs the watch-basket step after S-B (DESIGN/110 R2, report.md's "Watch basket"
-section, `ledger/wb/`) -- a pre-registered, exploration-only paper book of 18 stacked technical/flow
+section, `ledger/wb/`) -- a pre-registered, exploration-only paper book of 20 stacked technical/flow
 conditions, adding roughly 20-25 s to the run; it is **not** a signal, a filter on S-A/S-B, or
 anything traded before its own 2026-12-01-or-100-episode read (`DESIGN/110` §6).
 

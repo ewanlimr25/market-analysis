@@ -78,6 +78,8 @@ def test_evaluate_conditions_wires_inputs_through_to_the_right_condition(monkeyp
     assert row["C-RSI"] is None
     assert row["C-LEAP"] is True
     assert row["C-DP"] is True
+    assert row["C-POC-A"] is None        # bar-derived, no series for X
+    assert row["C-POC-A-LOSS"] is None
 
 
 def test_add_stacks_and_baskets_end_to_end():

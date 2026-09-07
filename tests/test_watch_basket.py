@@ -14,9 +14,9 @@ pytestmark = pytest.mark.unit
 def test_stacks_counts_only_true_and_lists_true_and_null_ids():
     row = {
         "C-HIGH": True, "C-IVUP": False, "C-DIV": None, "C-DIV-D": False, "C-AVWAP": True,
-        "C-POC": False, "C-SWING": True,
+        "C-POC": False, "C-POC-A": False, "C-SWING": True,
         "C-LOW": False, "C-SHORT": True, "C-OIBUILD": True, "C-CROWD": False,
-        "C-AVWAP-LOSS": None, "C-POC-LOSS": False, "C-SWING-LOSS": False,
+        "C-AVWAP-LOSS": None, "C-POC-LOSS": False, "C-POC-A-LOSS": None, "C-SWING-LOSS": False,
         "C-VOL": True, "C-RSI": True, "C-LEAP": None, "C-DP": False,
     }
     s = BK.stacks(row)
@@ -24,13 +24,13 @@ def test_stacks_counts_only_true_and_lists_true_and_null_ids():
     assert s["bear"] == 2          # C-SHORT, C-OIBUILD
     assert s["vol"] is True
     assert set(s["true_ids"]) == {"C-HIGH", "C-AVWAP", "C-SWING", "C-SHORT", "C-OIBUILD", "C-VOL", "C-RSI"}
-    assert set(s["null_ids"]) == {"C-DIV", "C-AVWAP-LOSS", "C-LEAP"}
+    assert set(s["null_ids"]) == {"C-DIV", "C-AVWAP-LOSS", "C-POC-A-LOSS", "C-LEAP"}
 
 
 def test_stacks_missing_keys_treated_as_null():
     assert BK.stacks({})["bull"] == 0
     assert set(BK.stacks({})["null_ids"]) == set(BK.stacks({}).keys()) or True  # sanity: no crash
-    assert len(BK.stacks({})["null_ids"]) == 18
+    assert len(BK.stacks({})["null_ids"]) == 20
 
 
 def test_baskets_long_requires_three_bull_and_zero_bear():

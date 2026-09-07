@@ -41,6 +41,9 @@ def test_render_wb_shows_long_short_vol_tables_with_a_tick_per_condition(tmp_pat
     assert "LONGCO" in text and "SHORTCO" in text
     # a tick column per condition id, e.g. C-HIGH is true for LONGCO
     assert "C-HIGH" in text and "C-SWING" in text
+    # the new anchored-POC pair (DESIGN/110 §2) shows up too -- report.py iterates ALL_CONDITIONS
+    # dynamically, so no renderer edit was needed for it
+    assert "C-POC-A" in text and "C-POC-A-LOSS" in text
     assert "CONFLICT (logged only, never a basket, DESIGN/110 §3): 0." in text
 
 

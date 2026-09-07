@@ -1,6 +1,8 @@
-"""The 18 watch-basket conditions (`DESIGN/110-watch-basket.md` §2, fixed; do not add, drop,
+"""The 20 watch-basket conditions (`DESIGN/110-watch-basket.md` §2, fixed; do not add, drop,
 re-sign or re-threshold a condition outside a read, per §6). C-DIV-D (daily RSI bullish
-divergence) was added 2026-09-07 evening, before any forward row, per §2/§8.
+divergence) was added 2026-09-07 evening, before any forward row, per §2/§8. C-POC-A and
+C-POC-A-LOSS (anchored volume-profile acceptance) were added the same evening, before any
+forward row, per §2/§8.
 
 Every function here is a small pure predicate over an ALREADY-COMPUTED metric (a decile flag, an
 indicator value, a structure flag) -- the data plumbing that produces those metrics from the
@@ -36,18 +38,22 @@ C_RSI_MAX_WEEKLY_RSI = 30.0               # C-RSI
 C_AVWAP_LOOKBACK_SESSIONS = 5             # C-AVWAP / C-AVWAP-LOSS
 C_POC_MAX_RANGE_FRACTION = 0.25           # C-POC / C-POC-LOSS, (high60-low60)/close
 C_POC_ACCEPTANCE_SESSIONS = 2             # C-POC / C-POC-LOSS
+POC_ANCHOR_MIN_SESSIONS = 20              # C-POC-A / C-POC-A-LOSS, anchored window length floor
+POC_ANCHOR_MAX_SESSIONS = 252             # C-POC-A / C-POC-A-LOSS, anchored window length ceiling
 C_LEAP_MIN_PREMIUM = 1_000_000.0          # C-LEAP, single-leg premium at the ask
 C_LEAP_MIN_DTE = 180                      # C-LEAP
 C_DP_MIN_PREMIUM = 5_000_000.0            # C-DP, dark-pool premium that day
 
-# The 18 condition ids, grouped by sign (DESIGN/110 §2 "Sign" column). C-DIV-D sits immediately
-# after C-DIV everywhere ids are listed (DESIGN/110 §2 row order).
-SIGN_PLUS = ("C-HIGH", "C-IVUP", "C-DIV", "C-DIV-D", "C-AVWAP", "C-POC", "C-SWING")
-SIGN_MINUS = ("C-LOW", "C-SHORT", "C-OIBUILD", "C-CROWD", "C-AVWAP-LOSS", "C-POC-LOSS", "C-SWING-LOSS")
+# The 20 condition ids, grouped by sign (DESIGN/110 §2 "Sign" column). C-DIV-D sits immediately
+# after C-DIV, and C-POC-A / C-POC-A-LOSS immediately after C-POC / C-POC-LOSS, everywhere ids are
+# listed (DESIGN/110 §2 row order).
+SIGN_PLUS = ("C-HIGH", "C-IVUP", "C-DIV", "C-DIV-D", "C-AVWAP", "C-POC", "C-POC-A", "C-SWING")
+SIGN_MINUS = ("C-LOW", "C-SHORT", "C-OIBUILD", "C-CROWD", "C-AVWAP-LOSS", "C-POC-LOSS", "C-POC-A-LOSS",
+              "C-SWING-LOSS")
 SIGN_VOL = ("C-VOL",)
 SIGN_LOGGED = ("C-RSI", "C-LEAP", "C-DP")
 ALL_CONDITIONS = SIGN_PLUS + SIGN_MINUS + SIGN_VOL + SIGN_LOGGED
-assert len(ALL_CONDITIONS) == 18
+assert len(ALL_CONDITIONS) == 20
 
 
 def _isnan(x) -> bool:
@@ -79,7 +85,7 @@ def _threshold(value, op) -> bool | None:
 
 
 # =============================================================================================
-# The 18 conditions
+# The 20 conditions
 # =============================================================================================
 
 
@@ -170,6 +176,21 @@ def c_poc_loss(accept_below_flag: bool | None) -> bool | None:
     return accept_below_flag
 
 
+def c_poc_a(accept_above_flag: bool | None) -> bool | None:
+    """C-POC-A: anchored value acceptance above -- volume profile anchored at the most recent
+    confirmed zigzag pivot LOW through today (50 bins, `indicators.volume_profile`), window at
+    least `POC_ANCHOR_MIN_SESSIONS` and at most `POC_ANCHOR_MAX_SESSIONS` sessions else `None`,
+    same range rule and two-session acceptance as C-POC, both folded into `accept_above_flag`
+    upstream (`series._poc_anchored_flags`). Added 2026-09-07 evening, before any forward row
+    (DESIGN/110 §2, §8)."""
+    return accept_above_flag
+
+
+def c_poc_a_loss(accept_below_flag: bool | None) -> bool | None:
+    """C-POC-A-LOSS: mirror of C-POC-A, anchored at the most recent confirmed pivot HIGH."""
+    return accept_below_flag
+
+
 def c_swing(structure_flag: bool | None) -> bool | None:
     """C-SWING: ATR(14)-zigzag (2x ATR reversal), last three pivots HL-HH-HL
     (`indicators.swing_structure`)."""
@@ -197,6 +218,7 @@ CONDITION_FUNCS = {
     "C-CROWD": c_crowd, "C-IVUP": c_ivup, "C-VOL": c_vol, "C-RSI": c_rsi, "C-DIV": c_div,
     "C-DIV-D": c_div_d,
     "C-AVWAP": c_avwap, "C-AVWAP-LOSS": c_avwap_loss, "C-POC": c_poc, "C-POC-LOSS": c_poc_loss,
+    "C-POC-A": c_poc_a, "C-POC-A-LOSS": c_poc_a_loss,
     "C-SWING": c_swing, "C-SWING-LOSS": c_swing_loss, "C-LEAP": c_leap, "C-DP": c_dp,
 }
 assert set(CONDITION_FUNCS) == set(ALL_CONDITIONS)

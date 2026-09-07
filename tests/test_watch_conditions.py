@@ -1,4 +1,4 @@
-"""engine.watch.conditions: the 18 watch-basket rules and their thresholds
+"""engine.watch.conditions: the 20 watch-basket rules and their thresholds
 (DESIGN/110-watch-basket.md §2). Each threshold is checked at its boundary and null-safety is
 checked explicitly: a missing input must return `None`, never `False`."""
 from __future__ import annotations
@@ -12,9 +12,9 @@ from engine.watch import conditions as C
 pytestmark = pytest.mark.unit
 
 
-def test_all_conditions_registered_exactly_18():
-    assert len(C.ALL_CONDITIONS) == 18
-    assert len(set(C.ALL_CONDITIONS)) == 18
+def test_all_conditions_registered_exactly_20():
+    assert len(C.ALL_CONDITIONS) == 20
+    assert len(set(C.ALL_CONDITIONS)) == 20
     assert set(C.CONDITION_FUNCS) == set(C.ALL_CONDITIONS)
 
 
@@ -23,14 +23,26 @@ def test_c_div_d_sits_immediately_after_c_div_everywhere():
     assert C.SIGN_PLUS.index("C-DIV-D") == C.SIGN_PLUS.index("C-DIV") + 1
 
 
-def test_sign_groups_partition_all_18_with_no_overlap():
+def test_c_poc_a_sits_immediately_after_c_poc_and_c_poc_a_loss_after_c_poc_loss():
+    assert C.ALL_CONDITIONS.index("C-POC-A") == C.ALL_CONDITIONS.index("C-POC") + 1
+    assert C.SIGN_PLUS.index("C-POC-A") == C.SIGN_PLUS.index("C-POC") + 1
+    assert C.ALL_CONDITIONS.index("C-POC-A-LOSS") == C.ALL_CONDITIONS.index("C-POC-LOSS") + 1
+    assert C.SIGN_MINUS.index("C-POC-A-LOSS") == C.SIGN_MINUS.index("C-POC-LOSS") + 1
+
+
+def test_sign_groups_partition_all_20_with_no_overlap():
     groups = [C.SIGN_PLUS, C.SIGN_MINUS, C.SIGN_VOL, C.SIGN_LOGGED]
-    assert sum(len(g) for g in groups) == 18
+    assert sum(len(g) for g in groups) == 20
     seen = set()
     for g in groups:
         assert not (seen & set(g))
         seen |= set(g)
     assert seen == set(C.ALL_CONDITIONS)
+
+
+def test_poc_anchor_window_bounds_are_20_and_252():
+    assert C.POC_ANCHOR_MIN_SESSIONS == 20
+    assert C.POC_ANCHOR_MAX_SESSIONS == 252
 
 
 # --- kleene logic -------------------------------------------------------------------------
@@ -153,7 +165,7 @@ def test_c_rsi_boundary_and_null():
 
 
 @pytest.mark.parametrize("fn", [C.c_div, C.c_div_d, C.c_avwap, C.c_avwap_loss, C.c_poc, C.c_poc_loss,
-                                 C.c_swing, C.c_swing_loss, C.c_leap, C.c_dp])
+                                 C.c_poc_a, C.c_poc_a_loss, C.c_swing, C.c_swing_loss, C.c_leap, C.c_dp])
 def test_passthrough_conditions_are_null_safe_identity(fn):
     assert fn(True) is True
     assert fn(False) is False

@@ -117,11 +117,11 @@ def test_full_nightly_document_from_real_builders_validates(tmp_path):
     assert doc["sb_state"]["running"][0]["n"] == 1                     # a count, kept as `n`
 
 
-# ---- d1.3: C-DIV-D widens watch_basket.count_distribution.bull to 0..7 (DESIGN/110 §2/§8) ---------
+# ---- d1.4: C-POC-A/C-POC-A-LOSS widen watch_basket.count_distribution to 0..8 (DESIGN/110 §2/§8) --
 
-def test_schema_version_defaults_to_d1_3_and_earlier_docs_stay_valid():
-    assert SCH.SCHEMA_VERSION == "d1.3" and SCH.SCHEMA_VERSIONS == ("d1.0", "d1.1", "d1.2", "d1.3")
-    for old in ("d1.0", "d1.1", "d1.2"):
+def test_schema_version_defaults_to_d1_4_and_earlier_docs_stay_valid():
+    assert SCH.SCHEMA_VERSION == "d1.4" and SCH.SCHEMA_VERSIONS == ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4")
+    for old in ("d1.0", "d1.1", "d1.2", "d1.3"):
         # a document from before the watch basket existed: no `watch_basket` key at all
         base = {"schema_version": old, "report_kind": SCH.REPORT_KIND, "date": SESSION.isoformat(), "season": "S2",
                 "preflight": {"ok": True, "warnings": []}, "mart": {"daily_contract_rows": 0, "earnings_events_rows": 0},
@@ -150,6 +150,25 @@ def test_a_d1_2_shaped_bull_distribution_without_key_7_still_validates():
     assert SCH.validate(base) == []
 
 
+def test_a_d1_3_shaped_bull_and_bear_distribution_without_key_8_still_validates():
+    """A genuine pre-C-POC-A d1.3 document's `count_distribution.bull`/`.bear` only ever had keys
+    "0".."7" (`SIGN_PLUS`/`SIGN_MINUS` were 7 long each); the widened d1.4 bound must not
+    retroactively require an "8" that document never had."""
+    old_dist = {str(i): 0 for i in range(8)}
+    assert set(old_dist) == {"0", "1", "2", "3", "4", "5", "6", "7"}
+    wb = {"available": True, "reason": None, "universe_n": 0,
+          "count_distribution": {"bull": old_dist, "bear": dict(old_dist)},
+          "top_bull": [], "top_bear": [], "long": [], "short": [], "vol": [], "conflict": [],
+          "ledger_open": False, "wb_emitted": 0, "wb_skipped": 0, "wb_graded": 0, "elapsed_s": 0.1}
+    base = {"schema_version": "d1.3", "report_kind": SCH.REPORT_KIND, "date": SESSION.isoformat(), "season": "S2",
+            "preflight": {"ok": True, "warnings": []}, "mart": {"daily_contract_rows": 0, "earnings_events_rows": 0},
+            "candidates": [], "suppressed": [], "dropped": [], "graded": [], "season_running": [],
+            "ledger": {"emitted": 0, "skipped": 0, "graded": 0, "ledger_open": False},
+            "sb_state": {"date": SESSION.isoformat(), "gate": {}, "candidates": [], "graded": [], "refresh": {"ok": True}},
+            "watch_basket": wb}
+    assert SCH.validate(base) == []
+
+
 def test_document_with_a_real_watch_basket_state_validates(tmp_path):
     run, graded, dropped_grade, running = _sa_pieces(str(tmp_path / "sa"))
     sb = _sb_state(str(tmp_path / "sb"), ENTRY)
@@ -159,12 +178,13 @@ def test_document_with_a_real_watch_basket_state_validates(tmp_path):
     assert wb["available"] is True and wb["wb_emitted"] == 1
     doc = D.assemble(SESSION, _preflight_ok(), {"daily_contract_rows": 1, "earnings_events_rows": 0},
                      run, graded, dropped_grade, running, counts, sb, wb)
-    assert doc["schema_version"] == "d1.3"
+    assert doc["schema_version"] == "d1.4"
     assert SCH.validate(doc) == []
     text = SCH.dumps(doc)
     assert SCH.validate(json.loads(text, **STRICT)) == []
     assert doc["watch_basket"]["long"][0]["ticker"] == "LONGCO"
-    assert set(doc["watch_basket"]["count_distribution"]["bull"]) == {str(i) for i in range(8)}
+    assert set(doc["watch_basket"]["count_distribution"]["bull"]) == {str(i) for i in range(9)}
+    assert set(doc["watch_basket"]["count_distribution"]["bear"]) == {str(i) for i in range(9)}
 
 
 def test_watch_basket_unavailable_shape_validates():
