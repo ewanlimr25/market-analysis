@@ -93,6 +93,52 @@ def test_weekly_rsi_never_leaks_a_future_session_within_the_current_week():
     assert out_a["div_flag"] == out_b["div_flag"]
 
 
+# =============================================================================================
+# C-DIV-D: daily RSI bullish divergence, last 20 daily bars (DESIGN/110 §2)
+# =============================================================================================
+
+
+def _naive_daily_div(daily: pd.DataFrame, asof: date):
+    trunc = B.bars_as_of(daily, asof)
+    if trunc.empty:
+        return None
+    closes = list(trunc["close"])
+    rsi_series = I.wilder_rsi_series(closes, n=I.RSI_PERIOD)
+    return I.bullish_divergence(closes, rsi_series, lookback=I.DIVERGENCE_LOOKBACK_DAYS)
+
+
+@pytest.mark.parametrize("offset", [0, 1, 2, 3, 4, 10, 30])
+def test_daily_divergence_matches_naive_truncate_and_recompute_at_many_asof_points(offset):
+    daily = _synthetic_daily(220)
+    base_idx = 150 + offset
+    asof = daily["date"].iloc[base_idx]
+    ts = S.build_ticker_series("X", daily=daily)
+    got = S.evaluate_bar_conditions(ts, asof)["div_d_flag"]
+    want = _naive_daily_div(daily, asof)
+    assert got == want
+
+
+def test_daily_divergence_none_before_rsi_has_warmed_up():
+    daily = _synthetic_daily(10)   # fewer than RSI_PERIOD+1 closes -> no daily RSI at all yet
+    ts = S.build_ticker_series("X", daily=daily)
+    out = S.evaluate_bar_conditions(ts, daily["date"].iloc[-1])
+    assert out["div_d_flag"] is None
+
+
+def test_daily_divergence_never_leaks_a_bar_after_asof():
+    daily_a = _synthetic_daily(120)
+    daily_b = daily_a.copy()
+    idx = 100
+    # flip the sign of everything after idx -- must not affect a div_d_flag computed at idx
+    daily_b.loc[idx + 1:, "close"] = daily_b.loc[idx + 1:, "close"] * 3.0
+    asof = daily_a["date"].iloc[idx]
+    ts_a = S.build_ticker_series("A", daily=daily_a)
+    ts_b = S.build_ticker_series("B", daily=daily_b)
+    out_a = S.evaluate_bar_conditions(ts_a, asof)
+    out_b = S.evaluate_bar_conditions(ts_b, asof)
+    assert out_a["div_d_flag"] == out_b["div_d_flag"]
+
+
 def test_swing_pivots_are_point_in_time_and_do_not_use_bars_after_asof():
     # A long, deliberately choppy daily series where later data would otherwise create an
     # additional pivot; check that asof in the middle only sees pivots confirmed by then.

@@ -200,3 +200,22 @@ def test_bullish_divergence_missing_rsi_is_none():
     closes = [10, 9, 8, 9, 10, 11, 7, 12]
     rsi = [50, 40, None, 45, 55, 60, 42, 65]
     assert I.bullish_divergence(closes, rsi, lookback=8) is None
+
+
+# --- reused daily (C-DIV-D, DESIGN/110 §2): same function, lookback=20 --------------------------
+
+
+def test_divergence_lookback_days_constant_is_20():
+    assert I.DIVERGENCE_LOOKBACK_DAYS == 20
+
+
+def test_bullish_divergence_true_on_20_daily_bars():
+    # 20 bars: earlier half's min close 8 (rsi 30), later half's min close 7 (rsi 42) -- price
+    # lower low, RSI higher low.
+    closes = [10, 9, 8, 9, 10, 11, 12, 13, 14, 15] + [16, 15, 14, 13, 7, 12, 13, 14, 15, 16]
+    rsi = [50, 40, 30, 45, 55, 60, 62, 64, 66, 68] + [70, 68, 66, 64, 42, 66, 68, 70, 72, 74]
+    assert I.bullish_divergence(closes, rsi, lookback=I.DIVERGENCE_LOOKBACK_DAYS) is True
+
+
+def test_bullish_divergence_daily_insufficient_bars_is_none():
+    assert I.bullish_divergence([10, 9, 8], [50, 40, 30], lookback=I.DIVERGENCE_LOOKBACK_DAYS) is None

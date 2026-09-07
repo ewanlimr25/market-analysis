@@ -1,4 +1,4 @@
-"""engine.watch.conditions: the 17 watch-basket rules and their thresholds
+"""engine.watch.conditions: the 18 watch-basket rules and their thresholds
 (DESIGN/110-watch-basket.md §2). Each threshold is checked at its boundary and null-safety is
 checked explicitly: a missing input must return `None`, never `False`."""
 from __future__ import annotations
@@ -12,15 +12,20 @@ from engine.watch import conditions as C
 pytestmark = pytest.mark.unit
 
 
-def test_all_conditions_registered_exactly_17():
-    assert len(C.ALL_CONDITIONS) == 17
-    assert len(set(C.ALL_CONDITIONS)) == 17
+def test_all_conditions_registered_exactly_18():
+    assert len(C.ALL_CONDITIONS) == 18
+    assert len(set(C.ALL_CONDITIONS)) == 18
     assert set(C.CONDITION_FUNCS) == set(C.ALL_CONDITIONS)
 
 
-def test_sign_groups_partition_all_17_with_no_overlap():
+def test_c_div_d_sits_immediately_after_c_div_everywhere():
+    assert C.ALL_CONDITIONS.index("C-DIV-D") == C.ALL_CONDITIONS.index("C-DIV") + 1
+    assert C.SIGN_PLUS.index("C-DIV-D") == C.SIGN_PLUS.index("C-DIV") + 1
+
+
+def test_sign_groups_partition_all_18_with_no_overlap():
     groups = [C.SIGN_PLUS, C.SIGN_MINUS, C.SIGN_VOL, C.SIGN_LOGGED]
-    assert sum(len(g) for g in groups) == 17
+    assert sum(len(g) for g in groups) == 18
     seen = set()
     for g in groups:
         assert not (seen & set(g))
@@ -147,7 +152,7 @@ def test_c_rsi_boundary_and_null():
 # --- pass-through structure conditions -----------------------------------------------------
 
 
-@pytest.mark.parametrize("fn", [C.c_div, C.c_avwap, C.c_avwap_loss, C.c_poc, C.c_poc_loss,
+@pytest.mark.parametrize("fn", [C.c_div, C.c_div_d, C.c_avwap, C.c_avwap_loss, C.c_poc, C.c_poc_loss,
                                  C.c_swing, C.c_swing_loss, C.c_leap, C.c_dp])
 def test_passthrough_conditions_are_null_safe_identity(fn):
     assert fn(True) is True

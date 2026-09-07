@@ -1,9 +1,10 @@
 """The watch-basket retrospective panel builder (`DESIGN/110-watch-basket.md` §1, §5; R1 build,
-§7). Assembles, for every (ticker, night) in the §1 universe over the panel 2026-03-13 to
-2026-09-04, every one of the 17 condition values, the `bull`/`bear`/`vol` stacks and the
-LONG/SHORT/VOL/CONFLICT basket flags -- `data/backtest/wb_conditions.parquet`. The five
-descriptive tables of §5 are built from that frame in `retro_tables.py`; `scripts/watch_retro.py`
-is the CLI entry point that calls `run()` and writes both output files plus the results docs.
+§7; C-DIV-D added 2026-09-07 evening, re-run into this same panel). Assembles, for every (ticker,
+night) in the §1 universe over the panel 2026-03-13 to 2026-09-04, every one of the 18 condition
+values, the `bull`/`bear`/`vol` stacks and the LONG/SHORT/VOL/CONFLICT basket flags --
+`data/backtest/wb_conditions.parquet`. The five descriptive tables of §5 are built from that frame
+in `retro_tables.py`; `scripts/watch_retro.py` is the CLI entry point that calls `run()` and writes
+both output files plus the results docs.
 
 Source mapping (documented again in `results.md` for the owner):
 
@@ -16,8 +17,8 @@ Source mapping (documented again in `results.md` for the owner):
       condition is `None` on almost every panel night unless FINRA alone already decides `True`).
   C-VOL          <- screener `iv30d`/`marketcap`/`next_earnings_date` (universe frame) plus
       `tier1.build_tier1_flags` (S-C's F7/F8 tier-1 ATM pair).
-  C-RSI, C-DIV, C-AVWAP(-LOSS), C-POC(-LOSS), C-SWING(-LOSS)  <- `series.py` on the G7/own-cache
-      Yahoo daily bars, one `TickerSeries` per unique ticker in the panel's universe.
+  C-RSI, C-DIV, C-DIV-D, C-AVWAP(-LOSS), C-POC(-LOSS), C-SWING(-LOSS)  <- `series.py` on the
+      G7/own-cache Yahoo daily bars, one `TickerSeries` per unique ticker in the panel's universe.
   C-LEAP, C-DP   <- `flows.py`, one DuckDB scan per session of the raw All Options / Dark Pool
       exports (note C-DP is also usable from `features.parquet`'s `dp_prem`; this build uses the
       features.parquet value per the task brief -- see `results.md` for the two-source note).
@@ -143,7 +144,7 @@ EVAL_COLUMNS = ("ticker", "date", "pct_52w_range", "days_to_cover", "borrow_fee_
 
 
 def evaluate_conditions(universe: pd.DataFrame, series_map: dict[str, S.TickerSeries | None]) -> pd.DataFrame:
-    """Evaluates the 17 conditions for every row of `universe` (already carrying every raw input
+    """Evaluates the 18 conditions for every row of `universe` (already carrying every raw input
     column this module's `attach_*`/`add_cross_sectional_deciles` functions produce). Returns a
     frame with `ticker`, `date` and one column per condition id (`True`/`False`/`None`).
 
@@ -172,6 +173,7 @@ def evaluate_conditions(universe: pd.DataFrame, series_map: dict[str, S.TickerSe
                              bool(cols["has_tier1_atm_pair"][i]), days_to_earn),
             "C-RSI": C.c_rsi(bar["rsi_last"]),
             "C-DIV": C.c_div(bar["div_flag"]),
+            "C-DIV-D": C.c_div_d(bar["div_d_flag"]),
             "C-AVWAP": C.c_avwap(bar["avwap_reclaim"]),
             "C-AVWAP-LOSS": C.c_avwap_loss(bar["avwap_loss"]),
             "C-POC": C.c_poc(bar["poc_accept"]),

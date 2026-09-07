@@ -13,7 +13,8 @@ pytestmark = pytest.mark.unit
 
 def test_stacks_counts_only_true_and_lists_true_and_null_ids():
     row = {
-        "C-HIGH": True, "C-IVUP": False, "C-DIV": None, "C-AVWAP": True, "C-POC": False, "C-SWING": True,
+        "C-HIGH": True, "C-IVUP": False, "C-DIV": None, "C-DIV-D": False, "C-AVWAP": True,
+        "C-POC": False, "C-SWING": True,
         "C-LOW": False, "C-SHORT": True, "C-OIBUILD": True, "C-CROWD": False,
         "C-AVWAP-LOSS": None, "C-POC-LOSS": False, "C-SWING-LOSS": False,
         "C-VOL": True, "C-RSI": True, "C-LEAP": None, "C-DP": False,
@@ -29,7 +30,7 @@ def test_stacks_counts_only_true_and_lists_true_and_null_ids():
 def test_stacks_missing_keys_treated_as_null():
     assert BK.stacks({})["bull"] == 0
     assert set(BK.stacks({})["null_ids"]) == set(BK.stacks({}).keys()) or True  # sanity: no crash
-    assert len(BK.stacks({})["null_ids"]) == 17
+    assert len(BK.stacks({})["null_ids"]) == 18
 
 
 def test_baskets_long_requires_three_bull_and_zero_bear():

@@ -1,6 +1,6 @@
 """The watch-basket nightly step (`DESIGN/110-watch-basket.md` §7 R2), called by `make daily`
 after the S-B step (`engine.daily`). `nightly(con, d, force_ledger, ledger_dir)` builds tonight's
-universe, evaluates the 17 conditions from LIVE sources (`live.py`, `tier1.py`, `flows.py`,
+universe, evaluates the 18 conditions from LIVE sources (`live.py`, `tier1.py`, `flows.py`,
 `series.py` -- results.md §5's replacement table), the stacks and the four baskets, emits one row
 per (name, night, basket) for LONG/SHORT/VOL (CONFLICT is logged in the return value only, never
 the ledger, DESIGN/110 §3), applies the 21-session episode rule (`engine.watch.basket`), writes to
@@ -63,7 +63,7 @@ def ledger_open(d: date, force_ledger: bool = False) -> bool:
 # =============================================================================================
 
 def build_universe_frame(d: date) -> pd.DataFrame:
-    """Tonight's §1 universe plus every raw input the 17 conditions need, all live sources."""
+    """Tonight's §1 universe plus every raw input the 18 conditions need, all live sources."""
     universe = U.build_universe([d])
     if universe.empty:
         return universe
@@ -107,7 +107,7 @@ def build_universe_frame(d: date) -> pd.DataFrame:
 
 
 # =============================================================================================
-# The 17 conditions, stacks and baskets (unchanged rules, `conditions.py` / `basket.py`)
+# The 18 conditions, stacks and baskets (unchanged rules, `conditions.py` / `basket.py`)
 # =============================================================================================
 
 def evaluate_conditions(universe: pd.DataFrame, series_map: dict[str, S.TickerSeries | None]) -> pd.DataFrame:
@@ -131,6 +131,7 @@ def evaluate_conditions(universe: pd.DataFrame, series_map: dict[str, S.TickerSe
                              bool(cols["has_tier1_atm_pair"][i]), days_to_earn),
             "C-RSI": C.c_rsi(bar["rsi_last"]),
             "C-DIV": C.c_div(bar["div_flag"]),
+            "C-DIV-D": C.c_div_d(bar["div_d_flag"]),
             "C-AVWAP": C.c_avwap(bar["avwap_reclaim"]),
             "C-AVWAP-LOSS": C.c_avwap_loss(bar["avwap_loss"]),
             "C-POC": C.c_poc(bar["poc_accept"]),

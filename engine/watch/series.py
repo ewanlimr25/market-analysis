@@ -14,6 +14,11 @@ history would let the in-progress week's bar see days after `asof`. `TickerSerie
 only fully-completed weeks; `evaluate_bar_conditions` splices in a single synthetic "partial
 current week" (its close is just `asof`'s own daily close) on top of the last completed week's
 saved Wilder state, which is exactly one more incremental step -- never a lookahead.
+
+The daily divergence (C-DIV-D, DESIGN/110 §2) needs no such splicing: `TickerSeries.daily_rsi` is
+already a full-history, index-aligned Wilder RSI-14 on the daily closes themselves (online by
+construction, like `atr_series`), so `_daily_divergence` just slices the trailing window up to
+`idx` and calls the same `indicators.bullish_divergence` C-DIV uses.
 """
 from __future__ import annotations
 
@@ -44,6 +49,7 @@ class TickerSeries:
     closes: list[float]
     volumes: list[float]
     atr_series: list[float | None]                  # daily Wilder ATR-14
+    daily_rsi: list[float | None]                    # daily Wilder RSI-14, C-DIV-D
     pivots: list[dict]                               # full-history zigzag pivots
     weekly_week_ids: list[tuple[int, int]]           # COMPLETED weeks only, ascending
     weekly_closes: list[float]
@@ -63,6 +69,7 @@ def build_ticker_series(ticker: str, daily: pd.DataFrame | None = None) -> Ticke
     closes = [float(x) for x in daily["close"]]
     volumes = [float(x) for x in daily["volume"]]
     atr_series = I.wilder_atr_series(highs, lows, closes, n=I.ATR_PERIOD)
+    daily_rsi = I.wilder_rsi_series(closes, n=I.RSI_PERIOD)
     pivots = I.zigzag_pivots(dates, highs, lows, atr_series, reversal_mult=I.ZIGZAG_REVERSAL_MULT)
 
     weekly = B.weekly_bars(daily)
@@ -72,7 +79,7 @@ def build_ticker_series(ticker: str, daily: pd.DataFrame | None = None) -> Ticke
     weekly_rsi = [I.rsi_from_state(*s) if s is not None else None for s in weekly_states]
 
     return TickerSeries(ticker=ticker, dates=dates, highs=highs, lows=lows, closes=closes,
-                         volumes=volumes, atr_series=atr_series, pivots=pivots,
+                         volumes=volumes, atr_series=atr_series, daily_rsi=daily_rsi, pivots=pivots,
                          weekly_week_ids=weekly_week_ids, weekly_closes=weekly_closes,
                          weekly_states=weekly_states, weekly_rsi=weekly_rsi)
 
@@ -139,11 +146,25 @@ def _weekly_rsi_and_divergence(ts: TickerSeries, idx: int, asof: date) -> tuple[
     return rsi_asof, div_flag
 
 
+def _daily_divergence(ts: TickerSeries, idx: int) -> bool | None:
+    """C-DIV-D (DESIGN/110 §2): the same `bullish_divergence` rule as C-DIV, but directly on the
+    daily closes/RSI already carried by `ts` -- unlike the weekly path, daily Wilder RSI at index
+    `idx` already depends only on `bars[0..idx]` (no in-progress-bar splicing needed), so this is
+    just a bounded, point-in-time-safe slice of the two full-history series already computed once
+    in `build_ticker_series`."""
+    lookback = I.DIVERGENCE_LOOKBACK_DAYS
+    start = max(0, idx - lookback + 1)
+    closes_seq = ts.closes[start:idx + 1]
+    rsi_seq = ts.daily_rsi[start:idx + 1]
+    return I.bullish_divergence(closes_seq, rsi_seq, lookback=lookback)
+
+
 def evaluate_bar_conditions(ts: TickerSeries | None, asof: date) -> dict:
-    """`{rsi_last, div_flag, avwap_reclaim, avwap_loss, poc_accept, poc_loss, swing_up,
+    """`{rsi_last, div_flag, div_d_flag, avwap_reclaim, avwap_loss, poc_accept, poc_loss, swing_up,
     swing_down}`, every value `None` when `ts` is `None` or has no bar exactly on `asof`."""
-    out = {"rsi_last": None, "div_flag": None, "avwap_reclaim": None, "avwap_loss": None,
-           "poc_accept": None, "poc_loss": None, "swing_up": None, "swing_down": None}
+    out = {"rsi_last": None, "div_flag": None, "div_d_flag": None, "avwap_reclaim": None,
+           "avwap_loss": None, "poc_accept": None, "poc_loss": None, "swing_up": None,
+           "swing_down": None}
     if ts is None:
         return out
     idx = bisect.bisect_left(ts.dates, asof)
@@ -163,4 +184,5 @@ def evaluate_bar_conditions(ts: TickerSeries | None, asof: date) -> dict:
 
     out["poc_accept"], out["poc_loss"] = _poc_flags(ts, idx)
     out["rsi_last"], out["div_flag"] = _weekly_rsi_and_divergence(ts, idx, asof)
+    out["div_d_flag"] = _daily_divergence(ts, idx)
     return out

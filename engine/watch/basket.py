@@ -1,6 +1,6 @@
 """Stacks, baskets and the episode rule (`DESIGN/110-watch-basket.md` §3-§4).
 
-`stacks(row)` turns one name-night's 17 condition values (a mapping `condition_id -> True/False/
+`stacks(row)` turns one name-night's 18 condition values (a mapping `condition_id -> True/False/
 None`) into the `bull`/`bear`/`vol` counts and the true/null id lists. `baskets(stack, row)`
 applies the fixed thresholds to get LONG/SHORT/VOL/CONFLICT membership for that name-night.
 `assign_episodes` implements §4's rule generically -- an episode is the first night a name enters

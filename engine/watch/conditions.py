@@ -1,5 +1,6 @@
-"""The 17 watch-basket conditions (`DESIGN/110-watch-basket.md` §2, fixed; do not add, drop,
-re-sign or re-threshold a condition outside a read, per §6).
+"""The 18 watch-basket conditions (`DESIGN/110-watch-basket.md` §2, fixed; do not add, drop,
+re-sign or re-threshold a condition outside a read, per §6). C-DIV-D (daily RSI bullish
+divergence) was added 2026-09-07 evening, before any forward row, per §2/§8.
 
 Every function here is a small pure predicate over an ALREADY-COMPUTED metric (a decile flag, an
 indicator value, a structure flag) -- the data plumbing that produces those metrics from the
@@ -39,13 +40,14 @@ C_LEAP_MIN_PREMIUM = 1_000_000.0          # C-LEAP, single-leg premium at the as
 C_LEAP_MIN_DTE = 180                      # C-LEAP
 C_DP_MIN_PREMIUM = 5_000_000.0            # C-DP, dark-pool premium that day
 
-# The 17 condition ids, grouped by sign (DESIGN/110 §2 "Sign" column).
-SIGN_PLUS = ("C-HIGH", "C-IVUP", "C-DIV", "C-AVWAP", "C-POC", "C-SWING")
+# The 18 condition ids, grouped by sign (DESIGN/110 §2 "Sign" column). C-DIV-D sits immediately
+# after C-DIV everywhere ids are listed (DESIGN/110 §2 row order).
+SIGN_PLUS = ("C-HIGH", "C-IVUP", "C-DIV", "C-DIV-D", "C-AVWAP", "C-POC", "C-SWING")
 SIGN_MINUS = ("C-LOW", "C-SHORT", "C-OIBUILD", "C-CROWD", "C-AVWAP-LOSS", "C-POC-LOSS", "C-SWING-LOSS")
 SIGN_VOL = ("C-VOL",)
 SIGN_LOGGED = ("C-RSI", "C-LEAP", "C-DP")
 ALL_CONDITIONS = SIGN_PLUS + SIGN_MINUS + SIGN_VOL + SIGN_LOGGED
-assert len(ALL_CONDITIONS) == 17
+assert len(ALL_CONDITIONS) == 18
 
 
 def _isnan(x) -> bool:
@@ -77,7 +79,7 @@ def _threshold(value, op) -> bool | None:
 
 
 # =============================================================================================
-# The 17 conditions
+# The 18 conditions
 # =============================================================================================
 
 
@@ -138,6 +140,13 @@ def c_div(bullish_divergence_flag: bool | None) -> bool | None:
     return bullish_divergence_flag
 
 
+def c_div_d(bullish_divergence_daily_flag: bool | None) -> bool | None:
+    """C-DIV-D: RSI bullish divergence over the last 20 daily bars, same halves rule as C-DIV but
+    on daily closes and daily RSI(14) (`indicators.bullish_divergence`, `series._daily_divergence`).
+    Added 2026-09-07 evening, before any forward row (DESIGN/110 §2, §8)."""
+    return bullish_divergence_daily_flag
+
+
 def c_avwap(reclaim_flag: bool | None) -> bool | None:
     """C-AVWAP: close above the AVWAP anchored at the 52-week-low date, crossed within 5 sessions
     (`indicators.crossed_within` on the anchored series)."""
@@ -186,6 +195,7 @@ def c_dp(has_dark_pool_print: bool | None) -> bool | None:
 CONDITION_FUNCS = {
     "C-HIGH": c_high, "C-LOW": c_low, "C-SHORT": c_short, "C-OIBUILD": c_oibuild,
     "C-CROWD": c_crowd, "C-IVUP": c_ivup, "C-VOL": c_vol, "C-RSI": c_rsi, "C-DIV": c_div,
+    "C-DIV-D": c_div_d,
     "C-AVWAP": c_avwap, "C-AVWAP-LOSS": c_avwap_loss, "C-POC": c_poc, "C-POC-LOSS": c_poc_loss,
     "C-SWING": c_swing, "C-SWING-LOSS": c_swing_loss, "C-LEAP": c_leap, "C-DP": c_dp,
 }

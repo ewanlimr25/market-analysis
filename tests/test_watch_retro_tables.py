@@ -61,7 +61,7 @@ def test_condition_table_c_high(fixture):
     assert row.sign == "+"
 
 
-def test_condition_table_covers_all_17_conditions(fixture):
+def test_condition_table_covers_all_18_conditions(fixture):
     _, cond_df, returns_df = fixture
     table = RT.condition_table(cond_df, returns_df)
     assert set(table["key"]) == set(C.ALL_CONDITIONS)

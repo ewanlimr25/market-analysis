@@ -21,6 +21,7 @@ VOLUME_PROFILE_BINS = 50
 VALUE_AREA_FRACTION = 0.70
 AVWAP_LOOKBACK_SESSIONS = 5         # DESIGN/110 §2 C-AVWAP/C-AVWAP-LOSS "within the last 5 sessions"
 DIVERGENCE_LOOKBACK_WEEKS = 8       # DESIGN/110 §2 C-DIV
+DIVERGENCE_LOOKBACK_DAYS = 20       # DESIGN/110 §2 C-DIV-D
 
 
 def _nan(x) -> bool:
@@ -270,14 +271,16 @@ def volume_profile(window: pd.DataFrame, n_bins: int = VOLUME_PROFILE_BINS,
 
 
 # =============================================================================================
-# RSI bullish divergence (weekly, last 8 bars)
+# RSI bullish divergence (weekly, last 8 bars; also reused daily, last 20 bars, for C-DIV-D)
 # =============================================================================================
 
 
 def bullish_divergence(closes: list[float], rsi_values: list[float | None],
                         lookback: int = DIVERGENCE_LOOKBACK_WEEKS) -> bool | None:
     """DESIGN/110 §2 C-DIV: "over the last 8 weekly bars: a lower low in close with a higher low
-    in RSI". Operationalised as: split the trailing `lookback` bars into an earlier and a later
+    in RSI" -- and, with `lookback=DIVERGENCE_LOOKBACK_DAYS` on daily closes and daily RSI(14),
+    C-DIV-D's "same halves rule ... over the last 20 daily bars" (same function, no new algorithm).
+    Operationalised as: split the trailing `lookback` bars into an earlier and a later
     half (later half gets the extra bar on an odd split); `low1` = the earlier half's minimum
     close, `low2` = the later half's minimum close. Divergence is `close[low2] < close[low1]`
     (price makes a lower low) AND `rsi[low2] > rsi[low1]` (RSI makes a higher low). `None` when
