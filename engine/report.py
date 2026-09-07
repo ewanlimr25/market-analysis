@@ -58,7 +58,8 @@ def render(signals: dict) -> str:
 
 SB_CANDIDATE_COLS = ["underlying", "structure", "expiry", "k_p1", "k_p2", "k_c1", "k_c2", "credit_entry", "max_loss_usd", "contracts", "entry_tier_max"]
 SB_GRADED_COLS = ["underlying", "structure", "entry", "expiry", "settle_close", "net_usd", "ror"]
-SB_RUNNING_COLS = ["sleeve", "n", "mean_ror", "nw_t", "net_usd_total"]
+SB_RUNNING_COLS = ["policy_id", "role", "sleeve", "n", "mean_ror", "nw_t", "net_usd_total"]
+SB_EXPLORATION_COLS = ["underlying", "structure", "expiry", "k_p1", "k_p2", "k_c1", "k_c2", "credit_entry", "max_loss_usd", "gate_verdict"]
 SB_SKIPPED_COLS = ["underlying", "structure", "reason"]
 PCT_COLS.update({"ror", "mean_ror"})
 
@@ -90,8 +91,12 @@ def render_sb(state: dict | None) -> str:
     skipped = state.get("skipped", [])
     if skipped:
         parts += ["", f"### S-B skipped ({len(skipped)})", table(skipped, SB_SKIPPED_COLS)]
+    explore = state.get("exploration", [])
+    if state.get("is_entry_day"):
+        parts += ["", f"### S-B exploration book tonight ({len(explore)}; one contract per sleeve, gate ignored, gate verdict recorded)",
+                  table(explore, SB_EXPLORATION_COLS) if explore else "_none (no markable position)_"]
     graded = state.get("graded", [])
-    parts += ["", f"### S-B graded at expiry today ({len(graded)})", table(graded, SB_GRADED_COLS) if graded else "_none due_"]
+    parts += ["", f"### S-B graded at expiry today ({len(graded)})", table(graded, SB_GRADED_COLS + ["role"]) if graded else "_none due_"]
     unsettled = state.get("unsettled", [])
     if unsettled:
         parts += ["", f"_{len(unsettled)} position(s) due today have no settlement close yet; they stay pending._"]
@@ -100,6 +105,7 @@ def render_sb(state: dict | None) -> str:
     running = state.get("running", [])
     parts += ["", "### S-B forward ledger to date", table(running, SB_RUNNING_COLS) if running else "_ledger empty_"]
     led = state.get("ledger", {})
-    parts += ["", f"S-B ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), graded {led.get('graded', 0)}; "
+    parts += ["", f"S-B ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), exploration {led.get('exploration_emitted', 0)} "
+                  f"(skipped {led.get('exploration_skipped', 0)}), graded {led.get('graded', 0)}; "
                   f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-09-11; nothing written)'}."]
     return "\n".join(parts)

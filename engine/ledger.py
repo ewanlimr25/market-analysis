@@ -7,6 +7,9 @@ Two files under the ledger directory (default `data/`):
 
 Rows are never re-derived once written (the `resolved_ledger.py` lesson): `emit` and `grade`
 skip keys that already exist and report how many they skipped.
+
+Every row carries `policy_id`, `role` and `gate_verdict` (DESIGN/100 §3); the writers refuse rows
+without them, and the key includes (policy_id, role) so two policies never share a row.
 """
 from __future__ import annotations
 
@@ -15,9 +18,11 @@ from datetime import date
 
 import pandas as pd
 
+from engine import policy as POL
+
 SIGNALS_FILE = "forward_signals.parquet"
 LEDGER_FILE = "forward_ledger.parquet"
-KEY = ["ticker", "E", "variant", "structure"]
+KEY = ["ticker", "E", "variant", "structure", "policy_id", "role"]
 
 
 def _path(ledger_dir: str, name: str) -> str:
@@ -70,6 +75,7 @@ def emit(ledger_dir: str, candidates: pd.DataFrame, emitted_on: date) -> tuple[i
     """Append tonight's candidate rows; returns (written, skipped-as-already-present)."""
     if candidates.empty:
         return 0, 0
+    POL.require_policy_columns(candidates)
     return _append(_path(ledger_dir, SIGNALS_FILE), candidates, "emitted_at", emitted_on)
 
 
@@ -77,6 +83,7 @@ def grade(ledger_dir: str, graded: pd.DataFrame, graded_on: date) -> tuple[int, 
     """Append graded rows; a key already in the ledger is never rewritten."""
     if graded.empty:
         return 0, 0
+    POL.require_policy_columns(graded)
     return _append(_path(ledger_dir, LEDGER_FILE), graded, "graded_at", graded_on)
 
 

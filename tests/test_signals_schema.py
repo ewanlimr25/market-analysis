@@ -44,7 +44,7 @@ def _walk(node, path="#"):
 
 def test_every_object_in_the_schema_is_closed():
     schema = SCH.load_schema()
-    assert schema["properties"]["schema_version"] == {"const": SCH.SCHEMA_VERSION}
+    assert schema["properties"]["schema_version"] == {"enum": list(SCH.SCHEMA_VERSIONS)} and SCH.SCHEMA_VERSION == SCH.SCHEMA_VERSIONS[-1]
     assert schema["properties"]["report_kind"] == {"const": SCH.REPORT_KIND}
     open_objects = [p for p, node in _walk(schema) if node.get("type") == "object" and "additionalProperties" not in node]
     assert open_objects == [], f"objects without additionalProperties: {open_objects}"
@@ -57,7 +57,7 @@ def test_committed_daily_outputs_validate_and_parse_strictly():
         with open(path) as fh:
             signals = json.load(fh, **STRICT)
         assert SCH.validate(signals) == [], path
-        assert signals["schema_version"] == SCH.SCHEMA_VERSION and signals["report_kind"] == SCH.REPORT_KIND
+        assert signals["schema_version"] in SCH.SCHEMA_VERSIONS and signals["report_kind"] == SCH.REPORT_KIND
 
 
 # ---- a full document from the real builders ------------------------------------------------------
@@ -101,7 +101,8 @@ def test_full_nightly_document_from_real_builders_validates(tmp_path):
     assert len(dropped_grade) == 4 and len(running) == 4
     sb_entry = _sb_state(str(tmp_path / "sb"), ENTRY)
     sb_expiry = _sb_state(str(tmp_path / "sb"), EXP)
-    assert len(sb_entry["candidates"]) == 2 and len(sb_expiry["graded"]) == 2 and len(sb_expiry["running"]) == 2
+    assert len(sb_entry["candidates"]) == 2 and len(sb_entry["exploration"]) == 2          # champion + exploration book (DESIGN/100)
+    assert len(sb_expiry["graded"]) == 4 and len(sb_expiry["running"]) == 4
     counts = {"emitted": 4, "skipped": 0, "graded": 4, "ledger_open": True}
     for sb in (sb_entry, sb_expiry):
         doc = D.assemble(SESSION, _preflight_ok(), {"daily_contract_rows": 1, "earnings_events_rows": 0},

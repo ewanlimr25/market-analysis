@@ -29,7 +29,8 @@ def _signal(ticker="XYZ", variant="A1", structure="SS", legs=None, **kw):
            "contracts": 1, "notional_usd": 10_000.0, "spot": 100.0, "implied": 0.08, "credit_entry": 7.6,
            "entry_cost_usd": 25.9, "stress_loss_usd": 1640.0, "max_loss_usd": None, "risk_usd": 1640.0,
            "credit_net_pct": 0.07341, "cap_pass": True, "cap_rank": 1, "sector": "Industrials",
-           "season": "S3", "month": "2026-10", "legs_json": json.dumps(legs), "expiry": date(2026, 10, 16), "k": 100.0}
+           "season": "S3", "month": "2026-10", "legs_json": json.dumps(legs), "expiry": date(2026, 10, 16), "k": 100.0,
+           "policy_id": "sa-1.0", "role": "champion", "gate_verdict": "PASS"}
     row.update(kw)
     return row
 

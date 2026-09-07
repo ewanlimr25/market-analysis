@@ -46,6 +46,9 @@ git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
 `make index-vol` (only if the nightly says the CBOE refresh failed two sessions running),
 `--force-ledger` (testing only). `/market-scan`, `/weekly-review` and `/calibration-audit` stay frozen.
 
+Every ledger row carries `policy_id`, `role` (`champion` / `challenger` / `exploration`) and `gate_verdict`
+(`DESIGN/100 §3`, adopted 2026-09-06). `signals.json` is `d1.1` from 2026-09-08; `d1.0` files stay valid.
+
 That is the entire job: one command and a commit on trading nights, three commands on weekends, and
 nothing touches real money before 2026-12-01. Sections 1 to 7 below are the detail.
 
@@ -137,9 +140,16 @@ timing). This is the gate-effectiveness cohort; it accrues on its own.
   contracts. Before 2026-12-01 these are **paper positions**; the sizing line shows what one contract
   would risk. Nothing is traded.
 - **S-B skipped:** the four sleeves and why (usually `OFF:G2`, or `not entry day`).
+- **S-B exploration book tonight:** on every entry day, one paper contract per sleeve entered under the
+  champion's rules **whether or not the gate is ON**, with the gate's verdict stored on the row
+  (`gate_verdict`). This is the improvement process's exploration floor (`findings/market-analysis/DESIGN/100 §6`):
+  it lets the 12-01 read grade the gate itself (gate-ON rows against gate-OFF rows) and means the book can
+  never go silent. Exploration rows carry `role = exploration`, are never mixed into the champion's tables,
+  never count toward the open-position cap, and are graded at expiry like any other row.
 - **S-B graded at expiry today:** positions settled today at intrinsic against the official close.
   `settle_source` shows whether the close came from `prices.parquet` or fell back to the last print.
-- **Open positions / forward ledger to date:** what is on, and the running record.
+- **Open positions / forward ledger to date:** what is on (champion rows only), and the running record per
+  `(policy_id, role, sleeve)`. Champion (`sb-1.0`) and exploration lines are separate by construction.
 
 ## 3. The calendar
 

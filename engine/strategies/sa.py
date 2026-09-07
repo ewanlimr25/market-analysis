@@ -16,6 +16,8 @@ from typing import Any, Mapping
 import pandas as pd
 
 from engine import calendar as cal
+from engine import policy as POL
+from engine.config import SA_POLICY_ID
 from engine import marking as M
 from engine.config import CONTRACT_MULTIPLIER, SAParams, SizingParams
 from engine.strategies import sa_filters as F
@@ -161,7 +163,7 @@ def _trade_row(event, sel: Selection, structure: str, legs: list[ST.Leg], n: int
            "dte": cal.trading_days_between(F.to_date(event["pre"]), sel.expiry),
            "legs_json": json.dumps([ST.leg_record(l) for l in legs]),
            **_leg_columns(legs), **_strata(event)}
-    return row
+    return POL.stamp(row, SA_POLICY_ID, POL.ROLE_CHAMPION, POL.SA_GATE_PASS)
 
 
 def _build_structures(event, sel: Selection, resolver: M.MarkResolver, sizing: SizingParams,

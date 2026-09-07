@@ -1,1606 +1,1696 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "engine-daily signals (d1.0)",
-  "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 \u00a75, DESIGN/80 \u00a77). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 \u00a74). `n` in the running tables is a count of positions; contracts are always `contracts`.",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "report_kind",
-    "date",
-    "season",
-    "preflight",
-    "mart",
-    "candidates",
-    "suppressed",
-    "dropped",
-    "graded",
-    "season_running",
-    "ledger",
-    "sb_state"
-  ],
-  "properties": {
-    "schema_version": {
-      "const": "d1.0"
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "engine-daily signals (d1.1)",
+ "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 \u00a75, DESIGN/80 \u00a77). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 \u00a74). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*.",
+ "type": "object",
+ "additionalProperties": false,
+ "required": [
+  "schema_version",
+  "report_kind",
+  "date",
+  "season",
+  "preflight",
+  "mart",
+  "candidates",
+  "suppressed",
+  "dropped",
+  "graded",
+  "season_running",
+  "ledger",
+  "sb_state"
+ ],
+ "properties": {
+  "schema_version": {
+   "enum": [
+    "d1.0",
+    "d1.1"
+   ]
+  },
+  "report_kind": {
+   "const": "engine-daily"
+  },
+  "date": {
+   "type": "string",
+   "format": "date",
+   "description": "the session that closed"
+  },
+  "season": {
+   "enum": [
+    "S1",
+    "S2",
+    "S3",
+    "off"
+   ],
+   "description": "S-A earnings season of the date (engine.config.SEASONS)"
+  },
+  "preflight": {
+   "$ref": "#/$defs/preflight"
+  },
+  "mart": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "rows appended to the two materialized tables tonight (0 when already present)",
+   "required": [
+    "daily_contract_rows",
+    "earnings_events_rows"
+   ],
+   "properties": {
+    "daily_contract_rows": {
+     "type": "integer"
     },
-    "report_kind": {
-      "const": "engine-daily"
-    },
+    "earnings_events_rows": {
+     "type": "integer"
+    }
+   }
+  },
+  "candidates": {
+   "type": "array",
+   "description": "S-A: events clearing every filter tonight (entry-only rows)",
+   "items": {
+    "$ref": "#/$defs/sa_position"
+   }
+  },
+  "suppressed": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/sa_suppressed"
+   }
+  },
+  "dropped": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/sa_dropped"
+   }
+  },
+  "graded": {
+   "type": "array",
+   "description": "S-A signals whose exit was this morning, re-priced from stored legs",
+   "items": {
+    "$ref": "#/$defs/sa_position"
+   }
+  },
+  "season_running": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/sa_running"
+   }
+  },
+  "ledger": {
+   "$ref": "#/$defs/ledger_counts"
+  },
+  "sb_state": {
+   "$ref": "#/$defs/sb_state"
+  }
+ },
+ "$defs": {
+  "preflight": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "scripts/preflight.py --json; when the subprocess itself fails only ok and warnings are present.",
+   "required": [
+    "ok",
+    "warnings"
+   ],
+   "properties": {
     "date": {
-      "type": "string",
-      "format": "date",
-      "description": "the session that closed"
+     "type": "string",
+     "format": "date"
+    },
+    "panel": {
+     "type": "object",
+     "description": "one entry per UW export group",
+     "additionalProperties": {
+      "$ref": "#/$defs/panel_entry"
+     }
+    },
+    "truth_set": {
+     "type": "object",
+     "propertyNames": {
+      "enum": [
+       "prices",
+       "returns",
+       "features"
+      ]
+     },
+     "additionalProperties": {
+      "$ref": "#/$defs/truth_entry"
+     }
+    },
+    "ok": {
+     "type": "boolean"
+    },
+    "warnings": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  "panel_entry": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "present",
+    "rows"
+   ],
+   "properties": {
+    "present": {
+     "type": "boolean"
+    },
+    "rows": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "error": {
+     "type": "string"
+    }
+   }
+  },
+  "truth_entry": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "max_date"
+   ],
+   "properties": {
+    "max_date": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "stale_vs_trade_date": {
+     "type": "boolean"
+    }
+   }
+  },
+  "sa_position": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "One S-A candidate (entry-only) or graded position. Sizing fields: contracts, notional_usd, risk_usd, stress_loss_usd, max_loss_usd; dollar P&L: gross_usd, cost_usd, net_usd, entry_cost_usd, exit_cost_usd.",
+   "required": [
+    "ticker",
+    "E",
+    "pre",
+    "post",
+    "variant",
+    "structure",
+    "expiry",
+    "k",
+    "contracts",
+    "notional_usd",
+    "credit_entry",
+    "credit_net_pct",
+    "risk_usd",
+    "entry_tier_max",
+    "legs_json",
+    "call_id",
+    "put_id",
+    "cap_pass",
+    "cap_rank"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "E": {
+     "type": "string",
+     "format": "date",
+     "description": "the print date"
+    },
+    "pre": {
+     "type": "string",
+     "format": "date"
+    },
+    "post": {
+     "type": "string",
+     "format": "date"
+    },
+    "variant": {
+     "enum": [
+      "A1",
+      "A2"
+     ]
+    },
+    "structure": {
+     "enum": [
+      "SS",
+      "IC"
+     ]
+    },
+    "expiry": {
+     "type": "string",
+     "format": "date"
+    },
+    "k": {
+     "type": "number",
+     "description": "ATM strike"
+    },
+    "k_up": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "k_dn": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "contracts": {
+     "type": "integer",
+     "description": "position size in contracts (sizing; DESIGN/70 \u00a73.3)"
+    },
+    "notional_usd": {
+     "type": "number"
+    },
+    "credit_entry": {
+     "type": "number",
+     "description": "net premium received per share at entry"
+    },
+    "debit_exit": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "per share to close; null until graded"
+    },
+    "gross_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "entry_cost_usd": {
+     "type": "number"
+    },
+    "exit_cost_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "cost_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "net_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "n_touches": {
+     "type": "integer",
+     "description": "legs x 2 (entry and exit touches)"
+    },
+    "gross_pct": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "cost_pct": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "net_pct": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "net P&L / notional; null until graded"
+    },
+    "credit_net_pct": {
+     "type": "number"
+    },
+    "stress_loss_usd": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "SS: per-contract loss at 3x implied (sizing basis)"
+    },
+    "max_loss_usd": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "IC: per-contract max loss (sizing basis)"
+    },
+    "risk_usd": {
+     "type": "number",
+     "description": "sizing basis x contracts"
+    },
+    "straddle_over_implied": {
+     "type": "number"
+    },
+    "exit_tier_max": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "entry_tier_max": {
+     "type": "integer"
+    },
+    "model_exit": {
+     "type": [
+      "boolean",
+      "null"
+     ]
+    },
+    "model_entry": {
+     "type": "boolean"
+    },
+    "dte": {
+     "type": "integer",
+     "description": "sessions from pre to expiry"
+    },
+    "legs_json": {
+     "type": "string",
+     "description": "JSON list of leg records (engine.strategies.sa_structures.leg_record)"
+    },
+    "call_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "call_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "call_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "call_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "call_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "call_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "call_exit_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "put_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "put_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "put_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "put_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "put_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "put_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "put_exit_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_call_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "wing_call_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_call_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "wing_call_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_call_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_call_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "wing_call_exit_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_put_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "wing_put_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_put_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "wing_put_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_put_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "wing_put_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "wing_put_exit_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "sector": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "mcap_bucket": {
+     "enum": [
+      "2-10B",
+      "10-50B"
+     ]
+    },
+    "timing": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "how": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "regime_pre": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "vix_pre": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "month": {
+     "type": [
+      "string",
+      "null"
+     ]
     },
     "season": {
-      "enum": [
-        "S1",
-        "S2",
-        "S3",
-        "off"
-      ],
-      "description": "S-A earnings season of the date (engine.config.SEASONS)"
+     "type": [
+      "string",
+      "null"
+     ]
     },
-    "preflight": {
-      "$ref": "#/$defs/preflight"
+    "implied": {
+     "type": "number",
+     "description": "vendor implied move as a fraction of spot"
     },
-    "mart": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "rows appended to the two materialized tables tonight (0 when already present)",
-      "required": [
-        "daily_contract_rows",
-        "earnings_events_rows"
-      ],
-      "properties": {
-        "daily_contract_rows": {
-          "type": "integer"
-        },
-        "earnings_events_rows": {
-          "type": "integer"
-        }
-      }
+    "spot": {
+     "type": "number"
     },
-    "candidates": {
-      "type": "array",
-      "description": "S-A: events clearing every filter tonight (entry-only rows)",
-      "items": {
-        "$ref": "#/$defs/sa_position"
-      }
+    "realized_move": {
+     "type": [
+      "number",
+      "null"
+     ]
     },
-    "suppressed": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/sa_suppressed"
-      }
+    "gap_signed": {
+     "type": [
+      "number",
+      "null"
+     ]
     },
-    "dropped": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/sa_dropped"
-      }
+    "iv30d_pre": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "iv30d_post": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "cap_pass": {
+     "type": "boolean",
+     "description": "inside the night's book caps (portfolio.apply_caps)"
+    },
+    "cap_rank": {
+     "type": "integer"
+    },
+    "emitted_at": {
+     "type": "string",
+     "format": "date",
+     "description": "present on rows read back from the forward ledger"
+    },
+    "policy_id": {
+     "type": "string",
+     "description": "the policy that produced the row (DESIGN/100 \u00a73); champion ids are pinned in engine.config"
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration"
+     ]
+    },
+    "gate_verdict": {
+     "type": "string",
+     "description": "the gate code printed that night; PASS for S-A champion rows"
+    }
+   }
+  },
+  "sa_suppressed": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "An event that failed a filter, with the first failing filter (DESIGN/70 \u00a73.1).",
+   "required": [
+    "ticker",
+    "E",
+    "pre",
+    "post",
+    "variant",
+    "first_fail"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "E": {
+     "type": "string",
+     "format": "date",
+     "description": "the print date"
+    },
+    "pre": {
+     "type": "string",
+     "format": "date"
+    },
+    "post": {
+     "type": "string",
+     "format": "date"
+    },
+    "variant": {
+     "enum": [
+      "A1",
+      "A2"
+     ]
+    },
+    "first_fail": {
+     "type": "string",
+     "pattern": "^(F[1-8]|A2_sector)$"
+    },
+    "sector": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "mcap_bucket": {
+     "enum": [
+      "2-10B",
+      "10-50B"
+     ]
+    },
+    "timing": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "how": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "regime_pre": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "vix_pre": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "month": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "season": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "implied": {
+     "type": "number",
+     "description": "vendor implied move as a fraction of spot"
+    },
+    "spot": {
+     "type": "number"
+    },
+    "realized_move": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "gap_signed": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "iv30d_pre": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "iv30d_post": {
+     "type": [
+      "number",
+      "null"
+     ]
+    }
+   }
+  },
+  "sa_dropped": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "A candidate or a due signal with an unmarkable leg; two shapes share one list, so every key but ticker/structure/reason is nullable.",
+   "required": [
+    "ticker",
+    "structure",
+    "reason"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "E": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "pre": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "post": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "variant": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "structure": {
+     "enum": [
+      "SS",
+      "IC",
+      "both",
+      null
+     ]
+    },
+    "reason": {
+     "type": "string"
+    },
+    "policy_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration",
+      null
+     ]
+    }
+   }
+  },
+  "sa_running": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "variant",
+    "structure",
+    "n",
+    "dates",
+    "mean_net_pct",
+    "t",
+    "net_usd_total"
+   ],
+   "properties": {
+    "variant": {
+     "enum": [
+      "A1",
+      "A2"
+     ]
+    },
+    "structure": {
+     "enum": [
+      "SS",
+      "IC"
+     ]
+    },
+    "n": {
+     "type": "integer",
+     "description": "graded positions (a count, not contracts)"
+    },
+    "dates": {
+     "type": "integer",
+     "description": "distinct print dates (clusters)"
+    },
+    "mean_net_pct": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "t": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "t clustered by print date"
+    },
+    "net_usd_total": {
+     "type": "number"
+    }
+   }
+  },
+  "ledger_counts": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "Ledger writes tonight; ledger_open is false before the ledger's open date unless --force-ledger.",
+   "required": [
+    "emitted",
+    "skipped",
+    "graded",
+    "ledger_open"
+   ],
+   "properties": {
+    "emitted": {
+     "type": "integer"
+    },
+    "skipped": {
+     "type": "integer"
     },
     "graded": {
-      "type": "array",
-      "description": "S-A signals whose exit was this morning, re-priced from stored legs",
-      "items": {
-        "$ref": "#/$defs/sa_position"
-      }
+     "type": "integer"
     },
-    "season_running": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/sa_running"
-      }
+    "ledger_open": {
+     "type": "boolean"
+    },
+    "exploration_emitted": {
+     "type": "integer"
+    },
+    "exploration_skipped": {
+     "type": "integer"
+    }
+   }
+  },
+  "sb_state": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "The S-B nightly step (DESIGN/80 \u00a77). Normal shape carries every key; the error shape carries date, error, empty candidates/graded, an empty gate, and refresh.",
+   "required": [
+    "date",
+    "gate",
+    "candidates",
+    "graded",
+    "refresh"
+   ],
+   "properties": {
+    "date": {
+     "type": "string",
+     "format": "date"
+    },
+    "index_vol_through": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "is_entry_day": {
+     "type": "boolean"
+    },
+    "gate": {
+     "$ref": "#/$defs/gates"
+    },
+    "gate_next": {
+     "$ref": "#/$defs/gates"
+    },
+    "candidates": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sb_position"
+     }
+    },
+    "skipped": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sb_skipped"
+     }
+    },
+    "graded": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sb_position"
+     }
+    },
+    "unsettled": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sb_unsettled"
+     }
+    },
+    "open_positions": {
+     "type": "object",
+     "propertyNames": {
+      "pattern": "^(SPY|QQQ)-(PS|IC)$"
+     },
+     "additionalProperties": {
+      "type": "integer"
+     }
+    },
+    "running": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sb_running"
+     }
     },
     "ledger": {
-      "$ref": "#/$defs/ledger_counts"
-    },
-    "sb_state": {
-      "$ref": "#/$defs/sb_state"
-    }
-  },
-  "$defs": {
-    "preflight": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "scripts/preflight.py --json; when the subprocess itself fails only ok and warnings are present.",
-      "required": [
-        "ok",
-        "warnings"
-      ],
-      "properties": {
-        "date": {
-          "type": "string",
-          "format": "date"
-        },
-        "panel": {
-          "type": "object",
-          "description": "one entry per UW export group",
-          "additionalProperties": {
-            "$ref": "#/$defs/panel_entry"
-          }
-        },
-        "truth_set": {
-          "type": "object",
-          "propertyNames": {
-            "enum": [
-              "prices",
-              "returns",
-              "features"
-            ]
-          },
-          "additionalProperties": {
-            "$ref": "#/$defs/truth_entry"
-          }
-        },
-        "ok": {
-          "type": "boolean"
-        },
-        "warnings": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "panel_entry": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "present",
-        "rows"
-      ],
-      "properties": {
-        "present": {
-          "type": "boolean"
-        },
-        "rows": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "error": {
-          "type": "string"
-        }
-      }
-    },
-    "truth_entry": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "max_date"
-      ],
-      "properties": {
-        "max_date": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
-        "stale_vs_trade_date": {
-          "type": "boolean"
-        }
-      }
-    },
-    "sa_position": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "One S-A candidate (entry-only) or graded position. Sizing fields: contracts, notional_usd, risk_usd, stress_loss_usd, max_loss_usd; dollar P&L: gross_usd, cost_usd, net_usd, entry_cost_usd, exit_cost_usd.",
-      "required": [
-        "ticker",
-        "E",
-        "pre",
-        "post",
-        "variant",
-        "structure",
-        "expiry",
-        "k",
-        "contracts",
-        "notional_usd",
-        "credit_entry",
-        "credit_net_pct",
-        "risk_usd",
-        "entry_tier_max",
-        "legs_json",
-        "call_id",
-        "put_id",
-        "cap_pass",
-        "cap_rank"
-      ],
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "E": {
-          "type": "string",
-          "format": "date",
-          "description": "the print date"
-        },
-        "pre": {
-          "type": "string",
-          "format": "date"
-        },
-        "post": {
-          "type": "string",
-          "format": "date"
-        },
-        "variant": {
-          "enum": [
-            "A1",
-            "A2"
-          ]
-        },
-        "structure": {
-          "enum": [
-            "SS",
-            "IC"
-          ]
-        },
-        "expiry": {
-          "type": "string",
-          "format": "date"
-        },
-        "k": {
-          "type": "number",
-          "description": "ATM strike"
-        },
-        "k_up": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "k_dn": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "contracts": {
-          "type": "integer",
-          "description": "position size in contracts (sizing; DESIGN/70 \u00a73.3)"
-        },
-        "notional_usd": {
-          "type": "number"
-        },
-        "credit_entry": {
-          "type": "number",
-          "description": "net premium received per share at entry"
-        },
-        "debit_exit": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "per share to close; null until graded"
-        },
-        "gross_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "entry_cost_usd": {
-          "type": "number"
-        },
-        "exit_cost_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "cost_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "net_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "n_touches": {
-          "type": "integer",
-          "description": "legs x 2 (entry and exit touches)"
-        },
-        "gross_pct": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "cost_pct": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "net_pct": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "net P&L / notional; null until graded"
-        },
-        "credit_net_pct": {
-          "type": "number"
-        },
-        "stress_loss_usd": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "SS: per-contract loss at 3x implied (sizing basis)"
-        },
-        "max_loss_usd": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "IC: per-contract max loss (sizing basis)"
-        },
-        "risk_usd": {
-          "type": "number",
-          "description": "sizing basis x contracts"
-        },
-        "straddle_over_implied": {
-          "type": "number"
-        },
-        "exit_tier_max": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "entry_tier_max": {
-          "type": "integer"
-        },
-        "model_exit": {
-          "type": [
-            "boolean",
-            "null"
-          ]
-        },
-        "model_entry": {
-          "type": "boolean"
-        },
-        "dte": {
-          "type": "integer",
-          "description": "sessions from pre to expiry"
-        },
-        "legs_json": {
-          "type": "string",
-          "description": "JSON list of leg records (engine.strategies.sa_structures.leg_record)"
-        },
-        "call_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "call_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "call_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "call_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "call_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "call_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "call_exit_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "put_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "put_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "put_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "put_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "put_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "put_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "put_exit_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_call_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "wing_call_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_call_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "wing_call_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_call_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_call_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "wing_call_exit_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_put_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "wing_put_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_put_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "wing_put_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_put_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "wing_put_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "wing_put_exit_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "sector": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "mcap_bucket": {
-          "enum": [
-            "2-10B",
-            "10-50B"
-          ]
-        },
-        "timing": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "how": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "regime_pre": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "vix_pre": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "month": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "season": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "implied": {
-          "type": "number",
-          "description": "vendor implied move as a fraction of spot"
-        },
-        "spot": {
-          "type": "number"
-        },
-        "realized_move": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "gap_signed": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "iv30d_pre": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "iv30d_post": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "cap_pass": {
-          "type": "boolean",
-          "description": "inside the night's book caps (portfolio.apply_caps)"
-        },
-        "cap_rank": {
-          "type": "integer"
-        },
-        "emitted_at": {
-          "type": "string",
-          "format": "date",
-          "description": "present on rows read back from the forward ledger"
-        }
-      }
-    },
-    "sa_suppressed": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "An event that failed a filter, with the first failing filter (DESIGN/70 \u00a73.1).",
-      "required": [
-        "ticker",
-        "E",
-        "pre",
-        "post",
-        "variant",
-        "first_fail"
-      ],
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "E": {
-          "type": "string",
-          "format": "date",
-          "description": "the print date"
-        },
-        "pre": {
-          "type": "string",
-          "format": "date"
-        },
-        "post": {
-          "type": "string",
-          "format": "date"
-        },
-        "variant": {
-          "enum": [
-            "A1",
-            "A2"
-          ]
-        },
-        "first_fail": {
-          "type": "string",
-          "pattern": "^(F[1-8]|A2_sector)$"
-        },
-        "sector": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "mcap_bucket": {
-          "enum": [
-            "2-10B",
-            "10-50B"
-          ]
-        },
-        "timing": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "how": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "regime_pre": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "vix_pre": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "month": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "season": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "implied": {
-          "type": "number",
-          "description": "vendor implied move as a fraction of spot"
-        },
-        "spot": {
-          "type": "number"
-        },
-        "realized_move": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "gap_signed": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "iv30d_pre": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "iv30d_post": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      }
-    },
-    "sa_dropped": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "A candidate or a due signal with an unmarkable leg; two shapes share one list, so every key but ticker/structure/reason is nullable.",
-      "required": [
-        "ticker",
-        "structure",
-        "reason"
-      ],
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "E": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
-        "pre": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
-        "post": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
-        "variant": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "structure": {
-          "enum": [
-            "SS",
-            "IC",
-            "both",
-            null
-          ]
-        },
-        "reason": {
-          "type": "string"
-        }
-      }
-    },
-    "sa_running": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "variant",
-        "structure",
-        "n",
-        "dates",
-        "mean_net_pct",
-        "t",
-        "net_usd_total"
-      ],
-      "properties": {
-        "variant": {
-          "enum": [
-            "A1",
-            "A2"
-          ]
-        },
-        "structure": {
-          "enum": [
-            "SS",
-            "IC"
-          ]
-        },
-        "n": {
-          "type": "integer",
-          "description": "graded positions (a count, not contracts)"
-        },
-        "dates": {
-          "type": "integer",
-          "description": "distinct print dates (clusters)"
-        },
-        "mean_net_pct": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "t": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "t clustered by print date"
-        },
-        "net_usd_total": {
-          "type": "number"
-        }
-      }
-    },
-    "ledger_counts": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Ledger writes tonight; ledger_open is false before the ledger's open date unless --force-ledger.",
-      "required": [
-        "emitted",
-        "skipped",
-        "graded",
-        "ledger_open"
-      ],
-      "properties": {
-        "emitted": {
-          "type": "integer"
-        },
-        "skipped": {
-          "type": "integer"
-        },
-        "graded": {
-          "type": "integer"
-        },
-        "ledger_open": {
-          "type": "boolean"
-        }
-      }
-    },
-    "sb_state": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "The S-B nightly step (DESIGN/80 \u00a77). Normal shape carries every key; the error shape carries date, error, empty candidates/graded, an empty gate, and refresh.",
-      "required": [
-        "date",
-        "gate",
-        "candidates",
-        "graded",
-        "refresh"
-      ],
-      "properties": {
-        "date": {
-          "type": "string",
-          "format": "date"
-        },
-        "index_vol_through": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "is_entry_day": {
-          "type": "boolean"
-        },
-        "gate": {
-          "$ref": "#/$defs/gates"
-        },
-        "gate_next": {
-          "$ref": "#/$defs/gates"
-        },
-        "candidates": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/sb_position"
-          }
-        },
-        "skipped": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/sb_skipped"
-          }
-        },
-        "graded": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/sb_position"
-          }
-        },
-        "unsettled": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/sb_unsettled"
-          }
-        },
-        "open_positions": {
-          "type": "object",
-          "propertyNames": {
-            "pattern": "^(SPY|QQQ)-(PS|IC)$"
-          },
-          "additionalProperties": {
-            "type": "integer"
-          }
-        },
-        "running": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/sb_running"
-          }
-        },
-        "ledger": {
-          "$ref": "#/$defs/ledger_counts"
-        },
-        "refresh": {
-          "$ref": "#/$defs/refresh"
-        },
-        "error": {
-          "type": "string",
-          "description": "present only when the S-B step failed; the S-A report is still written"
-        }
-      }
-    },
-    "gates": {
-      "type": "object",
-      "description": "one gate per underlying",
-      "propertyNames": {
-        "enum": [
-          "SPY",
-          "QQQ"
-        ]
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/gate_state"
-      }
-    },
-    "gate_state": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "date",
-        "asof",
-        "reason",
-        "on",
-        "known",
-        "vix",
-        "vix3m",
-        "x",
-        "x_median"
-      ],
-      "properties": {
-        "date": {
-          "type": "string",
-          "format": "date"
-        },
-        "asof": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date",
-          "description": "the close the gate was read at (prior session)"
-        },
-        "reason": {
-          "type": "string",
-          "pattern": "^(ON|OFF:G[12](,G2)?|UNKNOWN:.*)$",
-          "description": "G1 contango VIX < VIX3M; G2 level X above its 20-session median; UNKNOWN fails closed"
-        },
-        "on": {
-          "type": "boolean"
-        },
-        "known": {
-          "type": "boolean"
-        },
-        "vix": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "vix3m": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "x": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "VIX for SPY, VXN for QQQ"
-        },
-        "x_median": {
-          "type": [
-            "number",
-            "null"
-          ]
-        }
-      }
-    },
-    "sb_position": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "One S-B put spread or iron condor, entry-only or graded at expiry. Sizing fields: contracts, max_loss_usd, risk_usd; dollar P&L as in sa_position.",
-      "required": [
-        "ticker",
-        "underlying",
-        "E",
-        "entry",
-        "pre",
-        "post",
-        "variant",
-        "structure",
-        "expiry",
-        "dte_cal",
-        "spot",
-        "x",
-        "m",
-        "k_p1",
-        "k_p2",
-        "width",
-        "credit_entry",
-        "contracts",
-        "max_loss_usd",
-        "risk_usd",
-        "entry_tier_max",
-        "graded",
-        "legs_json",
-        "p1_id",
-        "p2_id",
-        "gate_reason",
-        "gate_mode"
-      ],
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "underlying": {
-          "enum": [
-            "SPY",
-            "QQQ"
-          ]
-        },
-        "E": {
-          "type": "string",
-          "format": "date"
-        },
-        "entry": {
-          "type": "string",
-          "format": "date"
-        },
-        "variant": {
-          "const": "B1"
-        },
-        "structure": {
-          "enum": [
-            "PS",
-            "IC"
-          ]
-        },
-        "pre": {
-          "type": "string",
-          "format": "date"
-        },
-        "post": {
-          "type": "string",
-          "format": "date"
-        },
-        "expiry": {
-          "type": "string",
-          "format": "date"
-        },
-        "dte_cal": {
-          "type": "integer"
-        },
-        "spot": {
-          "type": "number"
-        },
-        "x": {
-          "type": "number",
-          "description": "the vol index on the entry session"
-        },
-        "m": {
-          "type": "number",
-          "description": "sigma unit: x/100 * sqrt(dte/365)"
-        },
-        "k_p1": {
-          "type": "number"
-        },
-        "k_p2": {
-          "type": "number"
-        },
-        "k_c1": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "k_c2": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "width": {
-          "type": "number"
-        },
-        "credit_entry": {
-          "type": "number",
-          "description": "net premium received per share at entry"
-        },
-        "debit_exit": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "per share to close; null until graded"
-        },
-        "gross_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "entry_cost_usd": {
-          "type": "number"
-        },
-        "exit_cost_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "cost_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "net_usd": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "n_touches": {
-          "type": "integer",
-          "description": "legs x 2 (entry and exit touches)"
-        },
-        "contracts": {
-          "type": "integer",
-          "description": "position size in contracts (sizing; DESIGN/80 \u00a74)"
-        },
-        "max_loss_usd": {
-          "type": "number",
-          "description": "per contract"
-        },
-        "risk_usd": {
-          "type": "number",
-          "description": "max_loss_usd x contracts"
-        },
-        "ror": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "net_usd / risk_usd; null until graded"
-        },
-        "credit_over_width": {
-          "type": "number"
-        },
-        "cost_over_credit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "window": {
-          "enum": [
-            "P1",
-            "P2",
-            "P3",
-            "off"
-          ]
-        },
-        "entry_month": {
-          "type": "string"
-        },
-        "month": {
-          "type": "string",
-          "description": "expiry month"
-        },
-        "entry_tier_max": {
-          "type": "integer"
-        },
-        "exit_tier_max": {
-          "type": "integer",
-          "description": "4 (intrinsic) once graded"
-        },
-        "graded": {
-          "type": "boolean"
-        },
-        "settle_close": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "settle_source": {
-          "enum": [
-            "prices",
-            "daily_contract",
-            null
-          ]
-        },
-        "legs_json": {
-          "type": "string"
-        },
-        "p1_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "p1_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "p1_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "p1_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "p1_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "p1_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "p2_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "p2_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "p2_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "p2_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "p2_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "p2_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "c1_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "c1_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "c1_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "c1_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "c1_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "c1_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "c2_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "c2_entry": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "c2_entry_tier": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
-        },
-        "c2_entry_spread": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "c2_exit": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "c2_exit_tier": {
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
-        "gate_reason": {
-          "type": "string"
-        },
-        "gate_asof": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
-        "gate_vix": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "gate_vix3m": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "gate_x": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "gate_x_median": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "gate_mode": {
-          "enum": [
-            "both",
-            "g1",
-            "g2",
-            "off"
-          ]
-        },
-        "emitted_at": {
-          "type": "string",
-          "format": "date"
-        }
-      }
-    },
-    "sb_skipped": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "ticker",
-        "underlying",
-        "E",
-        "entry",
-        "variant",
-        "structure",
-        "reason",
-        "gate_reason"
-      ],
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "underlying": {
-          "enum": [
-            "SPY",
-            "QQQ"
-          ]
-        },
-        "E": {
-          "type": "string",
-          "format": "date"
-        },
-        "entry": {
-          "type": "string",
-          "format": "date"
-        },
-        "variant": {
-          "const": "B1"
-        },
-        "structure": {
-          "enum": [
-            "PS",
-            "IC"
-          ]
-        },
-        "reason": {
-          "type": "string",
-          "description": "the gate reason, or no_prints / no_expiry / no_spot / no_index_vol / no_tier1_<leg> / spread_<leg> / degenerate_strikes / unmarkable_entry / cap_open"
-        },
-        "gate_reason": {
-          "type": "string"
-        }
-      }
-    },
-    "sb_unsettled": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "ticker",
-        "E",
-        "variant",
-        "structure",
-        "reason"
-      ],
-      "properties": {
-        "ticker": {
-          "type": "string"
-        },
-        "E": {
-          "type": "string",
-          "format": "date"
-        },
-        "variant": {
-          "const": "B1"
-        },
-        "structure": {
-          "enum": [
-            "PS",
-            "IC"
-          ]
-        },
-        "reason": {
-          "const": "no_settlement_close"
-        }
-      }
-    },
-    "sb_running": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "sleeve",
-        "n",
-        "mean_ror",
-        "nw_t",
-        "net_usd_total"
-      ],
-      "properties": {
-        "sleeve": {
-          "type": "string",
-          "pattern": "^(SPY|QQQ)-(PS|IC)$"
-        },
-        "n": {
-          "type": "integer",
-          "description": "graded positions (a count, not contracts)"
-        },
-        "mean_ror": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "nw_t": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "description": "Newey-West t, lag 2"
-        },
-        "net_usd_total": {
-          "type": "number"
-        }
-      }
+     "$ref": "#/$defs/ledger_counts"
     },
     "refresh": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "CBOE refresh result; on failure the file on disk was used.",
-      "required": [
-        "ok"
-      ],
-      "properties": {
-        "ok": {
-          "type": "boolean"
-        },
-        "through": {
-          "type": "string"
-        },
-        "error": {
-          "type": "string"
-        }
-      }
+     "$ref": "#/$defs/refresh"
+    },
+    "error": {
+     "type": "string",
+     "description": "present only when the S-B step failed; the S-A report is still written"
+    },
+    "exploration": {
+     "type": "array",
+     "description": "DESIGN/100 \u00a76: one contract per sleeve on every entry day, gate ignored, role = exploration",
+     "items": {
+      "$ref": "#/$defs/sb_position"
+     }
+    },
+    "exploration_skipped": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sb_skipped"
+     }
     }
+   }
+  },
+  "gates": {
+   "type": "object",
+   "description": "one gate per underlying",
+   "propertyNames": {
+    "enum": [
+     "SPY",
+     "QQQ"
+    ]
+   },
+   "additionalProperties": {
+    "$ref": "#/$defs/gate_state"
+   }
+  },
+  "gate_state": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "date",
+    "asof",
+    "reason",
+    "on",
+    "known",
+    "vix",
+    "vix3m",
+    "x",
+    "x_median"
+   ],
+   "properties": {
+    "date": {
+     "type": "string",
+     "format": "date"
+    },
+    "asof": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date",
+     "description": "the close the gate was read at (prior session)"
+    },
+    "reason": {
+     "type": "string",
+     "pattern": "^(ON|OFF:G[12](,G2)?|UNKNOWN:.*)$",
+     "description": "G1 contango VIX < VIX3M; G2 level X above its 20-session median; UNKNOWN fails closed"
+    },
+    "on": {
+     "type": "boolean"
+    },
+    "known": {
+     "type": "boolean"
+    },
+    "vix": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "vix3m": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "x": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "VIX for SPY, VXN for QQQ"
+    },
+    "x_median": {
+     "type": [
+      "number",
+      "null"
+     ]
+    }
+   }
+  },
+  "sb_position": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "One S-B put spread or iron condor, entry-only or graded at expiry. Sizing fields: contracts, max_loss_usd, risk_usd; dollar P&L as in sa_position.",
+   "required": [
+    "ticker",
+    "underlying",
+    "E",
+    "entry",
+    "pre",
+    "post",
+    "variant",
+    "structure",
+    "expiry",
+    "dte_cal",
+    "spot",
+    "x",
+    "m",
+    "k_p1",
+    "k_p2",
+    "width",
+    "credit_entry",
+    "contracts",
+    "max_loss_usd",
+    "risk_usd",
+    "entry_tier_max",
+    "graded",
+    "legs_json",
+    "p1_id",
+    "p2_id",
+    "gate_reason",
+    "gate_mode"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "underlying": {
+     "enum": [
+      "SPY",
+      "QQQ"
+     ]
+    },
+    "E": {
+     "type": "string",
+     "format": "date"
+    },
+    "entry": {
+     "type": "string",
+     "format": "date"
+    },
+    "variant": {
+     "const": "B1"
+    },
+    "structure": {
+     "enum": [
+      "PS",
+      "IC"
+     ]
+    },
+    "pre": {
+     "type": "string",
+     "format": "date"
+    },
+    "post": {
+     "type": "string",
+     "format": "date"
+    },
+    "expiry": {
+     "type": "string",
+     "format": "date"
+    },
+    "dte_cal": {
+     "type": "integer"
+    },
+    "spot": {
+     "type": "number"
+    },
+    "x": {
+     "type": "number",
+     "description": "the vol index on the entry session"
+    },
+    "m": {
+     "type": "number",
+     "description": "sigma unit: x/100 * sqrt(dte/365)"
+    },
+    "k_p1": {
+     "type": "number"
+    },
+    "k_p2": {
+     "type": "number"
+    },
+    "k_c1": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "k_c2": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "width": {
+     "type": "number"
+    },
+    "credit_entry": {
+     "type": "number",
+     "description": "net premium received per share at entry"
+    },
+    "debit_exit": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "per share to close; null until graded"
+    },
+    "gross_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "entry_cost_usd": {
+     "type": "number"
+    },
+    "exit_cost_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "cost_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "net_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "n_touches": {
+     "type": "integer",
+     "description": "legs x 2 (entry and exit touches)"
+    },
+    "contracts": {
+     "type": "integer",
+     "description": "position size in contracts (sizing; DESIGN/80 \u00a74)"
+    },
+    "max_loss_usd": {
+     "type": "number",
+     "description": "per contract"
+    },
+    "risk_usd": {
+     "type": "number",
+     "description": "max_loss_usd x contracts"
+    },
+    "ror": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "net_usd / risk_usd; null until graded"
+    },
+    "credit_over_width": {
+     "type": "number"
+    },
+    "cost_over_credit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "window": {
+     "enum": [
+      "P1",
+      "P2",
+      "P3",
+      "off"
+     ]
+    },
+    "entry_month": {
+     "type": "string"
+    },
+    "month": {
+     "type": "string",
+     "description": "expiry month"
+    },
+    "entry_tier_max": {
+     "type": "integer"
+    },
+    "exit_tier_max": {
+     "type": "integer",
+     "description": "4 (intrinsic) once graded"
+    },
+    "graded": {
+     "type": "boolean"
+    },
+    "settle_close": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "settle_source": {
+     "enum": [
+      "prices",
+      "daily_contract",
+      null
+     ]
+    },
+    "legs_json": {
+     "type": "string"
+    },
+    "p1_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "p1_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "p1_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "p1_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "p1_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "p1_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "p2_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "p2_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "p2_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "p2_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "p2_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "p2_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "c1_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "c1_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "c1_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "c1_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "c1_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "c1_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "c2_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "c2_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "c2_entry_tier": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "description": "1 print VWAP, 2 NBBO mid, 3 model, 4 intrinsic"
+    },
+    "c2_entry_spread": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "c2_exit": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "c2_exit_tier": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "gate_reason": {
+     "type": "string"
+    },
+    "gate_asof": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "format": "date"
+    },
+    "gate_vix": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "gate_vix3m": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "gate_x": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "gate_x_median": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "gate_mode": {
+     "enum": [
+      "both",
+      "g1",
+      "g2",
+      "off"
+     ]
+    },
+    "emitted_at": {
+     "type": "string",
+     "format": "date"
+    },
+    "policy_id": {
+     "type": "string",
+     "description": "the policy that produced the row (DESIGN/100 \u00a73); champion ids are pinned in engine.config"
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration"
+     ]
+    },
+    "gate_verdict": {
+     "type": "string",
+     "description": "the gate code printed that night; PASS for S-A champion rows"
+    }
+   }
+  },
+  "sb_skipped": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "ticker",
+    "underlying",
+    "E",
+    "entry",
+    "variant",
+    "structure",
+    "reason",
+    "gate_reason"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "underlying": {
+     "enum": [
+      "SPY",
+      "QQQ"
+     ]
+    },
+    "E": {
+     "type": "string",
+     "format": "date"
+    },
+    "entry": {
+     "type": "string",
+     "format": "date"
+    },
+    "variant": {
+     "const": "B1"
+    },
+    "structure": {
+     "enum": [
+      "PS",
+      "IC"
+     ]
+    },
+    "reason": {
+     "type": "string",
+     "description": "the gate reason, or no_prints / no_expiry / no_spot / no_index_vol / no_tier1_<leg> / spread_<leg> / degenerate_strikes / unmarkable_entry / cap_open"
+    },
+    "gate_reason": {
+     "type": "string"
+    }
+   }
+  },
+  "sb_unsettled": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "ticker",
+    "E",
+    "variant",
+    "structure",
+    "reason"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "E": {
+     "type": "string",
+     "format": "date"
+    },
+    "variant": {
+     "const": "B1"
+    },
+    "structure": {
+     "enum": [
+      "PS",
+      "IC"
+     ]
+    },
+    "reason": {
+     "const": "no_settlement_close"
+    },
+    "policy_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration",
+      null
+     ]
+    }
+   }
+  },
+  "sb_running": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "sleeve",
+    "n",
+    "mean_ror",
+    "nw_t",
+    "net_usd_total"
+   ],
+   "properties": {
+    "sleeve": {
+     "type": "string",
+     "pattern": "^(SPY|QQQ)-(PS|IC)$"
+    },
+    "n": {
+     "type": "integer",
+     "description": "graded positions (a count, not contracts)"
+    },
+    "mean_ror": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "nw_t": {
+     "type": [
+      "number",
+      "null"
+     ],
+     "description": "Newey-West t, lag 2"
+    },
+    "net_usd_total": {
+     "type": "number"
+    },
+    "policy_id": {
+     "type": "string"
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration"
+     ]
+    }
+   }
+  },
+  "refresh": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "CBOE refresh result; on failure the file on disk was used.",
+   "required": [
+    "ok"
+   ],
+   "properties": {
+    "ok": {
+     "type": "boolean"
+    },
+    "through": {
+     "type": "string"
+    },
+    "error": {
+     "type": "string"
+    }
+   }
   }
+ }
 }

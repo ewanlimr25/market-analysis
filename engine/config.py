@@ -166,3 +166,12 @@ SB_GO_T_MIN = 2.0
 SB_GO_MONTH_LOSS_MULT = 3.0                      # worst month >= -3 x median month
 SB_SCALE_MIN_POSITIONS = 40                      # forward ledger count trigger for scaling up
 SB_PBO_BLOCKS = 16
+
+
+# =============================================================================================
+# Improvement process (findings/market-analysis DESIGN/100, D22; adopted 2026-09-06). The champion
+# policy id bumps only when an adjudication promotes a challenger, together with the frozen test.
+# =============================================================================================
+SA_POLICY_ID = "sa-1.0"
+SB_POLICY_ID = "sb-1.0"
+

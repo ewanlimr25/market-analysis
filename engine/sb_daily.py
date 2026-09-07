@@ -14,6 +14,7 @@ import pandas as pd
 
 from engine import calendar as cal
 from engine import ledger as L
+from engine import policy as POL
 from engine.config import (LEDGER_SB_DIR, SB_LEDGER_OPENS, SB_PARAMS, SB_SIZING, SB_UNDERLYINGS, SB_VOL_INDEX,
                            SBParams, SBSizing)
 from engine.mart import index_vol as IV
@@ -56,11 +57,16 @@ def _gates(index_vol: pd.DataFrame, t: date, prev: date, params: SBParams) -> di
 
 
 def open_positions(ledger_dir: str, d: date) -> dict[str, int]:
-    """Signals whose expiry is after d, per sleeve (graded rows are closed by construction)."""
+    """Champion signals whose expiry is after d, per sleeve (graded rows are closed by construction).
+    Exploration rows never count toward the cap (DESIGN/100 §6)."""
     sig = L.read_signals(ledger_dir)
     if sig.empty:
         return {}
+    if "role" in sig.columns:
+        sig = sig[sig["role"] == POL.ROLE_CHAMPION]
     open_ = sig[pd.to_datetime(sig["post"]).dt.date > d]
+    if open_.empty:
+        return {}
     return {f"{u}-{s}": int(n) for (u, s), n in open_.groupby(["underlying", "structure"]).size().items()}
 
 
@@ -85,6 +91,18 @@ def _candidates(con, d: date, index_vol: pd.DataFrame, gates: dict, rows_loader:
     return trades, skipped
 
 
+def _exploration(con, d: date, index_vol: pd.DataFrame, gates: dict, rows_loader: RowsLoader, params: SBParams) -> tuple[list[dict], list[dict]]:
+    """One exploration position per structure per underlying on every entry day, gate ignored (DESIGN/100 §6)."""
+    rows_all = rows_loader(con, SB_UNDERLYINGS, d)
+    trades, skipped = [], []
+    for u in SB_UNDERLYINGS:
+        rows_u = rows_all[rows_all["underlying_symbol"] == u] if len(rows_all) else pd.DataFrame()
+        res = sb.exploration_candidates(u, d, rows_u, gates[u], P._x_on(index_vol, d, SB_VOL_INDEX[u]), params, cal.is_trading_day)
+        trades.extend(res.trades)
+        skipped.extend(res.skipped)
+    return trades, skipped
+
+
 def _grade_due(con, d: date, ledger_dir: str, close_loader: CloseLoader) -> tuple[list[dict], list[dict]]:
     due = L.pending(ledger_dir, d)
     graded, unsettled = [], []
@@ -98,12 +116,15 @@ def _grade_due(con, d: date, ledger_dir: str, close_loader: CloseLoader) -> tupl
 
 
 def running(ledger: pd.DataFrame) -> list[dict]:
+    """Per (policy, role, sleeve); champion and exploration rows are never pooled (DESIGN/100 §2)."""
     if ledger.empty or "ror" not in ledger.columns:
         return []
     out = []
-    for (u, s), g in ledger.groupby(["underlying", "structure"]):
-        nw = S.nw_t(g["ror"], 2)
-        out.append({"sleeve": f"{u}-{s}", "n": nw["n"], "mean_ror": nw["mean"], "nw_t": nw["t"], "net_usd_total": float(g["net_usd"].sum())})
+    for (pid, role), sub in POL.by_policy(ledger):
+        for (u, s), g in sub.groupby(["underlying", "structure"]):
+            nw = S.nw_t(g["ror"], 2)
+            out.append({"policy_id": pid, "role": role, "sleeve": f"{u}-{s}", "n": nw["n"], "mean_ror": nw["mean"], "nw_t": nw["t"],
+                        "net_usd_total": float(g["net_usd"].sum())})
     return out
 
 
@@ -124,22 +145,28 @@ def run(con, d: date, ledger_dir: str = LEDGER_SB_DIR, index_vol: pd.DataFrame |
     is_open = ledger_open(d) or force_ledger
     open_now = open_positions(ledger_dir, d)
     trades, skipped = _candidates(con, d, iv, gates, rows_loader, params, sizing, open_now) if entry_day else ([], [])
+    explore, explore_skipped = _exploration(con, d, iv, gates, rows_loader, params) if entry_day else ([], [])
     graded, unsettled = _grade_due(con, d, ledger_dir, close_loader)
     emitted = L.emit(ledger_dir, pd.DataFrame(trades), d) if is_open and trades else (0, 0)
+    explored = L.emit(ledger_dir, pd.DataFrame(explore), d) if is_open and explore else (0, 0)
     n_graded = L.grade(ledger_dir, pd.DataFrame(graded), d)[0] if is_open and graded else 0
     return {"date": d.isoformat(), "index_vol_through": str(IV.latest_date(iv)) if len(iv) else None,
             "is_entry_day": entry_day, "gate": {u: _gate_dict(g) for u, g in gates.items()},
             "gate_next": {u: _gate_dict(g) for u, g in gates_next.items()},
             "candidates": _jsonable(trades), "skipped": _jsonable(skipped), "graded": _jsonable(graded), "unsettled": _jsonable(unsettled),
+            "exploration": _jsonable(explore), "exploration_skipped": _jsonable(explore_skipped),
             "open_positions": open_positions(ledger_dir, d), "running": running(L.read_ledger(ledger_dir)),
-            "ledger": {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open}}
+            "ledger": {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open,
+                       "exploration_emitted": explored[0], "exploration_skipped": explored[1]}}
 
 
-def nightly(con, d: date, force_ledger: bool = False) -> dict:
-    """The production entry point: refresh CBOE (fail-soft), then `run` with the mart loaders."""
+def nightly(con, d: date, force_ledger: bool = False, ledger_dir: str = LEDGER_SB_DIR) -> dict:
+    """The production entry point: refresh CBOE (fail-soft), then `run` with the mart loaders.
+    `ledger_dir` follows `make daily --ledger-dir` so a test run never touches the real ledger."""
     refresh = refresh_index_vol()
     try:
-        state = run(con, d, LEDGER_SB_DIR, None, sb_data.load_entry_rows, _default_close_loader, force_ledger)
+        state = run(con, d, ledger_dir, None, sb_data.load_entry_rows, _default_close_loader, force_ledger)
     except Exception as exc:  # the S-A report must still be written
-        state = {"date": d.isoformat(), "error": f"S-B step failed: {exc}"[:300], "candidates": [], "graded": [], "gate": {}}
+        state = {"date": d.isoformat(), "error": f"S-B step failed: {exc}"[:300], "candidates": [], "graded": [], "gate": {},
+                 "exploration": []}
     return {**state, "refresh": refresh}

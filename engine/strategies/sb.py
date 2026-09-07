@@ -13,8 +13,9 @@ import pandas as pd
 
 from engine import calendar as cal
 from engine import marking as M
+from engine import policy as POL
 from engine.mart import index_vol as IV
-from engine.config import SB_PARAMS, SB_SIZING, SB_STRUCTURES, SB_UNDERLYINGS, SB_VOL_INDEX, SBParams, SBSizing
+from engine.config import SB_PARAMS, SB_POLICY_ID, SB_SIZING, SB_STRUCTURES, SB_UNDERLYINGS, SB_VOL_INDEX, SBParams, SBSizing
 from engine.strategies import sb_gate as G
 from engine.strategies import sb_proxy as P
 from engine.strategies import sb_structures as SB
@@ -22,6 +23,8 @@ from engine.strategies import sa_structures as ST
 from engine.strategies import sa_filters as F
 
 VARIANT_B1 = "B1"
+# The exploration book (DESIGN/100 §6): one contract, whatever the equity; the sizing floor is 1.
+EXPLORATION_SIZING = SBSizing(equity=0.0, max_loss_frac=SB_SIZING.max_loss_frac, max_open_per_sleeve=SB_SIZING.max_open_per_sleeve)
 REASON_NO_PRINTS, REASON_NO_EXPIRY, REASON_NO_SPOT, REASON_NO_INDEX = "no_prints", "no_expiry", "no_spot", "no_index_vol"
 IsSession = Callable[[date], bool]
 
@@ -85,9 +88,10 @@ def _first_short_spread_fail(picked: Mapping[str, dict], structure: str, params:
 def _trade_row(underlying: str, entry: date, expiry: date, spot: float, x_t: float, strikes: dict, legs: list[ST.Leg],
                structure: str, state: G.GateState, sizing: SBSizing) -> dict:
     base = P.position_row(underlying, structure, entry, expiry, spot, x_t, strikes, legs, sizing, 1.0)
-    return {"ticker": underlying, "E": entry, "variant": VARIANT_B1, "pre": entry, "post": expiry, **base,
+    return POL.stamp({"ticker": underlying, "E": entry, "variant": VARIANT_B1, "pre": entry, "post": expiry, **base,
             "entry_tier_max": max(l.entry.tier for l in legs), "graded": False, "settle_close": None, "settle_source": None,
-            "legs_json": json.dumps([ST.leg_record(l) for l in legs]), **_leg_columns(legs), **P._gate_fields(state, "both")}
+            "legs_json": json.dumps([ST.leg_record(l) for l in legs]), **_leg_columns(legs), **P._gate_fields(state, "both")},
+                     SB_POLICY_ID, POL.ROLE_CHAMPION, state.reason)
 
 
 def entry_candidates(underlying: str, entry: date, rows: pd.DataFrame, state: G.GateState, x_t: float | None,
@@ -134,6 +138,24 @@ def entry_candidates(underlying: str, entry: date, rows: pd.DataFrame, state: G.
             continue
         legs = SB.build_legs(underlying, expiry, sub, marks, None, structure)
         res.trades.append(_trade_row(underlying, entry, expiry, spot, x_t, sub, legs, structure, state, sizing))
+    return res
+
+
+def _forced_on(state: G.GateState) -> G.GateState:
+    """The same inputs and reason string with the verdict forced ON; UNKNOWN stays UNKNOWN."""
+    if not state.known:
+        return state
+    return G.GateState(state.date, state.asof, state.vix, state.vix3m, state.x, state.x_median, state.contango,
+                       state.level_ok, True, True, state.reason)
+
+
+def exploration_candidates(underlying: str, entry: date, rows: pd.DataFrame, state: G.GateState, x_t: float | None,
+                           params: SBParams, is_session: IsSession, structures: tuple[str, ...] = SB_STRUCTURES) -> EntryResult:
+    """The exploration book (DESIGN/100 §6): the champion's entry rules with the gate ignored, one
+    contract per structure, `role = exploration`, the real gate verdict kept on the row. A gate that is
+    UNKNOWN (missing CBOE data) still fails closed: that is a data failure, not a gate verdict."""
+    res = entry_candidates(underlying, entry, rows, _forced_on(state), x_t, params, EXPLORATION_SIZING, is_session, structures)
+    res.trades = [POL.stamp(t, SB_POLICY_ID, POL.ROLE_EXPLORATION, state.reason) for t in res.trades]
     return res
 
 

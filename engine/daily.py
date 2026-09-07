@@ -37,6 +37,11 @@ def ledger_open(d: date) -> bool:
     return d >= LEDGER_OPENS
 
 
+def sb_ledger_dir(ledger_dir: str) -> str:
+    """The S-B ledger lives beside the S-A one: `<ledger_dir>/sb` (the default is `LEDGER_SB_DIR`)."""
+    return os.path.join(ledger_dir, "sb")
+
+
 def preflight(d: date) -> dict:
     cmd = [sys.executable, os.path.join(SCRIPTS, "preflight.py"), "--date", d.isoformat(), "--json"]
     try:
@@ -148,7 +153,7 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
     running = season_running(L.read_ledger(ledger_dir), earnings_events.season_of(d))
     signals = assemble(d, pf, mart, cands, graded, dropped, running,
                        {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open},
-                       SD.nightly(con, d, force_ledger))
+                       SD.nightly(con, d, force_ledger, sb_ledger_dir(ledger_dir)))
     write_outputs(signals, os.path.join(out_root, d.isoformat()))
     return signals
 
