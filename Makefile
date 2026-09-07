@@ -63,3 +63,10 @@ power:            ## n_required for a challenger: make power ARGS='--strategy sb
 
 adjudicate:       ## register / run / champion / gate: make adjudicate ARGS='champion --strategy sb --n-required 26'
 	$(PY) scripts/adjudicate.py $(ARGS)
+
+# ---- G6: expiration-day pinning (findings/market-analysis RESEARCH/47 §2 G6) -------------------
+.PHONY: expiry-pinning
+
+expiry-pinning:   ## build g6_pins.parquet + rate tables/verdict -> findings artifacts/edge-gaps/g6
+	$(PY) scripts/expiry_pinning.py build
+	$(PY) scripts/expiry_pinning.py report

@@ -5,6 +5,9 @@ bh_reject         Benjamini-Hochberg at a given FDR across the primary tests
 deflated_sharpe   Bailey & Lopez de Prado (2014): SR, the expected max SR under the null for the
                   trial count (SR*), their difference, and the PSR at SR* (the DSR probability)
 pbo               probability of backtest overfitting by CSCV over user-supplied blocks
+binomial_test     two-sided exact binomial test of a rate against a null proportion
+mcnemar_test      exact McNemar test on a paired binary comparison's discordant-pair counts
+nw_t              Newey-West (Bartlett kernel) mean test for an ordered, autocorrelated series
 """
 from __future__ import annotations
 
@@ -151,6 +154,28 @@ def pbo(pnl: pd.DataFrame, block_ids) -> dict:
     logits = np.asarray(logits)
     return {"pbo": float((logits < 0).mean()), "mean_logit": float(logits.mean()),
             "n_combinations": int(len(logits)), "n_configs": int(n_cfg), "n_blocks": int(n_blocks)}
+
+
+def binomial_test(successes: int, n: int, p0: float) -> dict:
+    """Two-sided exact binomial test of an observed rate against a null rate `p0` (e.g. a
+    pooled pin rate against a baseline rate treated as the null). NaN fields when n == 0."""
+    if n == 0:
+        return {"n": 0, "successes": 0, "rate": float("nan"), "p0": float(p0), "p": float("nan")}
+    res = sps.binomtest(int(successes), int(n), float(p0), alternative="two-sided")
+    return {"n": int(n), "successes": int(successes), "rate": successes / n, "p0": float(p0),
+            "p": float(res.pvalue)}
+
+
+def mcnemar_test(b: int, c: int) -> dict:
+    """Exact McNemar test on the discordant-pair counts of a paired binary comparison: `b` is
+    the count where the first condition was true and the second false, `c` the reverse. NaN
+    when there are no discordant pairs."""
+    b, c = int(b), int(c)
+    n = b + c
+    if n == 0:
+        return {"b": 0, "c": 0, "n": 0, "p": float("nan")}
+    p = float(min(2 * sps.binom.cdf(min(b, c), n, 0.5), 1.0))
+    return {"b": b, "c": c, "n": n, "p": p}
 
 
 def nw_t(x, lag: int) -> dict:

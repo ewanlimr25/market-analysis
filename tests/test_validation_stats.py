@@ -100,3 +100,39 @@ def test_deflated_sharpe_probability_agrees_with_purgedcv():
     x = rng.normal(0.01, 0.05, size=300)
     ours = S.deflated_sharpe(x, n_trials=6, var_sharpe=0.002)["dsr_prob"]
     assert ours == pytest.approx(deflated_sharpe_ratio(x, 6, 0.002), abs=2e-2)
+
+
+def test_binomial_test_matches_scipy_binomtest():
+    from scipy import stats as sps
+    r = S.binomial_test(successes=62, n=100, p0=0.5)
+    ref = sps.binomtest(62, 100, 0.5, alternative="two-sided")
+    assert r["n"] == 100 and r["successes"] == 62 and r["rate"] == pytest.approx(0.62)
+    assert r["p"] == pytest.approx(ref.pvalue)
+
+
+def test_binomial_test_symmetric_rate_is_not_significant():
+    r = S.binomial_test(successes=50, n=100, p0=0.5)
+    assert r["p"] == pytest.approx(1.0)
+
+
+def test_binomial_test_empty_sample_is_nan():
+    r = S.binomial_test(successes=0, n=0, p0=0.5)
+    assert r["n"] == 0 and np.isnan(r["p"])
+
+
+def test_mcnemar_test_known_example():
+    # Classic textbook 2x2: 10 discordant one way, 20 the other -> exact binomial p on n=30
+    from scipy import stats as sps
+    r = S.mcnemar_test(b=10, c=20)
+    expected_p = min(2 * sps.binom.cdf(10, 30, 0.5), 1.0)
+    assert r["n"] == 30 and r["p"] == pytest.approx(expected_p)
+
+
+def test_mcnemar_test_symmetric_discordance_is_not_significant():
+    r = S.mcnemar_test(b=15, c=15)
+    assert r["p"] == pytest.approx(1.0)
+
+
+def test_mcnemar_test_no_discordant_pairs_is_nan():
+    r = S.mcnemar_test(b=0, c=0)
+    assert r["n"] == 0 and np.isnan(r["p"])
