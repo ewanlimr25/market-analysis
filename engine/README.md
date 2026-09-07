@@ -23,6 +23,7 @@ make backtest-sg             # S-G: pre-earnings ramp, day -3/-5 long straddle/s
 make report-sg                # S-G: season table, BH, DSR, PBO, tail, spread halves, ramp decomposition, go/no-go -> data/backtest/g3_report.md
 make intraday-rv             # build data/mart/intraday_rv (IRV_DATE=<d> for one day, else the whole panel; DAYS=N caps it)
 make earnings-history        # build data/mart/earnings_history/{events,summary}.parquet (LIMIT=N caps the ticker set)
+make cross-section           # weekly IV-spread/skew/O-S cross-section -> data/backtest/g4_factors.parquet, g4_results.json (RESEARCH/47 G4/G5; standalone, not part of `make daily`)
 ```
 
 | module | what |
@@ -64,6 +65,10 @@ make earnings-history        # build data/mart/earnings_history/{events,summary}
 | `mart/intraday_rv.py` | one row per (underlying, day): RV5, Parkinson and Garman-Klass from the 5-minute `underlying_price` path, open/close and close-to-close returns, quality flag (G7, `findings/RESEARCH/47-edge-gaps.md` §2 G7) |
 | `mart/earnings_history.py` | per-name realized earnings-move history: Yahoo 10y bars joined to `earnings_events`' dates on its AMC/BMO alignment, plus a point-in-time trailing summary; a **verified blocker** limits Finnhub's own historical depth, see the module docstring (G7) |
 | `scripts/g7_rv_comparison.py` | the S-C-universe comparison of RV5 / close-to-close / Parkinson realized vol and the implied-minus-realized premium under each (G7 task 2; not consumed anywhere until `DESIGN/90` is edited) |
+| `research/xs_factors.py` | pure factor construction: delta matching/interpolation (`match_iv_at_delta`), the nearest-30-day expiry, `iv_spread`, `put_skew`, `os_ratio` (RESEARCH/47 G4/G5) |
+| `research/xs_stats.py` | per-week Spearman rank-IC and decile spread, cross-sectional OLS residualisation, NW/BH-style aggregation across formations (mean IC, sign consistency, half split, BH q-values) |
+| `research/cross_section.py` | the G4/G5 orchestrator: builds the weekly universe from `daily_contract` (hot-chains coverage) + the screener spine (marketcap, sector, volume) + `join_short_side`, attaches next-week excess (`data/returns.parquet`) and the one-week `d_iv_spread`, runs the 8 pre-registered tests (4 factors x raw/residual) with BH q-values, the power/projected-date read (`engine.improve.power`) and the CBOE-chain-vs-hot-chains skew data-quality check; `make cross-section` -> `data/backtest/g4_factors.parquet` / `g4_results.json` |
+| `strategies/xs.py` | the G4/G5 exploration-row generator: top/bottom-decile paper rows per factor, ten names a side, `policy_id="xs-1.0"`, `role="exploration"`, direction from the pre-registered hypothesis sign; `scripts/xs_rows.py --date` is a dry run (prints rows, writes nothing to `ledger/`) |
 
 The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 2026-09-11; before those dates
 `make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.

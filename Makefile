@@ -109,3 +109,8 @@ g1-fills:         ## fill-quality over 103 days of All Options -> data/backtest/
 
 g1-remark:        ## re-mark the frozen S-A rows (a / b1 / b2 / ab1 / ab2) -> data/backtest/g1_remarked.parquet
 	$(PY) scripts/g1_remark.py
+# ---- G4/G5: weekly IV spread, skew and O/S ratio cross-section (RESEARCH/47 §2 G4/G5) ---------
+.PHONY: cross-section
+
+cross-section:     ## weekly IV-spread/skew/O-S cross-section -> data/backtest/g4_factors.parquet, g4_results.json
+	$(PY) scripts/cross_section.py $(ARGS)
