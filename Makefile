@@ -47,6 +47,13 @@ report-sb:        ## sleeve tables, BH, DSR, PBO, month rule, tail, overlap, gat
 
 cboe-chain:        ## fetch+store the full CBOE option chain for SPY, QQQ and SYMBOLS=... -> data/mart/cboe_chain/
 	$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ $(SYMBOLS)
+# ---- G9: short interest, borrow, Reg SHO (RESEARCH/47 §2 G9; standalone, not part of `make daily`) --
+.PHONY: short-interest
+
+short-interest:    ## refresh FINRA short interest (full universe) + Reg SHO + IBKR borrow for DATE
+	$(PY) -m engine.mart.short_interest --refresh --universe data/universe.json
+	$(PY) -m engine.mart.regsho --refresh --date $(DATE)
+	$(PY) -m engine.mart.borrow --refresh --date $(DATE)
 
 # ---- Improvement process (findings/market-analysis DESIGN/100, D22) ---------------------------
 .PHONY: power adjudicate

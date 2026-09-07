@@ -17,6 +17,7 @@ make backtest-sb             # S-B: three-year proxy + marked panel run -> data/
 make report-sb               # S-B: sleeve tables, BH, DSR, PBO, month rule, tail, overlap, go/no-go -> data/backtest/sb_report.md
 make index-vol               # refresh data/mart/index_vol/ from the CBOE public CSVs (the nightly does this itself)
 make cboe-chain               # fetch+store the full SPY/QQQ (+ SYMBOLS=...) CBOE option chain -> data/mart/cboe_chain/ (RESEARCH/47 G8; standalone, not part of `make daily`)
+make short-interest DATE=2026-09-07  # FINRA short interest (full universe) + Reg SHO + IBKR borrow (RESEARCH/47 G9; standalone, not part of `make daily`)
 ```
 
 | module | what |
@@ -44,6 +45,11 @@ make cboe-chain               # fetch+store the full SPY/QQQ (+ SYMBOLS=...) CBO
 | `validation/sb_harness.py`, `validation/run_sb_report.py` | NW and expiry-clustered t, BH, deflated Sharpe (two benchmarks), PBO, month rule, tail, overlap, gate modes, go/no-go (DESIGN/80 §6) |
 | `sb_daily.py` | the S-B nightly step: CBOE refresh (fail-soft), gate tonight and next session, entries on the last session of the week, grading at expiry into `ledger/sb/` (DESIGN/80 §7) |
 | `mart/cboe_chain.py`, `mart/cboe_chain_derived.py` | the full option chain from CBOE's free delayed API, stored write-once at `data/mart/cboe_chain/symbol=<SYM>/date=<date>/`; GEX, 25-delta skew, ATM IV, put-call OI ratio (RESEARCH/47 G8; `make cboe-chain`, standalone) |
+| `mart/short_interest.py` | FINRA consolidated short interest, one POST per symbol (full history), write-once at `data/mart/short_interest/settlement=<date>/`; `load_short_interest(as_of)` applies a conservative 9-trading-day publication lag (RESEARCH/47 G9; `make short-interest`, standalone) |
+| `mart/borrow.py` | IBKR stock-loan availability (`usa.txt` via `ftp2.interactivebrokers.com`, user `shortstock`), daily snapshots at `data/mart/borrow/date=<date>/`, fail-soft `load_borrow` (RESEARCH/47 G9) |
+| `mart/regsho.py` | FINRA Reg SHO daily short volume, `data/mart/regsho/date=<date>/`; facilitation volume, control variable only, never a signal (RESEARCH/30 §5, RESEARCH/47 G9) |
+| `mart/finviz_short.py` | `short_float(ticker)`, a thin fail-soft wrapper on `fz quote --agent`, on-demand single-ticker use only (RESEARCH/47 G9) |
+| `features/short_side.py` | `join_short_side`: attaches `short_interest`, `days_to_cover`, `si_change_pct` (point-in-time) and `borrow_fee` onto a screener spine -- the control column G4 needs (RESEARCH/47 G4/G9) |
 
 The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 2026-09-11; before those dates
 `make daily` writes `analyses/daily/<date>/` but does not touch `ledger/` unless `--force-ledger` is passed.
