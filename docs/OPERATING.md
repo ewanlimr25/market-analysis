@@ -117,6 +117,11 @@ timing). This is the gate-effectiveness cohort; it accrues on its own.
 
 **Graded today:** S-A rows whose exit was this morning, with the net P&L from real marks.
 
+**Exploration book tonight (S-A):** from 10-01, both structures at one contract for every earnings event
+the engine can price (a markable ATM pair in the 1B to 100B load band), whatever F1..F8 and the caps
+said, with the first failing filter (or `PASS`) as `gate_verdict`. Same purpose as the S-B exploration
+book: the filter chain is graded against what it refused at the season read.
+
 **Season to date:** running S-A ledger stats. `ledger CLOSED (before 2026-10-01)` is correct until then.
 
 **S-B state** (the strategy that can launch):
@@ -198,6 +203,42 @@ is information, not a reason to change anything before the read.
   journal under `analyses/scan` and `analyses/weekly` is read-only history.
 - **Commit every night** (`analyses/daily`, `ledger`). Do not push without deciding to; the repo is
   public.
+
+## 6a. Changing a strategy (the improvement process, DESIGN/100)
+
+The weekly audit loops of the two retired fleets re-tuned prompts on n < 30 and converged on silence
+(`findings/uw-daily-analysis/RESEARCH/93`). Here a strategy changes in exactly one way:
+
+1. **Measure weekly, in code, and change nothing.** `make report-sb`, `make report`, the desk tables. No
+   parameter, cap, gate or status moves outside step 4.
+2. **Register one challenger** from the strategy's idea ledger (`DESIGN/80 §8`, `70 §7.4`), one parameter,
+   after the champion's season read (the first is 2026-12-01):
+   `make adjudicate ARGS="register --strategy sb --policy-id sb-c1 --idea 'VIX floor 15' --param vix_floor=15 --min-effect 0.01"`.
+   `n_required` comes from `make power` (the champion's realised sd, inflated for the Newey-West lag) and
+   fixes the adjudication date; the file lands in `ledger/challengers/` with a hash of the adjudication
+   script. Commit it before the first shadow night. One open challenger per strategy.
+3. **Run the challenger in shadow** under `role = challenger` with its own `policy_id`. The runner for a
+   given parameter is built with the first registration; it writes rows beside the champion's on the same
+   nights and never touches the champion's book.
+4. **Adjudicate once, on the date:** `make adjudicate ARGS="run --policy sb-c1"`. Before the date it prints
+   NOT_DUE and writes nothing; on the date it writes `ledger/adjudications/sb-c1.json` with PROMOTE or FAIL and
+   appends to `LOG.md` (INSUFFICIENT prints the count and writes nothing, so it can run again once the units
+   have accrued). It refuses to run twice and refuses an edited script. An early
+   FAIL fires at half `n_required` if the paired mean is below `-min_effect`. PROMOTE prints the two edits
+   to make by hand (the policy id in `engine/config.py` and the frozen-params test) and is recorded in
+   `DECISIONS.md`.
+5. **Grade the champion and its gate at every season read:** `make adjudicate ARGS="champion --strategy sb
+   --n-required 26"` (the t part of the bar; the month rule, DSR and tail stay in `make report-sb`) and
+   `make adjudicate ARGS="gate --strategy sb --min-effect 0.01 --n-required 20"`, which compares the
+   exploration book's gate-ON units to its gate-OFF units. A gate that does not earn its keep becomes a
+   challenger candidate for removal; it is never removed by the read itself.
+6. **Kill rules** (`DESIGN/100 §8`): three consecutive FAILs close a strategy's idea ledger for a season;
+   four season reads without a launched champion make the engine a measurement tool, and that is written
+   down too.
+
+Every ledger row carries `policy_id`, `role` and `gate_verdict`; rows are never pooled across them. The
+exploration books (S-B from 09-11, S-A from 10-01) are what make step 5 possible: one paper contract per
+sleeve or per priceable event, entered whatever the gate or the filters said, with the verdict on the row.
 
 ## 7. Where things live
 

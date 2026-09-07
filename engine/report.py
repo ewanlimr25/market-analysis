@@ -7,8 +7,9 @@ NO_EVENT = "no event tonight clears the filters"
 CANDIDATE_COLS = ["ticker", "variant", "structure", "expiry", "k", "k_up", "k_dn", "credit_entry",
                   "credit_net_pct", "risk_usd", "contracts", "entry_tier_max", "cap_pass"]
 SUPPRESSED_COLS = ["ticker", "variant", "first_fail"]
-GRADED_COLS = ["ticker", "variant", "structure", "net_pct", "net_usd", "exit_tier_max", "model_exit"]
-RUNNING_COLS = ["variant", "structure", "n", "dates", "mean_net_pct", "t", "net_usd_total"]
+GRADED_COLS = ["ticker", "variant", "structure", "role", "net_pct", "net_usd", "exit_tier_max", "model_exit"]
+RUNNING_COLS = ["policy_id", "role", "variant", "structure", "n", "dates", "mean_net_pct", "t", "net_usd_total"]
+EXPLORATION_COLS = ["ticker", "structure", "expiry", "k", "credit_entry", "credit_net_pct", "risk_usd", "gate_verdict"]
 PCT_COLS = {"credit_net_pct", "net_pct", "mean_net_pct"}
 
 
@@ -45,12 +46,17 @@ def render(signals: dict) -> str:
     parts.append(table(cands, CANDIDATE_COLS) if cands else f"_{NO_EVENT}._")
     sup = signals.get("suppressed", [])
     parts += ["", f"## Suppressed ({len(sup)})", table(sup, SUPPRESSED_COLS) if sup else "_none_"]
+    explore = signals.get("exploration", [])
+    if explore or signals.get("exploration_dropped"):
+        parts += ["", f"## Exploration book tonight ({len(explore)}; one contract per structure for every priceable event, filters ignored, first failing filter recorded)",
+                  table(explore, EXPLORATION_COLS) if explore else "_none priceable_"]
     graded = signals.get("graded", [])
     parts += ["", f"## Graded today ({len(graded)})", table(graded, GRADED_COLS) if graded else "_none due_"]
     running = signals.get("season_running", [])
     parts += ["", "## Season to date (forward ledger)", table(running, RUNNING_COLS) if running else "_ledger empty_"]
     led = signals.get("ledger", {})
-    parts += ["", f"Ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), graded {led.get('graded', 0)}; "
+    parts += ["", f"Ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), exploration {led.get('exploration_emitted', 0)} "
+                  f"(skipped {led.get('exploration_skipped', 0)}), graded {led.get('graded', 0)}; "
                   f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-10-01; nothing written)'}."]
     parts += ["", "## S-B state", render_sb(signals.get("sb_state")), ""]
     return "\n".join(parts)

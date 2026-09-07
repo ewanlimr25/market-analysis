@@ -39,3 +39,12 @@ backtest-sb:      ## proxy (3y) + marked (panel) S-B runs -> data/backtest/sb_*.
 
 report-sb:        ## sleeve tables, BH, DSR, PBO, month rule, tail, overlap, gate modes, go/no-go -> data/backtest/sb_report.md
 	$(PY) -m engine.validation.run_sb_report
+
+# ---- Improvement process (findings/market-analysis DESIGN/100, D22) ---------------------------
+.PHONY: power adjudicate
+
+power:            ## n_required for a challenger: make power ARGS='--strategy sb --min-effect 0.01'
+	$(PY) scripts/power.py $(ARGS)
+
+adjudicate:       ## register / run / champion / gate: make adjudicate ARGS='champion --strategy sb --n-required 26'
+	$(PY) scripts/adjudicate.py $(ARGS)

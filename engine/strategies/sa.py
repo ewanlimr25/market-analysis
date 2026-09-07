@@ -24,6 +24,9 @@ from engine.strategies import sa_filters as F
 from engine.strategies import sa_structures as ST
 
 VARIANT_A1, VARIANT_A2 = "A1", "A2"
+# The exploration book (DESIGN/100 §6): one contract per structure; the sizing floors are 1 at equity 0.
+EXPLORATION_SIZING = SizingParams(equity=0.0)
+REASON_NO_ATM_PAIR = "no_atm_pair"
 VARIANTS = (VARIANT_A1, VARIANT_A2)
 MCAP_MID_MAX = 10e9
 
@@ -50,6 +53,8 @@ class RunResult:
     trades: pd.DataFrame
     suppressed: pd.DataFrame
     dropped: pd.DataFrame
+    exploration: pd.DataFrame = field(default_factory=pd.DataFrame)          # DESIGN/100 §6
+    exploration_dropped: pd.DataFrame = field(default_factory=pd.DataFrame)
 
 
 def select_legs(event: Mapping[str, Any], pre_rows: pd.DataFrame, params: SAParams) -> tuple[Selection | None, dict]:
@@ -209,6 +214,38 @@ def evaluate_event(event: Mapping[str, Any], pre_rows: pd.DataFrame, resolver: M
     res.dropped.extend(dropped)
     res.trades.extend({**r, "variant": v} for v in passing for r in rows)
     return res
+
+
+def exploration_event(event: Mapping[str, Any], pre_rows: pd.DataFrame, resolver: M.MarkResolver, params: SAParams,
+                      cost_mult: float = 1.0, with_exit: bool = False) -> EventResult:
+    """The exploration book for one event (DESIGN/100 §6): both structures at one contract for any event
+    with a markable ATM pair (F5), whatever F1..F4, F6..F8 and the caps say. `gate_verdict` is the first
+    failing A1 filter, or PASS, so the filter chain is graded against what it refused."""
+    flags = F.cheap_filters(event, params)
+    sel, f56 = select_legs(event, pre_rows, params)
+    res = EventResult(flags={**flags, **f56})
+    if sel is None:
+        res.dropped.append({**_event_keys(event), "structure": "both", "reason": REASON_NO_ATM_PAIR})
+        return res
+    verdict = first_failing(res.flags, VARIANT_A1, True) or POL.SA_GATE_PASS
+    rows, dropped = _build_structures(event, sel, resolver, EXPLORATION_SIZING, cost_mult, with_exit)
+    res.dropped.extend(dropped)
+    res.trades.extend(POL.stamp({**r, "variant": VARIANT_A1, "cap_pass": True, "cap_rank": 0},
+                                SA_POLICY_ID, POL.ROLE_EXPLORATION, verdict) for r in rows)
+    return res
+
+
+def exploration_run(events: pd.DataFrame, pre_rows: pd.DataFrame, resolver: M.MarkResolver, params: SAParams,
+                    cost_mult: float = 1.0, with_exit: bool = False) -> RunResult:
+    """`exploration_event` over every event; trades in `.trades`, unpriceable events in `.dropped`."""
+    groups = {k: g for k, g in pre_rows.groupby(["underlying_symbol", "date"], sort=False)} if len(pre_rows) else {}
+    empty = pre_rows.iloc[0:0]
+    trades, dropped = [], []
+    for event in events.sort_values(["pre", "ticker", "E"]).to_dict("records"):
+        r = exploration_event(event, groups.get((event["ticker"], F.to_date(event["pre"])), empty), resolver, params, cost_mult, with_exit)
+        trades.extend(r.trades)
+        dropped.extend(r.dropped)
+    return RunResult(pd.DataFrame(trades), pd.DataFrame(), pd.DataFrame(dropped))
 
 
 def run(events: pd.DataFrame, pre_rows: pd.DataFrame, resolver: M.MarkResolver, params: SAParams,

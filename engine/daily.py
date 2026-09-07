@@ -18,6 +18,7 @@ import pandas as pd
 from engine import calendar as cal
 from engine import ledger as L
 from engine import marking as M
+from engine import policy as POL
 from engine import portfolio
 from engine import report as R
 from engine import schema as SCH
@@ -74,9 +75,13 @@ def candidates(con, d: date) -> sa.RunResult:
     iv30d = sa_data.load_iv30d(con, set(events.ticker), {d})
     rows = {(r["option_chain_id"], F.to_date(r["date"])): r for r in pre_rows.to_dict("records")}
     model = sa_data.build_model_inputs(prices, iv30d, spreads, pd.DataFrame(), {})
-    res = sa.run(events, pre_rows, M.MarkResolver(rows, model), SA_PARAMS, SIZING, with_exit=False)
+    resolver = M.MarkResolver(rows, model)
+    res = sa.run(events, pre_rows, resolver, SA_PARAMS, SIZING, with_exit=False)
     trades = portfolio.apply_caps(res.trades, SIZING) if len(res.trades) else res.trades
-    return sa.RunResult(trades, res.suppressed, res.dropped)
+    # The exploration book (DESIGN/100 §6) covers every event whose contracts were loaded (the load band).
+    in_band = events[events.marketcap.between(LOAD_MCAP_LO, LOAD_MCAP_HI)]
+    ex = sa.exploration_run(in_band, pre_rows, resolver, SA_PARAMS, with_exit=False) if len(in_band) else sa.RunResult(pd.DataFrame(), pd.DataFrame(), pd.DataFrame())
+    return sa.RunResult(trades, res.suppressed, res.dropped, ex.trades, ex.dropped)
 
 
 def _exit_legs(sig: dict, resolver: M.MarkResolver, post: date) -> list[ST.Leg] | None:
@@ -126,11 +131,16 @@ def season_running(ledger: pd.DataFrame, season: str) -> list[dict]:
     if ledger.empty:
         return []
     sub = ledger[ledger.season == season]
+    if sub.empty:
+        return []
+    if "role" not in sub.columns:                       # rows written before DESIGN/100
+        sub = sub.assign(policy_id="sa-1.0", role=POL.ROLE_CHAMPION)
     out = []
-    for (v, s), g in sub.groupby(["variant", "structure"]):
-        ct = S.cluster_t(g.net_pct, g.pre.astype(str))
-        out.append({"variant": v, "structure": s, "n": ct["n"], "dates": ct["G"], "mean_net_pct": ct["mean"],
-                    "t": ct["t"], "net_usd_total": float(g.net_usd.sum())})
+    for (pid, role), part in POL.by_policy(sub):
+        for (v, s), g in part.groupby(["variant", "structure"]):
+            ct = S.cluster_t(g.net_pct, g.pre.astype(str))
+            out.append({"policy_id": pid, "role": role, "variant": v, "structure": s, "n": ct["n"], "dates": ct["G"],
+                        "mean_net_pct": ct["mean"], "t": ct["t"], "net_usd_total": float(g.net_usd.sum())})
     return out
 
 
@@ -149,10 +159,12 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
     graded, dropped = grade_due(con, d, ledger_dir)
     is_open = ledger_open(d) or force_ledger
     emitted = L.emit(ledger_dir, cands.trades, d) if is_open and len(cands.trades) else (0, 0)
+    explored = L.emit(ledger_dir, cands.exploration, d) if is_open and len(cands.exploration) else (0, 0)
     n_graded = L.grade(ledger_dir, graded, d)[0] if is_open and len(graded) else 0
     running = season_running(L.read_ledger(ledger_dir), earnings_events.season_of(d))
     signals = assemble(d, pf, mart, cands, graded, dropped, running,
-                       {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open},
+                       {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open,
+                        "exploration_emitted": explored[0], "exploration_skipped": explored[1]},
                        SD.nightly(con, d, force_ledger, sb_ledger_dir(ledger_dir)))
     write_outputs(signals, os.path.join(out_root, d.isoformat()))
     return signals
@@ -165,6 +177,7 @@ def assemble(d: date, pf: dict, mart: dict, cands: sa.RunResult, graded: pd.Data
     body = {"date": d.isoformat(), "season": earnings_events.season_of(d), "preflight": pf, "mart": mart,
             "candidates": _jsonable(cands.trades), "suppressed": _jsonable(cands.suppressed),
             "dropped": _jsonable(both_dropped), "graded": _jsonable(graded), "season_running": running,
+            "exploration": _jsonable(cands.exploration), "exploration_dropped": _jsonable(cands.exploration_dropped),
             "ledger": ledger_counts, "sb_state": sb_state}
     return SCH.clean(SCH.stamp(body))
 

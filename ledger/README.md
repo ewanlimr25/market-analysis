@@ -8,7 +8,15 @@ rows). The row key includes `(policy_id, role)`, so two policies never share a r
 
 `forward_signals.parquet`: one row per (ticker, E, variant, structure, policy_id, role) that `make daily` emitted on the
 pre-print night, with the entry marks, tiers, size and the legs needed to grade it.
-`forward_ledger.parquet`: one row per graded signal, written once at `post`. Rows are never re-derived
+`forward_ledger.parquet`: one row per graded signal, written once at `post`. From 2026-10-01 the S-A files also
+hold the **exploration book** (`role = exploration`, `DESIGN/100 §6`): one contract per structure for every
+priceable event in the load band, `gate_verdict` = the first failing filter or `PASS`.
+
+## `challengers/` and `adjudications/`
+
+`challengers/<policy_id>.json` is a registered challenger (one open per strategy; `scripts/adjudicate.py register`).
+`adjudications/<name>.json` is a verdict written once (`run`, `champion`, `gate`), with `LOG.md` as the running
+index. Neither is ever edited by hand. Rows are never re-derived
 from the vendor feed (DESIGN/70 §6). A Season 3 trade that is not in this ledger was never a signal.
 
 ## `sb/` — the S-B forward ledger (opens 2026-09-11)

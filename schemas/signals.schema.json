@@ -100,6 +100,19 @@
   },
   "sb_state": {
    "$ref": "#/$defs/sb_state"
+  },
+  "exploration": {
+   "type": "array",
+   "description": "DESIGN/100 \u00a76: the S-A exploration book, one contract per structure for every priceable event in the load band, role = exploration, gate_verdict = first failing filter or PASS",
+   "items": {
+    "$ref": "#/$defs/sa_position"
+   }
+  },
+  "exploration_dropped": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/sa_dropped"
+   }
   }
  },
  "$defs": {
@@ -895,6 +908,16 @@
     },
     "net_usd_total": {
      "type": "number"
+    },
+    "policy_id": {
+     "type": "string"
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration"
+     ]
     }
    }
   },
