@@ -131,5 +131,5 @@ loaders-weekly:    ## weekly (cron, Saturday): FINRA short interest, full univer
 # ---- Watch basket (findings/market-analysis DESIGN/110-watch-basket.md; exploration-only, R1) --
 .PHONY: watch-retro
 
-watch-retro:       ## R1 retrospective: 17 conditions x panel -> data/backtest/wb_conditions.parquet, wb_retro.json
+watch-retro:       ## R1 retrospective: 20 conditions x panel -> data/backtest/wb_conditions.parquet, wb_retro.json
 	$(PY) scripts/watch_retro.py
