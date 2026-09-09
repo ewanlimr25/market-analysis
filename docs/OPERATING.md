@@ -215,6 +215,8 @@ is information, not a reason to change anything before the read.
 | A report shows a `model` tier on an entry leg | no print in the late window | the engine already refuses the entry; nothing to do |
 | `make daily` for a date already run | re-run | safe; ledger keys are unique and nothing is duplicated |
 | A number in an old report looks wrong | do not edit the report or the ledger | record it in `findings/.../DECISIONS.md`; ledger rows are never re-derived |
+| `[watch.bars] Yahoo fetch failed for <T>: HTTP Error 404` | a share class the panel writes concatenated (`BRKB`) and Yahoo hyphenates (`BRK-B`) | add the pair to `YAHOO_ALIASES` in `scripts/chart.py`, the single Yahoo boundary. The name is not dropped loudly: its bar conditions simply go null |
+| The watch basket's bar-derived conditions (`C-DIV`, `C-AVWAP`, `C-POC`, `C-SWING`, `C-RSI`) all read `?` | the bars cache does not reach the night being evaluated | expected only if the fetch failed; `bars.py` refreshes to the as-of session on its own, recovering the current session from `chart.session_bar` when Yahoo's multi-day array still lags. A whole column of `?` means the network pass failed, not that the conditions are false |
 
 ## 6. Rules that are not optional
 

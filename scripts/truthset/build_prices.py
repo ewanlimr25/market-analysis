@@ -21,19 +21,13 @@ OUT_PARQUET = os.path.join(DATA, "prices.parquet")
 # lead for ATR(14)/regime context; tail through last panel date
 START = "2026-01-15"
 
-# The panel writes share classes concatenated (BRKB); the Yahoo chart API wants them
-# hyphenated (BRK-B). Both are plain A-Z strings, so nothing about BRKB *looks* like it
-# needs translating -- it just 404s, and a 404 here is a ticker with no price rows, which
-# is the fail-open gap this cache exists to close. Fetch under the alias, store under the
-# PANEL's symbol: features.parquet is keyed BRKB, so storing BRK-B would leave the join
-# just as broken, only harder to spot.
-YAHOO_ALIASES = {
-    "BRKB": "BRK-B",
-    "BFB": "BF-B",
-    "HEIA": "HEI-A",
-    "MOGA": "MOG-A",
-    "PBRA": "PBR-A",
-}
+# Fetch under the Yahoo alias, store under the PANEL's symbol: features.parquet is keyed BRKB,
+# so storing BRK-B would leave the join just as broken, only harder to spot. The map itself now
+# lives at the shared Yahoo boundary, `scripts/chart.py` -- this file kept the only copy until
+# 2026-09-08, when the watch basket hit the same 404 on four names because it had no copy at all,
+# and the one copy that existed was missing BFA and UHALB.
+sys.path.insert(0, os.path.join(HERE, ".."))
+from chart import YAHOO_ALIASES  # noqa: E402
 
 def resolve_end():
     """Panel tail date. Defaults to TODAY so the truth set cannot silently rot.

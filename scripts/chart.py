@@ -30,6 +30,30 @@ UA = {"User-Agent": "Mozilla/5.0"}
 # draw. Two hosts is enough: the 2026-08-15 audit emptied 115 hole-y tickers down to 1 this way.
 HOSTS = ("query2", "query1")
 MAX_FETCH_TRIES = 4
+SESSION_RANGE = "1d"   # the only range that serves the CURRENT session -- see `session_bar`
+
+# The UnusualWhales panel writes share classes concatenated (BRKB); the Yahoo chart API wants
+# them hyphenated (BRK-B). Both spellings are plain A-Z strings, so nothing about BRKB *looks*
+# like it needs translating -- it just 404s, and every caller here is fail-soft, so the 404 is
+# booked as "this ticker has no bars" rather than as an error. The 2026-09-08 nightly lost BFB,
+# BRKB, MOGA and PBRA to exactly that. Translation happens at the URL ONLY: every row returned is
+# still labelled with the caller's own symbol, because `features.parquet` and every ledger are
+# keyed on the panel's spelling. `scripts/truthset/build_prices.py` imports this map rather than
+# keeping its own -- one copy drifted from the other for five sessions.
+YAHOO_ALIASES = {
+    "BFA": "BF-A",
+    "BFB": "BF-B",
+    "BRKB": "BRK-B",
+    "HEIA": "HEI-A",
+    "MOGA": "MOG-A",
+    "PBRA": "PBR-A",
+    "UHALB": "UHAL-B",
+}
+
+
+def yahoo_symbol(ticker: str) -> str:
+    """The Yahoo chart-API spelling of a panel symbol (`BRKB` -> `BRK-B`); unchanged otherwise."""
+    return YAHOO_ALIASES.get(ticker, ticker)
 
 
 def _parse(res: dict) -> tuple[dict[str, dict], list[str], list[dict]]:
@@ -96,9 +120,15 @@ def _apply_splits(by_date: dict[str, dict], splits: list[dict]) -> dict[str, dic
     return out
 
 
+def _chart_url(ticker: str, rng: str, host: str) -> str:
+    """The request URL, under the ticker's Yahoo alias -- split out so the alias is testable
+    without the network."""
+    return (f"https://{host}.finance.yahoo.com/v8/finance/chart/{yahoo_symbol(ticker)}"
+            f"?range={rng}&interval=1d&events=div%2Csplit")
+
+
 def _fetch(ticker: str, rng: str, host: str) -> dict:
-    url = (f"https://{host}.finance.yahoo.com/v8/finance/chart/{ticker}"
-           f"?range={rng}&interval=1d&events=div%2Csplit")
+    url = _chart_url(ticker, rng, host)
     with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25) as r:
         return json.load(r)["chart"]["result"][0]
 
@@ -165,6 +195,49 @@ def bars(ticker: str, rng: str = "6mo") -> list[dict]:
     detect one instead of indexing by position.
     """
     return bars_grid(ticker, rng)[0]
+
+
+def _session_closed(meta: dict) -> bool:
+    """True once the regular session described by `meta` has ended.
+
+    The single-day endpoint serves a LIVE, partial bar while the market is open: its `close` is
+    the current print and its `high`/`low`/`volume` are the day so far. Booking that as a
+    completed session would silently corrupt every window that touches it, so a bar is only
+    accepted once Yahoo's own `regularMarketTime` has reached the regular period's end.
+    """
+    end = ((meta.get("currentTradingPeriod") or {}).get("regular") or {}).get("end")
+    now = meta.get("regularMarketTime")
+    return end is not None and now is not None and now >= end
+
+
+def session_bar(ticker: str) -> dict | None:
+    """The CURRENT session's COMPLETED daily bar, or None when it is not available yet.
+
+    Yahoo publishes the current session into its MULTI-day daily arrays hours late. At 21:15 ET
+    on 2026-09-08 -- five hours after the close, well past the nightly's own run time --
+    `range=5d` still served `close: null` for that day on SPY and on every name sampled, while
+    `range=1d` served the complete bar (O/H/L/C/volume, `close` == `meta.regularMarketPrice`).
+
+    `bars()` deliberately does NOT fold this in: it reads Yahoo's official history, and a
+    trailing null there is a genuine "not published yet", not a hole to heal (`_interior_holes`).
+    Callers that must evaluate something AS OF today ask for the session bar explicitly and merge
+    it themselves, so the recovery is always visible at the call site.
+
+    Returns None -- never raises on a missing/incomplete bar -- when the session is still open,
+    when the bar is not populated, or when the response carries no trading period to judge by.
+    """
+    res = _fetch(ticker, SESSION_RANGE, HOSTS[0])
+    meta = res.get("meta") or {}
+    if not _session_closed(meta):
+        return None
+    by_date, _grid, _splits = _parse(res)
+    if len(by_date) != 1:
+        return None
+    bar = next(iter(by_date.values()))
+    # The trading period and the bar array are separate fields: return the session that was
+    # actually validated, never a different one that happened to be in the array.
+    session_day = dt.datetime.fromtimestamp(meta["regularMarketTime"], dt.UTC).strftime("%Y-%m-%d")
+    return bar if bar["date"] == session_day else None
 
 
 def rets(ticker: str, horizons=(5, 10), rng: str = "6mo") -> dict:

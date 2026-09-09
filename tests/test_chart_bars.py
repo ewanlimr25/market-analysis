@@ -283,3 +283,81 @@ class TestRetsAreDateIndexed:
         out = C.rets("MNST", (10,), "1y")
         # pre-split adj halves to 101.0; a close-based read would book ~-45%.
         assert out["ret10"] == pytest.approx(111.0 / 101.0 - 1)
+
+
+# =============================================================================================
+# Share-class aliases and the current-session read (2026-09-08)
+# =============================================================================================
+
+class TestYahooSymbol:
+    """The panel writes share classes concatenated; Yahoo wants them hyphenated. Both spellings
+    are plain A-Z strings, so an untranslated symbol 404s rather than looking wrong."""
+
+    def test_a_concatenated_share_class_translates_to_the_hyphenated_spelling(self):
+        assert C.yahoo_symbol("BRKB") == "BRK-B"
+        assert C.yahoo_symbol("UHALB") == "UHAL-B"
+        assert C.yahoo_symbol("PBRA") == "PBR-A"
+
+    def test_a_plain_symbol_passes_through_unchanged(self):
+        assert C.yahoo_symbol("AAPL") == "AAPL"
+        assert C.yahoo_symbol("^VIX") == "^VIX"
+
+    def test_the_request_url_carries_the_alias_not_the_panel_symbol(self):
+        assert "/chart/BRK-B?" in C._chart_url("BRKB", "10y", "query2")
+        assert "/chart/AAPL?" in C._chart_url("AAPL", "10y", "query2")
+
+
+def _session_payload(day: str, *, closed: bool = True, close: float | None = 10.5,
+                     bar_day: str | None = None):
+    """A `range=1d` result: one bar plus the `meta` block whose trading period says whether the
+    regular session has ended."""
+    end = _ts(day) + 20 * 3600
+    return {
+        "timestamp": [_ts(bar_day) + 20 * 3600 if bar_day else end],
+        "meta": {"regularMarketTime": end if closed else end - 3600,
+                 "currentTradingPeriod": {"regular": {"start": end - 23400, "end": end}}},
+        "indicators": {
+            "quote": [{"open": [10.0], "high": [10.9], "low": [9.8],
+                       "close": [close], "volume": [1234]}],
+        },
+    }
+
+
+class TestSessionBar:
+    """Yahoo publishes the current session into its MULTI-day daily arrays hours late -- on
+    2026-09-08 at 21:15 ET, `range=5d` still served `close: null` for that day on SPY and on every
+    name sampled, while `range=1d` served the complete bar. A nightly reading only the multi-day
+    array is therefore permanently one session short of its own as-of date."""
+
+    def test_returns_the_bar_once_the_regular_session_has_closed(self, monkeypatch):
+        # Arrange
+        monkeypatch.setattr(C, "_fetch", lambda t, rng, host: _session_payload("2026-09-08"))
+
+        # Act
+        bar = C.session_bar("AI")
+
+        # Assert
+        assert bar["date"] == "2026-09-08"
+        assert bar["close"] == 10.5 and bar["high"] == 10.9 and bar["volume"] == 1234
+        assert bar["adj"] == 10.5          # no adjclose array on this endpoint; close stands in
+
+    def test_returns_none_while_the_session_is_still_open(self, monkeypatch):
+        monkeypatch.setattr(C, "_fetch", lambda t, rng, host: _session_payload("2026-09-08", closed=False))
+        assert C.session_bar("AI") is None
+
+    def test_returns_none_when_the_session_bar_is_not_populated_yet(self, monkeypatch):
+        monkeypatch.setattr(C, "_fetch", lambda t, rng, host: _session_payload("2026-09-08", close=None))
+        assert C.session_bar("AI") is None
+
+    def test_returns_none_when_the_response_carries_no_trading_period(self, monkeypatch):
+        res = _session_payload("2026-09-08")
+        res["meta"] = {}
+        monkeypatch.setattr(C, "_fetch", lambda t, rng, host: res)
+        assert C.session_bar("AI") is None
+
+    def test_returns_none_when_the_bar_is_not_the_session_the_meta_describes(self, monkeypatch):
+        # The trading period and the bar array are separate fields; validating one and returning
+        # the other would hand the caller an unchecked session.
+        res = _session_payload("2026-09-08", bar_day="2026-09-04")
+        monkeypatch.setattr(C, "_fetch", lambda t, rng, host: res)
+        assert C.session_bar("AI") is None

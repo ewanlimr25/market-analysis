@@ -77,7 +77,7 @@ The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 202
 The backtest write-ups live in `~/Development/findings/market-analysis/RESEARCH/45-sa-backtest.md` (S-A) and
 `RESEARCH/46-sb-backtest.md` (S-B); the S-B parameters are frozen by `tests/test_sb_frozen_params.py`.
 
-| `watch/bars.py` | cached daily OHLCV, reusing `mart/earnings_history/bars/` read-only, falling back to its own cache `data/mart/watch/bars/` via `scripts/chart.py`; weekly resample |
+| `watch/bars.py` | cached daily OHLCV, reusing `mart/earnings_history/bars/` read-only, refreshing into its own cache `data/mart/watch/bars/` via `scripts/chart.py`; a caller that names an `as_of` session gets a cache that reaches it (tail refresh, then `chart.session_bar` for the session Yahoo's multi-day array has not published yet); weekly resample |
 | `watch/indicators.py` | Wilder RSI/ATR series, ATR-zigzag pivots (2x reversal), swing structure, anchored VWAP, crossed-within, 60-session/50-bin volume profile (POC + 70% value area), RSI bullish divergence |
 | `watch/conditions.py` | the 20 watch-basket conditions as null-safe pure predicates, thresholds as module constants (DESIGN/110 §2; C-DIV-D and C-POC-A/C-POC-A-LOSS added 2026-09-07 evening) |
 | `watch/basket.py` | `stacks`/`baskets` (LONG/SHORT/VOL/CONFLICT, DESIGN/110 §3) and `assign_episodes`/`episode_count` (the 21-session re-entry rule, §4), generic over baskets, conditions and counts |

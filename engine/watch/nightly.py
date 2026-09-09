@@ -161,15 +161,25 @@ def add_stacks_and_baskets(cond_df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def build_ticker_series_map(tickers: list[str], max_workers: int = BARS_FETCH_WORKERS) -> dict[str, S.TickerSeries | None]:
-    """Fetches (or confirms cached) daily bars for every ticker ONCE, in parallel, and builds each
-    `TickerSeries` from the bars already in hand. Unlike calling `retro.py`'s `warm_bars_cache`
-    followed by the generic per-ticker `build_ticker_series` (R1's own sequence, fine for a
-    one-time 103-night backtest build), a second, separate fetch pass here would hit every
-    permanently-missing ticker's Yahoo 404 (`bars.py`: a failure is never cached) TWICE, every
-    single night, forever -- real repeated network cost the nightly's 30 s budget cannot absorb."""
+def build_ticker_series_map(tickers: list[str], as_of: date,
+                            max_workers: int = BARS_FETCH_WORKERS) -> dict[str, S.TickerSeries | None]:
+    """Brings every ticker's bars up to `as_of` ONCE, in parallel, and builds each `TickerSeries`
+    from the bars already in hand.
+
+    `as_of` is not optional here, and that is the whole point: `evaluate_bar_conditions` needs a
+    bar exactly on the night being evaluated, so a nightly that loads bars without naming its own
+    date silently evaluates 11 of the 20 conditions as null for every name (2026-09-08, the first
+    live run -- both caches had been written once and nothing refreshed them). `bars.py` decides
+    what that costs; here it is one pass, not the two that calling `retro.py`'s `warm_bars_cache`
+    and then the generic per-ticker `build_ticker_series` would make.
+
+    Budget on a 2,000-name universe at `BARS_FETCH_WORKERS`, measured 2026-09-08: ~60 s on a first
+    run of a night, ~30 s to repeat one (parquet reads and series construction, no network). The
+    steady state is the first figure, not the second -- a session just closed is by definition in
+    no cache, so every ticker pays one tail fetch, plus one session fetch while Yahoo's multi-day
+    array still lags."""
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        bars_list = list(pool.map(B.load_daily_bars, tickers))
+        bars_list = list(pool.map(lambda t: B.load_daily_bars(t, as_of=as_of), tickers))
     return {t: S.build_ticker_series(t, daily=bars) for t, bars in zip(tickers, bars_list)}
 
 
@@ -181,7 +191,7 @@ def evaluate_universe(d: date) -> tuple[pd.DataFrame, int]:
                 *BK.BASKET_NAMES]
         return pd.DataFrame(columns=cols), universe_n
     tickers = sorted(universe["ticker"].unique())
-    series_map = build_ticker_series_map(tickers)
+    series_map = build_ticker_series_map(tickers, as_of=d)
     cond_df = evaluate_conditions(universe, series_map)
     cond_df = add_stacks_and_baskets(cond_df)
     return cond_df, universe_n

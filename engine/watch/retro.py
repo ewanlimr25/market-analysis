@@ -35,6 +35,7 @@ import pandas as pd
 from engine import config
 from engine.features.short_side import join_short_side
 from engine.mart import store
+from engine.watch import bars as B
 from engine.watch import basket as BK
 from engine.watch import conditions as C
 from engine.watch import flows as F
@@ -112,17 +113,21 @@ def attach_leap_dp(universe: pd.DataFrame, dates: list[date]) -> pd.DataFrame:
     return out
 
 
-def warm_bars_cache(tickers: list[str], max_workers: int = 16) -> None:
+def warm_bars_cache(tickers: list[str], as_of: date | None = None, max_workers: int = 16) -> None:
     """Fetch (or confirm-cached) daily bars for every ticker up front, in parallel -- a plain
-    HTTP GET releases the GIL while waiting, so threads help even under CPython."""
-    import engine.watch.bars as B
+    HTTP GET releases the GIL while waiting, so threads help even under CPython.
 
+    `as_of` is the panel's LAST night: a cache that stops before it evaluates that night's
+    bar-derived conditions as null for every ticker (`bars.py`, 2026-09-08). Passing the last
+    night covers every earlier one too, since the refresh only ever extends the tail."""
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        list(pool.map(B.load_daily_bars, tickers))
+        list(pool.map(lambda t: B.load_daily_bars(t, as_of=as_of), tickers))
 
 
-def build_ticker_series_map(tickers: list[str]) -> dict[str, S.TickerSeries | None]:
-    return {t: S.build_ticker_series(t) for t in tickers}
+def build_ticker_series_map(tickers: list[str], as_of: date | None = None) -> dict[str, S.TickerSeries | None]:
+    """`as_of` is passed through only so `bars.load_daily_bars` can stop at the first cache that
+    covers it; `warm_bars_cache` has already done any fetching."""
+    return {t: S.build_ticker_series(t, daily=B.load_daily_bars(t, as_of=as_of)) for t in tickers}
 
 
 def _is_missing(x) -> bool:
@@ -216,8 +221,9 @@ def build_panel() -> tuple[pd.DataFrame, dict]:
     universe = attach_leap_dp(universe, dates)
 
     tickers = sorted(universe["ticker"].unique())
-    warm_bars_cache(tickers)
-    series_map = build_ticker_series_map(tickers)
+    panel_end = max(dates) if dates else None
+    warm_bars_cache(tickers, as_of=panel_end)
+    series_map = build_ticker_series_map(tickers, as_of=panel_end)
 
     cond_df = evaluate_conditions(universe, series_map)
     cond_df = add_stacks_and_baskets(cond_df)
