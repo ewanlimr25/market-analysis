@@ -15,6 +15,7 @@ from engine import backtest_sb as B
 from engine.config import SB_DSR_TRIALS, SB_GO_T_MIN, SB_NW_LAG, SB_WINDOWS
 from engine.strategies.sa_data import as_dates
 from engine.validation import sb_harness as H
+from engine.validation.sb_glossary import appendix
 
 PCT = ("mean_ror", "median_ror", "mean_marked", "mean_proxy", "mean_p1", "mean_p2", "mean_p3", "marked_mean_ror",
        "proxy_mean_ror", "gap_ror", "marked_cost_ror", "worst_ror", "best_ror", "mean_win_ror", "mean_without_worst_1pct",
@@ -109,6 +110,7 @@ def build() -> str:
                                                          "n_marked", "mean_marked", "gap_ror", "worst_over_median", "deflated_sr", "deflated_sr_null", "forward_n",
                                                          "c1_proxy", "c2_marked", "c3_month", "c4_dsr", "c4_dsr_null", "c5_scale", "verdict", "note"], pct_cols=PCT)
                          if len(proxy) else "_no proxy positions_"))
+    parts.append(appendix())
     return "\n".join(parts)
 
 

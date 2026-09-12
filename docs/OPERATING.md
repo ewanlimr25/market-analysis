@@ -202,7 +202,8 @@ make backtest && make report                     # S-A: once Season 3 events exi
 make test                                        # 269 unit tests; must stay green
 ```
 
-Read `data/backtest/sb_report.md` §8 (go/no-go as of today). A criterion that flips from pass to fail
+Read `data/backtest/sb_report.md` §8 (go/no-go as of today). The report ends with an appendix that defines every column, symbol and
+verdict it prints (`engine/validation/sb_glossary.py`). A criterion that flips from pass to fail
 is information, not a reason to change anything before the read.
 
 ## 5. When something is off
