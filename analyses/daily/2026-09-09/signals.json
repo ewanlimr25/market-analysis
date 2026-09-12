@@ -1,0 +1,4533 @@
+{
+ "schema_version": "d1.4",
+ "report_kind": "engine-daily",
+ "date": "2026-09-09",
+ "season": "off",
+ "preflight": {
+  "date": "2026-09-09",
+  "panel": {
+   "All Options": {
+    "present": true,
+    "rows": 10710675
+   },
+   "Dark pool": {
+    "present": true,
+    "rows": 479485
+   },
+   "Hot Option Chains": {
+    "present": true,
+    "rows": 25492
+   },
+   "OI changes": {
+    "present": true,
+    "rows": 279580
+   },
+   "Stock Screener": {
+    "present": true,
+    "rows": 6300
+   }
+  },
+  "truth_set": {
+   "prices": {
+    "max_date": "2026-09-04",
+    "stale_vs_trade_date": true
+   },
+   "returns": {
+    "max_date": "2026-09-04",
+    "stale_vs_trade_date": true
+   },
+   "features": {
+    "max_date": "2026-09-04",
+    "stale_vs_trade_date": true
+   }
+  },
+  "ok": false,
+  "warnings": [
+   "prices.parquet ends 2026-09-04, BEFORE the 2026-09-09 trade date -- any lane reading it gets a stale regime/factor read. Rebuild: python3 scripts/truthset/build_prices.py",
+   "returns.parquet ends 2026-09-04, BEFORE the 2026-09-09 trade date -- any lane reading it gets a stale regime/factor read. Rebuild: python3 scripts/truthset/build_returns.py",
+   "features.parquet ends 2026-09-04, BEFORE the 2026-09-09 trade date -- any lane reading it gets a stale regime/factor read. Rebuild: python3 scripts/truthset/build_features.py"
+  ]
+ },
+ "mart": {
+  "daily_contract_rows": 319156,
+  "earnings_events_rows": 0
+ },
+ "candidates": [],
+ "suppressed": [],
+ "dropped": [],
+ "graded": [],
+ "season_running": [],
+ "exploration": [],
+ "exploration_dropped": [],
+ "ledger": {
+  "emitted": 0,
+  "skipped": 0,
+  "graded": 0,
+  "ledger_open": false,
+  "exploration_emitted": 0,
+  "exploration_skipped": 0,
+  "wb_emitted": 181,
+  "wb_graded": 0
+ },
+ "sb_state": {
+  "date": "2026-09-09",
+  "index_vol_through": "2026-09-09",
+  "is_entry_day": false,
+  "gate": {
+   "SPY": {
+    "date": "2026-09-09",
+    "asof": "2026-09-08",
+    "reason": "ON",
+    "on": true,
+    "known": true,
+    "vix": 15.72,
+    "vix3m": 18.39,
+    "x": 15.72,
+    "x_median": 15.16
+   },
+   "QQQ": {
+    "date": "2026-09-09",
+    "asof": "2026-09-08",
+    "reason": "ON",
+    "on": true,
+    "known": true,
+    "vix": 15.72,
+    "vix3m": 18.39,
+    "x": 21.71,
+    "x_median": 21.465000000000003
+   }
+  },
+  "gate_next": {
+   "SPY": {
+    "date": "2026-09-10",
+    "asof": "2026-09-09",
+    "reason": "UNKNOWN:null input at 2026-09-09",
+    "on": false,
+    "known": false,
+    "vix": null,
+    "vix3m": null,
+    "x": null,
+    "x_median": null
+   },
+   "QQQ": {
+    "date": "2026-09-10",
+    "asof": "2026-09-09",
+    "reason": "UNKNOWN:null input at 2026-09-09",
+    "on": false,
+    "known": false,
+    "vix": null,
+    "vix3m": null,
+    "x": null,
+    "x_median": null
+   }
+  },
+  "candidates": [],
+  "skipped": [],
+  "graded": [],
+  "unsettled": [],
+  "exploration": [],
+  "exploration_skipped": [],
+  "open_positions": {},
+  "running": [],
+  "ledger": {
+   "emitted": 0,
+   "skipped": 0,
+   "graded": 0,
+   "ledger_open": false,
+   "exploration_emitted": 0,
+   "exploration_skipped": 0
+  },
+  "refresh": {
+   "ok": true,
+   "through": "2026-09-09"
+  }
+ },
+ "watch_basket": {
+  "available": true,
+  "reason": null,
+  "universe_n": 2035,
+  "count_distribution": {
+   "bull": {
+    "0": 984,
+    "1": 725,
+    "2": 255,
+    "3": 63,
+    "4": 6,
+    "5": 2,
+    "6": 0,
+    "7": 0,
+    "8": 0
+   },
+   "bear": {
+    "0": 574,
+    "1": 725,
+    "2": 493,
+    "3": 188,
+    "4": 50,
+    "5": 5,
+    "6": 0,
+    "7": 0,
+    "8": 0
+   }
+  },
+  "top_bull": [
+   {
+    "ticker": "DMC",
+    "bull": 5,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "WTRG",
+    "bull": 5,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "DB",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "LTC",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A"
+    ]
+   },
+   {
+    "ticker": "MFG",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "OPY",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "STNG",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "STRF",
+    "bull": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "ACT",
+    "bull": 3,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "ADM",
+    "bull": 3,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "ALAB",
+    "bull": 3,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-CROWD",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "AMD",
+    "bull": 3,
+    "true_ids": [
+     "C-HIGH",
+     "C-DIV-D",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "AMSC",
+    "bull": 3,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-SWING",
+     "C-LOW"
+    ]
+   },
+   {
+    "ticker": "ARM",
+    "bull": 3,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BLCO",
+    "bull": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A"
+    ]
+   },
+   {
+    "ticker": "BNS",
+    "bull": 3,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BNY",
+    "bull": 3,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "CMBT",
+    "bull": 3,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "CMC",
+    "bull": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "CMP",
+    "bull": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING-LOSS"
+    ]
+   }
+  ],
+  "top_bear": [
+   {
+    "ticker": "NAMS",
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ]
+   },
+   {
+    "ticker": "NCLH",
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "NKE",
+    "bear": 5,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "OTIS",
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "RARE",
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS"
+    ]
+   },
+   {
+    "ticker": "ASST",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "AXP",
+    "bear": 4,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BCO",
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ]
+   },
+   {
+    "ticker": "BIDU",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BXP",
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BYD",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS"
+    ]
+   },
+   {
+    "ticker": "CAR",
+    "bear": 4,
+    "true_ids": [
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ]
+   },
+   {
+    "ticker": "CBT",
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ]
+   },
+   {
+    "ticker": "DKNG",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "EXC",
+    "bear": 4,
+    "true_ids": [
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "FIG",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "FOUR",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "FTV",
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "ITW",
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "JBS",
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ]
+   }
+  ],
+  "long": [
+   {
+    "ticker": "ACT",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ADM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BLCO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A"
+    ],
+    "null_ids": [
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CMBT",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CMC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "COP",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CVX",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "DB",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "DMC",
+    "bull": 5,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "EC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FLEX",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "GNK",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GNW",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HAL",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "HSAI",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HSBC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC-A",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "HUM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "ING",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LAZR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-AVWAP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-POC",
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-RSI"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LTC",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NMR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "NTR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OPY",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PAYP",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "QRVO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SFL",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SKHY",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-POC",
+     "C-POC-A",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-RSI"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "STNG",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "STRF",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "TDS",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-AVWAP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "TEN",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "UHS",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "UNM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "VLO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "VZ",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WOR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WPM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WTRG",
+    "bull": 5,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   }
+  ],
+  "short": [
+   {
+    "ticker": "AAOI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ABVX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ACGL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ACI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AEO",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "AI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ALC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "ALKT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ANIP",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "AOS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "APLE",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ASH",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ASST",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "AXP",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "BBUC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BCO",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "BEAM",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BFB",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BIDU",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BJ",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BLDR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "BN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "BNT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BRO",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BRZE",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BXP",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BYD",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "CALM",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CBRL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CBT",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "CHD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CHTR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CINF",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CNM",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "COIN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "CPNG",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CPT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "CRSP",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "DKNG",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "EPRT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ESAB",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "EXP",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "EXR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "FAF",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FICO",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FIG",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FLG",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FNF",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "FSLR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FTV",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "GIL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GXO",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HAYW",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "HD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "HEI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "IDA",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "IDXX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "IFF",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "INOD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "IONQ",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "IRMD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "IRT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "ITRI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "ITW",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "JBS",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "KD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KHC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KMB",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "KMI",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "KSPI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KSS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LAD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LINE",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "LOAR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LRN",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LULU",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LUNR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LUV",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "LVS",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LYV",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "MCD",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MCY",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-CROWD",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MFC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MLM",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "MO",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MSCI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "MTH",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "NAMS",
+    "bull": 0,
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "NCLH",
+    "bull": 0,
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "NN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "NTCT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "NTLA",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NVS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NVTS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ONON",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "OPCH",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OSIS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OTEX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OTIS",
+    "bull": 0,
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "OUST",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "OWL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "PATK",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "PECO",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-OIBUILD",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PHM",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "PL",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "PLTR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PRU",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PURR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "QBTS",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "QURE",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "RARE",
+    "bull": 0,
+    "bear": 5,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "RCUS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SBUX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SFM",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SIGI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SIRI",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SRPT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SSD",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "SUI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TCOM",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TDG",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "TNL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "TROW",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "TRVI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "TTAN",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TTD",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "TTWO",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "TXT",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "UPS",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "UPST",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "UUUU",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "VICI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "VSXY",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WCN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WLDN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WMS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WSBC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WYNN",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "XE",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "XYL",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "ZS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ZTS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   }
+  ],
+  "vol": [],
+  "conflict": [
+   {
+    "ticker": "AAP",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AEHR",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AMD",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-DIV-D",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AMP",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "APLD",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ARM",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AXTI",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BKE",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BKH",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BNL",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CB",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CDNA",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CHDN",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CLS",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CNH",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CRWV",
+    "bull": 3,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CTRI",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "DRTS",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "DSL",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ENPH",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "EXEL",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FIGR",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FISV",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FOUR",
+    "bull": 2,
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GFL",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HALO",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HPE",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "INFY",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "INIO",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-RSI"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "INTC",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ITT",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-AVWAP",
+     "C-SWING",
+     "C-SHORT",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "JPM",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KMX",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KNTK",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "LAZ",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LEA",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC-A",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LEGN",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LITE",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LPX",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "MARA",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "META",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MMED",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MRVL",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NHI",
+    "bull": 2,
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NOK",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NWG",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OKE",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OKLO",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-DIV-D",
+     "C-SWING",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ORCL",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OSCR",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OUT",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "OXY",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-POC",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PAGP",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SHORT",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PNW",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "PODD",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "POOL",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "RGTI",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "RIOT",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-AVWAP",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "RJF",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "RKT",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-SWING",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ROKU",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "RSI",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "RTO",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SAN",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SEI",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-AVWAP",
+     "C-SWING",
+     "C-SHORT",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SIFY",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SRAD",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "STWD",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-AVWAP",
+     "C-LOW",
+     "C-POC-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SYM",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WEC",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WHR",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "ZIM",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-CROWD",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   }
+  ],
+  "ledger_open": true,
+  "wb_emitted": 181,
+  "wb_skipped": 0,
+  "wb_graded": 0,
+  "elapsed_s": 66.97
+ }
+}
