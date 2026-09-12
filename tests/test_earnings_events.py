@@ -336,8 +336,9 @@ needs_real_data = pytest.mark.skipif(
 @pytest.fixture(scope="module")
 def rebuilt_and_artifact() -> tuple[pd.DataFrame, pd.DataFrame]:
     con = duckdb.connect()
-    e_min, e_max = ee.default_event_range(con, REAL_SCREENER)
-    assert (e_min, e_max) == (date(2026, 3, 16), date(2026, 9, 3))
+    e_min, panel_max = ee.default_event_range(con, REAL_SCREENER)
+    e_max = date(2026, 9, 3)                  # the E1 artifact's last event; the panel keeps growing past it
+    assert e_min == date(2026, 3, 16) and panel_max >= e_max
     ours = ee.build_events(con, REAL_SCREENER, config.PRICES, e_min, e_max,
                            regime_fn=_stub_regime, vix_fn=_stub_vix)
     return ours, pd.read_parquet(E1_ARTIFACT)
