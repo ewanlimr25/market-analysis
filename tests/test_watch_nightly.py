@@ -229,3 +229,27 @@ def test_run_grades_via_the_public_entry_point(tmp_path, monkeypatch):
     monkeypatch.setattr(LV, "load_closes", lambda tickers, dates, stocks_dir=None: closes)
     state = N.run(None, d_h5, str(tmp_path), force_ledger=True, evaluate_fn=_evaluate_fn([]))
     assert state["wb_graded"] == 1
+
+
+def test_run_carries_borrow_provenance_from_the_evaluated_frame(tmp_path):
+    """The state dict names the IBKR snapshot C-SHORT read (d1.5 `borrow`), taken from the
+    evaluated frame's attrs so a fallback night is visible in signals.json and the report."""
+    from datetime import date as _date
+    rows = [_cond_row("LONGCO", D0, LONG_IDS)]
+    base_fn = _evaluate_fn(rows)
+
+    def evaluate_fn(d):
+        cond_df, n = base_fn(d)
+        cond_df.attrs["borrow"] = {"asof": _date(2026, 9, 10), "stale_days": 1, "names_with_fee": 1}
+        return cond_df, n
+
+    state = N.run(None, D0, str(tmp_path), force_ledger=True, evaluate_fn=evaluate_fn)
+    assert state["borrow"] == {"asof": _date(2026, 9, 10), "stale_days": 1, "names_with_fee": 1}
+
+
+def test_borrow_provenance_reads_the_join_output():
+    from datetime import date as _date
+    side = pd.DataFrame({"borrow_fee": [1.0, float("nan"), 2.0], "borrow_asof": [_date(2026, 9, 10), None, _date(2026, 9, 10)]})
+    assert N._borrow_provenance(side, _date(2026, 9, 11)) == {"asof": _date(2026, 9, 10), "stale_days": 1, "names_with_fee": 2}
+    empty = pd.DataFrame({"borrow_fee": [float("nan")], "borrow_asof": [None]})
+    assert N._borrow_provenance(empty, _date(2026, 9, 11)) == {"asof": None, "stale_days": None, "names_with_fee": 0}

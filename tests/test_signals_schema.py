@@ -119,9 +119,9 @@ def test_full_nightly_document_from_real_builders_validates(tmp_path):
 
 # ---- d1.4: C-POC-A/C-POC-A-LOSS widen watch_basket.count_distribution to 0..8 (DESIGN/110 §2/§8) --
 
-def test_schema_version_defaults_to_d1_4_and_earlier_docs_stay_valid():
-    assert SCH.SCHEMA_VERSION == "d1.4" and SCH.SCHEMA_VERSIONS == ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4")
-    for old in ("d1.0", "d1.1", "d1.2", "d1.3"):
+def test_schema_version_defaults_to_d1_5_and_earlier_docs_stay_valid():
+    assert SCH.SCHEMA_VERSION == "d1.5" and SCH.SCHEMA_VERSIONS == ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4", "d1.5")
+    for old in ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4"):
         # a document from before the watch basket existed: no `watch_basket` key at all
         base = {"schema_version": old, "report_kind": SCH.REPORT_KIND, "date": SESSION.isoformat(), "season": "S2",
                 "preflight": {"ok": True, "warnings": []}, "mart": {"daily_contract_rows": 0, "earnings_events_rows": 0},
@@ -178,7 +178,7 @@ def test_document_with_a_real_watch_basket_state_validates(tmp_path):
     assert wb["available"] is True and wb["wb_emitted"] == 1
     doc = D.assemble(SESSION, _preflight_ok(), {"daily_contract_rows": 1, "earnings_events_rows": 0},
                      run, graded, dropped_grade, running, counts, sb, wb)
-    assert doc["schema_version"] == "d1.4"
+    assert doc["schema_version"] == "d1.5"
     assert SCH.validate(doc) == []
     text = SCH.dumps(doc)
     assert SCH.validate(json.loads(text, **STRICT)) == []
@@ -264,3 +264,29 @@ def test_validate_signals_script_exit_codes(tmp_path):
     nan.write_text('{"schema_version": "d1.0", "x": NaN}')
     res = subprocess.run([sys.executable, script, "--file", str(nan)], capture_output=True, text=True)
     assert res.returncode == 1 and "non-finite" in res.stdout
+
+
+# ---- d1.5: optional watch_basket.borrow (which IBKR snapshot C-SHORT read; fallback visible) --------
+
+def test_watch_basket_borrow_block_validates_and_is_optional(tmp_path):
+    rows = [_cond_row("LONGCO", SESSION, LONG_IDS)]
+    wb = WBN.nightly(None, SESSION, force_ledger=True, ledger_dir=str(tmp_path / "wb"), evaluate_fn=_evaluate_fn(rows))
+    assert "borrow" not in wb                       # a stub evaluate_fn carries no provenance: key omitted
+    doc = _doc_with_wb(wb)
+    assert SCH.validate(doc) == []
+    for block in ({"asof": "2026-09-10", "stale_days": 1, "names_with_fee": 812},
+                  {"asof": SESSION.isoformat(), "stale_days": 0, "names_with_fee": 900},
+                  {"asof": None, "stale_days": None, "names_with_fee": 0}):
+        doc = _doc_with_wb({**wb, "borrow": block})
+        assert SCH.validate(json.loads(SCH.dumps(doc), **STRICT)) == [], block
+    bad = _doc_with_wb({**wb, "borrow": {"asof": "2026-09-10", "stale_days": -1, "names_with_fee": 1}})
+    assert SCH.validate(bad) != []
+
+
+def _doc_with_wb(wb: dict) -> dict:
+    return {"schema_version": SCH.SCHEMA_VERSION, "report_kind": SCH.REPORT_KIND, "date": SESSION.isoformat(), "season": "S2",
+            "preflight": {"ok": True, "warnings": []}, "mart": {"daily_contract_rows": 0, "earnings_events_rows": 0},
+            "candidates": [], "suppressed": [], "dropped": [], "graded": [], "season_running": [],
+            "ledger": {"emitted": 0, "skipped": 0, "graded": 0, "ledger_open": False},
+            "sb_state": {"date": SESSION.isoformat(), "gate": {}, "candidates": [], "graded": [], "refresh": {"ok": True}},
+            "watch_basket": wb}

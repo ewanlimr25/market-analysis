@@ -88,3 +88,31 @@ def test_refresh_raises_on_transport_failure_rather_than_fabricating_data(tmp_pa
     with pytest.raises(TimeoutError):
         B.refresh(date(2026, 9, 7), fetch_text=boom)
     assert not store.has_partition(B.TABLE, date(2026, 9, 7))
+
+
+def test_load_borrow_asof_prefers_the_exact_day(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "MART", str(tmp_path / "mart"))
+    B.refresh(date(2026, 9, 10), fetch_text=lambda: USA_TXT.replace("7600000", "1"))
+    B.refresh(date(2026, 9, 11), fetch_text=lambda: USA_TXT)
+    out = B.load_borrow_asof(date(2026, 9, 11))
+    assert out["available"] is True and out["asof"] == date(2026, 9, 11) and out["stale_days"] == 0
+    assert out["data"][out["data"].symbol == "GME"].iloc[0].available_shares == 7600000.0
+
+
+def test_load_borrow_asof_falls_back_to_the_latest_prior_snapshot_never_a_later_one(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "MART", str(tmp_path / "mart"))
+    B.refresh(date(2026, 9, 9), fetch_text=lambda: USA_TXT.replace("7600000", "9"))
+    B.refresh(date(2026, 9, 10), fetch_text=lambda: USA_TXT)
+    B.refresh(date(2026, 9, 12), fetch_text=lambda: USA_TXT.replace("7600000", "12"))   # Saturday file, after the night
+    out = B.load_borrow_asof(date(2026, 9, 11))
+    assert out["available"] is True and out["asof"] == date(2026, 9, 10) and out["stale_days"] == 1
+    assert out["data"][out["data"].symbol == "GME"].iloc[0].available_shares == 7600000.0
+
+
+def test_load_borrow_asof_is_fail_soft_outside_the_window(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "MART", str(tmp_path / "mart"))
+    B.refresh(date(2026, 9, 1), fetch_text=lambda: USA_TXT)
+    out = B.load_borrow_asof(date(2026, 9, 11), max_stale_days=7)
+    assert out["available"] is False and out["asof"] is None and out["stale_days"] is None
+    assert out["data"].empty and "7 days" in out["reason"]
+    assert B.load_borrow_asof(date(2026, 9, 8), max_stale_days=7)["asof"] == date(2026, 9, 1)

@@ -1,7 +1,7 @@
 {
  "$schema": "http://json-schema.org/draft-07/schema#",
  "title": "engine-daily signals (d1.1)",
- "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 \u00a75, DESIGN/80 \u00a77). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 \u00a74). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*. d1.2 (2026-09-08, DESIGN/110 R2): optional top-level watch_basket object (exploration-only, paper rows, policy wb-1.0); ledger_counts.wb_emitted/wb_graded. d1.3 (2026-09-07 evening, DESIGN/110 \u00a72/\u00a78): C-DIV-D (daily RSI bullish divergence) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound from 0..6 to 0..7; key \"7\" is optional (not required) so d1.2 documents, which never emit it, stay valid. d1.4 (2026-09-07 evening, DESIGN/110 \u00a72/\u00a78): C-POC-A and C-POC-A-LOSS (anchored volume-profile acceptance) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound to 0..8 and .bear's bound to 0..8; keys \"8\" (bull) and \"8\" (bear) are optional (not required) so d1.0-d1.3 documents, which never emit them, stay valid.",
+ "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 §5, DESIGN/80 §7). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 §4). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*. d1.2 (2026-09-08, DESIGN/110 R2): optional top-level watch_basket object (exploration-only, paper rows, policy wb-1.0); ledger_counts.wb_emitted/wb_graded. d1.3 (2026-09-07 evening, DESIGN/110 §2/§8): C-DIV-D (daily RSI bullish divergence) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound from 0..6 to 0..7; key \"7\" is optional (not required) so d1.2 documents, which never emit it, stay valid. d1.4 (2026-09-07 evening, DESIGN/110 §2/§8): C-POC-A and C-POC-A-LOSS (anchored volume-profile acceptance) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound to 0..8 and .bear's bound to 0..8; keys \"8\" (bull) and \"8\" (bear) are optional (not required) so d1.0-d1.3 documents, which never emit them, stay valid.",
  "type": "object",
  "additionalProperties": false,
  "required": [
@@ -26,7 +26,8 @@
     "d1.1",
     "d1.2",
     "d1.3",
-    "d1.4"
+    "d1.4",
+    "d1.5"
    ]
   },
   "report_kind": {
@@ -106,7 +107,7 @@
   },
   "exploration": {
    "type": "array",
-   "description": "DESIGN/100 \u00a76: the S-A exploration book, one contract per structure for every priceable event in the load band, role = exploration, gate_verdict = first failing filter or PASS",
+   "description": "DESIGN/100 §6: the S-A exploration book, one contract per structure for every priceable event in the load band, role = exploration, gate_verdict = first failing filter or PASS",
    "items": {
     "$ref": "#/$defs/sa_position"
    }
@@ -283,7 +284,7 @@
     },
     "contracts": {
      "type": "integer",
-     "description": "position size in contracts (sizing; DESIGN/70 \u00a73.3)"
+     "description": "position size in contracts (sizing; DESIGN/70 §3.3)"
     },
     "notional_usd": {
      "type": "number"
@@ -664,7 +665,7 @@
     },
     "policy_id": {
      "type": "string",
-     "description": "the policy that produced the row (DESIGN/100 \u00a73); champion ids are pinned in engine.config"
+     "description": "the policy that produced the row (DESIGN/100 §3); champion ids are pinned in engine.config"
     },
     "role": {
      "enum": [
@@ -682,7 +683,7 @@
   "sa_suppressed": {
    "type": "object",
    "additionalProperties": false,
-   "description": "An event that failed a filter, with the first failing filter (DESIGN/70 \u00a73.1).",
+   "description": "An event that failed a filter, with the first failing filter (DESIGN/70 §3.1).",
    "required": [
     "ticker",
     "E",
@@ -967,7 +968,7 @@
   "sb_state": {
    "type": "object",
    "additionalProperties": false,
-   "description": "The S-B nightly step (DESIGN/80 \u00a77). Normal shape carries every key; the error shape carries date, error, empty candidates/graded, an empty gate, and refresh.",
+   "description": "The S-B nightly step (DESIGN/80 §7). Normal shape carries every key; the error shape carries date, error, empty candidates/graded, an empty gate, and refresh.",
    "required": [
     "date",
     "gate",
@@ -1046,7 +1047,7 @@
     },
     "exploration": {
      "type": "array",
-     "description": "DESIGN/100 \u00a76: one contract per sleeve on every entry day, gate ignored, role = exploration",
+     "description": "DESIGN/100 §6: one contract per sleeve on every entry day, gate ignored, role = exploration",
      "items": {
       "$ref": "#/$defs/sb_position"
      }
@@ -1288,7 +1289,7 @@
     },
     "contracts": {
      "type": "integer",
-     "description": "position size in contracts (sizing; DESIGN/80 \u00a74)"
+     "description": "position size in contracts (sizing; DESIGN/80 §4)"
     },
     "max_loss_usd": {
      "type": "number",
@@ -1551,7 +1552,7 @@
     },
     "policy_id": {
      "type": "string",
-     "description": "the policy that produced the row (DESIGN/100 \u00a73); champion ids are pinned in engine.config"
+     "description": "the policy that produced the row (DESIGN/100 §3); champion ids are pinned in engine.config"
     },
     "role": {
      "enum": [
@@ -1892,14 +1893,14 @@
     },
     "episode": {
      "type": "boolean",
-     "description": "DESIGN/110 \u00a74: false on a re-entry within 21 sessions"
+     "description": "DESIGN/110 §4: false on a re-entry within 21 sessions"
     }
    }
   },
   "watch_basket": {
    "type": "object",
    "additionalProperties": false,
-   "description": "The watch-basket nightly step (DESIGN/110-watch-basket.md \u00a77 R2). Exploration-only, paper rows, policy_id wb-1.0. Optional: d1.0/d1.1 documents (before 2026-09-08) never carried it.",
+   "description": "The watch-basket nightly step (DESIGN/110-watch-basket.md §7 R2). Exploration-only, paper rows, policy_id wb-1.0. Optional: d1.0/d1.1 documents (before 2026-09-08) never carried it. d1.5 adds the optional borrow block.",
    "required": [
     "available",
     "reason",
@@ -1969,7 +1970,7 @@
      "items": {
       "$ref": "#/$defs/wb_basket_entry"
      },
-     "description": "DESIGN/110 \u00a73: logged only, never written to the ledger"
+     "description": "DESIGN/110 §3: logged only, never written to the ledger"
     },
     "ledger_open": {
      "type": "boolean"
@@ -1985,6 +1986,36 @@
     },
     "elapsed_s": {
      "type": "number"
+    },
+    "borrow": {
+     "type": "object",
+     "additionalProperties": false,
+     "description": "d1.5: which IBKR borrow snapshot fed C-SHORT tonight. asof is the snapshot date (the session itself, or the latest earlier one within engine.mart.borrow.BORROW_FALLBACK_MAX_DAYS); stale_days is 0 when exact; both null when no snapshot lay in the window. Optional: d1.4 and earlier never carried it.",
+     "required": [
+      "asof",
+      "stale_days",
+      "names_with_fee"
+     ],
+     "properties": {
+      "asof": {
+       "type": [
+        "string",
+        "null"
+       ],
+       "format": "date"
+      },
+      "stale_days": {
+       "type": [
+        "integer",
+        "null"
+       ],
+       "minimum": 0
+      },
+      "names_with_fee": {
+       "type": "integer",
+       "minimum": 0
+      }
+     }
     }
    }
   }

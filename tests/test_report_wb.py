@@ -88,3 +88,12 @@ def test_render_without_watch_basket_key_omits_the_section_gracefully():
     text = R.render(signals)
     assert "## Watch basket" in text
     assert "step not run" in text
+
+
+def test_wb_borrow_line_names_exact_fallback_and_missing_snapshots():
+    from engine.report import _wb_borrow_line
+    assert "the session's own" in _wb_borrow_line({"asof": "2026-09-11", "stale_days": 0, "names_with_fee": 900})
+    assert "fallback, 1 day old" in _wb_borrow_line({"asof": "2026-09-10", "stale_days": 1, "names_with_fee": 812})
+    assert "fallback, 3 days old" in _wb_borrow_line({"asof": "2026-09-08", "stale_days": 3, "names_with_fee": 5})
+    assert "none within the fallback window" in _wb_borrow_line({"asof": None, "stale_days": None, "names_with_fee": 0})
+    assert "pre-d1.5" in _wb_borrow_line(None)

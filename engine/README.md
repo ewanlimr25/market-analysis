@@ -45,7 +45,7 @@ make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"   # the 
 | `validation/stats.py` | clustered t, BH, Sharpe deflation, CSCV PBO |
 | `validation/harness.py`, `validation/run_report.py` | season split, tail, robustness, go/no-go, §4.3 reproduction; the markdown report |
 | `ledger.py`, `daily.py`, `report.py` | forward ledger (`ledger/`, committed, never re-derived), `make daily`, templated `report.md` |
-| `schema.py` | the `signals.json` contract: `schema_version` / `report_kind` stamp, strict JSON (no NaN), validation against `schemas/signals.schema.json` (`d1.0`); `scripts/validate_signals.py` wraps it |
+| `schema.py` | the `signals.json` contract: `schema_version` / `report_kind` stamp, strict JSON (no NaN), validation against `schemas/signals.schema.json` (`d1.5`; `d1.0` to `d1.4` files stay valid); `scripts/validate_signals.py` wraps it |
 | `mart/index_vol.py` | CBOE VIX / VIX3M / VXN / VIX9D closes, cached in `data/mart/index_vol/`, artifact fallback (S-B, DESIGN/80 §1.1) |
 | `strategies/sb_gate.py` | the S-B gate: contango and level above the 20-session median, read at the prior close (DESIGN/80 §2) |
 | `strategies/sb_structures.py` | Friday-type expiry nearest 21 days, σ unit, tier-1 strike band, PS / IC legs, max loss, sizing, open cap (DESIGN/80 §3-§4) |
@@ -54,10 +54,10 @@ make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"   # the 
 | `sb_daily.py` | the S-B nightly step: CBOE refresh (fail-soft), gate tonight and next session, entries on the last session of the week, grading at expiry into `ledger/sb/` (DESIGN/80 §7) |
 | `mart/cboe_chain.py`, `mart/cboe_chain_derived.py` | the full option chain from CBOE's free delayed API, stored write-once at `data/mart/cboe_chain/symbol=<SYM>/date=<date>/`; GEX, 25-delta skew, ATM IV, put-call OI ratio (RESEARCH/47 G8; `make cboe-chain`, standalone) |
 | `mart/short_interest.py` | FINRA consolidated short interest, one POST per symbol (full history), write-once at `data/mart/short_interest/settlement=<date>/`; `load_short_interest(as_of)` applies a conservative 9-trading-day publication lag (RESEARCH/47 G9; `make short-interest`, standalone) |
-| `mart/borrow.py` | IBKR stock-loan availability (`usa.txt` via `ftp2.interactivebrokers.com`, user `shortstock`), daily snapshots at `data/mart/borrow/date=<date>/`, fail-soft `load_borrow` (RESEARCH/47 G9) |
+| `mart/borrow.py` | IBKR stock-loan availability (`usa.txt` via `ftp2.interactivebrokers.com`, user `shortstock`), daily snapshots at `data/mart/borrow/date=<date>/`, fail-soft `load_borrow` (exact day) and `load_borrow_asof` (exact day, else the latest earlier snapshot within 7 days, never a later one; reports `asof`/`stale_days`) (RESEARCH/47 G9) |
 | `mart/regsho.py` | FINRA Reg SHO daily short volume, `data/mart/regsho/date=<date>/`; facilitation volume, control variable only, never a signal (RESEARCH/30 §5, RESEARCH/47 G9); `--refresh --through <date>` catches up the unstored weekdays of the trailing two weeks (a 403 from the CDN is an unpublished file, not a block) |
 | `mart/finviz_short.py` | `short_float(ticker)`, a thin fail-soft wrapper on `fz quote --agent`, on-demand single-ticker use only (RESEARCH/47 G9) |
-| `features/short_side.py` | `join_short_side`: attaches `short_interest`, `days_to_cover`, `si_change_pct` (point-in-time) and `borrow_fee` onto a screener spine -- the control column G4 needs (RESEARCH/47 G4/G9) |
+| `features/short_side.py` | `join_short_side`: attaches `short_interest`, `days_to_cover`, `si_change_pct` (point-in-time), `borrow_fee` (via `load_borrow_asof`) and `borrow_asof` (the snapshot date each fee came from) onto a screener spine -- the control column G4 needs (RESEARCH/47 G4/G9) |
 | `mart/index_vol_ext.py`, `improve/sb_challengers.py` | G10: CBOE VVIX/SKEW + VIX9D/VIX and VIX/VIX3M ratios (`data/mart/index_vol_ext/`); the CBOE vol-index family as additional conditions on the frozen S-B gate, backtested on the proxy; registration drafts (RESEARCH/47-edge-gaps.md §2) |
 | `strategies/sg_filters.py` | entry/exit day arithmetic (`engine.calendar`), one-strike-out strangle selection; F1..F4, F7, F8 reused from `sa_filters.cheap_filters`, F5/F6 reused at the entry day (DESIGN/91 §1) |
 | `strategies/sg_structures.py` | LS / LG legs as `sa_structures.Leg` with `side=LONG`, premium-paid sizing (DESIGN/91 §2-§3) |

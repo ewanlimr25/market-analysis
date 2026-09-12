@@ -1,4 +1,4 @@
-"""The `signals.json` contract (schemas/signals.schema.json, `d1.4`; `d1.0`/`d1.1`/`d1.2`/`d1.3`
+"""The `signals.json` contract (schemas/signals.schema.json, `d1.5`; `d1.0` to `d1.4`
 files stay valid).
 
 `make daily` stamps every run with `schema_version` and `report_kind`, writes strict JSON (no NaN,
@@ -18,10 +18,10 @@ import jsonschema
 
 from engine.config import REPO
 
-SCHEMA_VERSIONS = ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4")   # every version a committed nightly may carry
-SCHEMA_VERSION = SCHEMA_VERSIONS[-1]    # what tonight is stamped with (d1.4: C-POC-A/C-POC-A-LOSS
-                                         # widen watch_basket count_distribution.bull and .bear
-                                         # bounds to 0..8, both keys optional)
+SCHEMA_VERSIONS = ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4", "d1.5")   # every version a committed nightly may carry
+SCHEMA_VERSION = SCHEMA_VERSIONS[-1]    # what tonight is stamped with (d1.5: optional watch_basket.borrow
+                                         # block naming the IBKR snapshot C-SHORT read; d1.4 widened the
+                                         # count_distribution bounds to 0..8)
 REPORT_KIND = "engine-daily"
 SCHEMA_PATH = os.path.join(REPO, "schemas", "signals.schema.json")
 

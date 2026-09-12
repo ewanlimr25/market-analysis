@@ -37,7 +37,7 @@ from __future__ import annotations
 import argparse
 import ftplib
 import io
-from datetime import date
+from datetime import date, timedelta
 from typing import Callable
 
 import pandas as pd
@@ -124,6 +124,25 @@ def refresh(d: date, fetch_text: Callable[[], str] = fetch_usa_txt) -> pd.DataFr
     if not store.has_partition(TABLE, d):
         store.write_partition(df, TABLE, d)
     return df
+
+
+BORROW_FALLBACK_MAX_DAYS = 7        # calendar days; covers a missed nightly or a weekend, never a stale month
+
+
+def load_borrow_asof(d: date, max_stale_days: int = BORROW_FALLBACK_MAX_DAYS) -> dict:
+    """Point-in-time with fallback: the snapshot for `d` if it exists, else the latest snapshot dated
+    on or before `d` within `max_stale_days` (never a later one, so nothing is known before its day).
+    Adds `asof` (the snapshot's date, or None) and `stale_days` (0 when exact) to the fail-soft dict;
+    `available` is False when no snapshot lies inside the window."""
+    if store.has_partition(TABLE, d):
+        return {**load_borrow(d), "asof": d, "stale_days": 0}
+    earliest = d - timedelta(days=max_stale_days)
+    prior = [x for x in store.available_dates(TABLE) if earliest <= x < d]
+    if not prior:
+        return {"available": False, "asof": None, "stale_days": None, "data": _empty(),
+                "reason": f"no borrow snapshot for {d.isoformat()} or the {max_stale_days} days before it"}
+    asof = max(prior)
+    return {**load_borrow(asof), "asof": asof, "stale_days": (d - asof).days}
 
 
 def load_borrow(d: date) -> dict:

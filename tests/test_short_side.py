@@ -36,7 +36,7 @@ def test_join_attaches_all_four_columns_by_ticker_and_date():
                                        "days_to_cover": [2.53], "change_percent": [-17.85]})})
     borrow = _borrow_loader({d: pd.DataFrame({"symbol": ["AAPL"], "fee_rate": [0.3648]})})
     out = SS.join_short_side(spine, load_short_interest=si, load_borrow=borrow)
-    assert list(out.columns) == ["ticker", "date"] + list(SS.ATTACHED_COLUMNS)
+    assert list(out.columns) == ["ticker", "date"] + list(SS.ATTACHED_COLUMNS) + [SS.BORROW_ASOF_COLUMN]
     aapl = out[out.ticker == "AAPL"].iloc[0]
     assert aapl.short_interest == 116327753.0
     assert aapl.days_to_cover == pytest.approx(2.53)
@@ -101,4 +101,31 @@ def test_join_raises_on_a_spine_missing_required_columns():
 def test_join_empty_spine_returns_empty_frame_with_the_right_columns():
     out = SS.join_short_side(pd.DataFrame(columns=["ticker", "date"]))
     assert out.empty
-    assert list(out.columns) == ["ticker", "date"] + list(SS.ATTACHED_COLUMNS)
+    assert list(out.columns) == ["ticker", "date"] + list(SS.ATTACHED_COLUMNS) + [SS.BORROW_ASOF_COLUMN]
+
+
+def _borrow_loader_asof(table: dict, max_stale_days: int = 7):
+    """Mimics `borrow.load_borrow_asof`: exact day, else the latest prior snapshot inside the window."""
+    def load(d):
+        prior = [x for x in table if d - pd.Timedelta(days=max_stale_days).to_pytimedelta() <= x <= d]
+        if not prior:
+            return {"available": False, "reason": "none", "asof": None, "stale_days": None,
+                    "data": pd.DataFrame(columns=["symbol", "fee_rate"])}
+        asof = max(prior)
+        return {"available": True, "reason": None, "asof": asof, "stale_days": (d - asof).days, "data": table[asof]}
+    return load
+
+
+def test_join_records_the_borrow_snapshot_date_each_row_came_from():
+    spine = pd.DataFrame({"ticker": ["GME", "AMC", "XYZ"], "date": [date(2026, 9, 11)] * 3})
+    borrow = {date(2026, 9, 10): pd.DataFrame({"symbol": ["GME", "AMC"], "fee_rate": [12.5, 3.0]})}
+    out = SS.join_short_side(spine, _si_loader({}), _borrow_loader_asof(borrow))
+    assert out["borrow_fee"].tolist()[:2] == [12.5, 3.0] and pd.isna(out["borrow_fee"].iloc[2])
+    assert out[SS.BORROW_ASOF_COLUMN].tolist() == [date(2026, 9, 10), date(2026, 9, 10), None]
+
+
+def test_join_with_the_exact_day_loader_keeps_borrow_null_and_asof_none_when_the_day_is_missing():
+    spine = pd.DataFrame({"ticker": ["GME"], "date": [date(2026, 9, 11)]})
+    borrow = {date(2026, 9, 10): pd.DataFrame({"symbol": ["GME"], "fee_rate": [12.5]})}
+    out = SS.join_short_side(spine, _si_loader({}), _borrow_loader(borrow))
+    assert pd.isna(out["borrow_fee"].iloc[0]) and out[SS.BORROW_ASOF_COLUMN].iloc[0] is None

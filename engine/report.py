@@ -143,13 +143,24 @@ def _wb_row_for_table(entry: dict) -> dict:
     return out
 
 
+def _wb_borrow_line(b: dict | None) -> str:
+    """Which IBKR snapshot C-SHORT read: exact, a fallback (with its age), or none (d1.5 `borrow`)."""
+    if not b:
+        return "Borrow snapshot: not recorded (pre-d1.5 document)."
+    if b.get("asof") is None:
+        return "Borrow snapshot: **none within the fallback window**; C-SHORT read borrow as null."
+    age = b.get("stale_days") or 0
+    how = "the session's own" if age == 0 else f"fallback, {age} day{'s' if age != 1 else ''} old"
+    return f"Borrow snapshot: {b['asof']} ({how}); fee known for {b.get('names_with_fee', 0)} names."
+
+
 def render_wb(state: dict | None) -> str:
     if not state:
         return "_no watch-basket state (step not run)._"
     if not state.get("available"):
         return f"**unavailable: {state.get('reason')}**"
     dist = state.get("count_distribution", {})
-    parts = [f"Universe: {state.get('universe_n', 0)} names.",
+    parts = [f"Universe: {state.get('universe_n', 0)} names.", _wb_borrow_line(state.get("borrow")),
              _wb_dist_line("Bull counts", dist.get("bull", {})),
              _wb_dist_line("Bear counts", dist.get("bear", {})), ""]
     for label, key in (("LONG", "long"), ("SHORT", "short"), ("VOL", "vol")):

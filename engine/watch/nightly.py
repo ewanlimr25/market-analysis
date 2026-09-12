@@ -88,6 +88,7 @@ def build_universe_frame(d: date) -> pd.DataFrame:
     universe = universe.reset_index(drop=True)
     universe["days_to_cover"] = side["days_to_cover"].to_numpy()
     universe["borrow_fee_pct"] = side["borrow_fee"].to_numpy()
+    universe.attrs["borrow"] = _borrow_provenance(side, d)
 
     flags = T.build_tier1_flags([d])
     universe = universe.merge(flags, on=["ticker", "date"], how="left")
@@ -194,7 +195,17 @@ def evaluate_universe(d: date) -> tuple[pd.DataFrame, int]:
     series_map = build_ticker_series_map(tickers, as_of=d)
     cond_df = evaluate_conditions(universe, series_map)
     cond_df = add_stacks_and_baskets(cond_df)
+    cond_df.attrs["borrow"] = universe.attrs.get("borrow")     # provenance rides along to `run`
     return cond_df, universe_n
+
+
+def _borrow_provenance(side: pd.DataFrame, d: date) -> dict:
+    """`{asof, stale_days, names_with_fee}`: which IBKR snapshot C-SHORT read tonight (the session's
+    own, or the latest earlier one inside `borrow.BORROW_FALLBACK_MAX_DAYS`; both null when none)."""
+    fee = side["borrow_fee"] if "borrow_fee" in side.columns else pd.Series(dtype="float64")
+    asof_col = side["borrow_asof"] if "borrow_asof" in side.columns else pd.Series(dtype="object")
+    asof = next((a for a in asof_col if isinstance(a, date)), None)
+    return {"asof": asof, "stale_days": (d - asof).days if asof else None, "names_with_fee": int(fee.notna().sum())}
 
 
 # =============================================================================================
@@ -384,6 +395,7 @@ def run(con, d: date, ledger_dir: str = LEDGER_WB_DIR, force_ledger: bool = Fals
         "long": _basket_list(cond_df, "LONG", episodes), "short": _basket_list(cond_df, "SHORT", episodes),
         "vol": _basket_list(cond_df, "VOL", episodes), "conflict": _basket_list(cond_df, "CONFLICT", episodes),
         "ledger_open": is_open, "wb_emitted": emitted, "wb_skipped": skipped, "wb_graded": n_graded,
+        **({"borrow": borrow} if (borrow := cond_df.attrs.get("borrow")) else {}),
     }
 
 
