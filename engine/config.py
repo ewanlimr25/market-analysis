@@ -219,6 +219,55 @@ CBOE_EXT_INDEX_COLUMN = {"VVIX": "vvix", "SKEW": "skew"}
 # `policy_id = "wb-1.0"`: nothing above this line moved, and the 20 conditions/thresholds stay in
 # `engine/watch/conditions.py`, not here.
 # =============================================================================================
+# =============================================================================================
+# S-C: single-name variance premium (DESIGN/90; pre-registered 2026-09-05, D19; RV5 note 2026-09-07,
+# D23/O2). Built from 2026-09-12 (R1). The freeze test (R6, tests/test_sc_frozen_params.py) pins
+# every value below when the ledger opens; nothing here is tuned on the panel. Nothing above this
+# line changed when S-C was added.
+# =============================================================================================
+LEDGER_SC_DIR = os.path.join(LEDGER_DIR, "sc")
+
+
+@dataclass(frozen=True)
+class SCParams:
+    """DESIGN/90 §2 filters, §3 entry / structure geometry."""
+    price_min: float = 10.0                      # F2 close >= $10
+    mcap_min: float = 1e9                        # F3 $1B ..
+    mcap_max: float = 20e9                       # F3 .. $20B (E2 terciles; the most in-sample choice, §2)
+    adv_min: float = 50e6                        # F4 20-day dollar ADV >= $50M (the C12 floor)
+    iv30d_min: float = 0.30                      # F6 iv30d in [0.30, 0.80]
+    iv30d_max: float = 0.80                      # F6
+    dte_cal_min: int = 21                        # F7 calendar DTE in [21, 35] ..
+    dte_cal_max: int = 35                        # F7
+    target_dte_cal: int = 28                     # F7 .. nearest t + 28, Friday-type expiry that printed on t
+    atm_band: float = 0.025                      # F8 |K/S - 1| <= 2.5%
+    leg_size_min: int = 20                       # F8 size_late >= 20 on the call and the put (tier-1 entry)
+    spread_max: float = 0.08                     # F9 late_rel_spread <= 8% on both ATM legs
+    select_n: int = 10                           # F10 ten lowest mean ATM spread per variant
+    c2_excluded_sectors: tuple[str, ...] = ("Technology",)   # C2 = C1 minus Technology (E2: no premium)
+    wing_sigma: float = 2.0                      # §3 IB wings at S -/+ 2 sigma_hold
+    stress_sigma: float = 3.0                    # §3 SS stress loss at a 3 sigma_hold move
+
+
+@dataclass(frozen=True)
+class SCSizing:
+    """DESIGN/90 §4."""
+    equity: float = 100_000.0
+    ib_max_loss_frac: float = 0.005              # IB max loss <= 0.5% of equity
+    ss_stress_frac: float = 0.010                # SS 3-sigma stress loss <= 1% of equity
+    max_new_per_week: int = 10                   # per variant (= F10)
+    max_open_per_variant: int = 20
+    max_open_per_sector: int = 4
+    book_budget_frac: float = 0.40               # S-C open risk <= 40% of the book when S-B is open
+
+
+SC_PARAMS = SCParams()
+SC_SIZING = SCSizing()
+SC_VARIANTS = ("C1", "C2")
+SC_STRUCTURES = ("SS", "IB")
+SC_POLICY_ID = "sc-1.0"
+SC_RV_TABLE = "intraday_rv"                      # §0 note: realized vol is RV5 from this mart, quality rows only
+
 LEDGER_WB_DIR = os.path.join(LEDGER_DIR, "wb")
 LEDGER_WB_OPEN = date(2026, 9, 8)                # DESIGN/110 §7 R2; before this, nothing is written
                                                   # to ledger/wb/ unless --force-ledger

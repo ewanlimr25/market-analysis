@@ -83,6 +83,12 @@ intraday-flow:    ## whole-panel G2 build + analysis -> data/backtest/g2_*/, fin
 intraday-rv:      ## build data/mart/intraday_rv for IRV_DATE=<d> (else the whole panel; DAYS=N limits to the N most recent panel days)
 	$(PY) -m engine.mart.intraday_rv $(if $(IRV_DATE),--date $(IRV_DATE),--rebuild $(if $(DAYS),--days $(DAYS),))
 
+sc-rv5:            ## S-C R1 descriptive: E2's F3/F6 under RV5, close-to-close beside -> data/backtest/sc_rv5_f3_f6.md
+	$(PY) scripts/sc_rv5_table.py
+
+sc-funnel:         ## S-C R1 funnel F1..F10 on DATES="2026-05-08 2026-06-30 2026-08-26" (default: last panel session)
+	$(PY) scripts/sc_funnel.py $(DATES)
+
 earnings-history:  ## build data/mart/earnings_history/{events,summary}.parquet (LIMIT=N caps the ticker set)
 	$(PY) -m engine.mart.earnings_history --rebuild $(if $(LIMIT),--limit $(LIMIT),) $(if $(FINNHUB_SAMPLE),--finnhub-sample $(FINNHUB_SAMPLE),)
 
