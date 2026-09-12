@@ -1,0 +1,23 @@
+{
+ "policy_id": "sb-c-nakedput-margin",
+ "strategy": "sb",
+ "champion": "sb-1.0",
+ "idea": "Naked short put with margin-based sizing: the champion put spread without its long 2-sigma wing; same gate, expiry, short strike p1, hold-to-expiry exit (DESIGN/80 §8 idea ledger, 2026-09-12; owner request, D25 addendum)",
+ "params_diff": {
+  "structure": "NP"
+ },
+ "registered": "PENDING-2026-12-01",
+ "n_required": 15,
+ "unit": "post",
+ "adjudicate_on": "2026-12-25",
+ "test": "paired difference in net excess per unit risk, challenger minus champion, on matched entry nights; one-sided t with Newey-West lag = overlap; alpha 0.05",
+ "min_effect": 0.01,
+ "kill": "if after n_required/2 units the paired mean is below -min_effect, stop early and record FAIL",
+ "script_sha256": "fade9ae58a709fba2b853f8aec2c8ca7cc84567618823f0287131e80397fc633",
+ "draft": true,
+ "sleeve": "SPY-PS",
+ "power_note": "n_required shared with the G10 drafts (min_effect 0.01 against the champion's realised sd at registration, marked n=24, NW lag 2 inflation 1.000)",
+ "sizing_rule": "Fixed here so it is not chosen after seeing the season. risk_usd = the champion's max loss at the same entry (p1 - p2 - PS credit) x 100 x contracts, i.e. the 2-sigma stress loss; contracts = the champion's on the matched night (DESIGN/80 §4 unchanged). ROR = net_usd / risk_usd. The loss beyond 2 sigma is uncapped and is charged in full to the unit that takes it. Reported beside every row, never the denominator: the Reg-T proxy margin max(20% x spot - OTM amount, 10% x spot) x 100 - premium (about $9,800 per SPY contract at spot 766 on 2026-09-11), which must fit buying power on the entry night or the row is skipped with reason no_margin.",
+ "registration_note": "Structure challenger: adjudicate.MATCH_KEY must pair on (ticker, E) with the champion side fixed to PS (same change the call-spread draft needs), and sb_structures needs an NP structure (short p1 only). Engine changes, no parameter. Launching this live would be the first S-B position without a defined maximum loss and needs its own decision at a read, not a PROMOTE alone.",
+ "prior_evidence": "In-sample on the proxy at the champion's risk denominator (findings/market-analysis/artifacts/sb-single-leg/results.md §5, 2026-09-12): gate ON SPY-NP +7.5% ROR (NW t 6.95, 61) vs SPY-PS +4.2%, paired +3.3%; QQQ-NP +7.0% vs +4.3%, paired +2.7%. The gain is the wing's cost (about $80 a contract, the long 2-sigma put paying -102% of its premium on average). Tail beyond the wing in three years: one QQQ position, -$461. Month rule (worst >= -3 x median): SPY passes (0.09 gate ON, 2.60 every Friday), QQQ fails (3.72 / 3.87). Worst single unit gate ON: SPY -57.6%, QQQ -124.7% of the 2-sigma risk."
+}
