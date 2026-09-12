@@ -15,14 +15,21 @@ Stored at `data/mart/regsho/date=<YYYY-MM-DD>/part.parquet`. `refresh(d)` is the
 touches the network. `load_regsho(d)` never does: fail-soft, `{"available": False, "reason": ...}` when
 the day has no snapshot.
 
-CLI: `python3 -m engine.mart.regsho --refresh --date 2026-09-04` (logs row count and short-volume share).
+FINRA posts a session's file in the evening (after the 16:30 loader run) and none on weekends or
+holidays; the CDN answers a missing file with HTTP 403, not 404. `refresh_missing(through)` therefore
+walks the unstored weekdays of a trailing window and records a 403/404 as "not published", so each
+nightly run stores the prior session's file and a run after a sleep gap catches up.
+
+CLI: `python3 -m engine.mart.regsho --refresh --date 2026-09-04` (one day; logs row count and short-volume
+share) or `--refresh --through 2026-09-12` (catch-up; the cron form).
 """
 from __future__ import annotations
 
 import argparse
 import io
+import urllib.error
 import urllib.request
-from datetime import date
+from datetime import date, timedelta
 from typing import Callable
 
 import pandas as pd
@@ -33,6 +40,9 @@ TABLE = "regsho"
 REGSHO_URL = "https://cdn.finra.org/equity/regsho/daily/CNMSshvol{d}.txt"
 USER_AGENT = {"User-Agent": "Mozilla/5.0 (research; market-analysis engine)"}
 FETCH_TIMEOUT_S = 30
+CATCHUP_LOOKBACK_DAYS = 14                      # a two-week sleep gap is recovered in one run
+NOT_PUBLISHED_STATUSES = (403, 404)             # CloudFront/S3 answers a missing key with 403
+STATUS_STORED, STATUS_NOT_PUBLISHED, STATUS_ERROR = "stored", "not_published", "error"
 
 COLUMNS = ["date", "symbol", "short_volume", "short_exempt_volume", "total_volume", "market"]
 
@@ -84,6 +94,43 @@ def refresh(d: date, fetch_text: Callable[[date], str] = fetch_regsho_text) -> p
     return df
 
 
+def _weekdays(start: date, end: date) -> list[date]:
+    days = (end - start).days
+    return [start + timedelta(i) for i in range(days + 1) if (start + timedelta(i)).weekday() < 5]
+
+
+def refresh_missing(through: date, lookback_days: int = CATCHUP_LOOKBACK_DAYS,
+                    fetch_text: Callable[[date], str] = fetch_regsho_text) -> list[dict]:
+    """Catch-up: refresh every weekday in `[through - lookback_days, through]` with no snapshot.
+    Returns one `{"date", "status", "rows", "reason"}` per day tried; a 403/404 is `not_published`
+    (weekend, holiday, or the evening file not yet posted), any other failure is `error`. Nothing
+    raises: a missing day must never stop the other loaders."""
+    out = []
+    for d in _weekdays(through - timedelta(lookback_days), through):
+        if store.has_partition(TABLE, d):
+            continue
+        try:
+            df = refresh(d, fetch_text)
+            out.append({"date": d, "status": STATUS_STORED, "rows": int(len(df)), "reason": None})
+        except urllib.error.HTTPError as exc:
+            status = STATUS_NOT_PUBLISHED if exc.code in NOT_PUBLISHED_STATUSES else STATUS_ERROR
+            out.append({"date": d, "status": status, "rows": 0, "reason": f"HTTP {exc.code}"})
+        except Exception as exc:
+            out.append({"date": d, "status": STATUS_ERROR, "rows": 0, "reason": str(exc)})
+    return out
+
+
+def summarize_catchup(results: list[dict]) -> str:
+    """One log line: stored days with row counts, then the not-published and error days."""
+    stored = [f"{r['date'].isoformat()} ({r['rows']} symbols)" for r in results if r["status"] == STATUS_STORED]
+    pending = [r["date"].isoformat() for r in results if r["status"] == STATUS_NOT_PUBLISHED]
+    errors = [f"{r['date'].isoformat()}: {r['reason']}" for r in results if r["status"] == STATUS_ERROR]
+    parts = [f"stored {', '.join(stored)}" if stored else "nothing new to store",
+             f"not published: {', '.join(pending)}" if pending else "",
+             f"errors: {'; '.join(errors)}" if errors else ""]
+    return "regsho: " + "; ".join(p for p in parts if p) + " (facilitation, control only, no signal use -- RESEARCH/30 §5)"
+
+
 def load_regsho(d: date) -> dict:
     """Fail-soft, no network: `{"available": True, "reason": None, "data": df}` when `d` has a
     snapshot, else `{"available": False, "reason": ..., "data": <empty frame>}`. Control-variable use
@@ -96,8 +143,15 @@ def load_regsho(d: date) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--refresh", action="store_true")
-    ap.add_argument("--date", required=True)
+    ap.add_argument("--date", help="one day: refresh it (with --refresh) or report whether it is stored")
+    ap.add_argument("--through", help="with --refresh: catch up every unstored weekday of the trailing window ending here")
     a = ap.parse_args()
+    if a.refresh and a.through:
+        results = refresh_missing(date.fromisoformat(a.through))
+        print(summarize_catchup(results))
+        return 1 if any(r["status"] == STATUS_ERROR for r in results) else 0
+    if not a.date:
+        ap.error("--date is required unless --refresh --through is given")
     d = date.fromisoformat(a.date)
     if not a.refresh:
         result = load_regsho(d)

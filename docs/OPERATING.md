@@ -108,7 +108,9 @@ schema changed for them. Installed 2026-09-07 (`crontab -l` to see it; `crontab 
 runs Saturday morning. cron does not catch up after sleep: if the Mac was asleep at 16:30 the chain for
 that day is missing, and `make loaders` by hand the same evening still stores it under the payload's own
 date. A holiday logs one `already exists` / `no file` line per loader and nothing else. `data/logs/` is
-gitignored; glance at it weekly.
+gitignored; glance at it weekly. The Reg SHO line catches up on its own: FINRA posts a session's file in the
+evening, after the 16:30 run, and its CDN answers a missing file with HTTP 403, so each run stores the prior
+session and lists today as `not published`; a run after a sleep gap refills the trailing two weeks.
 
 Do not run for a date with no export (weekends, holidays). If the export has not landed, wait; do
 not run the previous date twice (it is harmless, the ledger writes are idempotent, but it wastes a

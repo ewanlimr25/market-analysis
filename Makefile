@@ -121,7 +121,7 @@ cross-section:     ## weekly IV-spread/skew/O-S cross-section -> data/backtest/g
 
 loaders:           ## nightly (cron, weekdays): CBOE chain SPY/QQQ, Reg SHO, IBKR borrow, VVIX/SKEW -> data/mart/*
 	-$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ
-	-$(PY) -m engine.mart.regsho --refresh --date $(DATE)
+	-$(PY) -m engine.mart.regsho --refresh --through $(DATE)
 	-$(PY) -m engine.mart.borrow --refresh --date $(DATE)
 	-$(MAKE) -s index-vol-ext
 
