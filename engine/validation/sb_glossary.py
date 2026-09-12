@@ -104,6 +104,20 @@ def sensitivities() -> str:
     ])
 
 
+def other_structures() -> str:
+    return _rows([
+        ("long_c1, long_p1, long_c2, long_p2", "one long leg at the 1σ or 2σ strike; risk = the premium paid, so −100% is the premium gone."),
+        ("short_p1_naked, short_c1_naked", "one short leg at 1σ with no wing; risk = the 2σ stress loss (the matching spread's "
+                                          "max loss at the same strikes); `mean_margin_usd` is the Reg-T proxy margin per contract, "
+                                          "reported for buying power only."),
+        ("CS", "call credit spread, short `c1` long `c2`; risk = width − credit. Not a sleeve; a challenger draft."),
+        ("PS (in this table)", "the champion put spread recomputed by the same code, as a check against the sleeve table."),
+        ("set", "`gate ON` = the champion's entry nights; `every Friday` = every entry session, gate ignored."),
+        ("mean_pnl_usd / total_pnl_usd / mean_premium_usd", "per one contract: mean and total net $, and the mean premium "
+                                                              "(positive = paid, negative = received)."),
+    ])
+
+
 def verdict_columns() -> str:
     return _rows([
         ("n_proxy, mean_proxy, nw_t_proxy", "pooled proxy count, mean `ror` and NW t."),
@@ -129,6 +143,7 @@ def appendix() -> str:
         "Layers, gate and position columns (DESIGN/80 §2 to §5):\n", vocabulary(),
         "\nStatistics (§6.1 to §6.5):\n", statistics(),
         "\nSensitivities and skip reasons (§6.6; descriptive, cannot promote a configuration):\n", sensitivities(),
+        "\nOther structures on the proxy (descriptive; never a verdict input):\n", other_structures(),
         "\nGo / no-go columns (§6.7; read 2026-12-01):\n", verdict_columns(),
         "\nPercentages are `ror` unless the column says `usd`. Every threshold above is read from `engine/config.py`; "
         "none moves before the read.\n",

@@ -15,9 +15,10 @@ from engine import backtest_sb as B
 from engine.config import SB_DSR_TRIALS, SB_GO_T_MIN, SB_NW_LAG, SB_WINDOWS
 from engine.strategies.sa_data import as_dates
 from engine.validation import sb_harness as H
+from engine.validation.sb_alt_structures import TABLE_COLS as ALT_COLS, alt_structure_table
 from engine.validation.sb_glossary import appendix
 
-PCT = ("mean_ror", "median_ror", "mean_marked", "mean_proxy", "mean_p1", "mean_p2", "mean_p3", "marked_mean_ror",
+PCT = ("worst_ror", "mean_ror", "median_ror", "mean_marked", "mean_proxy", "mean_p1", "mean_p2", "mean_p3", "marked_mean_ror",
        "proxy_mean_ror", "gap_ror", "marked_cost_ror", "worst_ror", "best_ror", "mean_win_ror", "mean_without_worst_1pct",
        "mean_without_best_1pct", "mean_credit_over_width", "mean_cost_over_credit", "hit", "ror")
 SLEEVE_COLS = ["sleeve", "window", "n", "expiries", "mean_ror", "median_ror", "hit", "nw_t", "nw_p", "cl_t", "cl_p",
@@ -94,6 +95,13 @@ def build() -> str:
         parts.append(section("Tail report (proxy, pooled)", tails(proxy)))
         parts.append(section("Gate modes and sensitivities (proxy, pooled; descriptive)",
                              H.md(H.gate_table(proxy_sens), ["sensitivity", "sleeve", "n", "mean_ror", "nw_t", "cl_t", "net_usd_total", "mean_cost_over_credit"], pct_cols=PCT)))
+        alt = alt_structure_table(proxy_sens)
+        parts.append(section("Other structures on the proxy (descriptive; not sleeves, never a verdict input)",
+                             ("Single legs, naked shorts and the call spread re-priced on the same entry rows with the frozen "
+                              "smile and costs. Risk: debit = premium; credit spread = width - credit; naked = the 2-sigma "
+                              "stress loss (the matching spread's max loss), Reg-T proxy margin beside. `PS` here is the "
+                              "champion recomputed as a check. Drafts: `ledger/challengers/drafts/sb-c-callspread.json`, "
+                              "`sb-c-nakedput-margin.json`.\n\n" + H.md(alt, ALT_COLS, pct_cols=PCT)) if len(alt) else "_no sensitivities_"))
     parts.append(section("Marked (panel): sleeve table", H.md(H.sleeve_table(marked, ("P3",)), SLEEVE_COLS, pct_cols=PCT) if len(marked) else "_no marked positions_"))
     if len(marked):
         parts.append(section("Marked vs proxy on the same positions (§6.7 criterion 2)",

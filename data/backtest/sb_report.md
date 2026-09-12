@@ -186,6 +186,46 @@ Worst 10 positions, QQQ-PS (pooled):
 | wing_1.5 | QQQ-IC | 59 | -1.60% | -0.3756 | -0.4183 | -3,188 | +7.42% |
 
 
+## Other structures on the proxy (descriptive; not sleeves, never a verdict input)
+
+Single legs, naked shorts and the call spread re-priced on the same entry rows with the frozen smile and costs. Risk: debit = premium; credit spread = width - credit; naked = the 2-sigma stress loss (the matching spread's max loss), Reg-T proxy margin beside. `PS` here is the champion recomputed as a check. Drafts: `ledger/challengers/drafts/sb-c-callspread.json`, `sb-c-nakedput-margin.json`.
+
+| set | structure | underlying | n | mean_ror | nw_t | hit | mean_pnl_usd | worst_ror | mean_premium_usd | mean_margin_usd | total_pnl_usd |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| gate ON | long_c1 | QQQ | 59 | +29.51% | 0.4668 | +11.86% | -6.79 | -102.60% | 116.86 | — | -400.38 |
+| gate ON | long_p1 | QQQ | 59 | -76.10% | -3.17 | +1.69% | -207.55 | -101.38% | 249.25 | — | -12,246 |
+| gate ON | long_c2 | QQQ | 59 | -119.57% | -79.45 | +0.00% | -8.83 | -134.00% | 7.48 | — | -521.18 |
+| gate ON | long_p2 | QQQ | 59 | -88.04% | -6.30 | +1.69% | -73.19 | -103.38% | 80.25 | — | -4,318 |
+| gate ON | short_p1_naked | QQQ | 59 | +7.02% | 3.14 | +98.31% | 202.81 | -124.66% | -249.25 | 7,540 | 11,966 |
+| gate ON | short_c1_naked | QQQ | 59 | -1.38% | -0.5129 | +88.14% | 2.77 | -100.03% | -116.86 | 7,671 | 163.55 |
+| gate ON | CS | QQQ | 59 | -1.71% | -0.6354 | +86.44% | -6.06 | -100.16% | -109.38 | — | -357.63 |
+| gate ON | PS | QQQ | 59 | +4.35% | 2.44 | +98.31% | 129.62 | -100.20% | -169.00 | — | 7,648 |
+| gate ON | long_c1 | SPY | 61 | +42.33% | 0.5352 | +13.11% | 8.54 | -104.68% | 58.75 | — | 520.81 |
+| gate ON | long_p1 | SPY | 61 | -84.94% | -7.14 | +3.28% | -192.15 | -101.40% | 217.16 | — | -11,721 |
+| gate ON | long_c2 | SPY | 61 | -148.32% | -70.51 | +0.00% | -5.48 | -173.85% | 3.76 | — | -334.09 |
+| gate ON | long_p2 | SPY | 61 | -102.44% | -1,109 | +0.00% | -79.27 | -103.47% | 77.46 | — | -4,835 |
+| gate ON | short_p1_naked | SPY | 61 | +7.51% | 6.95 | +96.72% | 187.90 | -57.60% | -217.16 | 9,351 | 11,462 |
+| gate ON | short_c1_naked | SPY | 61 | -1.04% | -0.5856 | +86.89% | -12.46 | -89.21% | -58.75 | 9,514 | -760.04 |
+| gate ON | CS | SPY | 61 | -1.27% | -0.7121 | +86.89% | -17.94 | -89.43% | -54.99 | — | -1,094 |
+| gate ON | PS | SPY | 61 | +4.18% | 3.84 | +95.08% | 108.64 | -61.38% | -139.70 | — | 6,627 |
+| every Friday | long_c1 | QQQ | 150 | +59.25% | 1.19 | +17.33% | 71.55 | -102.61% | 115.25 | — | 10,732 |
+| every Friday | long_p1 | QQQ | 150 | -62.63% | -3.35 | +5.33% | -165.76 | -101.46% | 244.57 | — | -24,864 |
+| every Friday | long_c2 | QQQ | 150 | -120.95% | -128.16 | +0.00% | -8.74 | -139.37% | 7.35 | — | -1,311 |
+| every Friday | long_p2 | QQQ | 150 | -96.60% | -17.30 | +0.67% | -76.94 | -103.68% | 78.76 | — | -11,541 |
+| every Friday | short_p1_naked | QQQ | 150 | +5.69% | 3.24 | +94.67% | 161.06 | -124.66% | -244.57 | 7,613 | 24,158 |
+| every Friday | short_c1_naked | QQQ | 150 | -2.69% | -1.26 | +82.67% | -75.54 | -100.03% | -115.25 | 7,745 | -11,331 |
+| every Friday | CS | QQQ | 150 | -3.03% | -1.42 | +81.33% | -84.29 | -100.16% | -107.90 | — | -12,643 |
+| every Friday | PS | QQQ | 150 | +2.74% | 1.67 | +94.67% | 84.12 | -100.20% | -165.81 | — | 12,618 |
+| every Friday | long_c1 | SPY | 150 | +37.64% | 0.7314 | +13.33% | 24.47 | -105.35% | 58.03 | — | 3,670 |
+| every Friday | long_p1 | SPY | 150 | -74.52% | -6.09 | +4.67% | -163.35 | -101.52% | 214.34 | — | -24,502 |
+| every Friday | long_c2 | SPY | 150 | -150.05% | -87.24 | +0.00% | -5.44 | -188.16% | 3.73 | — | -816.22 |
+| every Friday | long_p2 | SPY | 150 | -102.49% | -1,494 | +0.00% | -78.02 | -103.74% | 76.22 | — | -11,703 |
+| every Friday | short_p1_naked | SPY | 150 | +6.58% | 5.95 | +95.33% | 159.12 | -92.22% | -214.34 | 9,283 | 23,868 |
+| every Friday | short_c1_naked | SPY | 150 | -1.00% | -0.8422 | +86.00% | -28.37 | -89.21% | -58.03 | 9,439 | -4,256 |
+| every Friday | CS | SPY | 150 | -1.23% | -1.03 | +86.00% | -33.81 | -89.43% | -54.30 | — | -5,072 |
+| every Friday | PS | SPY | 150 | +3.24% | 2.93 | +94.67% | 81.09 | -95.48% | -138.13 | — | 12,164 |
+
+
 ## Marked (panel): sleeve table
 
 | sleeve | window | n | expiries | mean_ror | median_ror | hit | nw_t | nw_p | cl_t | cl_p | net_usd_total | mean_credit_over_width | mean_cost_over_credit | mean_x | mean_risk_usd |
@@ -331,6 +371,17 @@ Sensitivities and skip reasons (§6.6; descriptive, cannot promote a configurati
 | `skipped reason `OFF:G1`, `OFF:G2`` | no entry because the gate was off (which condition failed first). |
 | `skipped reason `no_tier1_<leg>`` | no strike with a tier-1 print inside the band for that leg (marked layer only). |
 | `skipped reason `degenerate_strikes`` | the order `p2 < p1 < S < c1 < c2` did not hold. |
+
+Other structures on the proxy (descriptive; never a verdict input):
+
+| term | meaning |
+|---|---|
+| `long_c1, long_p1, long_c2, long_p2` | one long leg at the 1σ or 2σ strike; risk = the premium paid, so −100% is the premium gone. |
+| `short_p1_naked, short_c1_naked` | one short leg at 1σ with no wing; risk = the 2σ stress loss (the matching spread's max loss at the same strikes); `mean_margin_usd` is the Reg-T proxy margin per contract, reported for buying power only. |
+| `CS` | call credit spread, short `c1` long `c2`; risk = width − credit. Not a sleeve; a challenger draft. |
+| `PS (in this table)` | the champion put spread recomputed by the same code, as a check against the sleeve table. |
+| `set` | `gate ON` = the champion's entry nights; `every Friday` = every entry session, gate ignored. |
+| `mean_pnl_usd / total_pnl_usd / mean_premium_usd` | per one contract: mean and total net $, and the mean premium (positive = paid, negative = received). |
 
 Go / no-go columns (§6.7; read 2026-12-01):
 

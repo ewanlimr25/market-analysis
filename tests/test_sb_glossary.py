@@ -32,6 +32,17 @@ def test_every_report_column_has_a_glossary_row():
         assert col in terms, col
 
 
+def test_other_structure_names_and_columns_are_covered():
+    from engine.validation.sb_alt_structures import ALT_STRUCTURES, TABLE_COLS
+    text = G.other_structures()
+    for name in ALT_STRUCTURES:
+        assert name in text, name
+    terms = _terms(G.appendix())
+    for col in TABLE_COLS:
+        assert col in terms or col in ("n", "structure", "underlying", "nw_t", "hit", "mean_ror", "worst_ror", "mean_margin_usd"), col
+    assert "mean_margin_usd" in text
+
+
 def test_sensitivity_names_and_skip_reasons_are_covered():
     text = G.sensitivities()
     for name in ("base", "gate_off", "g1_only", "g2_only", "costs_x2", "wing_1.5", "band_0.15", "OFF:G1", "OFF:G2",

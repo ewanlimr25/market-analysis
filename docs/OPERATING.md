@@ -205,7 +205,9 @@ make test                                        # 269 unit tests; must stay gre
 ```
 
 Read `data/backtest/sb_report.md` §8 (go/no-go as of today). The report ends with an appendix that defines every column, symbol and
-verdict it prints (`engine/validation/sb_glossary.py`). A criterion that flips from pass to fail
+verdict it prints (`engine/validation/sb_glossary.py`). Between the sensitivities and the marked tables it also carries
+"Other structures on the proxy": single legs, naked shorts and the call spread re-priced on the same rows
+(`engine/validation/sb_alt_structures.py`). Descriptive only; the go/no-go never reads it. A criterion that flips from pass to fail
 is information, not a reason to change anything before the read.
 
 ## 5. When something is off
