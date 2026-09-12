@@ -1,0 +1,22 @@
+{
+ "policy_id": "sb-c-callspread",
+ "strategy": "sb",
+ "champion": "sb-1.0",
+ "idea": "Call credit spread as a standalone sleeve: short c1 at S(1+m), long c2 at S(1+2m), same gate, expiry, sizing and hold-to-expiry exit as the champion put spread (DESIGN/80 §8 idea ledger, 2026-09-12; owner request)",
+ "params_diff": {
+  "structure": "CS"
+ },
+ "registered": "PENDING-2026-12-01",
+ "n_required": 15,
+ "unit": "post",
+ "adjudicate_on": "2026-12-25",
+ "test": "paired difference in net excess per unit risk, challenger minus champion, on matched entry nights; one-sided t with Newey-West lag = overlap; alpha 0.05",
+ "min_effect": 0.01,
+ "kill": "if after n_required/2 units the paired mean is below -min_effect, stop early and record FAIL",
+ "script_sha256": "fade9ae58a709fba2b853f8aec2c8ca7cc84567618823f0287131e80397fc633",
+ "draft": true,
+ "sleeve": "SPY-PS",
+ "power_note": "n_required shared with the G10 drafts (min_effect 0.01 against the champion's realised sd at registration, marked n=24, NW lag 2 inflation 1.000)",
+ "registration_note": "A structure challenger: adjudicate.MATCH_KEY pairs rows on (ticker, E, structure), so before this draft is registered the paired test must match on (ticker, E) only, with the champion side fixed to PS. Engine change, no parameter. Also: engine/strategies/sb_structures.py has no CS structure; the shadow runner adds it as short c1 / long c2 with max loss (c2 - c1 - credit) x 100.",
+ "prior_evidence": "In-sample on the proxy (findings/market-analysis/artifacts/sb-single-leg/results.md, 2026-09-12): gate ON SPY-CS mean ROR -1.3% (NW t -0.71, 61 positions), QQQ-CS -1.7% (t -0.64, 59); every Friday -1.2% / -3.0%. The sign is against the challenger before it starts; it is filed so the forward answer is on the record, not because the proxy supports it."
+}
