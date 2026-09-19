@@ -253,3 +253,21 @@ def test_borrow_provenance_reads_the_join_output():
     assert N._borrow_provenance(side, _date(2026, 9, 11)) == {"asof": _date(2026, 9, 10), "stale_days": 1, "names_with_fee": 2}
     empty = pd.DataFrame({"borrow_fee": [float("nan")], "borrow_asof": [None]})
     assert N._borrow_provenance(empty, _date(2026, 9, 11)) == {"asof": None, "stale_days": None, "names_with_fee": 0}
+
+
+def test_evaluate_universe_records_borrow_provenance_after_the_universe_merges(monkeypatch):
+    """Regression: the provenance is read from columns after every merge in build_universe_frame
+    (pandas `attrs` are dropped by `merge`, which is how the first week of d1.5 files lost the block)."""
+    from datetime import date as _date
+    uni = pd.DataFrame({"ticker": ["AAA", "BBB"], "date": [D0, D0], "borrow_fee_pct": [1.5, float("nan")],
+                        "borrow_asof": [_date(2026, 6, 8), None]})
+    uni = uni.merge(pd.DataFrame({"ticker": ["AAA"], "date": [D0], "flag": [True]}), on=["ticker", "date"], how="left")
+    assert uni.attrs == {}
+    monkeypatch.setattr(N, "build_universe_frame", lambda d: uni)
+    monkeypatch.setattr(N, "build_ticker_series_map", lambda tickers, as_of: {})
+    monkeypatch.setattr(N, "evaluate_conditions", lambda universe, series_map: pd.DataFrame([_cond_row("AAA", D0, LONG_IDS)]))
+    monkeypatch.setattr(N, "add_stacks_and_baskets", lambda df: df)
+    cond_df, n = N.evaluate_universe(D0)
+    assert n == 2
+    assert cond_df.attrs["borrow"] == {"asof": _date(2026, 6, 8), "stale_days": 1, "names_with_fee": 1}
+    assert N.borrow_provenance(pd.DataFrame({"ticker": ["AAA"]}), D0) is None

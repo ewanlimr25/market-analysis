@@ -88,7 +88,7 @@ def build_universe_frame(d: date) -> pd.DataFrame:
     universe = universe.reset_index(drop=True)
     universe["days_to_cover"] = side["days_to_cover"].to_numpy()
     universe["borrow_fee_pct"] = side["borrow_fee"].to_numpy()
-    universe.attrs["borrow"] = _borrow_provenance(side, d)
+    universe["borrow_asof"] = side["borrow_asof"].to_numpy()     # a column survives the merges below; attrs do not
 
     flags = T.build_tier1_flags([d])
     universe = universe.merge(flags, on=["ticker", "date"], how="left")
@@ -195,8 +195,17 @@ def evaluate_universe(d: date) -> tuple[pd.DataFrame, int]:
     series_map = build_ticker_series_map(tickers, as_of=d)
     cond_df = evaluate_conditions(universe, series_map)
     cond_df = add_stacks_and_baskets(cond_df)
-    cond_df.attrs["borrow"] = universe.attrs.get("borrow")     # provenance rides along to `run`
+    cond_df.attrs["borrow"] = borrow_provenance(universe, d)   # read here, after the last merge; rides along to `run`
     return cond_df, universe_n
+
+
+def borrow_provenance(universe: pd.DataFrame, d: date) -> dict | None:
+    """The d1.5 `borrow` block from the universe frame's `borrow_fee_pct` / `borrow_asof` columns
+    (None when the frame never carried them, e.g. a stub in tests)."""
+    if universe is None or "borrow_asof" not in universe.columns:
+        return None
+    side = pd.DataFrame({"borrow_fee": universe["borrow_fee_pct"], "borrow_asof": universe["borrow_asof"]})
+    return _borrow_provenance(side, d)
 
 
 def _borrow_provenance(side: pd.DataFrame, d: date) -> dict:
