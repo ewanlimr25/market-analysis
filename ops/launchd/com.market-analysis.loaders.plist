@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- market-analysis nightly loaders (docs/OPERATING.md §1; findings DECISIONS D23/O4, moved from cron 2026-09-18).
+       Weekdays 16:30 local: CBOE chain SPY/QQQ, Reg SHO catch-up, IBKR borrow, VVIX/SKEW. launchd runs a missed
+       calendar job when the Mac wakes; cron did not. Install: launchctl bootstrap gui/$(id -u) <this file>. -->
+  <key>Label</key><string>com.market-analysis.loaders</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>cd /Users/ewan/Development/market-analysis &amp;&amp; /usr/bin/make -s loaders >> data/logs/loaders.log 2>&amp;1</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/Users/ewan/.pyenv/shims:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <key>HOME</key><string>/Users/ewan</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>16</integer><key>Minute</key><integer>30</integer></dict>
+  </array>
+  <key>StandardErrorPath</key><string>/Users/ewan/Development/market-analysis/data/logs/launchd-loaders.err</string>
+  <key>RunAtLoad</key><false/>
+</dict>
+</plist>

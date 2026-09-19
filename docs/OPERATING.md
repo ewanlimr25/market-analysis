@@ -93,24 +93,39 @@ machine copy is `signals.json` in the same folder; its shape is pinned by `schem
 `signals.json: VALID`. A `WARN ... does not match` line means a key drifted: the file is still the
 record, but tell the next session so the schema (not the ledger) is fixed.
 
-### The loaders run from cron, not from `make daily` (D23, 2026-09-07)
+### The loaders run from launchd, not from `make daily` (D23, 2026-09-07; moved from cron 2026-09-18)
 
 The G7 to G10 mart tables (`cboe_chain`, `regsho`, `borrow`, `index_vol_ext`, `short_interest`) are
-refreshed by two `make` targets that cron runs on this machine; `make daily` never calls them and no
-schema changed for them. Installed 2026-09-07 (`crontab -l` to see it; `crontab -r` removes it):
+refreshed by two `make` targets that launchd runs on this machine; `make daily` never calls them and no
+schema changed for them. The two LaunchAgents live in the repo under `ops/launchd/` and are installed as
+copies in `~/Library/LaunchAgents/`:
 
 ```
-30 16 * * 1-5  cd ~/Development/market-analysis && make -s loaders        >> data/logs/loaders.log 2>&1
-0  9  * * 6    cd ~/Development/market-analysis && make -s loaders-weekly >> data/logs/loaders.log 2>&1
+com.market-analysis.loaders          weekdays 16:30 local   make -s loaders          >> data/logs/loaders.log
+com.market-analysis.loaders-weekly   Saturday  09:00 local   make -s loaders-weekly   >> data/logs/loaders.log
+```
+
+Install or reinstall (after editing a plist, copy it again and repeat):
+
+```
+cp ops/launchd/com.market-analysis.*.plist ~/Library/LaunchAgents/
+launchctl bootout gui/$(id -u)/com.market-analysis.loaders 2>/dev/null; launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.market-analysis.loaders.plist
+launchctl bootout gui/$(id -u)/com.market-analysis.loaders-weekly 2>/dev/null; launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.market-analysis.loaders-weekly.plist
+launchctl list | grep market-analysis          # both rows present, last exit 0
+launchctl kickstart gui/$(id -u)/com.market-analysis.loaders   # fire it now (idempotent; a stored day logs "already stored")
 ```
 
 16:30 local is after CBOE's 15-minute delay on the close; the weekly FINRA pull (about 2,500 requests)
-runs Saturday morning. cron does not catch up after sleep: if the Mac was asleep at 16:30 the chain for
-that day is missing, and `make loaders` by hand the same evening still stores it under the payload's own
-date. A holiday logs one `already exists` / `no file` line per loader and nothing else. `data/logs/` is
-gitignored; glance at it weekly. The Reg SHO line catches up on its own: FINRA posts a session's file in the
-evening, after the 16:30 run, and its CDN answers a missing file with HTTP 403, so each run stores the prior
-session and lists today as `not published`; a run after a sleep gap refills the trailing two weeks.
+runs Saturday morning. **Why launchd:** a `StartCalendarInterval` job that was missed because the Mac was
+asleep runs when the Mac wakes; cron never caught up, and in the week of 09-14 it fired on one day of five.
+A job missed because the Mac was shut down (not asleep) still does not run; then `make loaders` by hand
+the same evening stores the chain under the payload's own date, and the CBOE payload holds a session's
+close until the next open. A holiday logs one `already exists` / `no file` line per loader and nothing
+else. `data/logs/` is gitignored; glance at `loaders.log` weekly and at `launchd-loaders*.err` if a row in
+`launchctl list` shows a non-zero exit. The Reg SHO line catches up on its own: FINRA posts a session's
+file in the evening, after the 16:30 run, and its CDN answers a missing file with HTTP 403, so each run
+stores the prior session and lists today as `not published`; a run after a sleep gap refills the trailing
+two weeks.
 
 Do not run for a date with no export (weekends, holidays). If the export has not landed, wait; do
 not run the previous date twice (it is harmless, the ledger writes are idempotent, but it wastes a
