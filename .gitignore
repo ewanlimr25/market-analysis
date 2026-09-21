@@ -11,3 +11,6 @@ data/backtest/*
 !data/backtest/*.md
 .tmp/
 data/logs/
+# Ticker-sheet inputs (findings/stock-deep-dive DESIGN/70 §1): ~0.7 MB per name-day, re-derivable from
+# the marts; ticker.json, report.md and narrate.md beside them are committed.
+analyses/ticker/*/*/inputs/

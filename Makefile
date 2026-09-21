@@ -139,3 +139,18 @@ loaders-weekly:    ## weekly (cron, Saturday): FINRA short interest, full univer
 
 watch-retro:       ## R1 retrospective: 20 conditions x panel -> data/backtest/wb_conditions.parquet, wb_retro.json
 	$(PY) scripts/watch_retro.py
+
+# ---- Ticker sheet (findings/stock-deep-dive DESIGN/70; frozen 2026-09-20). One name, one date, no model.
+.PHONY: ticker ticker-batch narrate seed-name
+
+ticker:            ## make ticker T=NVDA [DATE=] [DIRECTION=long|short] [E=100000] [OFFLINE=1] -> analyses/ticker/$(T)/$(DATE)/
+	$(PY) -m engine.name.sheet --ticker $(T) --date $(DATE) $(if $(DIRECTION),--direction $(DIRECTION),) $(if $(E),--equity $(E),) $(if $(OFFLINE),--offline,) $(if $(ALLOW_UNDEFINED),--allow-undefined,)
+
+ticker-batch:      ## one sheet per name in data/watch_names.txt for DATE (no DIRECTION; the exploration book)
+	$(PY) -m engine.name.sheet --symbols-file data/watch_names.txt --date $(DATE) $(if $(OFFLINE),--offline,)
+
+narrate:           ## make narrate T=NVDA [DATE=]: the qualitative layer (headlines, analyst, Form 4, checklist) -> narrate.md; changes no number
+	$(PY) -m engine.name.narrate --ticker $(T) --date $(DATE)
+
+seed-name:         ## one-off: seed ledger/name/ with the 62-decision corpus as sdd-llm-1.0 (DECISIONS D8); refuses to run twice
+	$(PY) -m engine.name.seed --ledger-dir ledger/name

@@ -1,0 +1,147 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "ticker.json (n1.0)",
+ "description": "One ticker sheet: analyses/ticker/<SYMBOL>/<DATE>/ticker.json, written by `make ticker` (findings/stock-deep-dive DESIGN/70 §7). Strict JSON; every number has a `source` sibling in its section; a null is a value and is listed in `nulls`. Validation failure is a hard error for the writer.",
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["schema", "policy_id", "ticker", "date", "generated", "E", "direction", "liquidity", "events", "premium",
+              "range", "flags", "context", "structures", "ledger_rows", "context_read", "inputs_dir", "nulls"],
+ "properties": {
+  "schema": {"const": "n1.0"},
+  "policy_id": {"const": "sheet-1.0"},
+  "ticker": {"type": "string", "pattern": "^[A-Z][A-Z0-9.-]{0,9}$"},
+  "date": {"type": "string", "format": "date"},
+  "generated": {"type": "string"},
+  "E": {"type": "number", "exclusiveMinimum": 0},
+  "direction": {"enum": ["long", "short", null]},
+  "liquidity": {"$ref": "#/$defs/liquidity"},
+  "events": {"$ref": "#/$defs/events"},
+  "premium": {"$ref": "#/$defs/premium"},
+  "range": {"$ref": "#/$defs/range"},
+  "flags": {"$ref": "#/$defs/flags"},
+  "context": {"$ref": "#/$defs/context"},
+  "structures": {"type": "array", "items": {"$ref": "#/$defs/structure"}},
+  "ledger_rows": {"type": "array", "items": {"$ref": "#/$defs/ledger_row"}},
+  "context_read": {"enum": ["none", "sheet_only", "narrate"]},
+  "inputs_dir": {"type": "string"},
+  "nulls": {"type": "array", "items": {"$ref": "#/$defs/null_entry"}}
+ },
+ "$defs": {
+  "num_or_null": {"type": ["number", "null"]},
+  "int_or_null": {"type": ["integer", "null"]},
+  "str_or_null": {"type": ["string", "null"]},
+  "date_or_null": {"type": ["string", "null"], "format": "date"},
+  "source": {"type": "object", "description": "field -> 'mart or endpoint <date it carries>'", "additionalProperties": {"type": ["string", "null"]}},
+  "null_entry": {"type": "object", "required": ["field", "reason"], "additionalProperties": false,
+                 "properties": {"field": {"type": "string"}, "reason": {"type": "string"}}},
+  "section_base": {"type": "object", "required": ["source", "nulls"],
+                   "properties": {"source": {"$ref": "#/$defs/source"}, "nulls": {"type": "array", "items": {"$ref": "#/$defs/null_entry"}}}},
+  "liquidity": {
+   "allOf": [{"$ref": "#/$defs/section_base"}],
+   "required": ["can_price", "failing", "contracts", "hot_chain_days", "adv_usd", "atm_spread", "tier"],
+   "properties": {
+    "can_price": {"type": "boolean"},
+    "failing": {"enum": ["L1", "L2", "L3", "L4", "L5", "L6", null]},
+    "contracts": {"$ref": "#/$defs/int_or_null"},
+    "hot_chain_days": {"$ref": "#/$defs/int_or_null"},
+    "adv_usd": {"$ref": "#/$defs/num_or_null"},
+    "atm_spread": {"$ref": "#/$defs/num_or_null"},
+    "tier": {"$ref": "#/$defs/int_or_null"}
+   }
+  },
+  "events": {
+   "allOf": [{"$ref": "#/$defs/section_base"}],
+   "required": ["earnings", "ex_div", "expiries", "macro"],
+   "properties": {
+    "earnings": {"type": "object", "required": ["date", "session", "sources", "confirmed"],
+                 "properties": {"date": {"$ref": "#/$defs/date_or_null"}, "session": {"$ref": "#/$defs/str_or_null"},
+                                "sources": {"type": "array", "minItems": 3, "maxItems": 3,
+                                            "items": {"type": "object", "required": ["name", "date"],
+                                                      "properties": {"name": {"type": "string"}, "date": {"$ref": "#/$defs/date_or_null"}}}},
+                                "confirmed": {"type": "boolean"}, "days_to": {"$ref": "#/$defs/int_or_null"}}},
+    "ex_div": {"$ref": "#/$defs/date_or_null"},
+    "expiries": {"type": "array", "maxItems": 2, "items": {"type": "string", "format": "date"}},
+    "macro": {"type": "array", "items": {"type": "object", "required": ["date", "event"],
+                                         "properties": {"date": {"type": "string", "format": "date"}, "event": {"type": "string"}}}}
+   }
+  },
+  "premium": {
+   "allOf": [{"$ref": "#/$defs/section_base"}],
+   "required": ["iv30d", "iv_pct_own", "rv5_21", "rv_c2c_21", "spread_rv5", "spread_c2c", "slope", "earnings_history",
+                "median_ratio_8", "sc", "sa", "verdict", "x1"],
+   "properties": {
+    "iv30d": {"$ref": "#/$defs/num_or_null"}, "iv_pct_own": {"$ref": "#/$defs/num_or_null"},
+    "rv5_21": {"$ref": "#/$defs/num_or_null"}, "rv_c2c_21": {"$ref": "#/$defs/num_or_null"},
+    "spread_rv5": {"$ref": "#/$defs/num_or_null"}, "spread_c2c": {"$ref": "#/$defs/num_or_null"},
+    "slope": {"$ref": "#/$defs/num_or_null"},
+    "earnings_history": {"type": "array", "items": {"type": "object", "required": ["E", "implied_move", "realized_move", "ratio"]}},
+    "median_ratio_8": {"$ref": "#/$defs/num_or_null"},
+    "sc": {"type": "object", "required": ["pass", "failing"], "properties": {"pass": {"type": "boolean"}, "failing": {"$ref": "#/$defs/str_or_null"}}},
+    "sa": {"type": ["object", "null"]},
+    "verdict": {"enum": ["RICH", "FAIR", "CHEAP", "CANNOT_MEASURE"]},
+    "x1": {"type": "boolean"}
+   }
+  },
+  "range": {
+   "allOf": [{"$ref": "#/$defs/section_base"}],
+   "required": ["straddle_front", "box_1s_front", "box_1s_21", "atr14", "gex_sign", "zero_gamma"],
+   "properties": {
+    "straddle_front": {"type": ["object", "null"]},
+    "box_1s_front": {"$ref": "#/$defs/num_or_null"}, "box_1s_21": {"$ref": "#/$defs/num_or_null"},
+    "atr14": {"$ref": "#/$defs/num_or_null"},
+    "gex_sign": {"enum": ["+", "-", null]}, "zero_gamma": {"$ref": "#/$defs/num_or_null"}
+   }
+  },
+  "flags": {
+   "allOf": [{"$ref": "#/$defs/section_base"}],
+   "required": ["borrow", "si", "beta_250", "analyst", "form4", "vix", "regime", "x2", "x5"],
+   "properties": {
+    "borrow": {"type": ["object", "null"]}, "si": {"type": ["object", "null"]},
+    "beta_250": {"$ref": "#/$defs/num_or_null"},
+    "analyst": {"type": "array"}, "form4": {"type": ["object", "null"]},
+    "vix": {"type": ["object", "null"]}, "regime": {"$ref": "#/$defs/str_or_null"},
+    "x2": {"type": "boolean"}, "x5": {"type": "boolean"}
+   }
+  },
+  "context": {
+   "allOf": [{"$ref": "#/$defs/section_base"}],
+   "required": ["ret_21", "ret_63", "w52_pos", "flow_pct_universe", "flow_pct_self", "sentence"],
+   "properties": {
+    "ret_21": {"$ref": "#/$defs/num_or_null"}, "ret_63": {"$ref": "#/$defs/num_or_null"},
+    "w52_pos": {"$ref": "#/$defs/num_or_null"},
+    "flow_pct_universe": {"$ref": "#/$defs/num_or_null"}, "flow_pct_self": {"$ref": "#/$defs/num_or_null"},
+    "sentence": {"type": "string"}
+   }
+  },
+  "leg": {
+   "type": "object", "required": ["right", "strike", "side", "mark", "mark_source", "expiry"],
+   "properties": {"right": {"enum": ["C", "P", "S"]}, "strike": {"$ref": "#/$defs/num_or_null"}, "side": {"enum": [1, -1]},
+                  "mark": {"$ref": "#/$defs/num_or_null"}, "half_spread": {"$ref": "#/$defs/num_or_null"},
+                  "mark_source": {"$ref": "#/$defs/str_or_null"}, "expiry": {"$ref": "#/$defs/date_or_null"}}
+  },
+  "structure": {
+   "type": "object",
+   "required": ["family", "legs", "expiry", "mark", "mark_source", "max_loss", "credit_debit", "breakevens", "cost", "n", "usd_at_risk", "excluded_by"],
+   "properties": {
+    "family": {"enum": ["IB", "IC", "SS", "SHARES", "DEBIT_VERTICAL", "CREDIT_VERTICAL"]},
+    "legs": {"type": "array", "items": {"$ref": "#/$defs/leg"}},
+    "expiry": {"$ref": "#/$defs/date_or_null"},
+    "mark": {"$ref": "#/$defs/num_or_null"}, "mark_source": {"$ref": "#/$defs/str_or_null"},
+    "max_loss": {"$ref": "#/$defs/num_or_null"},
+    "credit_debit": {"enum": ["credit", "debit", null]},
+    "breakevens": {"type": "array", "items": {"type": "number"}},
+    "p_inside": {"$ref": "#/$defs/num_or_null"}, "p_touch": {"$ref": "#/$defs/num_or_null"},
+    "cost": {"$ref": "#/$defs/num_or_null"}, "n": {"type": "integer", "minimum": 0},
+    "usd_at_risk": {"$ref": "#/$defs/num_or_null"},
+    "excluded_by": {"enum": ["X1", "X2", "X3", null]},
+    "note": {"$ref": "#/$defs/str_or_null"}
+   }
+  },
+  "ledger_row": {
+   "type": "object", "required": ["policy_id", "role", "gate_verdict", "structure", "written"],
+   "properties": {"policy_id": {"enum": ["sheet-1.0", "disc-1.0"]}, "role": {"enum": ["champion", "exploration"]},
+                  "gate_verdict": {"type": "string"}, "structure": {"type": "string"}, "written": {"type": "boolean"},
+                  "reason": {"$ref": "#/$defs/str_or_null"}}
+  }
+ }
+}

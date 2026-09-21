@@ -42,3 +42,25 @@ never touched again). `episode` is `false` on a re-entry into the same basket wi
 (DESIGN/110 §4) -- a continuation, still written, but not counted as a new independent unit by the R3 read
 (`engine/improve/basket_read.py`, `make adjudicate ARGS="basket --policy wb-1.0"`). The read itself writes
 to `ledger/adjudications/wb-1.0-<basket>.json`, same as every other verdict above.
+
+## `name/` — the ticker-sheet ledger (three policies in one file)
+
+`findings/stock-deep-dive/DESIGN/70-ticker-sheet-spec.md §6`. The same two files and the same
+write-once rule, with the row key `(ticker, E, variant, structure, policy_id, role)`. Three policy
+ids share the file and are never pooled (`engine.improve.adjudicate.champion_rows` filters on
+`policy_id`, and every read goes through it):
+
+- `sheet-1.0` — one row per sheet, `role = champion` on a `CAN_PRICE` name with no X1 and
+  `role = exploration` otherwise, with the failing S-C filter or `X1` in `gate_verdict`; the reward
+  is `ror` and the unit is `unit_id` (`"<ticker>:<post>"`), so overlapping same-name rows inside 21
+  sessions count once. Read at 40 units (`make adjudicate ARGS="gate --strategy sheet"`), NOT_DUE
+  before.
+- `disc-1.0` — one row per owner call (`DIRECTION=`), `role = exploration` always; the reward is
+  `r_share` on the share leg (and `ror` on the chosen vertical), the unit is the decision date `E`,
+  and every row carries `context_read ∈ {none, sheet_only, narrate}` (D13). Read at 70 units and no
+  earlier than 2027-03-01 (`make adjudicate ARGS="champion --strategy disc --n-required 70"`).
+- `sdd-llm-1.0` — the seeded old deep-dive book (D8): 62 decisions, 125 structures, 9 trade plans
+  and their 18 option legs, already graded in `findings/stock-deep-dive/artifacts/outcomes/`, loaded
+  once by `python3 -m engine.name.seed` into both files (graded history, emitted so `pending` stays
+  consistent) and never re-derived from a live feed. `gate_verdict` is the old skill's own bias
+  label; rows that never resolved carry a null `r_share` / `ror` rather than being dropped.

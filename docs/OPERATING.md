@@ -307,6 +307,46 @@ Every ledger row carries `policy_id`, `role` and `gate_verdict`; rows are never 
 exploration books (S-B from 09-11, S-A from 10-01) are what make step 5 possible: one paper contract per
 sleeve or per priceable event, entered whatever the gate or the filters said, with the verdict on the row.
 
+## 6b. One name: the ticker sheet (`make ticker`, findings/stock-deep-dive DESIGN/70; from 2026-09-21)
+
+When you want to look at one stock, run the sheet, not a research skill:
+
+```
+make ticker T=NVDA                      # today's sheet -> analyses/ticker/NVDA/<date>/{ticker.json, report.md}
+make ticker T=NVDA DATE=2026-09-18      # an earlier session (its inputs/ are kept beside it; a rerun is offline and identical)
+make ticker T=NVDA DIRECTION=long       # your call, priced as shares + two verticals and written to the disc-1.0 book
+make narrate T=NVDA                     # optional: headlines, analyst, Form 4, the disconfirming-facts checklist (changes no number)
+make ticker-batch DATE=...              # one sheet per data/watch_names.txt name (the exploration book)
+```
+
+The sheet answers, in order: **A** can this name be priced at all (L1..L6; the first failing floor is
+named and a `CANNOT_PRICE` sheet still writes B, E, F); **B** the next print from three sources, `confirmed`
+only when they agree on the session (a disagreement is X1 for 45 days -- the UW screener's
+`next_earnings_date` is often a week off Finnhub, which is the point); **C** the premium label beside its
+numbers (`spread_rv5` / `spread_c2c` in vol points, S-C's first failing filter, F6 at the value); **D** the
+1σ boxes, ATR14, chain GEX and the zero-gamma strike nearest spot (never `uw gex`'s first crossing);
+**E** borrow, short interest, beta, analyst, Form 4, VIX term, regime, with X2/X5 flagged; **F** the fixed
+sentence -- the engine emits no direction -- and three context numbers; **G** the structure menu at S-C's
+expiry with live-chain or tier-1/2 marks, cost, `P(inside)`/`P(touch)` and `n` at 0.5% of `E`; **H** what
+went to `ledger/name/`.
+
+What to expect at the frozen `E = $100,000`: a 2σ-wing butterfly on a $200+ stock has a max loss above
+$500, so `n = 0` with the note; the line still prints its numbers. `E=` on the command line is a reporting
+parameter, not a permission.
+
+The ledger: one `sheet-1.0` IB row per `CAN_PRICE` sheet (`champion` on `PASS`, else `exploration` with
+the failing S-C filter or `X1` as `gate_verdict`), two `disc-1.0` rows per `DIRECTION=` call (shares at
+the next open with the X4 stop, and the debit vertical) carrying `context_read` from file mtimes. `make
+daily` grades whatever is due (`name ledger:` line on stderr). Reads: `make adjudicate ARGS="gate
+--strategy sheet"` at 40 rows per stratum; `make adjudicate ARGS="champion --strategy disc --n-required
+70"` at 70 rows and not before 2027-03-01; both print NOT_DUE until then. The 62-decision corpus of the
+old skill sits in the same file as `sdd-llm-1.0` (graded, never re-derived). Kill rules are in DESIGN/70 §6.
+
+The CBOE chain loader reads `data/watch_names.txt` every weekday (SPY/QQQ always); add a name there the
+day you start looking at it -- its chain history starts then, not before. A weekend or after-close
+snapshot carries 0/0 quotes on strikes the market makers pulled; such a leg falls back to the day's
+`daily_contract` tier-1/2 mark, else the line is `unpriced`.
+
 ## 7. Where things live
 
 | Path | What |
@@ -314,6 +354,9 @@ sleeve or per priceable event, entered whatever the gate or the filters said, wi
 | `analyses/daily/<date>/report.md`, `signals.json` | the nightly output |
 | `ledger/sb/` | S-B forward ledger (parquet, committed) |
 | `ledger/` (S-A files) | S-A forward ledger, opens 2026-10-01 |
+| `ledger/name/` | the ticker sheet's book: `sheet-1.0`, `disc-1.0` and the `sdd-llm-1.0` seed in one file (§6b) |
+| `analyses/ticker/<SYMBOL>/<date>/` | one sheet: `ticker.json`, `report.md`, optional `narrate.md`; `inputs/` beside them is gitignored |
+| `data/watch_names.txt` | the names the CBOE chain loader fetches nightly |
 | `data/mart/daily_contract/date=*/` | per-contract daily marks, appended nightly |
 | `data/mart/earnings_events/` | the earnings event table |
 | `data/mart/index_vol/`, `data/mart/vix/` | CBOE and VIX series |

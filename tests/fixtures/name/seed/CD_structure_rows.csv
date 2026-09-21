@@ -1,0 +1,6 @@
+ticker,date,bias,idx,type,family,side,ok,expiry,premium,is_credit,max_loss,pl,ps,cs,cl,size,conf,conviction,status,mark_date,S,pnl,ror,win
+AAA,2026-06-01,LONG,0,call debit spread,debit_vertical,call,True,2026-06-19,2.0,False,2.0,,,110.0,100.0,1.0,70,0.65,EXPIRED,2026-06-19,115.0,8.0,4.0,1
+AAA,2026-06-01,LONG,1,put debit spread,debit_vertical,put,True,2026-06-19,1.0,False,1.0,100.0,90.0,,,1.0,70,0.65,EXPIRED,2026-06-19,115.0,-1.0,-1.0,0
+BBB,2026-06-02,SHORT,0,bear call credit spread,credit_vertical,call,True,2026-06-19,1.5,True,3.5,,,52.0,57.0,0.5,60,0.55,EXPIRED,2026-06-19,60.0,-3.5,-1.0,0
+CCC,2026-06-03,RANGE,0,iron condor,IC,both,True,2026-06-26,1.2,True,3.8,17.5,19.0,21.0,22.5,0.0,45,0.50,EXPIRED,2026-06-26,20.0,1.2,0.3157894736842105,1
+DDD,2026-06-04,NEUTRAL,0,iron condor,IC,both,True,2026-10-16,2.0,True,3.0,25.0,28.0,32.0,35.0,0.0,,0.45,OPEN,2026-09-18,31.0,2.0,0.6666666666666666,1

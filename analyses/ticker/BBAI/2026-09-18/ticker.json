@@ -1,0 +1,276 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "BBAI",
+ "date": "2026-09-18",
+ "generated": "2026-09-21T02:54:18+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L2",
+  "contracts": 164,
+  "hot_chain_days": 21,
+  "adv_usd": 52935873.04612398,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-10-16",
+  "verdicts": {
+   "L1": true,
+   "L2": false,
+   "L3": false,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-09-18",
+   "close": "screener 2026-09-18",
+   "contracts": "daily_contract 2026-09-18",
+   "hot_chain_days": "daily_contract 2026-08-20..2026-09-18 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-09-18",
+   "atm_spread": "daily_contract late window 2026-09-18",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-09-18"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 2.8 at 2026-10-16 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-11-09",
+   "session": "unknown",
+   "session_date": "2026-11-09",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-11-09",
+     "hour": null
+    },
+    {
+     "name": "screener",
+     "date": "2026-11-09",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-11-02",
+     "hour": null
+    }
+   ],
+   "confirmed": false,
+   "days_to": 52
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-09-25",
+   "2026-10-02"
+  ],
+  "macro": [
+   {
+    "date": "2026-10-28",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-11-02",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-09-18 + yfinance calendar",
+   "ex_div": "screener 2026-09-18",
+   "expiries": "cboe_chain 2026-09-18",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.earnings.confirmed",
+    "reason": "the earnings sources disagree on the session: finnhub 2026-11-09 None, screener 2026-11-09 unknown, yfinance 2026-11-02 None"
+   },
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.581363462238934,
+  "iv_pct_own": 1.7857142857142856,
+  "rv5_21": 47.42311510607723,
+  "rv_c2c_21": 46.926070633966745,
+  "spread_rv5": 10.713231117816164,
+  "spread_c2c": 11.210275589926653,
+  "slope": 5.145,
+  "earnings_history": [],
+  "median_ratio_8": null,
+  "sc": {
+   "pass": false,
+   "failing": "F2",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": false,
+    "F3": true,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": true,
+  "verdict": "FAIR",
+  "source": {
+   "iv30d": "screener 2026-09-18 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-03-13..2026-09-18 (112 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-08-07..2026-09-04 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-08-20..2026-09-18",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-09-18) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-08-07..2026-09-04 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-09-18) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-08-20..2026-09-18)",
+   "slope": "cboe_chain 2026-09-18 ATM IV at 2026-09-25 then 2026-10-02, vol points",
+   "earnings_history": "earnings_events + earnings_history/events.parquet",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-09-18",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-09-18"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-09-25",
+   "strike": 3.0,
+   "mark": 0.23500000000000001,
+   "mark_source": "cboe_chain 2026-09-18",
+   "tier": null
+  },
+  "box_1s_front": 0.23500000000000001,
+  "box_1s_21": 0.46668082834328506,
+  "atr14": 0.14627433714058996,
+  "gex_total": 14035285.4838,
+  "gex_sign": "+",
+  "zero_gamma": 3.0,
+  "zero_gamma_all_crossings": [
+   3.0
+  ],
+  "spot": 2.8,
+  "source": {
+   "straddle_front": "cboe_chain 2026-09-18",
+   "box_1s_front": "cboe_chain 2026-09-18",
+   "box_1s_21": "screener 2026-09-18",
+   "atr14": "earnings_history/bars <= 2026-09-18",
+   "gex_total": "cboe_chain 2026-09-18",
+   "gex_sign": "cboe_chain 2026-09-18",
+   "zero_gamma": "cboe_chain 2026-09-18",
+   "spot": "screener 2026-09-18"
+  },
+  "nulls": []
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.8041,
+   "available": 800000.0,
+   "date": "2026-09-18",
+   "decile": 0.4671967171069505,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.307,
+   "dtc": 8.05,
+   "settlement": "2026-08-31",
+   "publication": "2026-09-14",
+   "position": 145426949.0
+  },
+  "beta_250": 3.258001960048407,
+  "beta_n": 249,
+  "analyst": [],
+  "analyst_n": 0,
+  "form4": {
+   "buys": 0,
+   "sells": 0,
+   "other": 0,
+   "rows": []
+  },
+  "vix": {
+   "vix": 14.81,
+   "vix3m": 18.24,
+   "vxn": 19.29,
+   "term": "contango",
+   "date": "2026-09-18"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-09-04",
+  "regime_stale": true,
+  "x2": false,
+  "x2_reason": null,
+  "x5": true,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-09-18",
+   "si": "short_interest (FINRA) settlement 2026-08-31, published 2026-09-14 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-09-18",
+   "analyst": "yfinance upgrades_downgrades <= 2026-09-18",
+   "form4": "finnhub /stock/insider-transactions <= 2026-09-18",
+   "vix": "index_vol 2026-09-18",
+   "regime": "_regime.classify_regime asof 2026-09-04",
+   "x2": "borrow (IBKR) 2026-09-18",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": -0.11671927920274028,
+  "ret_63": -0.28571431178045636,
+  "w52_pos": 0.03088235660201515,
+  "flow_pct_universe": 5.549837021787614,
+  "flow_pct_self": 7.142857142857143,
+  "vol_pct_universe": 34.52629745733194,
+  "vol_pct_self": 45.23809523809524,
+  "net_premium": -190463.0,
+  "volume_ratio": 0.7129014248754603,
+  "universe_n": 5829,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-09-18",
+   "ret_63": "earnings_history/bars <= 2026-09-18",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-09-18",
+   "net_premium": "screener 2026-09-18",
+   "volume_ratio": "screener 2026-09-18",
+   "flow_pct_universe": "screener universe 2026-09-18",
+   "vol_pct_universe": "screener universe 2026-09-18",
+   "flow_pct_self": "screener 63 sessions to 2026-09-18",
+   "vol_pct_self": "screener 63 sessions to 2026-09-18",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "sheet_only",
+ "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/BBAI/2026-09-18/inputs",
+ "nulls": [
+  {
+   "field": "earnings_events",
+   "reason": "no earnings_events rows for BBAI"
+  },
+  {
+   "field": "earnings_history",
+   "reason": "no earnings_history rows for BBAI"
+  },
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 2.8 at 2026-10-16 with 5+ lots on both legs"
+  },
+  {
+   "field": "events.earnings.confirmed",
+   "reason": "the earnings sources disagree on the session: finnhub 2026-11-09 None, screener 2026-11-09 unknown, yfinance 2026-11-02 None"
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  }
+ ]
+}

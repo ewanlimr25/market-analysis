@@ -1,0 +1,5 @@
+ticker,plan_date,type,strikes,expiry,size,status,S,pnl,ror,size_x_ror_bp
+AAA,2026-06-01,call debit spread,100/110,2026-06-19,1.0,EXPIRED,115.0,8.0,4.0,400.0
+AAA,2026-06-01,put credit spread,95/90,2026-06-19,1.0,EXPIRED,115.0,1.0,0.25,25.0
+EEE,2026-06-05,iron condor,65/70 put + 85/90 call,2026-10-16,0.3,OPEN,72.0,-1.0,-0.25,-7.5
+EEE,2026-06-05,call debit spread,80/90,2026-07-17,0.3,EXPIRED,72.0,-3.0,-1.0,-30.0

@@ -97,13 +97,28 @@ def _entered_after(df: pd.DataFrame, spec: StrategySpec, registered: date) -> pd
     return df[pd.to_datetime(df[spec.entry_col]).dt.date > registered]
 
 
+def unit_keys(df: pd.DataFrame, spec: StrategySpec) -> pd.Series:
+    """The unit column as a groupable key: the date it carries, or the identifier itself when the
+    spec says the unit is not a date (the sheet's `unit_id`, DESIGN/70 §6)."""
+    return pd.to_datetime(df[spec.unit]).dt.date if spec.unit_is_date else df[spec.unit].astype(str)
+
+
 def unit_means(df: pd.DataFrame, spec: StrategySpec, col: str | None = None) -> pd.Series:
     """Mean of the metric per independent unit, ordered by unit."""
     col = col or spec.metric
     if df.empty:
         return pd.Series(dtype=float)
-    units = pd.to_datetime(df[spec.unit]).dt.date
-    return df.assign(_u=units).groupby("_u")[col].mean().sort_index()
+    return df.assign(_u=unit_keys(df, spec)).groupby("_u")[col].mean().sort_index()
+
+
+def read_due(n_units: int, spec: StrategySpec, as_of: date) -> tuple[str, str] | None:
+    """NOT_DUE and why, while a pre-registered read trigger has not fired; None when the read may
+    run. A spec with neither trigger (S-A, S-B) never defers and keeps its own verdict."""
+    if spec.read_n_required is not None and n_units < spec.read_n_required:
+        return NOT_DUE, f"{n_units} of {spec.read_n_required} units; the count trigger has not fired"
+    if spec.read_not_before is not None and as_of < spec.read_not_before:
+        return NOT_DUE, f"the read is registered for {spec.read_not_before.isoformat()}, not {as_of.isoformat()}"
+    return None
 
 
 def one_sided_p(t: float, n: int) -> float:

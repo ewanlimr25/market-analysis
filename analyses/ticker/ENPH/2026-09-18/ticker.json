@@ -1,0 +1,446 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "ENPH",
+ "date": "2026-09-18",
+ "generated": "2026-09-21T02:54:18+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": true,
+  "failing": null,
+  "contracts": 395,
+  "hot_chain_days": 21,
+  "adv_usd": 138489979.5371437,
+  "atm_spread": 0.022218429971988793,
+  "tier": 1,
+  "atm_strike": 35.0,
+  "atm_expiry": "2026-10-16",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": true
+  },
+  "source": {
+   "issue_type": "screener 2026-09-18",
+   "close": "screener 2026-09-18",
+   "contracts": "daily_contract 2026-09-18",
+   "hot_chain_days": "daily_contract 2026-08-20..2026-09-18 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-09-18",
+   "atm_spread": "daily_contract late window 2026-09-18",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-09-18"
+  },
+  "nulls": []
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-10-26",
+   "session": "post",
+   "session_date": "2026-10-27",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-10-26",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2026-10-27",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-10-27",
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 39
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-09-25",
+   "2026-10-02"
+  ],
+  "macro": [
+   {
+    "date": "2026-10-28",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-10-27",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-09-18 + yfinance calendar",
+   "ex_div": "screener 2026-09-18",
+   "expiries": "cboe_chain 2026-09-18",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.606606055386328,
+  "iv_pct_own": 6.25,
+  "rv5_21": 41.397014289282204,
+  "rv_c2c_21": 45.66277589281061,
+  "spread_rv5": 19.26359124935059,
+  "spread_c2c": 14.997829645822186,
+  "slope": -2.9100000000000015,
+  "earnings_history": [
+   {
+    "E": "2026-04-28",
+    "implied_move": 0.1233635502259981,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.0906705181393308,
+    "ratio": 0.7349862903039456
+   },
+   {
+    "E": "2026-07-28",
+    "implied_move": 0.1106712811725624,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.034416299848651466,
+    "ratio": 0.3109776943395858
+   }
+  ],
+  "median_ratio_8": 0.5229819923217657,
+  "sc": {
+   "pass": true,
+   "failing": null,
+   "expiry": "2026-10-16",
+   "dte_cal": 28,
+   "sigma_hold": 5.819922588536385,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": true,
+    "F4": true,
+    "F5": true,
+    "F6": true,
+    "F7": true,
+    "F8": true,
+    "F9": true
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "RICH",
+  "source": {
+   "iv30d": "screener 2026-09-18 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-03-13..2026-09-18 (112 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-08-07..2026-09-04 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-08-20..2026-09-18",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-09-18) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-08-07..2026-09-04 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-09-18) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-08-20..2026-09-18)",
+   "slope": "cboe_chain 2026-09-18 ATM IV at 2026-09-25 then 2026-10-02, vol points",
+   "earnings_history": "earnings_events <= 2026-07-28 + earnings_history/events.parquet <= 2026-07-28",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-09-18",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-09-18"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-09-25",
+   "strike": 34.5,
+   "mark": 2.115,
+   "mark_source": "cboe_chain 2026-09-18",
+   "tier": null
+  },
+  "box_1s_front": 2.115,
+  "box_1s_21": 6.024192204581344,
+  "atr14": 2.022811205444828,
+  "gex_total": -1574694.1089600003,
+  "gex_sign": "-",
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 34.64,
+  "source": {
+   "straddle_front": "cboe_chain 2026-09-18",
+   "box_1s_front": "cboe_chain 2026-09-18",
+   "box_1s_21": "screener 2026-09-18",
+   "atr14": "earnings_history/bars <= 2026-09-18",
+   "gex_total": "cboe_chain 2026-09-18",
+   "gex_sign": "cboe_chain 2026-09-18",
+   "zero_gamma": "cboe_chain 2026-09-18",
+   "spot": "screener 2026-09-18"
+  },
+  "nulls": [
+   {
+    "field": "zero_gamma",
+    "reason": "cumulative GEX never changes sign over the listed strikes"
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.4081,
+   "available": 2000000.0,
+   "date": "2026-09-18",
+   "decile": 0.3317773788150808,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.18239999999999998,
+   "dtc": 6.13,
+   "settlement": "2026-08-31",
+   "publication": "2026-09-14",
+   "position": 23375084.0
+  },
+  "beta_250": 2.582994280476923,
+  "beta_n": 249,
+  "analyst": [],
+  "analyst_n": 0,
+  "form4": {
+   "buys": 0,
+   "sells": 0,
+   "other": 0,
+   "rows": []
+  },
+  "vix": {
+   "vix": 14.81,
+   "vix3m": 18.24,
+   "vxn": 19.29,
+   "term": "contango",
+   "date": "2026-09-18"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-09-04",
+  "regime_stale": true,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-09-18",
+   "si": "short_interest (FINRA) settlement 2026-08-31, published 2026-09-14 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-09-18",
+   "analyst": "yfinance upgrades_downgrades <= 2026-09-18",
+   "form4": "finnhub /stock/insider-transactions <= 2026-09-18",
+   "vix": "index_vol 2026-09-18",
+   "regime": "_regime.classify_regime asof 2026-09-04",
+   "x2": "borrow (IBKR) 2026-09-18",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": -0.12014223191674056,
+  "ret_63": -0.3374139212228513,
+  "w52_pos": 0.18473726489769218,
+  "flow_pct_universe": 4.434722937038943,
+  "flow_pct_self": 46.82539682539682,
+  "vol_pct_universe": 83.9864158829676,
+  "vol_pct_self": 91.26984126984127,
+  "net_premium": -271333.0,
+  "volume_ratio": 1.2911170751075542,
+  "universe_n": 5829,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-09-18",
+   "ret_63": "earnings_history/bars <= 2026-09-18",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-09-18",
+   "net_premium": "screener 2026-09-18",
+   "volume_ratio": "screener 2026-09-18",
+   "flow_pct_universe": "screener universe 2026-09-18",
+   "vol_pct_universe": "screener universe 2026-09-18",
+   "flow_pct_self": "screener 63 sessions to 2026-09-18",
+   "vol_pct_self": "screener 63 sessions to 2026-09-18",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [
+  {
+   "family": "IB",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 22.5,
+     "side": 1,
+     "mark": 0.28,
+     "half_spread": 0.28,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    },
+    {
+     "right": "P",
+     "strike": 35.0,
+     "side": -1,
+     "mark": 2.455,
+     "half_spread": 0.04499999999999993,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    },
+    {
+     "right": "C",
+     "strike": 35.0,
+     "side": -1,
+     "mark": 2.1950000000000003,
+     "half_spread": 0.04500000000000015,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    },
+    {
+     "right": "C",
+     "strike": 45.0,
+     "side": 1,
+     "mark": 0.30000000000000004,
+     "half_spread": 0.01999999999999999,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    }
+   ],
+   "expiry": "2026-10-16",
+   "dte_cal": 28,
+   "mark": 4.07,
+   "mark_source": "cboe_chain 2026-09-18",
+   "max_loss": 843.0,
+   "credit_debit": "credit",
+   "breakevens": [
+    30.93,
+    39.07
+   ],
+   "p_inside": 0.518554357318944,
+   "p_touch": null,
+   "cost": 25.376000000000005,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": null,
+   "note": "max loss exceeds 0.5% of E at one contract",
+   "unit": "contract",
+   "rank": 1
+  },
+  {
+   "family": "IC",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 22.5,
+     "side": 1,
+     "mark": 0.28,
+     "half_spread": 0.28,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    },
+    {
+     "right": "P",
+     "strike": 30.0,
+     "side": -1,
+     "mark": 0.515,
+     "half_spread": 0.054999999999999966,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    },
+    {
+     "right": "C",
+     "strike": 40.0,
+     "side": -1,
+     "mark": 0.78,
+     "half_spread": 0.07,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    },
+    {
+     "right": "C",
+     "strike": 45.0,
+     "side": 1,
+     "mark": 0.30000000000000004,
+     "half_spread": 0.01999999999999999,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    }
+   ],
+   "expiry": "2026-10-16",
+   "dte_cal": 28,
+   "mark": 0.715,
+   "mark_source": "cboe_chain 2026-09-18",
+   "max_loss": 678.5,
+   "credit_debit": "credit",
+   "breakevens": [
+    29.285,
+    40.715
+   ],
+   "p_inside": 0.6808968463939411,
+   "p_touch": null,
+   "cost": 27.419999999999995,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": null,
+   "note": "max loss exceeds 0.5% of E at one contract",
+   "unit": "contract",
+   "rank": 2
+  },
+  {
+   "family": "SS",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 35.0,
+     "side": -1,
+     "mark": 2.455,
+     "half_spread": 0.04499999999999993,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    },
+    {
+     "right": "C",
+     "strike": 35.0,
+     "side": -1,
+     "mark": 2.1950000000000003,
+     "half_spread": 0.04500000000000015,
+     "mark_source": "cboe_chain 2026-09-18",
+     "expiry": "2026-10-16"
+    }
+   ],
+   "expiry": "2026-10-16",
+   "dte_cal": 28,
+   "mark": 4.65,
+   "mark_source": "cboe_chain 2026-09-18",
+   "max_loss": null,
+   "credit_debit": "credit",
+   "breakevens": [
+    30.35,
+    39.65
+   ],
+   "p_inside": 0.5800003060365307,
+   "p_touch": null,
+   "cost": 6.5560000000000045,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": null,
+   "note": "ALLOW_UNDEFINED=0: measurement only",
+   "unit": "contract",
+   "stress_loss_3s": 1316.9767765609154,
+   "rank": 3
+  }
+ ],
+ "ledger_rows": [
+  {
+   "policy_id": "sheet-1.0",
+   "role": "champion",
+   "gate_verdict": "PASS",
+   "structure": "IB",
+   "written": true,
+   "reason": null
+  }
+ ],
+ "context_read": "sheet_only",
+ "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/ENPH/2026-09-18/inputs",
+ "nulls": [
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cumulative GEX never changes sign over the listed strikes"
+  }
+ ]
+}

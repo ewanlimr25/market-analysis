@@ -33,6 +33,7 @@ from engine.strategies import sa_structures as ST
 from engine.validation import stats as S
 from engine.backtest_sa import LOAD_MCAP_HI, LOAD_MCAP_LO
 from engine.watch import nightly as WB
+from engine.name import grading as NG
 
 LEDGER_OPENS = date(2026, 10, 1)      # Season 3 ledger opens (DESIGN/70 §7 P7)
 
@@ -44,6 +45,19 @@ def ledger_open(d: date) -> bool:
 def sb_ledger_dir(ledger_dir: str) -> str:
     """The S-B ledger lives beside the S-A one: `<ledger_dir>/sb` (the default is `LEDGER_SB_DIR`)."""
     return os.path.join(ledger_dir, "sb")
+
+
+def name_ledger_dir(ledger_dir: str) -> str:
+    """`ledger/name/` beside the S-A files (findings/stock-deep-dive DESIGN/70 §6)."""
+    return os.path.join(ledger_dir, "name")
+
+
+def grade_name_ledger(d: date, ledger_dir: str) -> dict:
+    """The ticker sheet's grading step (DESIGN/70 R5): fail-soft, never touches signals.json."""
+    try:
+        return NG.grade_due(d, name_ledger_dir(ledger_dir))
+    except Exception as exc:  # the nightly must not fail on the sheet book
+        return {"due": None, "graded": 0, "skipped": 0, "dropped": 0, "error": str(exc)[:300]}
 
 
 def wb_ledger_dir(ledger_dir: str) -> str:
@@ -173,6 +187,9 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
     running = season_running(L.read_ledger(ledger_dir), earnings_events.season_of(d))
     sb_state = SD.nightly(con, d, force_ledger, sb_ledger_dir(ledger_dir))
     wb_state = WB.nightly(con, d, force_ledger, wb_ledger_dir(ledger_dir))
+    name_state = grade_name_ledger(d, ledger_dir)
+    print(f"name ledger: due={name_state.get('due')} graded={name_state.get('graded')} dropped={name_state.get('dropped')}"
+          + (f" error={name_state['error']}" if name_state.get("error") else ""), file=sys.stderr)
     signals = assemble(d, pf, mart, cands, graded, dropped, running,
                        {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open,
                         "exploration_emitted": explored[0], "exploration_skipped": explored[1],

@@ -272,3 +272,85 @@ LEDGER_WB_DIR = os.path.join(LEDGER_DIR, "wb")
 LEDGER_WB_OPEN = date(2026, 9, 8)                # DESIGN/110 §7 R2; before this, nothing is written
                                                   # to ledger/wb/ unless --force-ledger
 
+
+
+# =============================================================================================
+# Name sheet, `make ticker` (findings/stock-deep-dive DESIGN/70; pre-registered 2026-09-20, D14).
+# Every threshold in DESIGN/70 §2 to §6 lives here and is pinned by tests/test_name_frozen_params.py
+# (R6). Changes go through the idea ledger (DESIGN/70 §11) and wait for the read after the one they
+# are proposed at. Nothing above this line moved when the sheet was added; the sheet imports S-C's
+# `SC_PARAMS` and S-A's `SA_PARAMS` and never edits them.
+# =============================================================================================
+ANALYSES_TICKER = os.path.join(REPO, "analyses", "ticker")
+LEDGER_NAME_DIR = os.path.join(LEDGER_DIR, "name")
+WATCH_NAMES_FILE = os.path.join(DATA, "watch_names.txt")
+NAME_ISSUE_TYPES = ISSUE_TYPES + ("ETF",)         # L1: S-C F1 extended to ETFs for the sheet
+
+
+@dataclass(frozen=True)
+class NameParams:
+    """DESIGN/70 §2 to §6. Do not tune; a guess that is written down and frozen is a pre-registration."""
+    # §2 liquidity floor L1..L6
+    price_min: float = 10.0                      # L2 close >= $10 (S-C F2)
+    contracts_min: int = 300                     # L3 distinct contracts printed on DATE
+    hot_chain_min_contracts: int = 10            # L4 hot-chain contracts per session ..
+    hot_chain_min_days: int = 15                 # L4 .. on >= 15 of ..
+    hot_chain_window: int = 21                   # L4 .. the trailing 21 sessions (DATE inclusive)
+    adv_min: float = 50e6                        # L5 20-day dollar ADV (S-C F4)
+    atm_band: float = 0.025                      # L6 |K/S - 1| <= 2.5% (S-C F8)
+    atm_tier_max: int = 2                        # L6 both ATM legs mark at tier <= 2
+    atm_spread_max: float = 0.08                 # L6 late_rel_spread <= 8% on both legs (S-C F9)
+    atm_leg_size_min: int = 5                    # L6 the marking engine's tier-1 minimum (D26 option 1)
+    # §3 premium
+    iv_pct_window: int = 126                     # iv_pct_own over the name's trailing 126 sessions ..
+    iv_pct_min_sessions: int = 63                # .. needs >= 63, else null
+    rv_window: int = 21                          # rv5_21 / rv_c2c_21 over the trailing 21 sessions ..
+    rv_min_sessions: int = 15                    # .. needs >= 15 quality sessions, else CANNOT_MEASURE
+    rich_spread_rv5: float = 10.0                # RICH: spread_rv5 >= +10 vol points and ..
+    rich_spread_c2c: float = 2.0                 # .. spread_c2c >= +2 and no X1
+    cheap_spread_rv5: float = 2.0                # CHEAP: spread_rv5 <= +2 or ..
+    cheap_spread_c2c: float = -5.0               # .. spread_c2c <= -5
+    slope_min_dte_cal: int = 7                   # slope: both expiries >= 7 calendar DTE
+    earnings_history_n: int = 8                  # median realized/implied ratio over the last 8 prints
+    sa_window_days: int = 30                     # S-A A1 measurement line when a print is inside 30 days
+    # §4 exclusions
+    x1_unknown_earnings_days: int = 45           # X1: a null/disagreeing earnings date = a print tomorrow for 45 days
+    x2_borrow_decile: float = 0.9                # X2: borrow fee in the top decile of the day's universe ..
+    x2_available_min: float = 100_000            # .. or available_shares < 100,000 -> no short-share line
+    x4_atr_mult: float = 2.0                     # X4: share stop = entry -/+ 2 x ATR(14)
+    x5_short_float_min: float = 0.25             # X5: short float >= 25% -> `defined-risk preferred`
+    x6_wing_sigma: float = 2.0                   # X6: IB wings at S -/+ 2 sigma_hold (S-C §3)
+    x6_condor_sigma: float = 1.0                 # X6: IC short strikes at -/+ 1 sigma_hold
+    # §5 structures and the cost model
+    dir_target_dte_cal: int = 28                 # directional expiry: nearest listed on/after t + 28
+    cost_spread_mult: float = 0.584              # effective/quoted half-spread (Muravyev-Pearson, RESEARCH/30 §12)
+    commission_per_contract: float = 0.65
+    share_cost_bp: float = 5.0                   # per side
+    sigma_c2c_window: int = 63                   # P(inside)/P(touch) sigma = trailing 63-session close-to-close
+    risk_frac: float = 0.005                     # n = floor(0.005 x E / max_loss)
+    undefined_risk_frac: float = 0.010           # straddle: n = floor(0.010 x E / stress_loss_3s)
+    stress_sigma: float = 3.0
+    disc_target_mult: float = 2.0                # disc-1.0 share target = entry + 2 x stop distance
+    # §6 reads and kill rules
+    sheet_read_n: int = 40                       # sheet-1.0: >= 40 graded rows per stratum
+    disc_read_n: int = 70                        # disc-1.0: >= 70 graded rows ..
+    disc_read_not_before: date = date(2027, 3, 1)  # .. and no earlier than this
+    context_stratum_min: int = 35                # context_read strata: NOT_DUE below 35 rows
+    sheet_retire_min_sessions: int = 20          # kill rule 3: < 20 distinct sessions with a sheet by 2027-03-01
+
+
+@dataclass(frozen=True)
+class NameSizing:
+    """D11 defaults: E is a reporting parameter; undefined-risk lines are measurement-only unless allowed."""
+    equity: float = 100_000.0
+    allow_undefined: bool = False
+
+
+NAME_PARAMS = NameParams()
+NAME_SIZING = NameSizing()
+NAME_POLICY_ID = "sheet-1.0"                     # one row per sheet: champion (CAN_PRICE, no X1) or exploration
+DISC_POLICY_ID = "disc-1.0"                      # one row per owner call (DIRECTION=), always exploration
+SEED_POLICY_ID = "sdd-llm-1.0"                   # the 62-decision corpus, graded, seeded once (D8)
+NAME_SCHEMA_VERSION = "n1.0"
+NAME_FROZEN_ON = date(2026, 9, 20)
+CONTEXT_READ_VALUES = ("none", "sheet_only", "narrate")   # D13: set by the writer from file mtimes

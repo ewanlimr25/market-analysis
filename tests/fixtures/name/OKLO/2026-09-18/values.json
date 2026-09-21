@@ -1,0 +1,178 @@
+{
+ "adv_usd_20d": 389473405.85178375,
+ "analyst": [
+  {
+   "action": "init",
+   "date": "2026-09-09",
+   "firm": "Piper Sandler",
+   "from": "",
+   "to": "Overweight"
+  }
+ ],
+ "borrow": {
+  "asof": "2026-09-18",
+  "available_shares": 2600000.0,
+  "decile": 0.40338548345729675,
+  "fee_rate": 0.4585,
+  "rebate_rate": 3.4215,
+  "stale_days": 0
+ },
+ "chain_meta": {
+  "date": "2026-09-18",
+  "reason": "fixture trim: 6 nearest expiries",
+  "rows": 588,
+  "source": "cboe_chain"
+ },
+ "earnings_dates": {
+  "finnhub": {
+   "date": "2026-11-09",
+   "hour": null,
+   "reason": null,
+   "source": "finnhub /calendar/earnings"
+  },
+  "screener": {
+   "date": "2026-11-10",
+   "hour": "unknown",
+   "reason": null,
+   "source": "screener 2026-09-18"
+  },
+  "yfinance": {
+   "date": "2026-11-10",
+   "hour": null,
+   "reason": null,
+   "source": "yfinance calendar"
+  }
+ },
+ "fomc": [
+  "2026-10-28"
+ ],
+ "form4": [
+  {
+   "code": "S",
+   "date": "2026-08-25",
+   "name": "Narayanadas Vivek",
+   "price": 40.8,
+   "shares": -223.0
+  },
+  {
+   "code": "S",
+   "date": "2026-08-24",
+   "name": "Renner Alexandra",
+   "price": 39.77,
+   "shares": -557.0
+  },
+  {
+   "code": "S",
+   "date": "2026-08-24",
+   "name": "Hanson John",
+   "price": 39.77,
+   "shares": -539.0
+  },
+  {
+   "code": "S",
+   "date": "2026-08-24",
+   "name": "Narayanadas Vivek",
+   "price": 39.77,
+   "shares": -3264.0
+  },
+  {
+   "code": "S",
+   "date": "2026-08-24",
+   "name": "Goodwin William Carroll Murphy",
+   "price": 39.77,
+   "shares": -11592.0
+  },
+  {
+   "code": "M",
+   "date": "2026-08-21",
+   "name": "Narayanadas Vivek",
+   "price": 0.0,
+   "shares": -4806.0
+  },
+  {
+   "code": "M",
+   "date": "2026-08-21",
+   "name": "Narayanadas Vivek",
+   "price": 0.0,
+   "shares": 4806.0
+  }
+ ],
+ "index_vol": {
+  "date": "2026-09-18",
+  "vix": 14.81,
+  "vix3m": 18.24,
+  "vix9d": 12.27,
+  "vxn": 19.29
+ },
+ "regime": {
+  "asof": "2026-09-04",
+  "drawdown15": -0.0051,
+  "label": "CHOP",
+  "ret10": 0.0058,
+  "ret5": 0.0011,
+  "s1_standdown": false,
+  "stale": true
+ },
+ "screener": {
+  "avg30_volume": 10341664.095238095,
+  "avg_30_day_call_oi": 457312.3667,
+  "avg_30_day_call_volume": 43124.3,
+  "avg_30_day_put_oi": 257613.9,
+  "avg_30_day_put_volume": 21459.2333,
+  "avg_3_day_call_volume": 37658.3333,
+  "avg_3_day_put_volume": 25124.0,
+  "avg_7_day_call_volume": 39420.4286,
+  "avg_7_day_put_volume": 24297.2857,
+  "bearish_premium": 4390110.0,
+  "bullish_premium": 3415574.0,
+  "call_open_interest": 546329,
+  "call_premium": 4751791.0,
+  "call_volume": 37433,
+  "call_volume_ask_side": 16128,
+  "call_volume_bid_side": 18105,
+  "close": 38.0,
+  "date": "2026-09-18T00:00:00",
+  "er_time": "unknown",
+  "full_name": "OKLO, AltC Acquisition Corp",
+  "high": 40.3,
+  "implied_move": 0.2168872065038476,
+  "implied_move_perc": 0.00569930906592688,
+  "is_index": false,
+  "issue_type": "Common Stock",
+  "iv30d": 0.696873416110093,
+  "iv30d_1d": 0.728,
+  "iv30d_1m": 0.753,
+  "iv30d_1w": 0.694,
+  "iv_rank": 0.0,
+  "low": 37.51,
+  "marketcap": 7375599823.0,
+  "net_call_premium": -727811.0,
+  "net_put_premium": 246725.0,
+  "next_dividend_date": "NaT",
+  "next_earnings_date": "2026-11-10T00:00:00",
+  "prev_call_oi": 535952,
+  "prev_close": 39.65,
+  "prev_put_oi": 270041,
+  "put_call_ratio": 0.6042796463013919,
+  "put_open_interest": 279555,
+  "put_premium": 3709151.0,
+  "put_volume": 22620,
+  "put_volume_ask_side": 11020,
+  "put_volume_bid_side": 9147,
+  "sector": "Utilities",
+  "ticker": "OKLO",
+  "total_open_interest": 825884,
+  "total_volume": 9463406,
+  "volatility": 4.52234964985593,
+  "week_52_high": 193.84,
+  "week_52_low": 34.38
+ },
+ "short_interest": {
+  "current_short_position": 32200754.0,
+  "days_to_cover": 3.48,
+  "publication_date": "2026-09-14",
+  "settlement_date": "2026-08-31",
+  "short_float": 0.2047,
+  "short_float_source": "finviz fz quote"
+ }
+}

@@ -1,0 +1,142 @@
+{
+ "adv_usd_20d": 28402981248.69461,
+ "analyst": [
+  {
+   "action": "main",
+   "date": "2026-09-04",
+   "firm": "Rosenblatt",
+   "from": "Buy",
+   "to": "Buy"
+  },
+  {
+   "action": "reit",
+   "date": "2026-09-04",
+   "firm": "Needham",
+   "from": "Buy",
+   "to": "Buy"
+  },
+  {
+   "action": "init",
+   "date": "2026-09-10",
+   "firm": "Piper Sandler",
+   "from": "",
+   "to": "Overweight"
+  }
+ ],
+ "borrow": {
+  "asof": "2026-09-18",
+  "available_shares": 10000000.0,
+  "decile": 0.118491921005386,
+  "fee_rate": 0.25,
+  "rebate_rate": 3.63,
+  "stale_days": 0
+ },
+ "chain_meta": {
+  "date": "2026-09-18",
+  "reason": "fixture trim: 6 nearest expiries",
+  "rows": 788,
+  "source": "cboe_chain"
+ },
+ "earnings_dates": {
+  "finnhub": {
+   "date": "2026-11-17",
+   "hour": "amc",
+   "reason": null,
+   "source": "finnhub /calendar/earnings"
+  },
+  "screener": {
+   "date": "2026-11-18",
+   "hour": "unknown",
+   "reason": null,
+   "source": "screener 2026-09-18"
+  },
+  "yfinance": {
+   "date": "2026-11-17",
+   "hour": null,
+   "reason": null,
+   "source": "yfinance calendar"
+  }
+ },
+ "fomc": [
+  "2026-10-28"
+ ],
+ "form4": [],
+ "index_vol": {
+  "date": "2026-09-18",
+  "vix": 14.81,
+  "vix3m": 18.24,
+  "vix9d": 12.27,
+  "vxn": 19.29
+ },
+ "regime": {
+  "asof": "2026-09-04",
+  "drawdown15": -0.0051,
+  "label": "CHOP",
+  "ret10": 0.0058,
+  "ret5": 0.0011,
+  "s1_standdown": false,
+  "stale": true
+ },
+ "screener": {
+  "avg30_volume": 128236890.8095238,
+  "avg_30_day_call_oi": 8131301.7,
+  "avg_30_day_call_volume": 2089443.6333,
+  "avg_30_day_put_oi": 6868085.1333,
+  "avg_30_day_put_volume": 1176479.1,
+  "avg_3_day_call_volume": 1444242.6667,
+  "avg_3_day_put_volume": 823627.3333,
+  "avg_7_day_call_volume": 1632658.7143,
+  "avg_7_day_put_volume": 922826.0,
+  "bearish_premium": 303064946.0,
+  "bullish_premium": 316187086.0,
+  "call_open_interest": 8511345,
+  "call_premium": 537056907.0,
+  "call_volume": 1807630,
+  "call_volume_ask_side": 870613,
+  "call_volume_bid_side": 785618,
+  "close": 222.27,
+  "date": "2026-09-18T00:00:00",
+  "er_time": "unknown",
+  "full_name": "NVIDIA CORP",
+  "high": 222.73,
+  "implied_move": 0.471825439579244,
+  "implied_move_perc": 0.002127448099825248,
+  "is_index": false,
+  "issue_type": "Common Stock",
+  "iv30d": 0.313918177319816,
+  "iv30d_1d": 0.307,
+  "iv30d_1m": 0.394,
+  "iv30d_1w": 0.314,
+  "iv_rank": 1.6715,
+  "low": 218.03,
+  "marketcap": 5286094000000.0,
+  "net_call_premium": -12055116.0,
+  "net_put_premium": -18746352.0,
+  "next_dividend_date": "2026-09-10T00:00:00",
+  "next_earnings_date": "2026-11-18T00:00:00",
+  "prev_call_oi": 8374720,
+  "prev_close": 219.34,
+  "prev_put_oi": 7386697,
+  "put_call_ratio": 0.5138916703086361,
+  "put_open_interest": 7509756,
+  "put_premium": 189296650.0,
+  "put_volume": 928926,
+  "put_volume_ask_side": 402520,
+  "put_volume_bid_side": 414520,
+  "sector": "Technology",
+  "ticker": "NVDA",
+  "total_open_interest": 16021101,
+  "total_volume": 96481784,
+  "volatility": 1.49314627089465,
+  "week_52_high": 236.54,
+  "week_52_low": 164.27
+ },
+ "short_interest": {
+  "current_short_position": 298301619.0,
+  "days_to_cover": 2.14,
+  "publication_date": "2026-09-14",
+  "settlement_date": "2026-08-31",
+  "short_float": 0.0129,
+  "short_float_source": "finviz fz quote"
+ }
+}

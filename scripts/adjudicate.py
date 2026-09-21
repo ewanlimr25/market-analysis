@@ -5,6 +5,10 @@
   run       --policy sb-c1 [--as-of YYYY-MM-DD]            challenger vs champion, paired, once
   champion  --strategy sb --n-required 26 [--as-of]         champion vs its bar (t part; the report holds the rest)
   gate      --strategy sb --min-effect 0.01 --n-required 20 [--as-of]   gate-ON vs gate-OFF on the exploration book
+
+`--strategy` is one of sb, sa, sheet, disc (`engine/improve/spec.py`). The two name-sheet books read
+NOT_DUE and write nothing until their pre-registered trigger fires (DESIGN/70 §6: 40 units for
+`sheet`, 70 units and no earlier than 2027-03-01 for `disc`).
   basket    --policy wb-1.0 [--basket LONG|SHORT|VOL] [--as-of]   the watch-basket read (DESIGN/110 §6); omit
                                                                    --basket to read all three
 """
@@ -90,11 +94,23 @@ def cmd_run(a) -> int:
     return 0
 
 
+def _not_due(kind: str, sp, deferred: tuple[str, str], as_of: str, stats: dict) -> int:
+    """A read whose pre-registered trigger has not fired writes nothing (DESIGN/70 §6)."""
+    verdict, reason = deferred
+    print(json.dumps({"policy_id": sp.champion_id, "kind": kind, "as_of": as_of, "verdict": verdict,
+                      "reason": reason, "stats": stats}, indent=1, default=str))
+    print(f"{verdict}: no verdict, nothing written; {reason}")
+    return 0
+
+
 def cmd_champion(a) -> int:
     sp = spec(a.strategy)
     led = _ledger(a.strategy, a.ledger_dir)
     rows = A.rows_for(led, sp.champion_id, POL.ROLE_CHAMPION)
     stats = A.series_stats(A.unit_means(rows, sp), sp.lag)
+    deferred = A.read_due(stats["n_units"], sp, date.fromisoformat(a.as_of))
+    if deferred:
+        return _not_due("champion", sp, deferred, a.as_of, stats)
     verdict, reason = A.champion_verdict(stats, a.n_required, sp.go_t)
     payload = {"policy_id": sp.champion_id, "kind": "champion", "as_of": a.as_of, "verdict": verdict, "reason": reason, "stats": stats,
                "n_required": a.n_required, "go_t": sp.go_t}
@@ -108,6 +124,9 @@ def cmd_gate(a) -> int:
     led = _ledger(a.strategy, a.ledger_dir)
     rows = A.rows_for(led, sp.champion_id, POL.ROLE_EXPLORATION)
     stats = A.gate_stats(rows, sp)
+    deferred = A.read_due(min(stats["n_on"], stats["n_off"]), sp, date.fromisoformat(a.as_of))
+    if deferred:
+        return _not_due("gate", sp, deferred, a.as_of, stats)
     verdict, reason = A.gate_verdict(stats, a.min_effect, a.n_required)
     payload = {"policy_id": sp.champion_id, "kind": "gate", "as_of": a.as_of, "verdict": verdict, "reason": reason, "stats": stats,
                "min_effect": a.min_effect, "n_required": a.n_required}

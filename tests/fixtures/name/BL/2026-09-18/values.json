@@ -1,0 +1,289 @@
+{
+ "adv_usd_20d": 32722013.871278763,
+ "analyst": [],
+ "borrow": {
+  "asof": "2026-09-18",
+  "available_shares": 600000.0,
+  "decile": 0.30074378045652733,
+  "fee_rate": 0.3522,
+  "rebate_rate": 3.5278,
+  "stale_days": 0
+ },
+ "chain_meta": {
+  "date": "2026-09-18",
+  "reason": "fixture trim: 6 nearest expiries",
+  "rows": 194,
+  "source": "cboe_chain"
+ },
+ "earnings_dates": {
+  "finnhub": {
+   "date": "2026-11-04",
+   "hour": "amc",
+   "reason": null,
+   "source": "finnhub /calendar/earnings"
+  },
+  "screener": {
+   "date": "2026-11-05",
+   "hour": "unknown",
+   "reason": null,
+   "source": "screener 2026-09-18"
+  },
+  "yfinance": {
+   "date": "2026-11-03",
+   "hour": null,
+   "reason": null,
+   "source": "yfinance calendar"
+  }
+ },
+ "fomc": [
+  "2026-10-28"
+ ],
+ "form4": [
+  {
+   "code": "S",
+   "date": "2026-08-27",
+   "name": "Stalick Michelle D",
+   "price": 33.65,
+   "shares": -780.0
+  },
+  {
+   "code": "M",
+   "date": "2026-08-24",
+   "name": "Tucker Therese",
+   "price": 0.0,
+   "shares": -26560.0
+  },
+  {
+   "code": "M",
+   "date": "2026-08-24",
+   "name": "Tucker Therese",
+   "price": 0.0,
+   "shares": -70000.0
+  },
+  {
+   "code": "S",
+   "date": "2026-08-24",
+   "name": "Tucker Therese",
+   "price": 31.957,
+   "shares": -70000.0
+  },
+  {
+   "code": "M",
+   "date": "2026-08-24",
+   "name": "Tucker Therese",
+   "price": 14.0,
+   "shares": 26560.0
+  },
+  {
+   "code": "M",
+   "date": "2026-08-24",
+   "name": "Tucker Therese",
+   "price": 14.0,
+   "shares": 70000.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Villanova Patrick",
+   "price": 31.92,
+   "shares": -1200.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Villanova Patrick",
+   "price": 31.92,
+   "shares": -300.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Villanova Patrick",
+   "price": 31.92,
+   "shares": -260.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Van Houten Stuart",
+   "price": 31.92,
+   "shares": -1720.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Ung Jeremy",
+   "price": 31.92,
+   "shares": -876.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Ung Jeremy",
+   "price": 31.92,
+   "shares": -1388.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Ryan Owen",
+   "price": 31.92,
+   "shares": -2438.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Ryan Owen",
+   "price": 31.92,
+   "shares": -2027.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Ryan Owen",
+   "price": 31.92,
+   "shares": -2235.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Stalick Michelle D",
+   "price": 31.92,
+   "shares": -302.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Stalick Michelle D",
+   "price": 31.92,
+   "shares": -265.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Stalick Michelle D",
+   "price": 31.92,
+   "shares": -161.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Stalick Michelle D",
+   "price": 31.92,
+   "shares": -143.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Duan Jimmy C",
+   "price": 31.92,
+   "shares": -751.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Duan Jimmy C",
+   "price": 31.92,
+   "shares": -1190.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Morgan-Prager Karole",
+   "price": 31.92,
+   "shares": -1063.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Morgan-Prager Karole",
+   "price": 31.92,
+   "shares": -884.0
+  },
+  {
+   "code": "F",
+   "date": "2026-08-20",
+   "name": "Morgan-Prager Karole",
+   "price": 31.92,
+   "shares": -778.0
+  }
+ ],
+ "index_vol": {
+  "date": "2026-09-18",
+  "vix": 14.81,
+  "vix3m": 18.24,
+  "vix9d": 12.27,
+  "vxn": 19.29
+ },
+ "regime": {
+  "asof": "2026-09-04",
+  "drawdown15": -0.0051,
+  "label": "CHOP",
+  "ret10": 0.0058,
+  "ret5": 0.0011,
+  "s1_standdown": false,
+  "stale": true
+ },
+ "screener": {
+  "avg30_volume": 906003.0476190476,
+  "avg_30_day_call_oi": 32675.8667,
+  "avg_30_day_call_volume": 265.3667,
+  "avg_30_day_put_oi": 7247.1333,
+  "avg_30_day_put_volume": 308.2667,
+  "avg_3_day_call_volume": 18.6667,
+  "avg_3_day_put_volume": 22.0,
+  "avg_7_day_call_volume": 88.4286,
+  "avg_7_day_put_volume": 152.0,
+  "bearish_premium": 8383.0,
+  "bullish_premium": 5371.0,
+  "call_open_interest": 33918,
+  "call_premium": 7361.0,
+  "call_volume": 24,
+  "call_volume_ask_side": 3,
+  "call_volume_bid_side": 21,
+  "close": 28.14,
+  "date": "2026-09-18T00:00:00",
+  "er_time": "unknown",
+  "full_name": "BLACKLINE INC",
+  "high": 28.5,
+  "implied_move": 0.923206521634374,
+  "implied_move_perc": 0.03280762337009147,
+  "is_index": false,
+  "issue_type": "Common Stock",
+  "iv30d": 0.605920055739631,
+  "iv30d_1d": 0.641,
+  "iv30d_1m": 0.663,
+  "iv30d_1w": 0.548,
+  "iv_rank": 57.2447,
+  "low": 27.705,
+  "marketcap": 1656570195.0,
+  "net_call_premium": -3913.0,
+  "net_put_premium": -901.0,
+  "next_dividend_date": "NaT",
+  "next_earnings_date": "2026-11-05T00:00:00",
+  "prev_call_oi": 33912,
+  "prev_close": 28.5,
+  "prev_put_oi": 6259,
+  "put_call_ratio": 0.875,
+  "put_open_interest": 6257,
+  "put_premium": 6393.0,
+  "put_volume": 21,
+  "put_volume_ask_side": 10,
+  "put_volume_bid_side": 11,
+  "sector": "Technology",
+  "ticker": "BL",
+  "total_open_interest": 40175,
+  "total_volume": 463920,
+  "volatility": 34.13444672749865,
+  "week_52_high": 59.57,
+  "week_52_low": 24.7
+ },
+ "short_interest": {
+  "current_short_position": 5836597.0,
+  "days_to_cover": 6.07,
+  "publication_date": "2026-09-14",
+  "settlement_date": "2026-08-31",
+  "short_float": 0.1259,
+  "short_float_source": "finviz fz quote"
+ }
+}

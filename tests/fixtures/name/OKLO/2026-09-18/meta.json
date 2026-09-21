@@ -1,0 +1,27 @@
+{
+ "date": "2026-09-18",
+ "nulls": [],
+ "sources": {
+  "adv_usd_20d": "prices.parquet 20 sessions to 2026-09-18",
+  "analyst": "yfinance upgrades_downgrades <= 2026-09-18",
+  "bars": "earnings_history/bars + watch/bars 2021-07-08..2026-09-18 (fixture: last 2 years only)",
+  "borrow": "borrow (IBKR) 2026-09-18",
+  "chain": "cboe_chain 2026-09-18 (fixture: 6 nearest expiries only)",
+  "contract_sessions": "daily_contract 2026-08-20..2026-09-18 (21 sessions)",
+  "contracts_today": "daily_contract 2026-09-18",
+  "earnings_dates": "finnhub /calendar/earnings + screener 2026-09-18 + yfinance calendar",
+  "earnings_events": "earnings_events <= 2026-08-07",
+  "earnings_history": "earnings_history/events.parquet <= 2026-08-07",
+  "fomc": "FOMC published calendar (engine.name.data.FOMC_DATES)",
+  "form4": "finnhub /stock/insider-transactions <= 2026-09-18",
+  "index_vol": "index_vol 2026-09-18",
+  "regime": "_regime.classify_regime asof 2026-09-04",
+  "rv": "intraday_rv 2026-08-07..2026-09-04 (21 sessions)",
+  "screener": "screener 2026-09-18",
+  "screener_history": "screener 2026-03-13..2026-09-18 (112 sessions)",
+  "short_interest": "short_interest (FINRA) settlement 2026-08-31",
+  "spy_bars": "earnings_history/bars + watch/bars 2016-09-19..2026-09-18 (fixture: last 2 years only)",
+  "universe_today": "screener 2026-09-18"
+ },
+ "ticker": "OKLO"
+}
