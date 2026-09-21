@@ -45,8 +45,8 @@ report-sb:        ## sleeve tables, BH, DSR, PBO, month rule, tail, overlap, gat
 # must stay fast and never touch S-A/S-B numbers. Run by hand, or on your own cron, after the close.
 .PHONY: cboe-chain
 
-cboe-chain:        ## fetch+store the full CBOE option chain for SPY, QQQ and SYMBOLS=... -> data/mart/cboe_chain/
-	$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ $(SYMBOLS)
+cboe-chain:        ## fetch+store the full CBOE option chain for SPY, QQQ, data/watch_names.txt and SYMBOLS=... -> data/mart/cboe_chain/
+	$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ $(SYMBOLS) --symbols-file data/watch_names.txt
 # ---- G9: short interest, borrow, Reg SHO (RESEARCH/47 §2 G9; standalone, not part of `make daily`) --
 .PHONY: short-interest
 
@@ -125,8 +125,8 @@ cross-section:     ## weekly IV-spread/skew/O-S cross-section -> data/backtest/g
 # Each loader is write-once and fail-soft; the leading `-` lets a holiday or a dead endpoint log and move on.
 .PHONY: loaders loaders-weekly
 
-loaders:           ## nightly (cron, weekdays): CBOE chain SPY/QQQ, Reg SHO, IBKR borrow, VVIX/SKEW -> data/mart/*
-	-$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ
+loaders:           ## nightly (launchd, weekdays): CBOE chain SPY/QQQ + data/watch_names.txt, Reg SHO, IBKR borrow, VVIX/SKEW -> data/mart/*
+	-$(PY) -m engine.mart.cboe_chain --symbols SPY QQQ --symbols-file data/watch_names.txt
 	-$(PY) -m engine.mart.regsho --refresh --through $(DATE)
 	-$(PY) -m engine.mart.borrow --refresh --date $(DATE)
 	-$(MAKE) -s index-vol-ext

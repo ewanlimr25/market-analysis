@@ -242,14 +242,39 @@ def refresh_chains(symbols: Iterable[str], d: date | None = None,
     return {symbol: refresh_one(symbol, d, fetch, now, force) for symbol in symbols}
 
 
+def read_symbols_file(path: str) -> list[str]:
+    """The watch list (`data/watch_names.txt`; findings/stock-deep-dive DECISIONS D6): one symbol
+    per line, `#` comments and blank lines ignored, upper-cased, first occurrence kept. An absent
+    file is an empty list, never an error, so the nightly loader still fetches SPY and QQQ."""
+    if not os.path.exists(path):
+        return []
+    with open(path) as fh:
+        raw = [line.split("#", 1)[0].strip().upper() for line in fh]
+    return merge_symbols([], [s for s in raw if s])
+
+
+def merge_symbols(first: Iterable[str], second: Iterable[str]) -> list[str]:
+    """`first + second` in order, each symbol once (a name on the watch list that is already a
+    default is fetched once)."""
+    out: list[str] = []
+    for s in (*first, *second):
+        if s not in out:
+            out.append(s)
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Fetch and store the CBOE delayed option chain for one or more symbols.")
-    ap.add_argument("--symbols", nargs="+", required=True, help="e.g. --symbols SPY QQQ")
+    ap.add_argument("--symbols", nargs="*", default=[], help="e.g. --symbols SPY QQQ")
+    ap.add_argument("--symbols-file", default=None, help="one symbol per line, # comments (data/watch_names.txt)")
     ap.add_argument("--date", default=None, help="storage date override (default: the payload's own asof date)")
     ap.add_argument("--force", action="store_true")
     a = ap.parse_args()
+    symbols = merge_symbols(a.symbols, read_symbols_file(a.symbols_file) if a.symbols_file else [])
+    if not symbols:
+        ap.error("no symbols: pass --symbols and/or --symbols-file")
     d = date.fromisoformat(a.date) if a.date else None
-    result = refresh_chains(a.symbols, d, force=a.force)
+    result = refresh_chains(symbols, d, force=a.force)
     for symbol, r in result.items():
         print(f"{symbol}: {r}")
     return 0 if all(r["available"] for r in result.values()) else 1

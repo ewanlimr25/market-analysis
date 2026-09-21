@@ -204,3 +204,19 @@ def test_refresh_one_never_raises_even_on_a_store_failure(tmp_path, monkeypatch)
     fetch = _fake_fetch({"SPY": _fixture_payload()})
     result = C.refresh_one("SPY", fetch=fetch, now=lambda: FETCHED_AT)
     assert result["available"] is False
+
+
+# ---- watch list (findings/stock-deep-dive DECISIONS D6; DESIGN/70 R1) ------------------------------
+
+def test_read_symbols_file_skips_comments_blanks_and_duplicates(tmp_path):
+    path = tmp_path / "watch_names.txt"
+    path.write_text("# dived names\nNVDA\n\n  mu  \nNVDA\nBL # thin, kept for the fixture\n")
+    assert C.read_symbols_file(str(path)) == ["NVDA", "MU", "BL"]
+
+
+def test_read_symbols_file_is_empty_when_the_file_is_absent(tmp_path):
+    assert C.read_symbols_file(str(tmp_path / "missing.txt")) == []
+
+
+def test_merge_symbols_keeps_order_and_drops_repeats():
+    assert C.merge_symbols(["SPY", "QQQ"], ["NVDA", "SPY", "MU"]) == ["SPY", "QQQ", "NVDA", "MU"]

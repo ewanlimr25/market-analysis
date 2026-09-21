@@ -1,0 +1,44 @@
+# CBOE delayed-chain watch list, read by `make loaders` and `make cboe-chain` (engine/mart/cboe_chain.py
+# --symbols-file). One symbol per line; `#` starts a comment. SPY and QQQ are always fetched and need not
+# be listed. Chain history for a name starts the first weekday it is on this list (no free historical
+# chain exists: findings/stock-deep-dive RESEARCH/20 §8 row 1).
+#
+# Seeded 2026-09-20 with the 34 dived names that clear the 300-contract liquidity floor
+# (findings/stock-deep-dive DECISIONS D6 default, RESEARCH/20 §1.2, artifacts/inventory/per_ticker.csv
+# contracts_med >= 300). S-C's weekly selections are appended by hand when S-C emits them (DESIGN/90).
+NVDA
+MU
+AAPL
+MSFT
+INTC
+MSTR
+HOOD
+SOFI
+NBIS
+IREN
+GOOG
+SMH
+NOW
+BE
+BABA
+MARA
+CRM
+ADBE
+OKLO
+XOM
+LRCX
+RDDT
+SNOW
+PYPL
+SMR
+SHOP
+NVO
+FCX
+USAR
+PATH
+PDD
+ENPH
+FSLR
+ELF
+# Below the floor (kept out of the loader; the thin fixture name for the sheet's tests is BL):
+# RKT BBAI KWEB GRAB FSLY DOCN ENVX SYM GFS BILI SWKS NTAP CMPS BL
