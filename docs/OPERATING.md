@@ -47,7 +47,8 @@ git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
 
 **Commands you never run on your own:** `make mart` (full rebuild, only for a corrupted partition),
 `make index-vol` (only if the nightly says the CBOE refresh failed two sessions running),
-`--force-ledger` (testing only). `/market-scan`, `/weekly-review` and `/calibration-audit` stay frozen.
+`--force-ledger` (testing only). `/market-scan`, `/weekly-review` and `/calibration-audit` stay frozen
+(moved to `legacy/` on 2026-09-26; `legacy/README.md`).
 
 Every ledger row carries `policy_id`, `role` (`champion` / `challenger` / `exploration`) and `gate_verdict`
 (`DESIGN/100 §3`, adopted 2026-09-06). `signals.json` is `d1.1` from 2026-09-08; `d1.0` files stay valid.
@@ -305,7 +306,8 @@ picked it is still good enough. Neither is a verdict before 2026-12-01.
 - **Nothing trades real money before the read.** The report's sizing lines are what one contract
   would risk, so the dollars are visible, not so they are traded.
 - **The old `/market-scan`, `/weekly-review` Layer 2 and `/calibration-audit` stay frozen.** The
-  journal under `analyses/scan` and `analyses/weekly` is read-only history.
+  journal under `analyses/scan` and `analyses/weekly` is read-only history. The fleet itself (agents,
+  commands, scripts, docs, the June research) lives in `legacy/` and is not part of any routine.
 - **Commit every night** (`analyses/daily`, `ledger`). Do not push without deciding to; the repo is
   public.
 
@@ -430,3 +432,4 @@ snapshot carries 0/0 quotes on strikes the market makers pulled; such a leg fall
 | `engine/config.py` | every frozen parameter, with the section of the spec it comes from |
 | `schemas/signals.schema.json` | the contract for `signals.json`; `make validate DATE=...` checks one night by hand |
 | `~/Development/findings/market-analysis/` | why all of this exists, and the hand-off note `NEXT-SESSION.md` |
+| `legacy/` | the frozen Claude Code fleet and its June research; history only (`legacy/README.md`) |
