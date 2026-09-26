@@ -78,7 +78,8 @@ def _evaluate(week: WeekInput, params: SCParams, is_session: IsSession) -> list[
     evs = []
     for row in week.universe.to_dict("records"):
         ev = F.evaluate_name(row, by_u.get(row["ticker"], empty), week.entry, is_session, params)
-        evs.append({**ev, "close": row.get("close"), "_rows": by_u.get(row["ticker"], empty)})
+        evs.append({**ev, "close": row.get("close"), "marketcap": row.get("marketcap"), "iv30d": row.get("iv30d"),
+                    "_rows": by_u.get(row["ticker"], empty)})
     return evs
 
 
@@ -115,7 +116,8 @@ def entry_week(week: WeekInput, sizing: SCSizing = SC_SIZING, params: SCParams =
                 built[ev["ticker"]] = S.build(ev, rows[rows["expiry"].map(F.to_date) == ev["expiry"]], resolver, sizing, params)
             b = built[ev["ticker"]]
             for structure, row in b.structures.items():
-                res.candidates.append(POL.stamp({**row, "variant": variant, "rank": ev["rank"], "E": week.entry},
+                res.candidates.append(POL.stamp({**row, "variant": variant, "rank": ev["rank"], "E": week.entry,
+                                                 "marketcap": ev.get("marketcap"), "iv30d": ev.get("iv30d")},
                                                 SC_POLICY_ID, POL.ROLE_CHAMPION, POL.SA_GATE_PASS))
             res.dropped.extend({**d, "variant": variant} for d in b.dropped)
     return res

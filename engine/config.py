@@ -267,6 +267,14 @@ SC_VARIANTS = ("C1", "C2")
 SC_STRUCTURES = ("SS", "IB")
 SC_POLICY_ID = "sc-1.0"
 SC_RV_TABLE = "intraday_rv"                      # §0 note: realized vol is RV5 from this mart, quality rows only
+# §6 the bar (R4). The unit is the entry week; NW lag 4 for up to five overlapping four-week holds.
+SC_NW_LAG = 4
+SC_DSR_TRIALS = 6                                # 4 primary pairs + the two §8 alternates
+SC_GO_T_MIN = 2.0
+SC_GO_MONTH_LOSS_MULT = 3.0                      # worst calendar month >= -3 x median month
+SC_READ_MIN_WEEKS = 40                           # count trigger: graded forward entry-weeks per pair
+SC_SCALE_MIN_WEEKS = 80                          # scale above one contract
+SC_PBO_BLOCKS = 8                                # descriptive only (not a §6 criterion); ~3 weeks a block in-sample
 
 LEDGER_WB_DIR = os.path.join(LEDGER_DIR, "wb")
 LEDGER_WB_OPEN = date(2026, 9, 8)                # DESIGN/110 §7 R2; before this, nothing is written
