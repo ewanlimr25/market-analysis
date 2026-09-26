@@ -1,0 +1,312 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "FSLR",
+ "date": "2026-09-25",
+ "generated": "2026-09-26T03:28:50+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L6",
+  "contracts": 609,
+  "hot_chain_days": 20,
+  "adv_usd": 476546692.0436859,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-10-23",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-09-25",
+   "close": "screener 2026-09-25",
+   "contracts": "daily_contract 2026-09-25",
+   "hot_chain_days": "daily_contract 2026-08-27..2026-09-25 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-09-25",
+   "atm_spread": "daily_contract late window 2026-09-25",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-09-25"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 177.71 at 2026-10-23 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-10-28",
+   "session": "post",
+   "session_date": "2026-10-29",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-10-28",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2026-10-29",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-10-29",
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 34
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-10-02",
+   "2026-10-09"
+  ],
+  "macro": [
+   {
+    "date": "2026-10-28",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-10-29",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-09-25 + yfinance calendar",
+   "ex_div": "screener 2026-09-25",
+   "expiries": "cboe_chain 2026-09-25",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.4564215246569,
+  "iv_pct_own": 0.8547008547008548,
+  "rv5_21": 36.89587708693025,
+  "rv_c2c_21": 58.503562007827384,
+  "spread_rv5": 8.746275378759755,
+  "spread_c2c": -12.86140954213738,
+  "slope": -0.47000000000000375,
+  "earnings_history": [
+   {
+    "E": "2026-04-30",
+    "implied_move": 0.068754208261485,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.04864038513005342,
+    "ratio": 0.7074532070104715
+   },
+   {
+    "E": "2026-07-30",
+    "implied_move": 0.0640763450228257,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.024367770527241817,
+    "ratio": 0.3802927666763978
+   }
+  ],
+  "median_ratio_8": 0.5438729868434347,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "CHEAP",
+  "source": {
+   "iv30d": "screener 2026-09-25 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-03-13..2026-09-25 (117 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-08-27..2026-09-25 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-08-27..2026-09-25",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-09-25) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-08-27..2026-09-25 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-09-25) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-08-27..2026-09-25)",
+   "slope": "cboe_chain 2026-09-25 ATM IV at 2026-10-02 then 2026-10-09, vol points",
+   "earnings_history": "earnings_events <= 2026-07-30 + earnings_history/events.parquet <= 2026-07-30",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-09-25",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-09-25"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-10-02",
+   "strike": 177.5,
+   "mark": 9.875,
+   "mark_source": "cboe_chain 2026-09-25",
+   "tier": null
+  },
+  "box_1s_front": 9.875,
+  "box_1s_21": 23.25370611104855,
+  "atr14": 10.287513860574366,
+  "gex_total": -8013802.2393000005,
+  "gex_sign": "-",
+  "zero_gamma": 70.0,
+  "zero_gamma_all_crossings": [
+   70.0
+  ],
+  "spot": 177.71,
+  "source": {
+   "straddle_front": "cboe_chain 2026-09-25",
+   "box_1s_front": "cboe_chain 2026-09-25",
+   "box_1s_21": "screener 2026-09-25",
+   "atr14": "earnings_history/bars <= 2026-09-25",
+   "gex_total": "cboe_chain 2026-09-25",
+   "gex_sign": "cboe_chain 2026-09-25",
+   "zero_gamma": "cboe_chain 2026-09-25",
+   "spot": "screener 2026-09-25"
+  },
+  "nulls": []
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.4135,
+   "available": 2100000.0,
+   "date": "2026-09-24",
+   "decile": 0.361567506888458,
+   "stale_days": 1
+  },
+  "si": {
+   "pct_float": 0.1036,
+   "dtc": 5.57,
+   "settlement": "2026-08-31",
+   "publication": "2026-09-14",
+   "position": 9427542.0
+  },
+  "beta_250": 1.8187251387055279,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-09-22",
+    "firm": "GLJ Research",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   }
+  ],
+  "analyst_n": 1,
+  "form4": {
+   "buys": 0,
+   "sells": 1,
+   "other": 3,
+   "rows": [
+    {
+     "date": "2026-09-01",
+     "name": "Sloan Samantha L.",
+     "code": "M",
+     "shares": -469.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Sloan Samantha L.",
+     "code": "F",
+     "shares": -134.0,
+     "price": 199.65
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Sloan Samantha L.",
+     "code": "M",
+     "shares": 469.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Gloeckler Markus",
+     "code": "S",
+     "shares": -800.0,
+     "price": 200.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 14.87,
+   "vix3m": 17.93,
+   "vxn": 20.87,
+   "term": "contango",
+   "date": "2026-09-25"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-09-25",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-09-24",
+   "si": "short_interest (FINRA) settlement 2026-08-31, published 2026-09-14 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-09-25",
+   "analyst": "yfinance upgrades_downgrades <= 2026-09-25",
+   "form4": "finnhub /stock/insider-transactions <= 2026-09-25",
+   "vix": "index_vol 2026-09-25",
+   "regime": "_regime.classify_regime asof 2026-09-25",
+   "x2": "borrow (IBKR) 2026-09-24",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": -0.137036793889193,
+  "ret_63": -0.2566612236186415,
+  "w52_pos": 0.04602066760424628,
+  "flow_pct_universe": 99.83676975945018,
+  "flow_pct_self": 97.61904761904762,
+  "vol_pct_universe": 89.89890186508629,
+  "vol_pct_self": 88.0952380952381,
+  "net_premium": 10885426.0,
+  "volume_ratio": 1.4222125718949004,
+  "universe_n": 5820,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-09-25",
+   "ret_63": "earnings_history/bars <= 2026-09-25",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-09-25",
+   "net_premium": "screener 2026-09-25",
+   "volume_ratio": "screener 2026-09-25",
+   "flow_pct_universe": "screener universe 2026-09-25",
+   "vol_pct_universe": "screener universe 2026-09-25",
+   "flow_pct_self": "screener 63 sessions to 2026-09-25",
+   "vol_pct_self": "screener 63 sessions to 2026-09-25",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/FSLR/2026-09-25/inputs",
+ "nulls": [
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 177.71 at 2026-10-23 with 5+ lots on both legs"
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  }
+ ]
+}

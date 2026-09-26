@@ -1,0 +1,555 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "CRM",
+ "date": "2026-09-25",
+ "generated": "2026-09-26T03:28:08+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L6",
+  "contracts": 630,
+  "hot_chain_days": 21,
+  "adv_usd": 3641878681.43486,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-10-23",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-09-25",
+   "close": "screener 2026-09-25",
+   "contracts": "daily_contract 2026-09-25",
+   "hot_chain_days": "daily_contract 2026-08-27..2026-09-25 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-09-25",
+   "atm_spread": "daily_contract late window 2026-09-25",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-09-25"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 234.02 at 2026-10-23 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-12-01",
+   "session": "post",
+   "session_date": "2026-12-02",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-12-01",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2026-12-02",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-12-02",
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 68
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-10-02",
+   "2026-10-09"
+  ],
+  "macro": [
+   {
+    "date": "2026-10-28",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-12-02",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-09-25 + yfinance calendar",
+   "ex_div": "screener 2026-09-25",
+   "expiries": "cboe_chain 2026-09-25",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": []
+ },
+ "premium": {
+  "iv30d": 0.3794957330572,
+  "iv_pct_own": 8.547008547008547,
+  "rv5_21": 32.86311699912765,
+  "rv_c2c_21": 77.13803102439074,
+  "spread_rv5": 5.086456306592353,
+  "spread_c2c": -39.18845771867074,
+  "slope": 0.0,
+  "earnings_history": [
+   {
+    "E": "2026-05-27",
+    "implied_move": 0.0748069205466537,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.007548850089334147,
+    "ratio": 0.10091111937466093
+   },
+   {
+    "E": "2026-08-26",
+    "implied_move": 0.0607678889711346,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.22580492674415642,
+    "ratio": 3.715859322534903
+   }
+  ],
+  "median_ratio_8": 1.9083852209547818,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "CHEAP",
+  "source": {
+   "iv30d": "screener 2026-09-25 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-03-13..2026-09-25 (117 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-08-27..2026-09-25 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-08-27..2026-09-25",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-09-25) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-08-27..2026-09-25 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-09-25) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-08-27..2026-09-25)",
+   "slope": "cboe_chain 2026-09-25 ATM IV at 2026-10-02 then 2026-10-09, vol points",
+   "earnings_history": "earnings_events <= 2026-08-26 + earnings_history/events.parquet <= 2026-08-26",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-09-25",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-09-25"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-10-02",
+   "strike": 235.0,
+   "mark": 9.725000000000001,
+   "mark_source": "cboe_chain 2026-09-25",
+   "tier": null
+  },
+  "box_1s_front": 9.725000000000001,
+  "box_1s_21": 25.460918534460166,
+  "atr14": 8.924767071702894,
+  "gex_total": -150086.9937000013,
+  "gex_sign": "-",
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 234.02,
+  "source": {
+   "straddle_front": "cboe_chain 2026-09-25",
+   "box_1s_front": "cboe_chain 2026-09-25",
+   "box_1s_21": "screener 2026-09-25",
+   "atr14": "earnings_history/bars <= 2026-09-25",
+   "gex_total": "cboe_chain 2026-09-25",
+   "gex_sign": "cboe_chain 2026-09-25",
+   "zero_gamma": "cboe_chain 2026-09-25",
+   "spot": "screener 2026-09-25"
+  },
+  "nulls": [
+   {
+    "field": "zero_gamma",
+    "reason": "cumulative GEX never changes sign over the listed strikes"
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.2782,
+   "available": 5800000.0,
+   "date": "2026-09-24",
+   "decile": 0.2645423002347178,
+   "stale_days": 1
+  },
+  "si": {
+   "pct_float": 0.0406,
+   "dtc": 1.5,
+   "settlement": "2026-08-31",
+   "publication": "2026-09-14",
+   "position": 29211825.0
+  },
+  "beta_250": 0.44781412654399594,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-09-16",
+    "firm": "Stifel",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "reit"
+   },
+   {
+    "date": "2026-09-16",
+    "firm": "Mizuho",
+    "from": "Outperform",
+    "to": "Outperform",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "Freedom Broker",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "Stifel",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "Citigroup",
+    "from": "Neutral",
+    "to": "Neutral",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "RBC Capital",
+    "from": "Sector Perform",
+    "to": "Sector Perform",
+    "action": "reit"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "BMO Capital",
+    "from": "Outperform",
+    "to": "Outperform",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "Guggenheim",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "Canaccord Genuity",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-17",
+    "firm": "Cantor Fitzgerald",
+    "from": "Overweight",
+    "to": "Overweight",
+    "action": "reit"
+   },
+   {
+    "date": "2026-09-18",
+    "firm": "Citizens",
+    "from": "Market Outperform",
+    "to": "Market Outperform",
+    "action": "reit"
+   },
+   {
+    "date": "2026-09-18",
+    "firm": "Stephens & Co.",
+    "from": "Equal-Weight",
+    "to": "Equal-Weight",
+    "action": "reit"
+   },
+   {
+    "date": "2026-09-18",
+    "firm": "Wells Fargo",
+    "from": "Equal-Weight",
+    "to": "Equal-Weight",
+    "action": "main"
+   }
+  ],
+  "analyst_n": 13,
+  "form4": {
+   "buys": 1,
+   "sells": 2,
+   "other": 24,
+   "rows": [
+    {
+     "date": "2026-09-22",
+     "name": "Harris Parker",
+     "code": "M",
+     "shares": -1272.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Harris Parker",
+     "code": "M",
+     "shares": -1269.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Harris Parker",
+     "code": "F",
+     "shares": -631.0,
+     "price": 233.28
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Harris Parker",
+     "code": "M",
+     "shares": 1272.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Harris Parker",
+     "code": "F",
+     "shares": -630.0,
+     "price": 233.28
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Harris Parker",
+     "code": "M",
+     "shares": 1269.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Washington Robin L",
+     "code": "M",
+     "shares": -1831.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Washington Robin L",
+     "code": "F",
+     "shares": -908.0,
+     "price": 233.28
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Washington Robin L",
+     "code": "M",
+     "shares": 1831.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Niles Sabastian",
+     "code": "M",
+     "shares": -1017.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Niles Sabastian",
+     "code": "M",
+     "shares": -1015.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Niles Sabastian",
+     "code": "F",
+     "shares": -563.0,
+     "price": 233.28
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Niles Sabastian",
+     "code": "M",
+     "shares": 1017.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Niles Sabastian",
+     "code": "F",
+     "shares": -562.0,
+     "price": 233.28
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Niles Sabastian",
+     "code": "M",
+     "shares": 1015.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Milano Miguel",
+     "code": "M",
+     "shares": -1526.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Milano Miguel",
+     "code": "M",
+     "shares": -1015.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Milano Miguel",
+     "code": "F",
+     "shares": -601.0,
+     "price": 233.28
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Milano Miguel",
+     "code": "M",
+     "shares": 1526.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Milano Miguel",
+     "code": "F",
+     "shares": -400.0,
+     "price": 233.28
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Milano Miguel",
+     "code": "M",
+     "shares": 1015.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-18",
+     "name": "Kirk David Blair",
+     "code": "P",
+     "shares": 4176.0,
+     "price": 239.3321
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Niles Sabastian",
+     "code": "F",
+     "shares": -8873.0,
+     "price": 255.65
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Milano Miguel",
+     "code": "F",
+     "shares": -6535.0,
+     "price": 255.65
+    },
+    {
+     "date": "2026-09-04",
+     "name": "Conway Craig",
+     "code": "S",
+     "shares": -3082.0,
+     "price": 260.6629
+    },
+    {
+     "date": "2026-09-04",
+     "name": "Conway Craig",
+     "code": "S",
+     "shares": -1418.0,
+     "price": 260.4958
+    },
+    {
+     "date": "2026-08-28",
+     "name": "Harris Parker",
+     "code": "G",
+     "shares": -16000.0,
+     "price": 0.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 14.87,
+   "vix3m": 17.93,
+   "vxn": 20.87,
+   "term": "contango",
+   "date": "2026-09-25"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-09-25",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-09-24",
+   "si": "short_interest (FINRA) settlement 2026-08-31, published 2026-09-14 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-09-25",
+   "analyst": "yfinance upgrades_downgrades <= 2026-09-25",
+   "form4": "finnhub /stock/insider-transactions <= 2026-09-25",
+   "vix": "index_vol 2026-09-25",
+   "regime": "_regime.classify_regime asof 2026-09-25",
+   "x2": "borrow (IBKR) 2026-09-24",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": 0.1381189078381586,
+  "ret_63": 0.477678925855213,
+  "w52_pos": 0.7142276459135168,
+  "flow_pct_universe": 0.781786941580756,
+  "flow_pct_self": 18.253968253968253,
+  "vol_pct_universe": 8.689210388704899,
+  "vol_pct_self": 5.555555555555555,
+  "net_premium": -2466553.0,
+  "volume_ratio": 0.3838050048131265,
+  "universe_n": 5820,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-09-25",
+   "ret_63": "earnings_history/bars <= 2026-09-25",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-09-25",
+   "net_premium": "screener 2026-09-25",
+   "volume_ratio": "screener 2026-09-25",
+   "flow_pct_universe": "screener universe 2026-09-25",
+   "vol_pct_universe": "screener universe 2026-09-25",
+   "flow_pct_self": "screener 63 sessions to 2026-09-25",
+   "vol_pct_self": "screener 63 sessions to 2026-09-25",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/CRM/2026-09-25/inputs",
+ "nulls": [
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 234.02 at 2026-10-23 with 5+ lots on both legs"
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cumulative GEX never changes sign over the listed strikes"
+  }
+ ]
+}

@@ -1,0 +1,705 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "HOOD",
+ "date": "2026-09-25",
+ "generated": "2026-09-26T03:27:40+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L6",
+  "contracts": 1292,
+  "hot_chain_days": 21,
+  "adv_usd": 2662948279.657097,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-10-23",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-09-25",
+   "close": "screener 2026-09-25",
+   "contracts": "daily_contract 2026-09-25",
+   "hot_chain_days": "daily_contract 2026-08-27..2026-09-25 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-09-25",
+   "atm_spread": "daily_contract late window 2026-09-25",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-09-25"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 119.4 at 2026-10-23 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-11-03",
+   "session": "post",
+   "session_date": "2026-11-04",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-11-03",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2026-11-04",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-11-04",
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 40
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-10-02",
+   "2026-10-09"
+  ],
+  "macro": [
+   {
+    "date": "2026-10-28",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-11-04",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-09-25 + yfinance calendar",
+   "ex_div": "screener 2026-09-25",
+   "expiries": "cboe_chain 2026-09-25",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.575763401945888,
+  "iv_pct_own": 8.547008547008547,
+  "rv5_21": 47.82775034076687,
+  "rv_c2c_21": 74.25738247271175,
+  "spread_rv5": 9.748589853821933,
+  "spread_c2c": -16.681042278122952,
+  "slope": -1.6250000000000098,
+  "earnings_history": [
+   {
+    "E": "2026-04-28",
+    "implied_move": 0.0791090787233307,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.1324479442792974,
+    "ratio": 1.6742445546927613
+   },
+   {
+    "E": "2026-07-29",
+    "implied_move": 0.0811345446158554,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.036064091672308285,
+    "ratio": 0.4444973696846337
+   }
+  ],
+  "median_ratio_8": 1.0593709621886975,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "CHEAP",
+  "source": {
+   "iv30d": "screener 2026-09-25 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-03-13..2026-09-25 (117 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-08-27..2026-09-25 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-08-27..2026-09-25",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-09-25) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-08-27..2026-09-25 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-09-25) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-08-27..2026-09-25)",
+   "slope": "cboe_chain 2026-09-25 ATM IV at 2026-10-02 then 2026-10-09, vol points",
+   "earnings_history": "earnings_events <= 2026-07-29 + earnings_history/events.parquet <= 2026-07-29",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-09-25",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-09-25"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-10-02",
+   "strike": 119.0,
+   "mark": 7.825,
+   "mark_source": "cboe_chain 2026-09-25",
+   "tier": null
+  },
+  "box_1s_front": 7.825,
+  "box_1s_21": 19.70890870035639,
+  "atr14": 6.217172323615133,
+  "gex_total": 62355953.281944,
+  "gex_sign": "+",
+  "zero_gamma": 120.0,
+  "zero_gamma_all_crossings": [
+   15.0,
+   120.0
+  ],
+  "spot": 119.4,
+  "source": {
+   "straddle_front": "cboe_chain 2026-09-25",
+   "box_1s_front": "cboe_chain 2026-09-25",
+   "box_1s_21": "screener 2026-09-25",
+   "atr14": "earnings_history/bars <= 2026-09-25",
+   "gex_total": "cboe_chain 2026-09-25",
+   "gex_sign": "cboe_chain 2026-09-25",
+   "zero_gamma": "cboe_chain 2026-09-25",
+   "spot": "screener 2026-09-25"
+  },
+  "nulls": []
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.2835,
+   "available": 10000000.0,
+   "date": "2026-09-24",
+   "decile": 0.2756403714664762,
+   "stale_days": 1
+  },
+  "si": {
+   "pct_float": 0.0475,
+   "dtc": 1.71,
+   "settlement": "2026-08-31",
+   "publication": "2026-09-14",
+   "position": 35537085.0
+  },
+  "beta_250": 3.13002430012066,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-09-14",
+    "firm": "Deutsche Bank",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   }
+  ],
+  "analyst_n": 1,
+  "form4": {
+   "buys": 0,
+   "sells": 35,
+   "other": 25,
+   "rows": [
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": -240834.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -1302.0,
+     "price": 126.1408
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -239532.0,
+     "price": 125.3282
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": 240834.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": -259166.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -11030.0,
+     "price": 126.1489
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -248136.0,
+     "price": 125.5528
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": 259166.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -200.0,
+     "price": 112.825
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -1800.0,
+     "price": 112.1811
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -1289.0,
+     "price": 111.0825
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -6032.0,
+     "price": 110.2586
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -1851.0,
+     "price": 109.2267
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -300.0,
+     "price": 106.1767
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "C",
+     "shares": -43373.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -100.0,
+     "price": 116.26
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -6000.0,
+     "price": 115.5387
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -18889.0,
+     "price": 114.5114
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -15984.0,
+     "price": 113.7372
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -2400.0,
+     "price": 112.7717
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "C",
+     "shares": 43373.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-08",
+     "name": "Treseder Oluwadara Johnson",
+     "code": "S",
+     "shares": -1875.0,
+     "price": 125.0
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -700.0,
+     "price": 124.6192
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -2700.0,
+     "price": 123.9133
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -3800.0,
+     "price": 122.996
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -800.0,
+     "price": 121.6575
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -400.0,
+     "price": 120.7725
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -900.0,
+     "price": 119.6022
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -300.0,
+     "price": 118.3733
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -200.0,
+     "price": 117.165
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -100.0,
+     "price": 115.84
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -100.0,
+     "price": 113.45
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -812.0,
+     "price": 124.5807
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -2700.0,
+     "price": 123.8826
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -3599.0,
+     "price": 122.9652
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -800.0,
+     "price": 121.6975
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -400.0,
+     "price": 120.6325
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -13208.0,
+     "price": 119.9285
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -300.0,
+     "price": 117.86
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -200.0,
+     "price": 116.28
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -2397.0,
+     "price": 113.2475
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Verma Shiv",
+     "code": "M",
+     "shares": -23631.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Verma Shiv",
+     "code": "M",
+     "shares": -9692.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Verma Shiv",
+     "code": "F",
+     "shares": -16956.0,
+     "price": 104.81
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Verma Shiv",
+     "code": "M",
+     "shares": 33323.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Bazzano Dara",
+     "code": "M",
+     "shares": -6977.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Bazzano Dara",
+     "code": "F",
+     "shares": -2504.0,
+     "price": 104.81
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Bazzano Dara",
+     "code": "M",
+     "shares": 6977.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "M",
+     "shares": -8205.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "M",
+     "shares": -13747.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "M",
+     "shares": -24414.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "M",
+     "shares": -66490.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "F",
+     "shares": -54309.0,
+     "price": 104.81
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "M",
+     "shares": 112856.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Quirk Steven M.",
+     "code": "M",
+     "shares": -9846.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Quirk Steven M.",
+     "code": "M",
+     "shares": -16497.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Quirk Steven M.",
+     "code": "M",
+     "shares": -16838.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Quirk Steven M.",
+     "code": "M",
+     "shares": -27995.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Quirk Steven M.",
+     "code": "F",
+     "shares": -31533.0,
+     "price": 104.81
+    },
+    {
+     "date": "2026-09-01",
+     "name": "Quirk Steven M.",
+     "code": "M",
+     "shares": 71176.0,
+     "price": 0.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 14.87,
+   "vix3m": 17.93,
+   "vxn": 20.87,
+   "term": "contango",
+   "date": "2026-09-25"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-09-25",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-09-24",
+   "si": "short_interest (FINRA) settlement 2026-08-31, published 2026-09-14 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-09-25",
+   "analyst": "yfinance upgrades_downgrades <= 2026-09-25",
+   "form4": "finnhub /stock/insider-transactions <= 2026-09-25",
+   "vix": "index_vol 2026-09-25",
+   "regime": "_regime.classify_regime asof 2026-09-25",
+   "x2": "borrow (IBKR) 2026-09-24",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": 0.10005528393908425,
+  "ret_63": 0.20984900772262627,
+  "w52_pos": 0.618573262284976,
+  "flow_pct_universe": 0.3178694158075601,
+  "flow_pct_self": 10.317460317460318,
+  "vol_pct_universe": 25.352971936552205,
+  "vol_pct_self": 18.253968253968253,
+  "net_premium": -8298327.0,
+  "volume_ratio": 0.5397659473355007,
+  "universe_n": 5820,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-09-25",
+   "ret_63": "earnings_history/bars <= 2026-09-25",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-09-25",
+   "net_premium": "screener 2026-09-25",
+   "volume_ratio": "screener 2026-09-25",
+   "flow_pct_universe": "screener universe 2026-09-25",
+   "vol_pct_universe": "screener universe 2026-09-25",
+   "flow_pct_self": "screener 63 sessions to 2026-09-25",
+   "vol_pct_self": "screener 63 sessions to 2026-09-25",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/HOOD/2026-09-25/inputs",
+ "nulls": [
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 119.4 at 2026-10-23 with 5+ lots on both legs"
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  }
+ ]
+}
