@@ -248,6 +248,39 @@ verdict it prints (`engine/validation/sb_glossary.py`). Between the sensitivitie
 (`engine/validation/sb_alt_structures.py`). Descriptive only; the go/no-go never reads it. A criterion that flips from pass to fail
 is information, not a reason to change anything before the read.
 
+**The weekly report has no strikes; that is by design.** `sb_report.md` is the scorecard for the *rule*: about 60
+proxy positions per sleeve reduced to statistics, answering one question, whether each sleeve still clears the bar
+for the 12-01 read. It never lists a trade. The positions themselves live in two places:
+
+| What | Where |
+|---|---|
+| positions entered on a Friday | `analyses/daily/<Friday>/report.md`, section "S-B positions tonight" |
+| every position, open and graded | `ledger/sb/forward_signals.parquet` (`E`, `expiry`, `k_p1 k_p2 k_c1 k_c2`, `credit_entry`, `max_loss_usd`, `role`) |
+
+Reading a position row: SPY PS `744 / 717`, credit `1.33`, expiry 10-16 (entered 2026-09-25, spot 771.40) is short
+the 744 put and long the 717 put, about 1σ and 2σ below spot. Max loss is `(width − credit) × 100` =
+`(27 − 1.33) × 100` = $2,567. An IC adds the short `c1` and long `c2` calls above spot. Every row is one paper
+contract until the read. The next time a position is graded is the Friday of its expiry.
+
+Reading `sb_report.md`, bottom up:
+
+1. **Go / no-go** (the last table before the appendix). The only table that matters week to week: `verdict` per
+   sleeve, with `note` naming the failed criteria. The weekly check is whether any of `c1_proxy`, `c2_marked`,
+   `c3_month` or `c4_dsr` flipped since last week.
+2. **The three evidence layers behind it.** The *proxy* tables (three years of positions priced from CBOE vol
+   indices, the source of the t-stats). The *marked* tables (the same rule on real option prints since March; they
+   check that the proxy does not flatter itself, through `gap_ror`). The *forward* ledger (`forward_n`, 0 until the
+   first positions are graded on 2026-10-02).
+3. **The risk checks.** The month rule (worst expiry month against the median month, ≤ 3×), the tail report (the
+   single worst positions, for example SPY-PS −61% entered 2024-07-12), and the deflated Sharpe and PBO, which charge
+   for having tested several variants.
+4. **Descriptive sections** (gate modes and sensitivities, "Other structures on the proxy"). Context only; they
+   never enter a verdict.
+5. **Appendix.** Defines every column.
+
+Rule of thumb: the daily report says what the book would be holding; the weekly report says whether the rule that
+picked it is still good enough. Neither is a verdict before 2026-12-01.
+
 ## 5. When something is off
 
 | Symptom | Cause | What to do |
