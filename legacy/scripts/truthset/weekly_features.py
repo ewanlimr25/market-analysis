@@ -15,7 +15,7 @@ Output: data/weekly_features.parquet  + prints an illustrative SPY/QQQ/IWM weekl
 """
 import duckdb, os
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.join(HERE, "..", "..", "data")
+DATA = os.path.join(HERE, "..", "..", "..", "data")
 PX = os.path.join(DATA, "prices.parquet")
 OUT = os.path.join(DATA, "weekly_features.parquet")
 con = duckdb.connect()

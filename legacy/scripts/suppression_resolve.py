@@ -49,10 +49,11 @@ import statistics as st
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "scripts"))  # live helpers (legacy/README.md)
 import resolved_ledger  # noqa: E402
 from chart import bars  # noqa: E402
 
-ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 
 # Lane -> (horizon, direction the lane would have taken). Must match the lane agents; a
 # suppressed MOM_SHORT name is graded as the SHORT it would have been, not as a long.

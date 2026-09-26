@@ -33,6 +33,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "scripts"))  # live helpers (legacy/README.md)
 from _calendar import trading_days  # noqa: E402
 from _regime import classify_regime  # noqa: E402
 

@@ -34,6 +34,7 @@ con = duckdb.connect()
 # Gates compare against the end of the real TRADING-day window, never DATE 'T'+N
 # calendar days -- see scripts/_calendar.py for why. [audit 2026-07-24]
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "scripts"))  # live helpers (legacy/README.md)
 from _calendar import hz_end  # noqa: E402
 from _regime import classify_regime as _classify_regime  # noqa: E402
 

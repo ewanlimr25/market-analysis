@@ -48,7 +48,7 @@ import os
 import sys
 from dataclasses import dataclass
 
-ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 DEFAULT_LEDGER = os.path.join(ROOT, "analyses", "audit", "resolved_ledger.json")
 DEFAULT_SUPPRESSION_LEDGER = os.path.join(ROOT, "analyses", "audit",
                                           "suppression_ledger.json")

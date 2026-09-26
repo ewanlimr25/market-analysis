@@ -5,7 +5,7 @@ analyses/audit/*
 .env
 __pycache__/
 *.pyc
-archive/
+legacy/local/
 data/mart/
 data/backtest/*
 !data/backtest/*.md

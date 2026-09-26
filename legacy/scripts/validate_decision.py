@@ -7,7 +7,7 @@ import argparse, json, os, sys
 import jsonschema
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SCHEMAS = os.path.join(HERE, "..", "schemas")
+SCHEMAS = os.path.join(HERE, "..", "..", "schemas")
 
 def main() -> int:
     ap = argparse.ArgumentParser()

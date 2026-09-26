@@ -29,7 +29,7 @@ MCAP_MIN = 2e9                     # universe floor, RESEARCH/47 §2 G6 pre-regi
 MIN_OI_CONTRACTS = 5_000           # total call+put OI in the expiring series at day -1
 TOLERANCES = (0.0025, 0.005, 0.01)  # pre-stated: 0.25%, 0.5% (primary), 1.0%
 PRIMARY_TOLERANCE = 0.005
-_OCC_SUFFIX_RE = r"^(\d{6})([CP])\d{8}$"   # date, call/put, strike*1000 (same tail scripts/oi_build.py parses)
+_OCC_SUFFIX_RE = r"^(\d{6})([CP])\d{8}$"   # date, call/put, strike*1000 (same tail legacy/scripts/oi_build.py parses)
 
 
 # ----------------------------------------------------------------------------- expiry calendar
@@ -72,7 +72,7 @@ def build_expiry_calendar(start: date, end: date) -> list[ExpiryWeek]:
 def parse_oi_snapshot(raw: pd.DataFrame) -> pd.DataFrame:
     """Add `option_type` ('call'/'put') and `expiry` (date), parsed from `option_symbol` by
     stripping the `underlying_symbol` prefix and reading the standard OCC date+type+strike
-    tail (`YYMMDD[C|P]########`), the same convention `scripts/oi_build.py`'s `CP` regex
+    tail (`YYMMDD[C|P]########`), the same convention `legacy/scripts/oi_build.py`'s `CP` regex
     uses for option_type alone. Rows whose symbol does not start with their own underlying,
     or whose tail does not match, are dropped (RESEARCH/20 §5 documents no such rows on the
     panel; kept here as a fail-closed guard, not a silent swallow)."""

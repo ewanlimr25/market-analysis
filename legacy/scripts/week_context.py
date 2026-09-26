@@ -26,9 +26,10 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "scripts"))  # live helpers (legacy/README.md)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA = os.path.normpath(os.path.join(HERE, "..", "data"))
+DATA = os.path.normpath(os.path.join(HERE, "..", "..", "data"))
 PX = os.path.join(DATA, "prices.parquet")
 WK = os.path.join(DATA, "weekly_features.parquet")
 STOCKS = os.path.expanduser("~/Documents/Stocks")

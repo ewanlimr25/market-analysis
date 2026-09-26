@@ -45,8 +45,8 @@ GROUP BY 1
 """
 
 # C-OIBUILD's SQL half: net call-OI build (`oi_diff_plain`, NOT the `oi_change` ratio -- see
-# `scripts/oi_build.py`'s own module docstring for why that mistake is easy and silent) minus the
-# matching put build, per ticker per day. Same option-symbol regex `scripts/oi_build.py` uses.
+# `legacy/scripts/oi_build.py`'s own module docstring for why that mistake is easy and silent) minus the
+# matching put build, per ticker per day. Same option-symbol regex `legacy/scripts/oi_build.py` uses.
 _OI_CP_REGEX = r"regexp_extract(option_symbol,'\d{6}([CP])',1)"
 _OI_NET_QUERY = f"""
 SELECT underlying_symbol AS ticker,
@@ -108,7 +108,7 @@ def available_oi_dates(stocks_dir: str = STOCKS) -> list[date]:
 
 def oi_window_dates(d: date, stocks_dir: str = STOCKS, window: int = OI_WINDOW_SESSIONS) -> list[date]:
     """Up to `window` most recent OI-changes file dates on or before `d` (mirrors
-    `scripts/oi_build.py:_panel_dates`; a file's own date is whatever calendar day the export
+    `legacy/scripts/oi_build.py:_panel_dates`; a file's own date is whatever calendar day the export
     landed on, so this is "up to `window` available files", not strictly five trading sessions)."""
     have = [x for x in available_oi_dates(stocks_dir) if x <= d]
     return have[-window:]

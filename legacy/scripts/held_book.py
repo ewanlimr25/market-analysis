@@ -26,6 +26,7 @@ import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "scripts"))  # live helpers (legacy/README.md)
 from chart import bars, rsi14  # noqa: E402
 
 # A terminal verdict is matched on its LEADING TOKEN, never as a substring. Substring

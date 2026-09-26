@@ -29,6 +29,7 @@ import urllib.request
 from datetime import datetime, timedelta
 
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
+sys.path.insert(1, __file__.rsplit("/", 1)[0] + "/../../scripts")  # live helpers (legacy/README.md)
 from _env import get_key  # noqa: E402
 
 BASE_URL = "https://api.stlouisfed.org/fred/series/observations"

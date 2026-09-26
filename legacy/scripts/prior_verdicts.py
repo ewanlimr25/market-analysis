@@ -35,7 +35,7 @@ import sys
 from datetime import date, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.normpath(os.path.join(HERE, ".."))
+ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 ANALYSES = os.path.join(ROOT, "analyses")
 
 # Substrings that mean "this name was stopped", checked case-insensitively against
