@@ -266,6 +266,7 @@ SC_SIZING = SCSizing()
 SC_VARIANTS = ("C1", "C2")
 SC_STRUCTURES = ("SS", "IB")
 SC_POLICY_ID = "sc-1.0"
+SC_FROZEN_ON = date(2026, 9, 26)                 # §10 R6: every S-C value pinned by tests/test_sc_frozen_params.py
 SC_LEDGER_OPENS = date(2026, 10, 2)              # §10 R6: the first entry Friday after acceptance (DECISIONS)
 SC_RV_TABLE = "intraday_rv"                      # §0 note: realized vol is RV5 from this mart, quality rows only
 # §6 the bar (R4). The unit is the entry week; NW lag 4 for up to five overlapping four-week holds.
