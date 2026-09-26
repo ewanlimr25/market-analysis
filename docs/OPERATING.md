@@ -25,6 +25,8 @@ has not landed, wait.
 **Every weekend**
 
 ```
+python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py
+make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
 make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the marked backtest -> data/backtest/sb_report.md (read §8)
 make test                                        # 269 unit tests; also proves no frozen parameter moved
 make backtest && make report                     # S-A, from October once Season 3 events exist
@@ -224,11 +226,20 @@ before the read.
 ## 4. Weekly (weekend)
 
 ```
+python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py
+make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
 make backtest-sb REFRESH=1 && make report-sb     # S-B: proxy + marked run, then the bar tables -> data/backtest/sb_report.md
 make backtest && make report                     # S-A: once Season 3 events exist (from October)
 make backtest-sc && make report-sc               # S-C: panel run, then the §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
 make test                                        # 269 unit tests; must stay green
 ```
+
+**Why the refresh comes first.** `prices.parquet`, `returns` and `features` (`scripts/truthset/`) and
+`data/mart/intraday_rv` are manual rebuilds; no loader or `make daily` touches them. Left alone they go stale
+silently until preflight trips: they sat at 2026-09-04 for three weeks in September, which made `rv5_21` and
+the regime label on every ticker sheet 10+ sessions old and would have pushed S-B and S-C settlement onto the
+last-print fallback. Run the two refresh lines every weekend, and again before any `make daily` or
+`make ticker` whose date is past the truth set's last session.
 
 Read `data/backtest/sb_report.md` §8 (go/no-go as of today). The report ends with an appendix that defines every column, symbol and
 verdict it prints (`engine/validation/sb_glossary.py`). Between the sensitivities and the marked tables it also carries
@@ -328,6 +339,7 @@ make ticker T=NVDA DATE=2026-09-18      # an earlier session (its inputs/ are ke
 make ticker T=NVDA DIRECTION=long       # your call, priced as shares + two verticals and written to the disc-1.0 book
 make narrate T=NVDA                     # optional: headlines, analyst, Form 4, the disconfirming-facts checklist (changes no number)
 make ticker-batch DATE=...              # one sheet per data/watch_names.txt name (the exploration book)
+                                        # weekly, after the section 4 truth-set refresh, for the Friday session
 ```
 
 The sheet answers, in order: **A** can this name be priced at all (L1..L6; the first failing floor is
@@ -340,6 +352,15 @@ numbers (`spread_rv5` / `spread_c2c` in vol points, S-C's first failing filter, 
 sentence -- the engine emits no direction -- and three context numbers; **G** the structure menu at S-C's
 expiry with live-chain or tier-1/2 marks, cost, `P(inside)`/`P(touch)` and `n` at 0.5% of `E`; **H** what
 went to `ledger/name/`.
+
+What to expect from week to week: many names come back `CANNOT_PRICE` at L6 on some Fridays, and that is the
+calendar, not a fault. The sheet prices premium at S-C's expiry, the listed expiry 20 to 40 days out nearest
+`t + 28` (D26). When that lands on a monthly, most liquid names print an at-the-money pair with 5+ lots on
+each leg; when it lands on a weekly, many do not (2026-09-18, 10-16 monthly: 23 of 34 watch names priced;
+2026-09-25, 10-23 weekly: 12 of 34, MU failing with 4,460 contracts traded on the day). L6 reads the day's
+flagged `daily_contract` prints, not the live CBOE quote, and stays frozen (owner default, 2026-09-26). A
+`CANNOT_PRICE` sheet still writes sections B, E and F, and it adds no `sheet-1.0` row. S-C's own funnel thins
+the same way on those weeks.
 
 What to expect at the frozen `E = $100,000`: a 2σ-wing butterfly on a $200+ stock has a max loss above
 $500, so `n = 0` with the note; the line still prints its numbers. `E=` on the command line is a reporting
