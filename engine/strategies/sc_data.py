@@ -76,3 +76,41 @@ def load_contract_rows(con, underlyings: Iterable[str], d: date) -> pd.DataFrame
 
 def panel_sessions() -> list[date]:
     return store.available_dates(CONTRACTS)
+
+
+# ---- R3: wing history and settlement (DESIGN/90 §3) -------------------------------------------------
+
+def load_rows_for_underlyings(con, underlyings: Iterable[str], dates: Iterable[date]) -> pd.DataFrame:
+    """Every daily_contract row of the underlyings on the given sessions (the wings' IV lookback)."""
+    want = [d for d in sorted(set(dates)) if store.has_partition(CONTRACTS, d)]
+    names = sorted(set(underlyings))
+    if not want or not names:
+        return pd.DataFrame()
+    return pd.concat([load_contract_rows(con, names, d) for d in want], ignore_index=True)
+
+
+def prices_through(con, prices_path: str = PRICES) -> date | None:
+    row = con.execute(f"SELECT max(date) FROM read_parquet('{prices_path}')").fetchone()
+    return pd.Timestamp(row[0]).date() if row and row[0] is not None else None
+
+
+class PrintCloses:
+    """`.get((ticker, d))` -> the last print's underlying price on session d, queried on demand and
+    cached (the settlement fallback when Yahoo has no close; only a few rows ever need it)."""
+
+    def __init__(self, con):
+        self._con, self._cache = con, {}
+
+    def get(self, key: tuple[str, date], default=None):
+        if key not in self._cache:
+            self._cache[key] = self._query(*key)
+        value = self._cache[key]
+        return default if value is None else value
+
+    def _query(self, ticker: str, d: date) -> float | None:
+        if not store.has_partition(CONTRACTS, d):
+            return None
+        row = self._con.execute(f"""
+            SELECT arg_max(underlying_last, last_ts) FROM read_parquet('{store.partition_path(CONTRACTS, d)}')
+            WHERE underlying_symbol = ? AND underlying_last IS NOT NULL""", [ticker]).fetchone()
+        return float(row[0]) if row and row[0] is not None else None

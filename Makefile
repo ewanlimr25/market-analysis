@@ -29,13 +29,16 @@ test-integration:
 test: test-unit
 
 # ---- S-B (DESIGN/80) ---------------------------------------------------------------------------
-.PHONY: index-vol backtest-sb report-sb
+.PHONY: index-vol backtest-sb report-sb backtest-sc
 
 index-vol:        ## refresh data/mart/index_vol/index_vol.parquet from the CBOE public CSVs
 	$(PY) -m engine.mart.index_vol --refresh
 
 backtest-sb:      ## proxy (3y) + marked (panel) S-B runs -> data/backtest/sb_*.parquet  (add REFRESH=1 to refetch inputs)
 	$(PY) -m engine.backtest_sb $(if $(REFRESH),--refresh,)
+
+backtest-sc:      ## S-C marked weekly run on the panel -> data/backtest/sc_*.parquet (DESIGN/90 §5)
+	$(PY) -m engine.backtest_sc
 
 report-sb:        ## sleeve tables, BH, DSR, PBO, month rule, tail, overlap, gate modes, go/no-go -> data/backtest/sb_report.md
 	$(PY) -m engine.validation.run_sb_report
