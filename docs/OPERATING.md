@@ -28,7 +28,8 @@ has not landed, wait.
 python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py
 make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
 make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the marked backtest -> data/backtest/sb_report.md (read §8)
-make test                                        # 269 unit tests; also proves no frozen parameter moved
+make backtest-sc && make report-sc               # S-C panel run + §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
+make test                                        # every unit test (1,279 at 2026-09-26); also proves no frozen parameter moved
 make backtest && make report                     # S-A, from October once Season 3 events exist
 git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
 ```
@@ -51,7 +52,7 @@ git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
 Every ledger row carries `policy_id`, `role` (`champion` / `challenger` / `exploration`) and `gate_verdict`
 (`DESIGN/100 §3`, adopted 2026-09-06). `signals.json` is `d1.1` from 2026-09-08; `d1.0` files stay valid.
 
-That is the entire job: one command and a commit on trading nights, three commands on weekends, and
+That is the entire job: one command and a commit on trading nights, the block above on weekends, and
 nothing touches real money before 2026-12-01. Sections 1 to 7 below are the detail.
 
 ### What one week of the routine produces
@@ -66,7 +67,7 @@ nothing touches real money before 2026-12-01. Sections 1 to 7 below are the deta
 | S-A ledger rows | from 2026-10-01, any night with a qualifying print | earnings candidates emitted and graded next morning; measurement only |
 | `data/backtest/sb_report.md`, `sb_*.parquet` | weekend | proxy extended by one week, marked run re-done, the §8 go/no-go table as of that date (the `.md` reports are committed; the parquet stays local) |
 | `data/backtest/report.md` | weekend, from October | S-A Season 3 tables accruing |
-| `make test` result | weekend | 269 green, which also certifies no frozen parameter moved |
+| `make test` result | weekend | all green, which also certifies no frozen parameter moved |
 | six commits, pushed | five nightly, one weekly | the public, append-only record |
 
 **What accumulates.** At most four S-B positions a week, and the gate has been ON about 40% of
@@ -231,7 +232,7 @@ make intraday-rv DAYS=5                          # the truth set and intraday_rv
 make backtest-sb REFRESH=1 && make report-sb     # S-B: proxy + marked run, then the bar tables -> data/backtest/sb_report.md
 make backtest && make report                     # S-A: once Season 3 events exist (from October)
 make backtest-sc && make report-sc               # S-C: panel run, then the §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
-make test                                        # 269 unit tests; must stay green
+make test                                        # every unit test; must stay green
 ```
 
 **Why the refresh comes first.** `prices.parquet`, `returns` and `features` (`scripts/truthset/`) and
