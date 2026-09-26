@@ -119,9 +119,9 @@ def test_full_nightly_document_from_real_builders_validates(tmp_path):
 
 # ---- d1.4: C-POC-A/C-POC-A-LOSS widen watch_basket.count_distribution to 0..8 (DESIGN/110 §2/§8) --
 
-def test_schema_version_defaults_to_d1_5_and_earlier_docs_stay_valid():
-    assert SCH.SCHEMA_VERSION == "d1.5" and SCH.SCHEMA_VERSIONS == ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4", "d1.5")
-    for old in ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4"):
+def test_schema_version_defaults_to_d1_6_and_earlier_docs_stay_valid():
+    assert SCH.SCHEMA_VERSION == "d1.6" and SCH.SCHEMA_VERSIONS == ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4", "d1.5", "d1.6")
+    for old in ("d1.0", "d1.1", "d1.2", "d1.3", "d1.4", "d1.5"):
         # a document from before the watch basket existed: no `watch_basket` key at all
         base = {"schema_version": old, "report_kind": SCH.REPORT_KIND, "date": SESSION.isoformat(), "season": "S2",
                 "preflight": {"ok": True, "warnings": []}, "mart": {"daily_contract_rows": 0, "earnings_events_rows": 0},
@@ -178,7 +178,7 @@ def test_document_with_a_real_watch_basket_state_validates(tmp_path):
     assert wb["available"] is True and wb["wb_emitted"] == 1
     doc = D.assemble(SESSION, _preflight_ok(), {"daily_contract_rows": 1, "earnings_events_rows": 0},
                      run, graded, dropped_grade, running, counts, sb, wb)
-    assert doc["schema_version"] == "d1.5"
+    assert doc["schema_version"] == "d1.6"
     assert SCH.validate(doc) == []
     text = SCH.dumps(doc)
     assert SCH.validate(json.loads(text, **STRICT)) == []

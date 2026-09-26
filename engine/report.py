@@ -61,6 +61,8 @@ def render(signals: dict) -> str:
                   f"(skipped {led.get('exploration_skipped', 0)}), graded {led.get('graded', 0)}; "
                   f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-10-01; nothing written)'}."]
     parts += ["", "## S-B state", render_sb(signals.get("sb_state")), ""]
+    if "sc_state" in signals:
+        parts += ["", "## S-C state", render_sc(signals.get("sc_state")), ""]
     parts += ["", "## Watch basket (wb-1.0, exploration, paper only)", render_wb(signals.get("watch_basket")), ""]
     return "\n".join(parts)
 
@@ -117,6 +119,54 @@ def render_sb(state: dict | None) -> str:
     parts += ["", f"S-B ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), exploration {led.get('exploration_emitted', 0)} "
                   f"(skipped {led.get('exploration_skipped', 0)}), graded {led.get('graded', 0)}; "
                   f"ledger {'open' if led.get('ledger_open') else 'CLOSED (before 2026-09-11; nothing written)'}."]
+    return "\n".join(parts)
+
+
+# ---- S-C (findings DESIGN/90 §7) -------------------------------------------------------------------
+
+SC_CANDIDATE_COLS = ["variant", "rank", "ticker", "sector", "structure", "close", "iv30d", "expiry", "dte_cal", "k", "k_up", "k_dn",
+                     "credit_entry", "max_loss_usd", "stress_loss_usd", "entry_cost_usd", "contracts", "sigma_hold", "cap_pass", "cap_reason"]
+SC_GRADED_COLS = ["ticker", "variant", "structure", "E", "expiry", "settle_close", "settle_source", "corporate_action", "net_usd", "ror"]
+SC_SLEEVE_COLS = ["pair", "positions", "open_risk_usd", "budget_usd", "max_sector_positions"]
+SC_RUNNING_COLS = ["policy_id", "role", "pair", "n", "weeks", "mean_ror", "nw_t", "net_usd_total"]
+SC_FILTER_ORDER = ("F1", "F2", "F3", "F4", "F7", "F5", "F6", "F8", "F9")
+
+
+def _sc_funnel(funnel: dict) -> str:
+    stops = [f"{f} {funnel[f]}" for f in SC_FILTER_ORDER if funnel.get(f)]
+    tail = [f"{k} {v}" for k, v in sorted(funnel.items()) if ":" in k]
+    return "Stopped at: " + (" · ".join(stops) or "none") + ("; " + " · ".join(tail) if tail else "")
+
+
+def render_sc(state: dict | None) -> str:
+    """Friday: funnel, positions, exploration counts; every night: graded, open book, progress to the read."""
+    if not state:
+        return "_no S-C state (step not run)._"
+    if state.get("error"):
+        return f"**{state['error']}**"
+    parts = [f"Entry day: {'yes' if state.get('is_entry_day') else 'no'}; ledger "
+             f"{'open' if state.get('ledger_open') else 'CLOSED (opens 2026-10-02; nothing written)'}."]
+    if state.get("is_entry_day"):
+        cands = state.get("candidates", [])
+        ex = state.get("exploration", {})
+        parts += ["", _sc_funnel(state.get("funnel", {})),
+                  "", f"### S-C positions tonight ({len(cands)}; paper, before the read)", table(cands, SC_CANDIDATE_COLS) if cands else "_none selected_",
+                  "", f"Exploration book: {ex.get('names', 0)} priceable names at one contract each, by first failing filter: "
+                      + (", ".join(f"{k} {v}" for k, v in sorted(ex.get("by_verdict", {}).items())) or "none")]
+    graded = state.get("graded", [])
+    parts += ["", f"### S-C graded at expiry ({len(graded)})", table(graded, SC_GRADED_COLS) if graded else "_none due_"]
+    if state.get("unsettled"):
+        parts += ["", f"_{len(state['unsettled'])} row(s) due have no settlement close yet; they are retried each night._"]
+    book = state.get("open_book", {})
+    parts += ["", f"### S-C open book (S-B open: {'yes' if book.get('sb_open') else 'no'}; the 40% budget binds only then)",
+              table(book.get("sleeves", []), SC_SLEEVE_COLS) if book.get("sleeves") else "_empty_"]
+    running = state.get("running", [])
+    parts += ["", "### S-C forward ledger to date (entry-week series)", table(running, SC_RUNNING_COLS) if running else "_ledger empty_"]
+    progress = state.get("progress", [])
+    parts += ["", "Progress to the read: graded entry-weeks " + ", ".join(f"{p['forward_weeks']} of {p['required']} ({p['pair']})" for p in progress)]
+    led = state.get("ledger", {})
+    parts += ["", f"S-C ledger: emitted {led.get('emitted', 0)} (skipped {led.get('skipped', 0)}), exploration {led.get('exploration_emitted', 0)} "
+                  f"(skipped {led.get('exploration_skipped', 0)}), graded {led.get('graded', 0)}."]
     return "\n".join(parts)
 
 

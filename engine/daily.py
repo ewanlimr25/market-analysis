@@ -1,6 +1,7 @@
 """`make daily DATE=YYYY-MM-DD` (DESIGN/70 §5): preflight, append the mart, tonight's S-A
 candidates with every filter's verdict, grade yesterday's signals into the forward ledger, then the
-S-B step (DESIGN/80 §7, `engine/sb_daily.py`) and the watch-basket step (DESIGN/110 §7 R2,
+S-B step (DESIGN/80 §7, `engine/sb_daily.py`), the S-C step (findings DESIGN/90 §7,
+`engine/sc_daily.py`, fail-soft) and the watch-basket step (DESIGN/110 §7 R2,
 `engine/watch/nightly.py`, exploration-only paper rows, fail-soft), and write
 analyses/daily/<date>/signals.json + report.md. Deterministic; no model call; the only network use
 is the CBOE refresh, fail-soft.
@@ -25,6 +26,7 @@ from engine import portfolio
 from engine import report as R
 from engine import schema as SCH
 from engine import sb_daily as SD
+from engine import sc_daily as SCD
 from engine.config import ANALYSES_DAILY, LEDGER_DIR, SA_PARAMS, SCRIPTS, SIZING
 from engine.mart import daily_contract, earnings_events
 from engine.strategies import sa, sa_data
@@ -45,6 +47,11 @@ def ledger_open(d: date) -> bool:
 def sb_ledger_dir(ledger_dir: str) -> str:
     """The S-B ledger lives beside the S-A one: `<ledger_dir>/sb` (the default is `LEDGER_SB_DIR`)."""
     return os.path.join(ledger_dir, "sb")
+
+
+def sc_ledger_dir(ledger_dir: str) -> str:
+    """`ledger/sc/` beside the S-A files (findings DESIGN/90 §7)."""
+    return os.path.join(ledger_dir, "sc")
 
 
 def name_ledger_dir(ledger_dir: str) -> str:
@@ -186,6 +193,7 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
     n_graded = L.grade(ledger_dir, graded, d)[0] if is_open and len(graded) else 0
     running = season_running(L.read_ledger(ledger_dir), earnings_events.season_of(d))
     sb_state = SD.nightly(con, d, force_ledger, sb_ledger_dir(ledger_dir))
+    sc_state = SCD.nightly(con, d, force_ledger, sc_ledger_dir(ledger_dir), sb_ledger_dir(ledger_dir))
     wb_state = WB.nightly(con, d, force_ledger, wb_ledger_dir(ledger_dir))
     name_state = grade_name_ledger(d, ledger_dir)
     print(f"name ledger: due={name_state.get('due')} graded={name_state.get('graded')} dropped={name_state.get('dropped')}"
@@ -194,13 +202,14 @@ def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DA
                        {"emitted": emitted[0], "skipped": emitted[1], "graded": n_graded, "ledger_open": is_open,
                         "exploration_emitted": explored[0], "exploration_skipped": explored[1],
                         "wb_emitted": wb_state.get("wb_emitted", 0), "wb_graded": wb_state.get("wb_graded", 0)},
-                       sb_state, wb_state)
+                       sb_state, wb_state, sc_state)
     write_outputs(signals, os.path.join(out_root, d.isoformat()))
     return signals
 
 
 def assemble(d: date, pf: dict, mart: dict, cands: sa.RunResult, graded: pd.DataFrame, dropped: pd.DataFrame,
-             running: list[dict], ledger_counts: dict, sb_state: dict, wb_state: dict | None = None) -> dict:
+             running: list[dict], ledger_counts: dict, sb_state: dict, wb_state: dict | None = None,
+             sc_state: dict | None = None) -> dict:
     """The `signals.json` document (schemas/signals.schema.json): stamped, strict-JSON clean.
     `wb_state` is optional (schema `d1.2`; `d1.0`/`d1.1` documents never carried it) so existing
     call sites that predate the watch basket keep working."""
@@ -212,6 +221,8 @@ def assemble(d: date, pf: dict, mart: dict, cands: sa.RunResult, graded: pd.Data
             "ledger": ledger_counts, "sb_state": sb_state}
     if wb_state is not None:
         body["watch_basket"] = wb_state
+    if sc_state is not None:
+        body["sc_state"] = sc_state
     return SCH.clean(SCH.stamp(body))
 
 

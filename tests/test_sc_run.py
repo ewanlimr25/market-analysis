@@ -9,52 +9,14 @@ from datetime import date
 import pandas as pd
 import pytest
 
-from engine import marking as M
 from engine.config import SC_SIZING
 from engine.strategies import sc as SC
+from sc_fixtures import Wings, chain as _chain, is_session as _is_session, screener as _screener, week as _week
 
 pytestmark = pytest.mark.unit
 
 T1, T2 = date(2026, 7, 10), date(2026, 7, 17)            # two entry Fridays
 X1, X2 = date(2026, 8, 7), date(2026, 8, 14)             # 28 days after each
-
-
-def _is_session(d: date) -> bool:
-    return d.weekday() < 5
-
-
-def _screener(ticker: str, **over) -> dict:
-    base = {"ticker": ticker, "issue_type": "Common Stock", "is_index": False, "close": 50.0, "marketcap": 5e9,
-            "adv_usd_20d": 120e6, "iv30d": 0.45, "next_earnings_date": date(2026, 9, 30), "sector": "Healthcare"}
-    return {**base, **over}
-
-
-def _c(u: str, typ: str, k: float, exp: date, vwap: float, size: int = 40, spread: float = 0.05) -> dict:
-    return {"underlying_symbol": u, "option_chain_id": f"{u}{exp:%y%m%d}{typ[0].upper()}{int(k * 1000):08d}",
-            "option_type": typ, "strike": k, "expiry": exp, "size_late": size, "vwap_late": vwap,
-            "late_rel_spread": spread, "late_last_bid": None, "late_last_ask": None, "last_nbbo_bid": None,
-            "last_nbbo_ask": None}
-
-
-def _chain(u: str, exp: date, atm_size: int = 40, spread: float = 0.05) -> list[dict]:
-    rows = [_c(u, "call", 50.0, exp, 3.00, atm_size, spread), _c(u, "put", 50.0, exp, 2.80, atm_size, spread)]
-    return rows + [_c(u, t, float(k), exp, 1.0) for k in range(45, 56) if k != 50 for t in ("call", "put")]
-
-
-class Wings:
-    def mark(self, contract, d, when):
-        return M.Mark(0.30 if contract.option_type == "call" else 0.40, 0.05, 3, M.SOURCE_MODEL)
-
-
-def _week(entry: date, exp: date, spread_by_name: dict[str, float] | None = None) -> SC.WeekInput:
-    spread_by_name = spread_by_name or {"AAA": 0.04, "BBB": 0.05}
-    universe = pd.DataFrame([_screener("AAA"), _screener("BBB", sector="Technology"),
-                             _screener("CCC", marketcap=40e9), _screener("DDD")])
-    rows = []
-    for name, spread in spread_by_name.items():
-        rows += _chain(name, exp, spread=spread)
-    rows += [{**r, "size_late": 2} for r in _chain("DDD", exp)]              # F8: nothing prints 5 lots
-    return SC.WeekInput(entry, universe, pd.DataFrame(rows), lambda names: Wings())
 
 
 def test_entry_week_selects_builds_and_suppresses():
@@ -150,3 +112,26 @@ def test_a_week_with_no_selection_after_an_open_book_is_fine():
     t = SC.run([_week(T1, X1), empty], _closes(), {}, prices_through=X2, sb_open_on=lambda d: False,
                is_session=_is_session).trades
     assert len(t) == 6 and set(t["entry"]) == {T1}
+
+
+# ---- the exploration book (DESIGN/100 §6, D22; S-A's pattern) ------------------------------------
+
+def test_exploration_takes_every_priceable_pair_whatever_the_filters_say():
+    wk = _week(T1, X1)
+    rows = SC.exploration_week(wk, is_session=_is_session)
+    got = {(r["ticker"], r["structure"]): r["gate_verdict"] for r in rows}
+    assert got == {("AAA", "SS"): "PASS", ("AAA", "IB"): "PASS", ("BBB", "SS"): "PASS", ("BBB", "IB"): "PASS",
+                   ("CCC", "SS"): "F3", ("CCC", "IB"): "F3"}                      # CCC: $40B; DDD has no pair
+    assert all(r["role"] == "exploration" and r["variant"] == "C1" and r["contracts"] == 1 for r in rows)
+    assert all(r["policy_id"] == "sc-1.0" for r in rows)
+
+
+def test_exploration_marks_the_f10_cut():
+    names = {f"N{i:02d}": 0.02 + 0.001 * i for i in range(11)}
+    universe = pd.DataFrame([_screener(n) for n in names])
+    rows = []
+    for n, sp in names.items():
+        rows += _chain(n, X1, spread=sp)
+    wk = SC.WeekInput(T1, universe, pd.DataFrame(rows), lambda names: Wings())
+    verdicts = {r["ticker"]: r["gate_verdict"] for r in SC.exploration_week(wk, is_session=_is_session)}
+    assert verdicts["N10"] == SC.REASON_F10 and verdicts["N00"] == "PASS"

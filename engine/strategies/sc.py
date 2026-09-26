@@ -123,6 +123,55 @@ def entry_week(week: WeekInput, sizing: SCSizing = SC_SIZING, params: SCParams =
     return res
 
 
+# ---- the exploration book (DESIGN/100 §6, D22) ---------------------------------------------------
+
+EXPLORATION_SIZING = SCSizing(equity=0.0)          # one contract per structure: the sizing floor is 1 at equity 0
+
+
+def _priceable(ev: Mapping[str, Any], row: Mapping[str, Any], entry: date, is_session: IsSession,
+               params: SCParams) -> dict | None:
+    """The name's F7 expiry and F8 pair whatever F1..F6 said, or None when there is no pair to price."""
+    rows = ev["_rows"]
+    close, iv = F._num(row.get("close")), F._num(row.get("iv30d"))
+    if rows.empty or not close or not iv:
+        return None
+    expiry = F.select_expiry(rows["expiry"].dropna().unique(), entry, is_session, params)
+    if expiry is None:
+        return None
+    pair = F.select_atm_pair(rows[rows["expiry"].map(F.to_date) == expiry], close, params)
+    if pair is None:
+        return None
+    dte = (expiry - entry).days
+    return {**ev, "expiry": expiry, "dte_cal": dte, "pair": pair, "mean_spread": pair.mean_spread,
+            "sigma_hold": F.sigma_hold(close, iv, dte), "reason": None}
+
+
+def exploration_week(week: WeekInput, params: SCParams = SC_PARAMS, is_session: IsSession = cal.is_trading_day) -> list[dict]:
+    """One contract of SS and IB (variant C1) for every name with a priceable F7 / F8 pair, whatever F1..F6,
+    F9 and F10 say, as S-A's book does for any event with a markable pair. `gate_verdict` is the first
+    failing filter, `F10` for a name S-C passed but did not rank into its ten, else PASS."""
+    evs = _evaluate(week, params, is_session)
+    chosen = {e["ticker"] for e in F.select_top(evs, F.VARIANT_C1, params)}
+    raw = {r["ticker"]: r for r in week.universe.to_dict("records")}
+    picks = []
+    for ev in evs:
+        p = _priceable(ev, raw[ev["ticker"]], week.entry, is_session, params)
+        if p is not None:
+            verdict = ev["reason"] or (POL.SA_GATE_PASS if ev["ticker"] in chosen else REASON_F10)
+            picks.append((p, verdict))
+    if not picks:
+        return []
+    resolver = week.wing_resolver(sorted(p["ticker"] for p, _ in picks))
+    out = []
+    for p, verdict in picks:
+        rows = p["_rows"]
+        b = S.build(p, rows[rows["expiry"].map(F.to_date) == p["expiry"]], resolver, EXPLORATION_SIZING, params)
+        out.extend(POL.stamp({**row, "variant": F.VARIANT_C1, "rank": None, "E": week.entry, "marketcap": p.get("marketcap"),
+                              "iv30d": p.get("iv30d"), "cap_pass": True, "cap_reason": None},
+                             SC_POLICY_ID, POL.ROLE_EXPLORATION, verdict) for row in b.structures.values())
+    return out
+
+
 # ---- settlement ----------------------------------------------------------------------------------
 
 def split_factor(raw_entry: float | None, yahoo_entry: float | None) -> float:

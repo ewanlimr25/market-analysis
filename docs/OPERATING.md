@@ -199,6 +199,14 @@ book: the filter chain is graded against what it refused at the season read.
 - **Open positions / forward ledger to date:** what is on (champion rows only), and the running record per
   `(policy_id, role, sleeve)`. Champion (`sb-1.0`) and exploration lines are separate by construction.
 
+**S-C state (from 2026-10-02):** on Fridays, where the week's universe stopped (one count per filter), the
+positions tonight per variant (C1, C2 without Technology; SS and IB, one row each, with `cap_pass`: every selection
+is a ledger row, the caps are the portfolio view), and the exploration book as counts by first failing filter (one
+contract for every name with a priceable pair; the rows are in `ledger/sc/`). Every night: positions graded at
+expiry (a row whose close is missing is retried the next night), the open book per pair against the 40% budget
+(which binds only while S-B has positions open), and `graded entry-weeks: n of 40` per pair. Nothing here is a trade
+before the read.
+
 ## 3. The calendar
 
 | Date | What |
@@ -207,15 +215,18 @@ book: the filter chain is graded against what it refused at the season read.
 | **2026-09-11 (Fri)** | S-B ledger opens. First entry night if the gate is ON |
 | 2026-10-01 | S-A Season 3 ledger opens (automatic) |
 | 2026-10-02 | First S-B positions expire and are graded |
+| **2026-10-02 (Fri)** | S-C ledger opens (`ledger/sc/`): first entry Friday, C1 and C2, SS and IB, plus the exploration book (findings DESIGN/90 §7) |
 | 2026-11-06 | Last S-B entry that counts toward the read |
 | **2026-12-01** | **The read.** Run the two backtests, write `findings/.../RESEARCH/47-read-2026-12-01.md`, record verdicts in `DECISIONS.md`. If SPY-PS clears all four criteria of `DESIGN/80 §6.7`, one contract goes live on the first gate-on Friday after |
 | after | Scale above one contract only at the first cycle with ≥ 40 graded forward positions and positive mean (per sleeve) |
+| about 2027-10 | S-C read: the first week a (variant, structure) pair holds 40 graded forward entry-weeks (the panel selected in 20 of 25 weeks, so about 50 calendar weeks plus the four-week hold) (`make report-sc` prints the count; NOT DUE until then) |
 
 ## 4. Weekly (weekend)
 
 ```
 make backtest-sb REFRESH=1 && make report-sb     # S-B: proxy + marked run, then the bar tables -> data/backtest/sb_report.md
 make backtest && make report                     # S-A: once Season 3 events exist (from October)
+make backtest-sc && make report-sc               # S-C: panel run, then the §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
 make test                                        # 269 unit tests; must stay green
 ```
 

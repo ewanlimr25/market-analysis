@@ -1,7 +1,7 @@
 {
  "$schema": "http://json-schema.org/draft-07/schema#",
- "title": "engine-daily signals (d1.1)",
- "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 §5, DESIGN/80 §7). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 §4). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*. d1.2 (2026-09-08, DESIGN/110 R2): optional top-level watch_basket object (exploration-only, paper rows, policy wb-1.0); ledger_counts.wb_emitted/wb_graded. d1.3 (2026-09-07 evening, DESIGN/110 §2/§8): C-DIV-D (daily RSI bullish divergence) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound from 0..6 to 0..7; key \"7\" is optional (not required) so d1.2 documents, which never emit it, stay valid. d1.4 (2026-09-07 evening, DESIGN/110 §2/§8): C-POC-A and C-POC-A-LOSS (anchored volume-profile acceptance) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound to 0..8 and .bear's bound to 0..8; keys \"8\" (bull) and \"8\" (bear) are optional (not required) so d1.0-d1.3 documents, which never emit them, stay valid.",
+ "title": "engine-daily signals (d1.6)",
+ "description": "The machine copy of one `make daily` run (analyses/daily/<date>/signals.json; DESIGN/70 §5, DESIGN/80 §7). Deterministic engine output, no model. Every object is strict (additionalProperties false) so a consumer can detect drift. Sizing fields (contracts and every *_usd) are the redaction class for public surfaces (findings DESIGN/95 §4). `n` in the running tables is a count of positions; contracts are always `contracts`. d1.1 (2026-09-06): policy_id/role/gate_verdict on positions, the S-B exploration book, ledger_counts.exploration_*. d1.2 (2026-09-08, DESIGN/110 R2): optional top-level watch_basket object (exploration-only, paper rows, policy wb-1.0); ledger_counts.wb_emitted/wb_graded. d1.3 (2026-09-07 evening, DESIGN/110 §2/§8): C-DIV-D (daily RSI bullish divergence) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound from 0..6 to 0..7; key \"7\" is optional (not required) so d1.2 documents, which never emit it, stay valid. d1.4 (2026-09-07 evening, DESIGN/110 §2/§8): C-POC-A and C-POC-A-LOSS (anchored volume-profile acceptance) added to the watch-basket conditions, widening watch_basket.count_distribution.bull's bound to 0..8 and .bear's bound to 0..8; keys \"8\" (bull) and \"8\" (bear) are optional (not required) so d1.0-d1.3 documents, which never emit them, stay valid. d1.6 (2026-09-26, findings DESIGN/90 §7 R5): optional top-level sc_state object (the S-C nightly step: funnel, champion positions tonight, graded, unsettled, exploration counts, open book, running, progress to the 40-week read); documents before d1.6 never carry it.",
  "type": "object",
  "additionalProperties": false,
  "required": [
@@ -27,7 +27,8 @@
     "d1.2",
     "d1.3",
     "d1.4",
-    "d1.5"
+    "d1.5",
+    "d1.6"
    ]
   },
   "report_kind": {
@@ -120,6 +121,9 @@
   },
   "watch_basket": {
    "$ref": "#/$defs/watch_basket"
+  },
+  "sc_state": {
+   "$ref": "#/$defs/sc_state"
   }
  },
  "$defs": {
@@ -2016,6 +2020,518 @@
        "minimum": 0
       }
      }
+    }
+   }
+  },
+  "sc_position": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "One S-C structure tonight (full row in ledger/sc/).",
+   "required": [
+    "ticker",
+    "variant",
+    "structure",
+    "expiry",
+    "contracts",
+    "policy_id",
+    "role",
+    "gate_verdict"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "variant": {
+     "enum": [
+      "C1",
+      "C2"
+     ]
+    },
+    "structure": {
+     "enum": [
+      "SS",
+      "IB"
+     ]
+    },
+    "rank": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "sector": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "close": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "iv30d": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "expiry": {
+     "type": "string",
+     "format": "date"
+    },
+    "dte_cal": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "k": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "k_up": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "k_dn": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "credit_entry": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "entry_cost_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "max_loss_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "stress_loss_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "contracts": {
+     "type": "integer"
+    },
+    "risk_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "sigma_hold": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "entry_tier_max": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "cap_pass": {
+     "type": [
+      "boolean",
+      "null"
+     ]
+    },
+    "cap_reason": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "policy_id": {
+     "type": "string"
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration"
+     ]
+    },
+    "gate_verdict": {
+     "type": "string"
+    }
+   }
+  },
+  "sc_graded": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "One S-C champion structure graded tonight at intrinsic.",
+   "required": [
+    "ticker",
+    "E",
+    "variant",
+    "structure",
+    "settle_close",
+    "settle_source",
+    "net_usd",
+    "ror"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "E": {
+     "type": "string",
+     "format": "date"
+    },
+    "variant": {
+     "enum": [
+      "C1",
+      "C2"
+     ]
+    },
+    "structure": {
+     "enum": [
+      "SS",
+      "IB"
+     ]
+    },
+    "expiry": {
+     "type": "string",
+     "format": "date"
+    },
+    "contracts": {
+     "type": [
+      "integer",
+      "null"
+     ]
+    },
+    "settle_close": {
+     "type": "number"
+    },
+    "settle_source": {
+     "enum": [
+      "prices",
+      "daily_contract",
+      "last_close"
+     ]
+    },
+    "corporate_action": {
+     "enum": [
+      null,
+      "split",
+      "delisted"
+     ]
+    },
+    "net_usd": {
+     "type": "number"
+    },
+    "ror": {
+     "type": "number"
+    },
+    "policy_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "role": {
+     "enum": [
+      "champion",
+      "challenger",
+      "exploration",
+      null
+     ]
+    },
+    "gate_verdict": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   }
+  },
+  "sc_unsettled": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "ticker",
+    "E",
+    "variant",
+    "structure",
+    "reason"
+   ],
+   "properties": {
+    "ticker": {
+     "type": "string"
+    },
+    "E": {
+     "type": "string",
+     "format": "date"
+    },
+    "variant": {
+     "type": "string"
+    },
+    "structure": {
+     "type": "string"
+    },
+    "policy_id": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "role": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "expiry": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "reason": {
+     "type": "string"
+    }
+   }
+  },
+  "sc_sleeve": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "pair",
+    "positions",
+    "open_risk_usd"
+   ],
+   "properties": {
+    "pair": {
+     "type": "string",
+     "pattern": "^C[12]-(SS|IB)$"
+    },
+    "positions": {
+     "type": "integer"
+    },
+    "open_risk_usd": {
+     "type": "number"
+    },
+    "budget_usd": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "max_sector_positions": {
+     "type": "integer"
+    }
+   }
+  },
+  "sc_running": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "policy_id",
+    "role",
+    "pair",
+    "n",
+    "weeks"
+   ],
+   "properties": {
+    "policy_id": {
+     "type": "string"
+    },
+    "role": {
+     "type": "string"
+    },
+    "pair": {
+     "type": "string"
+    },
+    "n": {
+     "type": "integer"
+    },
+    "weeks": {
+     "type": "integer"
+    },
+    "mean_ror": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "nw_t": {
+     "type": [
+      "number",
+      "null"
+     ]
+    },
+    "net_usd_total": {
+     "type": [
+      "number",
+      "null"
+     ]
+    }
+   }
+  },
+  "sc_progress": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "pair",
+    "forward_weeks",
+    "required"
+   ],
+   "properties": {
+    "pair": {
+     "type": "string"
+    },
+    "forward_weeks": {
+     "type": "integer"
+    },
+    "required": {
+     "type": "integer"
+    }
+   }
+  },
+  "sc_state": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "The S-C nightly step (findings DESIGN/90 §7). Normal shape carries every key; the error shape carries date, error and empty candidates/graded.",
+   "required": [
+    "date",
+    "candidates",
+    "graded"
+   ],
+   "properties": {
+    "date": {
+     "type": "string",
+     "format": "date"
+    },
+    "is_entry_day": {
+     "type": "boolean"
+    },
+    "ledger_open": {
+     "type": "boolean"
+    },
+    "funnel": {
+     "type": "object",
+     "additionalProperties": {
+      "type": "integer"
+     }
+    },
+    "candidates": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sc_position"
+     }
+    },
+    "graded": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sc_graded"
+     }
+    },
+    "unsettled": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sc_unsettled"
+     }
+    },
+    "exploration": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "names",
+      "by_verdict",
+      "graded"
+     ],
+     "description": "DESIGN/100 §6: one contract of SS and IB for every priceable F7/F8 pair, first failing filter as gate_verdict; counts only (rows in ledger/sc/)",
+     "properties": {
+      "names": {
+       "type": "integer"
+      },
+      "by_verdict": {
+       "type": "object",
+       "additionalProperties": {
+        "type": "integer"
+       }
+      },
+      "graded": {
+       "type": "integer"
+      }
+     }
+    },
+    "open_book": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "sb_open",
+      "sleeves"
+     ],
+     "properties": {
+      "sb_open": {
+       "type": "boolean"
+      },
+      "sleeves": {
+       "type": "array",
+       "items": {
+        "$ref": "#/$defs/sc_sleeve"
+       }
+      }
+     }
+    },
+    "running": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sc_running"
+     }
+    },
+    "progress": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/sc_progress"
+     }
+    },
+    "ledger": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "emitted": {
+       "type": "integer"
+      },
+      "skipped": {
+       "type": "integer"
+      },
+      "exploration_emitted": {
+       "type": "integer"
+      },
+      "exploration_skipped": {
+       "type": "integer"
+      },
+      "graded": {
+       "type": "integer"
+      }
+     }
+    },
+    "error": {
+     "type": "string",
+     "description": "present only when the S-C step failed; the rest of the report is still written"
     }
    }
   }
