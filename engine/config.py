@@ -237,11 +237,11 @@ class SCParams:
     adv_min: float = 50e6                        # F4 20-day dollar ADV >= $50M (the C12 floor)
     iv30d_min: float = 0.30                      # F6 iv30d in [0.30, 0.80]
     iv30d_max: float = 0.80                      # F6
-    dte_cal_min: int = 21                        # F7 calendar DTE in [21, 35] ..
-    dte_cal_max: int = 35                        # F7
-    target_dte_cal: int = 28                     # F7 .. nearest t + 28, Friday-type expiry that printed on t
+    dte_cal_min: int = 20                        # F7 calendar DTE in [20, 40] .. (D26 option 1, 2026-09-25; was [21, 35])
+    dte_cal_max: int = 40                        # F7
+    target_dte_cal: int = 28                     # F7 .. nearest t + 28, any listed expiry that printed on t (D26: Friday-type clause dropped)
     atm_band: float = 0.025                      # F8 |K/S - 1| <= 2.5%
-    leg_size_min: int = 20                       # F8 size_late >= 20 on the call and the put (tier-1 entry)
+    leg_size_min: int = 5                        # F8 size_late >= 5 on the call and the put (tier-1 minimum; D26, was 20)
     spread_max: float = 0.08                     # F9 late_rel_spread <= 8% on both ATM legs
     select_n: int = 10                           # F10 ten lowest mean ATM spread per variant
     c2_excluded_sectors: tuple[str, ...] = ("Technology",)   # C2 = C1 minus Technology (E2: no premium)

@@ -25,7 +25,7 @@ import pandas as pd
 
 from engine.config import ISSUE_TYPES, SC_PARAMS, SCParams
 from engine.strategies.sa_filters import _num, to_date
-from engine.strategies.sb_structures import DAYS_PER_YEAR, is_friday_expiry
+from engine.strategies.sb_structures import DAYS_PER_YEAR
 
 FILTER_ORDER = ("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9")
 SCREENER_FILTERS = ("F1", "F2", "F3", "F4", "F6")
@@ -54,11 +54,12 @@ def screener_filters(row: Mapping[str, Any], params: SCParams = SC_PARAMS) -> di
 
 def select_expiry(printed_expiries: Iterable[date], entry: date, is_session: Callable[[date], bool],
                   params: SCParams = SC_PARAMS) -> date | None:
-    """F7: among the expiries that printed on `entry`, the Friday-type one (Friday, or the Thursday
-    before a holiday Friday) with calendar DTE in [dte_cal_min, dte_cal_max] nearest `entry +
-    target_dte_cal`; ties go earlier. None when nothing qualifies."""
+    """F7: among the expiries that printed on `entry`, the one with calendar DTE in [dte_cal_min,
+    dte_cal_max] nearest `entry + target_dte_cal`; ties go earlier. None when nothing qualifies.
+    D26 option 1 (2026-09-25) dropped the Friday-type clause: monthly-only names had no expiry in
+    [21, 35] on two weeks of four. `is_session` stays in the signature for the callers."""
     ok = [e for e in {to_date(x) for x in printed_expiries if x is not None}
-          if params.dte_cal_min <= (e - entry).days <= params.dte_cal_max and is_friday_expiry(e, is_session)]
+          if params.dte_cal_min <= (e - entry).days <= params.dte_cal_max]
     if not ok:
         return None
     return min(ok, key=lambda e: (abs((e - entry).days - params.target_dte_cal), e))

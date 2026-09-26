@@ -1,5 +1,5 @@
 """S-C R1 (DESIGN/90 §2, §3, §10): F1..F10, C2, expiry and ATM selection, the σ unit. Boundary
-cases on every filter, a null earnings date failing closed, the Thursday before a holiday Friday."""
+cases on every filter, a null earnings date failing closed, the D26 expiry and leg-size values."""
 from __future__ import annotations
 
 import math
@@ -63,21 +63,29 @@ def test_f1_needs_common_or_adr_and_not_an_index_and_missing_numbers_fail():
 
 # ---- F7 expiry -----------------------------------------------------------------------------------
 
-def test_select_expiry_takes_the_friday_nearest_28_days_inside_21_to_35_ties_earlier():
+def test_d26_values_are_the_amended_f7_f8():
+    """D26 option 1 (2026-09-25, before any S-C row): F7 any listed expiry in [20, 40] calendar days,
+    F8 at the marking engine's tier-1 minimum of 5 lots; the band and target unchanged."""
+    assert (SC_PARAMS.dte_cal_min, SC_PARAMS.dte_cal_max, SC_PARAMS.target_dte_cal) == (20, 40, 28)
+    assert SC_PARAMS.leg_size_min == 5 and SC_PARAMS.atm_band == 0.025
+
+
+def test_select_expiry_takes_the_expiry_nearest_28_days_inside_20_to_40_ties_earlier():
     cands = [ENTRY + timedelta(days=n) for n in (14, 21, 28, 35, 42)]        # all Fridays
     assert F.select_expiry(cands, ENTRY, _is_session) == ENTRY + timedelta(days=28)
     assert F.select_expiry([ENTRY + timedelta(21), ENTRY + timedelta(35)], ENTRY, _is_session) == ENTRY + timedelta(21)  # tie -> earlier
     assert F.select_expiry([ENTRY + timedelta(14), ENTRY + timedelta(42)], ENTRY, _is_session) is None
-    assert F.select_expiry([ENTRY + timedelta(24)], ENTRY, _is_session) is None                       # a Monday
+    assert F.select_expiry([ENTRY + timedelta(20)], ENTRY, _is_session) == ENTRY + timedelta(20)      # band edges
+    assert F.select_expiry([ENTRY + timedelta(40)], ENTRY, _is_session) == ENTRY + timedelta(40)
+    assert F.select_expiry([ENTRY + timedelta(19), ENTRY + timedelta(41)], ENTRY, _is_session) is None
     assert F.select_expiry([], ENTRY, _is_session) is None
     assert F.select_expiry([pd.Timestamp(ENTRY + timedelta(28)), None], ENTRY, _is_session) == ENTRY + timedelta(28)
 
 
-def test_select_expiry_accepts_the_thursday_before_a_holiday_friday():
-    entry = date(2026, 3, 6)                                  # Friday; Good Friday 2026-04-03 is 28 days out
-    thursday = date(2026, 4, 2)
-    assert F.select_expiry([thursday], entry, _is_session) == thursday
-    assert F.select_expiry([date(2026, 4, 9)], entry, _is_session) is None                      # an ordinary Thursday, 34 days
+def test_select_expiry_accepts_any_listed_weekday_after_d26():
+    assert F.select_expiry([ENTRY + timedelta(24)], ENTRY, _is_session) == ENTRY + timedelta(24)      # a Monday
+    entry = date(2026, 3, 6)                                  # Good Friday 2026-04-03 is 28 days out
+    assert F.select_expiry([date(2026, 4, 2), date(2026, 4, 9)], entry, _is_session) == date(2026, 4, 2)   # 27 beats 34
 
 
 # ---- F5 earnings ---------------------------------------------------------------------------------
@@ -140,7 +148,7 @@ def test_evaluate_name_passes_a_clean_name_and_names_the_first_failure():
     assert F.evaluate_name(_row(next_earnings_date=None), _good_rows(), ENTRY, _is_session)["reason"] == "F5"
     assert F.evaluate_name(_row(next_earnings_date=EXP), _good_rows(), ENTRY, _is_session)["reason"] == "F5"
     assert F.evaluate_name(_row(iv30d=0.9), _good_rows(), ENTRY, _is_session)["reason"] == "F6"
-    assert F.evaluate_name(_row(), _good_rows(size=5), ENTRY, _is_session)["reason"] == "F8"
+    assert F.evaluate_name(_row(), _good_rows(size=SC_PARAMS.leg_size_min - 1), ENTRY, _is_session)["reason"] == "F8"
     assert F.evaluate_name(_row(), _good_rows(spread=0.12), ENTRY, _is_session)["reason"] == "F9"
     assert F.evaluate_name(_row(), pd.DataFrame(), ENTRY, _is_session)["reason"] == "F7"
 

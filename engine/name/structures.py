@@ -55,7 +55,7 @@ NOTE_NO_ATR = "no ATR(14): the X4 stop cannot be placed"
 NOTE_NO_SIGMA = "no iv30d: sigma_hold cannot be placed on the strike grid"
 NOTE_NO_GRID = "no listed strike grid at that expiry"
 NOTE_DEGENERATE = "the strike grid is too coarse for the sigma_hold wings"
-NOTE_NO_PREMIUM_EXPIRY = (f"no listed Friday-type expiry with calendar DTE in "
+NOTE_NO_PREMIUM_EXPIRY = (f"no listed expiry with calendar DTE in "
                           f"[{SC_PARAMS.dte_cal_min}, {SC_PARAMS.dte_cal_max}]")
 
 
@@ -143,7 +143,7 @@ def round_to_listed_strike(x: float, grid: StrikeGrid) -> float:
 # --- §5 expiry rule ------------------------------------------------------------------------------
 
 def premium_expiry(inputs, premium: dict, live_source: str | None) -> tuple[date | None, float | None]:
-    """S-C's own expiry when F7 found one, else the listed Friday-type expiry with calendar DTE in
+    """S-C's own expiry when F7 found one, else the listed expiry with calendar DTE in
     S-C's band nearest `t + 28` (`sc_filters.select_expiry`). Returns `(expiry, sigma_hold)`;
     `sigma_hold` is S-C's when it came with the expiry, else None for the caller to compute."""
     sc = (premium or {}).get("sc") or {}

@@ -137,8 +137,8 @@ def front_expiry(rows: pd.DataFrame, d: date, min_dte_cal: int) -> date | None:
 
 
 def premium_expiry(rows: pd.DataFrame, d: date, min_dte_cal: int) -> date | None:
-    """The expiry the sheet prices its premium structures at: S-C's F7 rule (a Friday-type expiry
-    with calendar DTE in [21, 35] nearest `d + 28`) among the day's prints, else the front expiry
+    """The expiry the sheet prices its premium structures at: S-C's F7 rule (any listed expiry
+    with calendar DTE in [20, 40] nearest `d + 28`, D26) among the day's prints, else the front expiry
     at least `min_dte_cal` out. Build-time amendment B1 (findings/stock-deep-dive DESIGN/70 §12):
     the spec's "front expiry" made L6 fail on a weekly's spread for names S-C itself passes at the
     monthly (ENPH, 2026-09-18), so the floor is measured where the structures are priced."""
