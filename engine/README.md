@@ -42,6 +42,7 @@ make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"   # the 
 | `strategies/sa.py` | `evaluate_event` / `run`: trades, suppressed (first failing filter), dropped |
 | `strategies/sa_data.py`, `backtest_sa.py` | mart access, model-input closure, the two-pass backtest driver |
 | `strategies/sc_filters.py` | **S-C R1** (DESIGN/90 §2-§3): F1..F10, C2, any listed expiry in [20, 40] nearest t+28, ATM pair at size_late >= 5 (D26 option 1, 2026-09-25; was Friday-type [21, 35] and 20 lots), σ_hold, wing targets; `evaluate_name` / `select_top` / `funnel_counts` |
+| `strategies/sc_structures.py` | **S-C R2** (DESIGN/90 §3-§4): SS / IB legs (ATM at the F8 late print, wings at round_to_strike(S ± 2σ_hold) through `MarkResolver`, a tier-3 wing floored at 5%), stress loss at 3σ_hold (worse side), IB max loss, sizing (min 1), `settle` at tier-4 intrinsic with no exit cost, `apply_caps` (10 new / 20 open per sleeve, 4 per sector, the 40% book budget while S-B is open) |
 | `strategies/sc_data.py` | S-C entry universe: the session's screener export with the 20-session dollar ADV from prices.parquet, and the underlyings' `daily_contract` rows |
 | `research/sc_rv5.py`, `scripts/sc_rv5_table.py` | S-C R1 descriptive: E2's F3 / F6 under RV5 (forward 21-session quality windows, close-to-close beside, month-clustered t) -> `data/backtest/sc_rv5_f3_f6.md` |
 | `scripts/sc_funnel.py` | S-C R1 funnel F1..F10 per entry session with an E2-style pair count and the F7 / F8 diagnostics (`make sc-funnel DATES=...`) |
