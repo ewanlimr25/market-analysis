@@ -1,0 +1,186 @@
+{
+ "schema_version": "d1.5",
+ "report_kind": "engine-daily",
+ "date": "2026-09-23",
+ "season": "off",
+ "preflight": {
+  "date": "2026-09-23",
+  "panel": {
+   "All Options": {
+    "present": true,
+    "rows": 11634980
+   },
+   "Dark pool": {
+    "present": true,
+    "rows": 520978
+   },
+   "Hot Option Chains": {
+    "present": true,
+    "rows": 27890
+   },
+   "OI changes": {
+    "present": true,
+    "rows": 284885
+   },
+   "Stock Screener": {
+    "present": true,
+    "rows": 6284
+   }
+  },
+  "truth_set": {
+   "prices": {
+    "max_date": "2026-09-25",
+    "stale_vs_trade_date": false
+   },
+   "returns": {
+    "max_date": "2026-09-25",
+    "stale_vs_trade_date": false
+   },
+   "features": {
+    "max_date": "2026-09-25",
+    "stale_vs_trade_date": false
+   }
+  },
+  "ok": true,
+  "warnings": []
+ },
+ "mart": {
+  "daily_contract_rows": 327398,
+  "earnings_events_rows": 0
+ },
+ "candidates": [],
+ "suppressed": [],
+ "dropped": [],
+ "graded": [],
+ "season_running": [],
+ "exploration": [],
+ "exploration_dropped": [],
+ "ledger": {
+  "emitted": 0,
+  "skipped": 0,
+  "graded": 0,
+  "ledger_open": false,
+  "exploration_emitted": 0,
+  "exploration_skipped": 0,
+  "wb_emitted": 0,
+  "wb_graded": 0
+ },
+ "sb_state": {
+  "date": "2026-09-23",
+  "index_vol_through": "2026-09-25",
+  "is_entry_day": false,
+  "gate": {
+   "SPY": {
+    "date": "2026-09-23",
+    "asof": "2026-09-22",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 14.21,
+    "vix3m": 17.61,
+    "x": 14.21,
+    "x_median": 15.445
+   },
+   "QQQ": {
+    "date": "2026-09-23",
+    "asof": "2026-09-22",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 14.21,
+    "vix3m": 17.61,
+    "x": 20.18,
+    "x_median": 21.245
+   }
+  },
+  "gate_next": {
+   "SPY": {
+    "date": "2026-09-24",
+    "asof": "2026-09-23",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 15.18,
+    "vix3m": 18.11,
+    "x": 15.18,
+    "x_median": 15.325
+   },
+   "QQQ": {
+    "date": "2026-09-24",
+    "asof": "2026-09-23",
+    "reason": "OFF:G2",
+    "on": false,
+    "known": true,
+    "vix": 15.18,
+    "vix3m": 18.11,
+    "x": 20.76,
+    "x_median": 21.045
+   }
+  },
+  "candidates": [],
+  "skipped": [],
+  "graded": [],
+  "unsettled": [],
+  "exploration": [],
+  "exploration_skipped": [],
+  "open_positions": {
+   "QQQ-IC": 2,
+   "QQQ-PS": 2,
+   "SPY-IC": 1,
+   "SPY-PS": 2
+  },
+  "running": [],
+  "ledger": {
+   "emitted": 0,
+   "skipped": 0,
+   "graded": 0,
+   "ledger_open": true,
+   "exploration_emitted": 0,
+   "exploration_skipped": 0
+  },
+  "refresh": {
+   "ok": true,
+   "through": "2026-09-25"
+  }
+ },
+ "watch_basket": {
+  "available": false,
+  "reason": "watch_basket step failed: datetime.date(2026, 9, 25)",
+  "universe_n": 0,
+  "count_distribution": {
+   "bull": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0
+   },
+   "bear": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0
+   }
+  },
+  "top_bull": [],
+  "top_bear": [],
+  "long": [],
+  "short": [],
+  "vol": [],
+  "conflict": [],
+  "ledger_open": true,
+  "wb_emitted": 0,
+  "wb_skipped": 0,
+  "wb_graded": 0,
+  "elapsed_s": 35.09
+ }
+}
