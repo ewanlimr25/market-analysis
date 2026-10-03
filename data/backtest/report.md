@@ -3,28 +3,28 @@
 
 ## §4.3 reproduction and straddle checks
 
-E1 headline from `earnings_events`: N 3260 (ref 3260), 97 pre-dates, mean implied−realized +1.5591% (ref +1.5591%), t 7.24 (ref 7.24) — N match: True, mean match: True, t match: True.
+E1 headline from `earnings_events`: N 3317 (ref 3260), 111 pre-dates, mean implied−realized +1.5552% (ref +1.5591%), t 7.31 (ref 7.24) — N match: False, mean match: False, t match: False.
 
-(a) marked late straddle / vendor implied move on the 194 A1 events: mean 1.257, median 1.189, IQR 1.163–1.234 (07-29 spot check: 1.20).
+(a) marked late straddle / vendor implied move on the 205 A1 events: mean 1.253, median 1.188, IQR 1.164–1.225 (07-29 spot check: 1.20).
 
-(b) on the same events: proxy (implied−realized) +1.16%, marked SS gross +0.63%, cost 1.29%, net -0.66% of spot. Gap proxy→gross +0.53pp; gross→net 1.29pp.
+(b) on the same events: proxy (implied−realized) +1.20%, marked SS gross +0.64%, cost 1.28%, net -0.64% of spot. Gap proxy→gross +0.56pp; gross→net 1.28pp.
 
-Mean absolute realized move 8.35% vs mean marked straddle 11.79% of spot (the §4.3 comparison); exit debit 11.17%.
+Mean absolute realized move 8.21% vs mean marked straddle 11.65% of spot (the §4.3 comparison); exit debit 11.02%.
 
 
 ## Filter funnel (A1, first failing filter)
 
-3260 events → A1 194 traded, A2 112 traded (A2 sector cut removed 82).
+3317 events → A1 205 traded, A2 123 traded (A2 sector cut removed 82).
 
 | filter | first_fail_count |
 |---|---|
 | F1 | 0 |
-| F2 | 169 |
-| F3 | 731 |
-| F4 | 420 |
-| F5 | 1271 |
-| F6 | 440 |
-| F7 | 31 |
+| F2 | 172 |
+| F3 | 741 |
+| F4 | 425 |
+| F5 | 1276 |
+| F6 | 461 |
+| F7 | 33 |
 | F8 | 4 |
 
 
@@ -32,8 +32,8 @@ Mean absolute realized move 8.35% vs mean marked straddle 11.79% of spot (the §
 
 | structure | n | entry_tier1 | entry_tier3_wing | exit_tier1 | exit_tier2 | exit_tier3_model | mean_entry_spread | mean_exit_spread | median_dte | share_dte_le5 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| IC | 194 | 113 | 59 | 101 | 22 | 71 | 0.0571 | 0.3016 | 4.50 | 0.5258 |
-| SS | 194 | 194 | 0 | 181 | 12 | 1 | 0.0571 | 0.3016 | 4.50 | 0.5258 |
+| IC | 205 | 123 | 60 | 110 | 23 | 72 | 0.0572 | 0.2988 | 5.00 | 0.5220 |
+| SS | 205 | 205 | 0 | 191 | 13 | 1 | 0.0572 | 0.2988 | 5.00 | 0.5220 |
 
 
 ## Primary table: mean net P&L in % of notional, t clustered by print date
@@ -45,13 +45,13 @@ Mean absolute realized move 8.35% vs mean marked straddle 11.79% of spot (the §
 | A2 | SS | S1 | 47 | 20 | +0.43% | +0.60% | 0.5957 | 0.8681 | 0.3962 | +1.58% | +1.16% | 1.26 |
 | A2 | IC | S1 | 47 | 20 | -0.32% | -0.41% | 0.4255 | -0.8733 | 0.3934 | +1.26% | +1.58% | 1.26 |
 | A1 | SS | S2 | 90 | 26 | -0.74% | -0.15% | 0.4667 | -1.45 | 0.1603 | +0.57% | +1.31% | 1.26 |
-| A1 | IC | S2 | 90 | 26 | -1.39% | -1.23% | 0.3333 | -3.32 | 0.0028 | +0.40% | +1.79% | 1.26 |
+| A1 | IC | S2 | 90 | 26 | -1.39% | -1.23% | 0.3333 | -3.32 | 0.0027 | +0.40% | +1.79% | 1.26 |
 | A2 | SS | S2 | 53 | 23 | -0.64% | -0.16% | 0.4528 | -1.14 | 0.2671 | +0.58% | +1.22% | 1.24 |
 | A2 | IC | S2 | 53 | 23 | -1.32% | -1.26% | 0.3019 | -2.97 | 0.0071 | +0.38% | +1.70% | 1.24 |
-| A1 | SS | pooled | 194 | 56 | -0.66% | +0.30% | 0.5258 | -1.90 | 0.0621 | +0.63% | +1.29% | 1.26 |
-| A1 | IC | pooled | 194 | 56 | -1.15% | -0.74% | 0.3918 | -4.30 | 0.0001 | +0.62% | +1.77% | 1.26 |
-| A2 | SS | pooled | 112 | 50 | -0.02% | +0.29% | 0.5268 | -0.0661 | 0.9476 | +1.14% | +1.16% | 1.25 |
-| A2 | IC | pooled | 112 | 50 | -0.74% | -0.65% | 0.3750 | -2.58 | 0.0130 | +0.86% | +1.60% | 1.25 |
+| A1 | SS | pooled | 205 | 63 | -0.64% | +0.30% | 0.5268 | -1.93 | 0.0581 | +0.64% | +1.28% | 1.25 |
+| A1 | IC | pooled | 205 | 63 | -1.13% | -0.72% | 0.3902 | -4.45 | 0.0000 | +0.62% | +1.74% | 1.25 |
+| A2 | SS | pooled | 123 | 57 | -0.04% | +0.28% | 0.5285 | -0.1113 | 0.9118 | +1.11% | +1.15% | 1.24 |
+| A2 | IC | pooled | 123 | 57 | -0.74% | -0.65% | 0.3740 | -2.80 | 0.0069 | +0.84% | +1.57% | 1.24 |
 
 
 ## BH(0.10) across the four primary tests — S1
@@ -69,7 +69,7 @@ Mean absolute realized move 8.35% vs mean marked straddle 11.79% of spot (the §
 | variant | structure | n | mean_net_pct | t | p | bh_pass |
 |---|---|---|---|---|---|---|
 | A1 | SS | 90 | -0.74% | -1.45 | 0.1603 | no |
-| A1 | IC | 90 | -1.39% | -3.32 | 0.0028 | yes |
+| A1 | IC | 90 | -1.39% | -3.32 | 0.0027 | yes |
 | A2 | SS | 53 | -0.64% | -1.14 | 0.2671 | no |
 | A2 | IC | 53 | -1.32% | -2.97 | 0.0071 | yes |
 
@@ -78,10 +78,10 @@ Mean absolute realized move 8.35% vs mean marked straddle 11.79% of spot (the §
 
 | variant | structure | n | mean_net_pct | t | p | bh_pass |
 |---|---|---|---|---|---|---|
-| A1 | SS | 194 | -0.66% | -1.90 | 0.0621 | yes |
-| A1 | IC | 194 | -1.15% | -4.30 | 0.0001 | yes |
-| A2 | SS | 112 | -0.02% | -0.0661 | 0.9476 | no |
-| A2 | IC | 112 | -0.74% | -2.58 | 0.0130 | yes |
+| A1 | SS | 205 | -0.64% | -1.93 | 0.0581 | yes |
+| A1 | IC | 205 | -1.13% | -4.45 | 0.0000 | yes |
+| A2 | SS | 123 | -0.04% | -0.1113 | 0.9118 | no |
+| A2 | IC | 123 | -0.74% | -2.80 | 0.0069 | yes |
 
 
 ## Deflated Sharpe (6 trials) — S1
@@ -98,40 +98,40 @@ Mean absolute realized move 8.35% vs mean marked straddle 11.79% of spot (the §
 
 | variant | structure | n | sr | sr_star | deflated_sr | dsr_prob | skew | kurt |
 |---|---|---|---|---|---|---|---|---|
-| A1 | SS | 90 | -0.1622 | 0.1858 | -0.3480 | 0.0001 | -1.85 | 10.04 |
-| A1 | IC | 90 | -0.3899 | 0.1858 | -0.5757 | 0.0000 | -0.9492 | 5.79 |
-| A2 | SS | 53 | -0.1615 | 0.1858 | -0.3473 | 0.0038 | -0.8681 | 4.09 |
-| A2 | IC | 53 | -0.4262 | 0.1858 | -0.6119 | 0.0000 | -0.4611 | 3.54 |
+| A1 | SS | 90 | -0.1622 | 0.1859 | -0.3481 | 0.0001 | -1.85 | 10.04 |
+| A1 | IC | 90 | -0.3903 | 0.1859 | -0.5763 | 0.0000 | -0.9541 | 5.79 |
+| A2 | SS | 53 | -0.1615 | 0.1859 | -0.3475 | 0.0038 | -0.8681 | 4.09 |
+| A2 | IC | 53 | -0.4262 | 0.1859 | -0.6121 | 0.0000 | -0.4611 | 3.54 |
 
 
 ## Deflated Sharpe (6 trials) — pooled
 
 | variant | structure | n | sr | sr_star | deflated_sr | dsr_prob | skew | kurt |
 |---|---|---|---|---|---|---|---|---|
-| A1 | SS | 194 | -0.1324 | 0.1819 | -0.3143 | 0.0000 | -2.07 | 9.12 |
-| A1 | IC | 194 | -0.3177 | 0.1819 | -0.4996 | 0.0000 | -1.25 | 5.94 |
-| A2 | SS | 112 | -0.0068 | 0.1819 | -0.1887 | 0.0230 | -1.06 | 4.86 |
-| A2 | IC | 112 | -0.2665 | 0.1819 | -0.4484 | 0.0000 | -0.5833 | 3.94 |
+| A1 | SS | 205 | -0.1298 | 0.1824 | -0.3122 | 0.0000 | -2.10 | 9.43 |
+| A1 | IC | 205 | -0.3183 | 0.1824 | -0.5007 | 0.0000 | -1.28 | 6.14 |
+| A2 | SS | 123 | -0.0109 | 0.1824 | -0.1933 | 0.0159 | -1.07 | 4.94 |
+| A2 | IC | 123 | -0.2740 | 0.1824 | -0.4563 | 0.0000 | -0.5891 | 4.05 |
 
 
 ## PBO (CSCV over 16 print-date blocks, pooled)
 
-- pbo: 0.029914529914529916
-- mean_logit: 1.3033536728477606
+- pbo: 0.011732711732711733
+- mean_logit: 1.353764376888484
 - n_combinations: 12870
 - n_configs: 4
 - n_blocks: 16
-- n_dates: 56
+- n_dates: 63
 
 
 ## Tail report — pooled
 
 | variant | structure | n | mean_net_pct | worst_event_pct | best_event_pct | mean_win_pct | worst_to_mean_win | worst_decile_share_of_loss | mean_without_worst_1pct | mean_without_best_1pct | skew | kurt | stress_breaches |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A1 | SS | 194 | -0.66% | -24.03% | +7.57% | +2.51% | 9.56 | 0.5990 | -0.43% | -0.75% | -2.07 | 6.12 | 4 |
-| A1 | IC | 194 | -1.15% | -16.41% | +7.17% | +1.97% | 8.35 | 0.4661 | -0.99% | -1.23% | -1.25 | 2.94 | 5 |
-| A2 | SS | 112 | -0.02% | -11.94% | +7.57% | +2.31% | 5.17 | 0.6057 | +0.08% | -0.09% | -1.06 | 1.86 | 0 |
-| A2 | IC | 112 | -0.74% | -8.96% | +5.52% | +1.88% | 4.76 | 0.4361 | -0.66% | -0.79% | -0.5833 | 0.9408 | 0 |
+| A1 | SS | 205 | -0.64% | -24.03% | +7.57% | +2.45% | 9.82 | 0.6009 | -0.41% | -0.72% | -2.10 | 6.43 | 4 |
+| A1 | IC | 205 | -1.13% | -16.41% | +7.10% | +1.91% | 8.58 | 0.4678 | -0.98% | -1.20% | -1.28 | 3.14 | 5 |
+| A2 | SS | 123 | -0.04% | -11.94% | +7.57% | +2.22% | 5.38 | 0.6072 | +0.06% | -0.10% | -1.07 | 1.94 | 0 |
+| A2 | IC | 123 | -0.74% | -8.96% | +5.52% | +1.80% | 4.98 | 0.4325 | -0.67% | -0.79% | -0.5891 | 1.05 | 0 |
 
 Worst 10 events, A1 SS (pooled):
 
@@ -209,7 +209,7 @@ Worst 10 events, A1 IC (S1):
 | variant | structure | n | mean_net_pct | worst_event_pct | best_event_pct | mean_win_pct | worst_to_mean_win | worst_decile_share_of_loss | mean_without_worst_1pct | mean_without_best_1pct | skew | kurt | stress_breaches |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | A1 | SS | 90 | -0.74% | -24.03% | +7.57% | +2.51% | 9.57 | 0.5391 | -0.47% | -0.83% | -1.85 | 7.04 | 1 |
-| A1 | IC | 90 | -1.39% | -16.41% | +7.17% | +2.06% | 7.95 | 0.4223 | -1.23% | -1.49% | -0.9492 | 2.79 | 1 |
+| A1 | IC | 90 | -1.39% | -16.41% | +7.10% | +2.06% | 7.96 | 0.4223 | -1.23% | -1.49% | -0.9541 | 2.79 | 1 |
 | A2 | SS | 53 | -0.64% | -11.94% | +7.57% | +2.37% | 5.04 | 0.4994 | -0.42% | -0.80% | -0.8681 | 1.09 | 0 |
 | A2 | IC | 53 | -1.32% | -8.96% | +5.52% | +1.98% | 4.52 | 0.3854 | -1.17% | -1.45% | -0.4611 | 0.5418 | 0 |
 
@@ -248,30 +248,30 @@ Worst 10 events, A1 IC (S2):
 
 | sensitivity | variant | structure | n | dates | mean_net_pct | t | mean_cost_pct |
 |---|---|---|---|---|---|---|---|
-| base | A1 | SS | 194 | 56 | -0.66% | -1.90 | +1.29% |
-| base | A1 | IC | 194 | 56 | -1.15% | -4.30 | +1.77% |
-| base | A2 | SS | 112 | 50 | -0.02% | -0.0661 | +1.16% |
-| base | A2 | IC | 112 | 50 | -0.74% | -2.58 | +1.60% |
-| no_model_exit | A1 | SS | 193 | 56 | -0.66% | -1.89 | +1.29% |
-| no_model_exit | A1 | IC | 123 | 50 | -1.11% | -4.10 | +1.75% |
-| no_model_exit | A2 | SS | 111 | 50 | -0.02% | -0.0438 | +1.15% |
-| no_model_exit | A2 | IC | 72 | 41 | -0.66% | -1.99 | +1.56% |
-| costs_x2 | A1 | SS | 194 | 56 | -1.95% | -5.14 | +2.58% |
-| costs_x2 | A1 | IC | 194 | 56 | -2.92% | -8.90 | +3.53% |
-| costs_x2 | A2 | SS | 112 | 50 | -1.19% | -3.15 | +2.33% |
-| costs_x2 | A2 | IC | 112 | 50 | -2.34% | -7.29 | +3.20% |
-| spread_7.5pct | A1 | SS | 117 | 46 | -0.17% | -0.4047 | +1.13% |
-| spread_7.5pct | A1 | IC | 117 | 46 | -0.64% | -2.10 | +1.53% |
-| spread_7.5pct | A2 | SS | 64 | 35 | +0.48% | 0.9940 | +0.98% |
-| spread_7.5pct | A2 | IC | 64 | 35 | -0.22% | -0.5614 | +1.34% |
-| spread_12.5pct | A1 | SS | 269 | 58 | -0.67% | -2.65 | +1.42% |
-| spread_12.5pct | A1 | IC | 269 | 58 | -1.23% | -5.91 | +1.94% |
-| spread_12.5pct | A2 | SS | 159 | 55 | -0.41% | -1.46 | +1.32% |
-| spread_12.5pct | A2 | IC | 159 | 55 | -1.05% | -4.66 | +1.82% |
-| mcap_1B_100B | A1 | SS | 247 | 61 | -0.82% | -2.25 | +1.24% |
-| mcap_1B_100B | A1 | IC | 247 | 61 | -1.19% | -4.72 | +1.69% |
-| mcap_1B_100B | A2 | SS | 140 | 53 | -0.22% | -0.6932 | +1.15% |
-| mcap_1B_100B | A2 | IC | 140 | 53 | -0.85% | -3.38 | +1.57% |
+| base | A1 | SS | 205 | 63 | -0.64% | -1.93 | +1.28% |
+| base | A1 | IC | 205 | 63 | -1.13% | -4.45 | +1.74% |
+| base | A2 | SS | 123 | 57 | -0.04% | -0.1113 | +1.15% |
+| base | A2 | IC | 123 | 57 | -0.74% | -2.80 | +1.57% |
+| no_model_exit | A1 | SS | 204 | 63 | -0.64% | -1.92 | +1.27% |
+| no_model_exit | A1 | IC | 133 | 56 | -1.09% | -4.32 | +1.72% |
+| no_model_exit | A2 | SS | 122 | 57 | -0.03% | -0.0893 | +1.14% |
+| no_model_exit | A2 | IC | 82 | 47 | -0.68% | -2.29 | +1.53% |
+| costs_x2 | A1 | SS | 205 | 63 | -1.91% | -5.31 | +2.55% |
+| costs_x2 | A1 | IC | 205 | 63 | -2.87% | -9.24 | +3.49% |
+| costs_x2 | A2 | SS | 123 | 57 | -1.19% | -3.43 | +2.30% |
+| costs_x2 | A2 | IC | 123 | 57 | -2.31% | -7.86 | +3.15% |
+| spread_7.5pct | A1 | SS | 123 | 51 | -0.16% | -0.4120 | +1.11% |
+| spread_7.5pct | A1 | IC | 123 | 51 | -0.64% | -2.20 | +1.51% |
+| spread_7.5pct | A2 | SS | 70 | 40 | +0.43% | 0.9630 | +0.97% |
+| spread_7.5pct | A2 | IC | 70 | 40 | -0.25% | -0.7036 | +1.33% |
+| spread_12.5pct | A1 | SS | 284 | 67 | -0.63% | -2.61 | +1.41% |
+| spread_12.5pct | A1 | IC | 284 | 67 | -1.19% | -6.04 | +1.91% |
+| spread_12.5pct | A2 | SS | 174 | 64 | -0.36% | -1.40 | +1.30% |
+| spread_12.5pct | A2 | IC | 174 | 64 | -1.00% | -4.84 | +1.78% |
+| mcap_1B_100B | A1 | SS | 258 | 68 | -0.79% | -2.27 | +1.23% |
+| mcap_1B_100B | A1 | IC | 258 | 68 | -1.17% | -4.85 | +1.68% |
+| mcap_1B_100B | A2 | SS | 151 | 60 | -0.22% | -0.7304 | +1.14% |
+| mcap_1B_100B | A2 | IC | 151 | 60 | -0.84% | -3.59 | +1.55% |
 
 
 ## Go / no-go (DESIGN/70 §4.2, read on Season 3 alone)
