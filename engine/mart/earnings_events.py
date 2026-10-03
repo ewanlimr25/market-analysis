@@ -47,6 +47,11 @@ Forward use (fixed 2026-10-03; findings/market-analysis DECISIONS D28): until th
   `refresh_final()`    : rewrites the trailing partitions whose post data are on disk (prices and
                          screener through `next_session(next_session(pre))`); `make daily` runs it
                          nightly, so the table catches up whenever the truth set is refreshed.
+
+Do NOT `--rebuild --force` (or `--date D --force` on a pre-2026-08-31 partition) without a reason: Yahoo
+has stopped serving the closes behind 7 E1 events (APGE x2, AVB, FBRX, GBTG, TWO, WBS; D28), and the
+stored partitions are now their only copy. A rebuild drops them; restore one from the E1 artifact's
+c_pre/c_post the way CRNX 2026-05-07 was restored on 2026-10-03.
 """
 from __future__ import annotations
 
