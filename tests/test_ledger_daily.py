@@ -133,3 +133,24 @@ def test_report_says_so_when_no_event_clears():
 
 def test_ledger_open_rule():
     assert D.ledger_open(date(2026, 10, 1)) and not D.ledger_open(date(2026, 9, 30))
+
+
+# ---- S-A-only backfill (D28) -------------------------------------------------------------------
+
+def test_sa_backfill_emits_and_grades_stamped_with_the_day_it_ran(tmp_path, monkeypatch):
+    ran = date(2026, 10, 17)
+    monkeypatch.setattr(D, "candidates", lambda con, d: D.sa.RunResult(
+        pd.DataFrame([_signal()]), pd.DataFrame(), pd.DataFrame(), pd.DataFrame([_signal(role="exploration")])))
+    graded = {**_signal(), "net_usd": 120.0}
+    monkeypatch.setattr(D, "grade_due", lambda con, d, ledger_dir: (pd.DataFrame([graded]), pd.DataFrame()))
+    out = D.sa_backfill(PRE, str(tmp_path), ran, con=object())
+    assert out == {"date": PRE.isoformat(), "emitted": 1, "explored": 1, "graded": 1}
+    assert set(L.read_signals(str(tmp_path)).emitted_at) == {ran.isoformat()}
+    assert set(L.read_ledger(str(tmp_path)).graded_at) == {ran.isoformat()}
+    assert D.sa_backfill(PRE, str(tmp_path), ran, con=object()) == {"date": PRE.isoformat(), "emitted": 0,
+                                                                     "explored": 0, "graded": 0}
+
+
+def test_sa_backfill_refuses_dates_before_the_ledger_opens(tmp_path):
+    with pytest.raises(ValueError):
+        D.sa_backfill(date(2026, 9, 30), str(tmp_path), date(2026, 10, 3), con=object())

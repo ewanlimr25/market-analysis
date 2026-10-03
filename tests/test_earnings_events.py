@@ -279,6 +279,79 @@ def test_build_day_writes_a_readable_partition(panel, tmp_path, monkeypatch):
     assert set(back.date) == {E_APR} and list(back.columns) == ee.COLUMNS
 
 
+# ---- unit: the pre-night (provisional) build and the trailing refresh ----------------------------
+def _stale_prices(panel: dict, tmp_path, last: date) -> str:
+    """The truth set as it stands on a weekday: prices end before the pre night."""
+    path = str(tmp_path / "prices_stale.parquet")
+    pd.read_parquet(panel["prices_path"]).query("date <= @last").to_parquet(path, index=False)
+    return path
+
+
+def _provisional(panel: dict, d: date, prices_path: str | None = None) -> pd.DataFrame:
+    return ee.provisional_day(d, duckdb.connect(), regime_fn=_stub_regime, vix_fn=_stub_vix,
+                              screener=panel["screener_glob"], prices_path=prices_path or panel["prices_path"])
+
+
+@pytest.mark.unit
+def test_provisional_day_sees_labelled_events_without_any_post_print_data(panel, tmp_path):
+    stale = _stale_prices(panel, tmp_path, cal.prev_session(E_APR_PREV))
+    pm = _row(_provisional(panel, E_APR, stale), "PM")
+    assert (pm.pre, pm.post, pm.timing, pm.how) == (E_APR, E_APR_NEXT, "postmarket", "labelled")
+    assert pm.spot_pre == pytest.approx(99.0)            # the screener close: prices end before pre
+    assert pd.isna(pm.close_post) and pd.isna(pm.realized_move) and pd.isna(pm.proxy_pnl)
+    am = _row(_provisional(panel, E_APR_PREV, stale), "AM")
+    assert (am.pre, am.post, am.timing) == (E_APR_PREV, E_APR, "premarket")
+
+
+@pytest.mark.unit
+def test_provisional_day_prefers_the_truth_set_close_when_it_has_pre(panel):
+    assert _row(_provisional(panel, E_APR), "PM").spot_pre == pytest.approx(100.0)
+
+
+@pytest.mark.unit
+def test_provisional_day_leaves_out_what_the_pre_night_cannot_know(panel):
+    tickers = set(_provisional(panel, E_APR).ticker)
+    assert {"INFP", "INFQ", "UNR", "TIE"}.isdisjoint(tickers)      # timing needs the crush: F8 fails ex ante
+    assert {"NED", "ETFX"}.isdisjoint(tickers)                     # rescheduled; not a stock
+    assert {"PM", "MAJ"} <= tickers and set(_provisional(panel, E_APR).pre) == {E_APR}
+
+
+@pytest.mark.unit
+def test_provisional_day_ignores_screener_rows_dated_after_the_pre_night(panel, tmp_path):
+    flip = _screener_rows("FLIP", E_APR_NEXT, None)                 # unlabelled up to the pre night ...
+    flip = [{**r, "er_time": "premarket"} if r["date"] == E_APR_NEXT else r for r in flip]   # ... labelled on E
+    rows = pd.concat([pd.read_parquet(f) for f in glob.glob(panel["screener_glob"])]).to_dict("records")
+    glob_ = _write_screener(str(tmp_path), rows + flip)
+    prices = str(tmp_path / "prices.parquet")
+    pd.concat([pd.read_parquet(panel["prices_path"]), pd.DataFrame(_price_rows("FLIP", 20.0))]).to_parquet(prices)
+    kw = dict(regime_fn=_stub_regime, vix_fn=_stub_vix, screener=glob_, prices_path=prices)
+    assert "FLIP" not in set(ee.provisional_day(E_APR, duckdb.connect(), **kw).ticker)
+    full = ee.build_events(duckdb.connect(), glob_, prices, E_APR_NEXT, E_APR_NEXT,
+                           regime_fn=_stub_regime, vix_fn=_stub_vix)
+    assert full[full.ticker == "FLIP"].how.tolist() == ["labelled"]   # hindsight would have labelled it
+
+
+@pytest.mark.unit
+def test_refresh_final_overwrites_empty_partitions_once_post_data_exist(panel, tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "MART", str(tmp_path / "mart"))
+    store.write_partition(ee._empty_events(), ee.TABLE, E_APR)          # what the old nightly left behind
+    written = ee.refresh_final(duckdb.connect(), through=E_APR_NEXT, lookback=5, regime_fn=_stub_regime,
+                               vix_fn=_stub_vix, screener=panel["screener_glob"], prices_path=panel["prices_path"])
+    assert E_APR in dict(written) and E_APR_NEXT in dict(written)
+    back = store.read_partition(ee.TABLE, E_APR)
+    assert set(back.ticker) == {"PM", "INFQ", "MAJ", "NEWT", "PART", "SEAS"} and list(back.columns) == ee.COLUMNS
+
+
+@pytest.mark.unit
+def test_refresh_final_stops_where_post_data_end(panel, tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "MART", str(tmp_path / "mart"))
+    stale = _stale_prices(panel, tmp_path, E_APR_NEXT)
+    written = ee.refresh_final(duckdb.connect(), lookback=3, regime_fn=_stub_regime, vix_fn=_stub_vix,
+                               screener=panel["screener_glob"], prices_path=stale)
+    assert max(d for d, _ in written) == cal.prev_session(cal.prev_session(E_APR_NEXT)) == E_APR_PREV
+    assert not store.has_partition(ee.TABLE, E_APR)
+
+
 @pytest.mark.unit
 def test_build_day_rejects_non_trading_day():
     with pytest.raises(ValueError):

@@ -29,8 +29,8 @@ python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_retur
 make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
 make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the marked backtest -> data/backtest/sb_report.md (read §8)
 make backtest-sc && make report-sc               # S-C panel run + §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
-make test                                        # every unit test (1,279 at 2026-09-26); also proves no frozen parameter moved
-make backtest && make report                     # S-A, from October once Season 3 events exist
+make test                                        # every unit test (1,213 at 2026-10-03); also proves no frozen parameter moved
+make backtest && make report                     # S-A; its E1 line reads N match False once the mart runs past the E1 artifact (expected)
 git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
 ```
 
@@ -158,6 +158,16 @@ spread cost, max or stress loss, and `contracts` sized to the risk limit (the co
 season it reads `no event tonight clears the filters`. **S-A is a measurement only:** its backtest
 failed the bar on Seasons 1 and 2 (`RESEARCH/45`), so these rows are never traded; they are graded
 into the ledger to see whether Season 3 agrees.
+
+*Where tonight's events come from (fixed 2026-10-03, findings D28).* The candidates are built from what
+is on disk that night: screener rows up to tonight, a labelled `er_time` (an unlabelled print fails F8,
+because its timing is only known from the next day's IV crush), and the truth-set close, or the screener
+close when the truth set is older. The stored `earnings_events` table is rewritten each night for the
+trailing sessions whose next-day data exist (`python3 -m engine.mart.earnings_events --refresh`), so it
+lags tonight by two sessions plus however stale the truth set is. Before the fix the nightly wrote tonight's
+partition empty, so S-A saw no event from 09-04 to 10-02. To enter a missed night by hand:
+`python3 -m engine.daily --date YYYY-MM-DD --sa-backfill`. This writes S-A rows only, stamped with the day
+it runs, and leaves that night's report as it was.
 
 **Suppressed:** events that failed, with the first failing filter (F1 price/issue type through F8
 timing). This is the gate-effectiveness cohort; it accrues on its own.

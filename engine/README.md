@@ -33,7 +33,7 @@ make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"   # the 
 | `config.py` | paths, session windows, marking constants, `SAParams` / `SizingParams` (frozen), seasons, the go/no-go bar |
 | `calendar.py` | NYSE calendar 2026–2027 (`next_session`, `prev_session`, `trading_days_between`) |
 | `mart/daily_contract.py` | one row per (contract, day) from All Options + Hot Chains; integer-scaled sums so a rebuild is bit-for-bit |
-| `mart/earnings_events.py` | one row per (ticker, print), E1's construction reproduced exactly (3,260 events) |
+| `mart/earnings_events.py` | one row per (ticker, print), E1's construction reproduced exactly (3,260 events); `provisional_day` is S-A's pre-night view (labelled timing, nothing after `pre`), `refresh_final` rewrites the trailing complete partitions nightly (D28) |
 | `mart/vix.py` | VIX closes via `scripts/chart.py`, cached in `data/mart/vix/` |
 | `mart/store.py` | `data/mart/<table>/date=YYYY-MM-DD/part.parquet` helpers |
 | `bs.py`, `marking.py` | Black-Scholes fallback; the four-tier `mark()`; `leg_cost` (half-spread + $0.65) |

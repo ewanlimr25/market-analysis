@@ -36,6 +36,17 @@ crush inference needs the screener's `iv30d` on E and E+1, so the partition for 
 complete only once prices and the screener through `next_session(next_session(d))` are on disk.
 Run `--date d` on that night (or later) or rerun it with `--force`; run early, unlabelled events
 come out `unresolved` or are dropped and are re-resolved when the partition is rebuilt.
+
+Forward use (fixed 2026-10-03; findings/market-analysis DECISIONS D28): until then `make daily` called
+`build_day(d)` on the pre night itself, which can never see `close[post]`, so every partition from
+2026-09-04 was written empty and never rebuilt, and S-A saw no event. Now:
+  `provisional_day(d)` : the events S-A may trade on the pre night, from screener rows dated <= d only:
+                         labelled timing (an unlabelled print's timing needs the crush, which is
+                         hindsight, so F8 fails it ex ante), `spot_pre` from the truth set or else the
+                         screener close, post-print fields NaN. Never written to the mart.
+  `refresh_final()`    : rewrites the trailing partitions whose post data are on disk (prices and
+                         screener through `next_session(next_session(pre))`); `make daily` runs it
+                         nightly, so the table catches up whenever the truth set is refreshed.
 """
 from __future__ import annotations
 
@@ -44,7 +55,7 @@ import shutil
 import sys
 import time
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from typing import Callable, NamedTuple
 
 import duckdb
@@ -63,6 +74,7 @@ RUNUP_LOOKBACK_SESSIONS = 5     # E1: imp_5d_ago / iv30d_5d_ago
 PRICE_FLOOR = 5.0               # E1: close[pre] >= 5
 ADV_WINDOW_SESSIONS = 20        # adv_usd_20d window, ending at and including pre
 ADV_MIN_SESSIONS = 10           # fewer valid sessions than this -> fall back to adv_usd_30d
+FINAL_LOOKBACK_SESSIONS = 10   # refresh_final: trailing partitions rewritten each night
 UNKNOWN_ER_TIME = "unknown"
 LABELLED = ("postmarket", "premarket")
 COLUMNS = ["ticker", "E", "er_time", "timing", "how", "pre", "post", "date",
@@ -127,17 +139,19 @@ def _calendar(con: duckdb.DuckDBPyConnection, prices_path: str, e_max: date) -> 
     return cal.trading_days(lo, max(hi, cal.next_session(e_max)))
 
 
-def _load_candidates(con: duckdb.DuckDBPyConnection, screener: str, e_min: date, e_max: date
-                     ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """E1's `scr` slice (one row per ticker-date) and its candidates (ticker, E, plurality er_time)."""
+def _load_candidates(con: duckdb.DuckDBPyConnection, screener: str, e_min: date, e_max: date,
+                     asof: date | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """E1's `scr` slice (one row per ticker-date) and its candidates (ticker, E, plurality er_time).
+    `asof` keeps only screener rows dated on or before it (what a given night could see)."""
     types = ", ".join(f"'{t}'" for t in config.ISSUE_TYPES)
+    asof_clause = f"WHERE date <= DATE '{asof.isoformat()}'" if asof is not None else ""
     con.execute(f"""
         CREATE OR REPLACE TEMP TABLE {_SCR_TABLE} AS
         SELECT date, ticker, any_value(next_earnings_date) ned, any_value(er_time) er_time,
                any_value(implied_move_perc) imp, any_value(iv30d) iv30d, any_value(iv_rank) iv_rank,
                any_value(marketcap) mcap, any_value(sector) sector, any_value(close) AS px,
                any_value(issue_type) issue_type, any_value(avg30_volume) adv
-        FROM read_parquet('{screener}') GROUP BY date, ticker""")
+        FROM read_parquet('{screener}') {asof_clause} GROUP BY date, ticker""")
     try:
         cands = con.execute(f"""
             WITH win AS (SELECT ticker, ned AS E, er_time FROM {_SCR_TABLE}
@@ -171,9 +185,9 @@ def _price_map(con: duckdb.DuckDBPyConnection, prices_path: str, tickers: set[st
     return dict(zip(zip(px.ticker, _dates(px.date)), px.close))
 
 
-def _context(con, screener: str, prices_path: str, e_min: date, e_max: date) -> _Ctx:
+def _context(con, screener: str, prices_path: str, e_min: date, e_max: date, asof: date | None = None) -> _Ctx:
     days = _calendar(con, prices_path, e_max)
-    scr, cands = _load_candidates(con, screener, e_min, e_max)
+    scr, cands = _load_candidates(con, screener, e_min, e_max, asof)
     tickers = set(cands.ticker)
     return _Ctx(cal=days, idx=cal.session_index(days), cands=cands,
                 scr=_screener_map(scr, tickers), px=_price_map(con, prices_path, tickers))
@@ -240,6 +254,33 @@ def _build_rows(ctx: _Ctx) -> pd.DataFrame:
             for c in ctx.cands.itertuples(index=False)]
     kept = [r for r in rows if r is not None]
     return pd.DataFrame(kept) if kept else _empty_events()
+
+
+def _finite(v) -> float | None:
+    return float(v) if v is not None and np.isfinite(v) else None
+
+
+def _provisional_row(tk: str, E: date, er_time: str, d: date, ctx: _Ctx) -> dict | None:
+    """The event as the pre night `d` sees it: E1's filters that need nothing after `pre`."""
+    i = ctx.idx.get(E)
+    if er_time not in LABELLED or i is None or i == 0 or i + 1 >= len(ctx.cal):
+        return None
+    pre, post = _window(er_time, ctx.cal[i - 1], E, ctx.cal[i + 1])
+    s = ctx.scr.get((tk, pre))
+    if pre != d or s is None or s.ned != E or _finite(s.imp) is None:
+        return None
+    c_pre = _finite(ctx.px.get((tk, pre))) or _finite(s.px)
+    if c_pre is None or c_pre < PRICE_FLOOR:
+        return None
+    i5 = ctx.idx[pre] - RUNUP_LOOKBACK_SESSIONS
+    s5 = ctx.scr.get((tk, ctx.cal[i5])) if i5 >= 0 else None
+    return {"ticker": tk, "E": E, "er_time": er_time, "timing": er_time, "how": "labelled", "pre": pre,
+            "post": post, "spot_pre": c_pre, "close_post": np.nan, "realized_move": np.nan,
+            "gap_signed": np.nan, "implied_move_perc": float(s.imp), "iv30d_pre": s.iv30d, "iv30d_post": None,
+            "iv_rank_pre": s.iv_rank, "imp_5d_ago": (s5.imp if s5 is not None else None),
+            "iv30d_5d_ago": (s5.iv30d if s5 is not None else None),
+            "marketcap": s.mcap, "sector": s.sector, "issue_type": s.issue_type,
+            "adv_usd_30d": (s.adv or 0) * c_pre}
 
 
 # ---- enrichment -----------------------------------------------------------------------------------
@@ -342,6 +383,51 @@ def build_day(d: date, con: duckdb.DuckDBPyConnection | None = None, force: bool
     return df
 
 
+def provisional_day(d: date, con: duckdb.DuckDBPyConnection | None = None, regime_fn: RegimeFn | None = None,
+                    vix_fn: VixFn | None = None, screener: str | None = None,
+                    prices_path: str | None = None) -> pd.DataFrame:
+    """Events with `pre == d` from what is on disk on the pre night (module doc); not written."""
+    con = con or duckdb.connect()
+    screener, prices_path = screener or screener_glob(), prices_path or config.PRICES
+    ctx = _context(con, screener, prices_path, d, cal.next_session(d), asof=d)
+    rows = [_provisional_row(c.ticker, c.E, c.er_time if isinstance(c.er_time, str) else UNKNOWN_ER_TIME, d, ctx)
+            for c in ctx.cands.itertuples(index=False)]
+    kept = [r for r in rows if r is not None]
+    raw = pd.DataFrame(kept) if kept else _empty_events()
+    return _enrich(raw, con, prices_path, ctx.cal, regime_fn or default_regime_fn(con), vix_fn or default_vix_fn(con))
+
+
+def complete_through(con: duckdb.DuckDBPyConnection, screener: str, prices_path: str) -> date | None:
+    """The last `pre` whose partition can be final: prices and screener hold next_session(next_session(pre))."""
+    (px_hi,) = con.execute(f"SELECT max(date) FROM read_parquet('{prices_path}') WHERE ticker = 'SPY'").fetchone()
+    (scr_hi,) = con.execute(f"SELECT max(date) FROM read_parquet('{screener}')").fetchone()
+    if px_hi is None or scr_hi is None:
+        return None
+    return cal.prev_session(cal.prev_session(min(pd.Timestamp(px_hi).date(), pd.Timestamp(scr_hi).date())))
+
+
+def refresh_final(con: duckdb.DuckDBPyConnection | None = None, lookback: int = FINAL_LOOKBACK_SESSIONS,
+                  through: date | None = None, regime_fn: RegimeFn | None = None, vix_fn: VixFn | None = None,
+                  screener: str | None = None, prices_path: str | None = None) -> list[tuple[date, int]]:
+    """Rewrite the `lookback` partitions ending at the last complete `pre` (capped at `through`);
+    returns [(pre, rows)]. Idempotent: a partition is a pure function of the files on disk."""
+    con = con or duckdb.connect()
+    screener, prices_path = screener or screener_glob(), prices_path or config.PRICES
+    last = complete_through(con, screener, prices_path)
+    if last is None:
+        return []
+    last = min(last, through) if through is not None else last
+    pres = cal.trading_days(last - timedelta(days=2 * lookback + 10), last)[-lookback:]
+    df = build_events(con, screener, prices_path, pres[0], cal.next_session(last),
+                      regime_fn=regime_fn, vix_fn=vix_fn)
+    written = []
+    for d in pres:
+        part = df[df.pre == d].reset_index(drop=True)
+        store.write_partition(part if len(part) else _empty_events(), TABLE, d)
+        written.append((d, int(len(part))))
+    return written
+
+
 def rebuild(force: bool = False, con: duckdb.DuckDBPyConnection | None = None) -> pd.DataFrame:
     """Build the whole table in one pass and write one partition per distinct `pre`."""
     existing = store.available_dates(TABLE)
@@ -371,9 +457,15 @@ def main(argv: list[str] | None = None) -> int:
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--date", help="build the partition for pre == D (YYYY-MM-DD)")
     g.add_argument("--rebuild", action="store_true", help="rebuild every partition in one pass")
+    g.add_argument("--refresh", action="store_true", help="rewrite the trailing partitions whose post data exist")
     ap.add_argument("--force", action="store_true", help="overwrite existing partitions")
+    ap.add_argument("--lookback", type=int, default=FINAL_LOOKBACK_SESSIONS, help="sessions --refresh rewrites")
     args = ap.parse_args(argv)
     t0 = time.time()
+    if args.refresh:
+        written = refresh_final(lookback=args.lookback)
+        print(" ".join(f"{d}:{n}" for d, n in written) or "nothing complete to refresh")
+        return 0
     try:
         df = rebuild(force=args.force) if args.rebuild else build_day(cal.parse_date(args.date), force=args.force)
     except (FileExistsError, ValueError) as exc:

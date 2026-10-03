@@ -83,15 +83,17 @@ def preflight(d: date) -> dict:
 
 
 def append_mart(d: date, con) -> dict:
-    """Append `daily_contract` and `earnings_events` for d; both are no-ops when present."""
+    """Append `daily_contract` for d (a no-op when present) and rewrite the trailing `earnings_events`
+    partitions whose post data are on disk. The pre night itself is never written: its partition
+    needs `close[post]` (D28; before 2026-10-03 this wrote it empty and S-A saw no event)."""
     contracts = daily_contract.build_day(d, con)
-    events = earnings_events.build_day(d, con)
-    return {"daily_contract_rows": int(len(contracts)), "earnings_events_rows": int(len(events))}
+    events = earnings_events.refresh_final(con, through=cal.prev_session(cal.prev_session(d)))
+    return {"daily_contract_rows": int(len(contracts)), "earnings_events_rows": sum(n for _, n in events)}
 
 
 def _events_for_pre(con, d: date) -> pd.DataFrame:
-    ev = sa_data.load_events(con)
-    return ev[ev.pre == d] if len(ev) else ev
+    """The events S-A may trade on the pre night d, from what is on disk that night (D28)."""
+    return sa_data.as_dates(earnings_events.provisional_day(d, con), sa_data.EVENT_DATE_COLS)
 
 
 def candidates(con, d: date) -> sa.RunResult:
@@ -180,6 +182,21 @@ def _jsonable(df: pd.DataFrame) -> list[dict]:
     return json.loads(df.to_json(orient="records", date_format="iso", default_handler=str))
 
 
+def sa_backfill(d: date, ledger_dir: str, ran_on: date, con=None) -> dict:
+    """S-A only, for a night whose S-A step saw no events (D28): emit d's candidates and grade what was
+    due on d, stamped `ran_on` so the rows show they were written late. The other steps and the
+    night's report are left as they ran."""
+    if not ledger_open(d):
+        raise ValueError(f"{d} is before the S-A ledger opens ({LEDGER_OPENS})")
+    con = con or duckdb.connect()
+    cands = candidates(con, d)
+    graded, _ = grade_due(con, d, ledger_dir)
+    return {"date": d.isoformat(),
+            "emitted": L.emit(ledger_dir, cands.trades, ran_on)[0] if len(cands.trades) else 0,
+            "explored": L.emit(ledger_dir, cands.exploration, ran_on)[0] if len(cands.exploration) else 0,
+            "graded": L.grade(ledger_dir, graded, ran_on)[0] if len(graded) else 0}
+
+
 def run_daily(d: date, ledger_dir: str = LEDGER_DIR, out_root: str = ANALYSES_DAILY, con=None,
               force_ledger: bool = False) -> dict:
     con = con or duckdb.connect()
@@ -245,11 +262,15 @@ def main() -> int:
     ap.add_argument("--ledger-dir", default=LEDGER_DIR)
     ap.add_argument("--out-root", default=ANALYSES_DAILY)
     ap.add_argument("--force-ledger", action="store_true", help="write the ledger before 2026-10-01 (testing)")
+    ap.add_argument("--sa-backfill", action="store_true", help="S-A only: emit and grade a missed night (D28)")
     a = ap.parse_args()
     d = cal.parse_date(a.date)
     if not cal.is_trading_day(d):
         print(f"{d} is not a trading day", file=sys.stderr)
         return 1
+    if a.sa_backfill:
+        print(json.dumps(sa_backfill(d, a.ledger_dir, date.today())))
+        return 0
     sig = run_daily(d, a.ledger_dir, a.out_root, force_ledger=a.force_ledger)
     print(f"{d}: {len(sig['candidates'])} candidates, {len(sig['suppressed'])} suppressed, "
           f"{len(sig['graded'])} graded; report at {os.path.join(a.out_root, d.isoformat(), 'report.md')}")
