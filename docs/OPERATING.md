@@ -53,6 +53,11 @@ git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
 Every ledger row carries `policy_id`, `role` (`champion` / `challenger` / `exploration`) and `gate_verdict`
 (`DESIGN/100 §3`, adopted 2026-09-06). `signals.json` is `d1.1` from 2026-09-08; `d1.0` files stay valid.
 
+**To see the whole paper book at once:** `make book` prints every open champion position (strikes, expiry,
+credit, risk) and the closed P&L per strategy and structure, with each trade counted once (S-A's A1/A2 and
+S-C's C1/C2 copies merged, exploration rows only counted). It is read-only; `make book OUT=book.md` also
+saves the page.
+
 That is the entire job: one command and a commit on trading nights, the block above on weekends, and
 nothing touches real money before 2026-12-01. Sections 1 to 7 below are the detail.
 

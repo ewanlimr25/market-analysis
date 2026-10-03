@@ -2,7 +2,7 @@
 PY ?= python3
 DATE ?= $(shell date +%F)
 
-.PHONY: daily validate mart backtest report test test-unit test-integration
+.PHONY: daily validate mart backtest report book test test-unit test-integration
 
 daily:            ## preflight, append mart, candidates, grade, signals.json + report.md
 	$(PY) -m engine.daily --date $(DATE)
@@ -19,6 +19,9 @@ backtest:         ## run S-A on the whole mart -> data/backtest/{trades,suppress
 
 report:           ## season-split tables, BH, DSR, PBO, tail, robustness, go/no-go -> stdout
 	$(PY) -m engine.validation.run_report
+
+book:             ## the paper book on one page: open positions + closed P&L per strategy, each trade once (OUT=path to save)
+	$(PY) -m engine.book $(if $(OUT),--out $(OUT))
 
 test-unit:
 	$(PY) -m pytest -q -m unit
