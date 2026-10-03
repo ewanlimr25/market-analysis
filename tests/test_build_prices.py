@@ -62,3 +62,21 @@ def test_no_temp_file_is_left_behind(tmp_path):
     out = str(tmp_path / "prices.parquet")
     BP.write_merged([_bar("SPY", "2026-07-22", 600.0)], out)
     assert sorted(os.listdir(tmp_path)) == ["prices.parquet"]
+
+
+# ---- renamed symbols (D28 addendum) -------------------------------------------------------------
+
+def test_a_renamed_symbol_is_fetched_under_its_new_name():
+    assert BP.query_symbol("BK") == "BNY" and BP.query_symbol("SATS") == "ECHO" and BP.query_symbol("VSCO") == "VSXY"
+    assert BP.query_symbol("BRKB") == "BRK-B" and BP.query_symbol("SPY") == "SPY"
+
+
+def test_a_renamed_symbol_keeps_only_the_days_the_panel_used_the_old_name():
+    rows = [_bar("BK", "2026-05-20", 130.0), _bar("BK", "2026-05-21", 131.0), _bar("BK", "2026-05-22", 132.0)]
+    assert [r[1] for r in BP.trim_renamed("BK", rows)] == ["2026-05-20", "2026-05-21"]
+    assert BP.trim_renamed("SPY", rows) == rows
+
+
+def test_the_rename_map_never_points_a_symbol_at_itself_or_at_an_alias():
+    from chart import RENAMES, YAHOO_ALIASES
+    assert all(old != new and old not in YAHOO_ALIASES for old, (new, _) in RENAMES.items())

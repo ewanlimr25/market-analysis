@@ -412,6 +412,9 @@ needs_real_data = pytest.mark.skipif(
 VENDOR_LOST = {("APGE", date(2026, 5, 11)), ("APGE", date(2026, 8, 10)), ("AVB", date(2026, 7, 22)),
                ("CRNX", date(2026, 5, 7)), ("FBRX", date(2026, 3, 27)), ("GBTG", date(2026, 8, 4)),
                ("TWO", date(2026, 7, 27)), ("WBS", date(2026, 7, 21))}
+# Events E1 never had because the renamed issuer's old symbol was already unpriced when it was built,
+# recovered by chart.RENAMES (D28 addendum): SATS -> ECHO, VSCO -> VSXY.
+VENDOR_GAINED = {("SATS", date(2026, 5, 8)), ("VSCO", date(2026, 6, 2))}
 E1_N = 3260
 
 
@@ -430,8 +433,8 @@ def rebuilt_and_artifact() -> tuple[pd.DataFrame, pd.DataFrame]:
 @needs_real_data
 def test_rebuild_matches_e1_event_set(rebuilt_and_artifact):
     ours, e1 = rebuilt_and_artifact
-    assert len(e1) == E1_N and len(ours) == E1_N - len(VENDOR_LOST)
-    assert set(zip(ours.ticker, ours.E)) == set(zip(e1.ticker, e1.E)) - VENDOR_LOST
+    assert len(e1) == E1_N and len(ours) == E1_N - len(VENDOR_LOST) + len(VENDOR_GAINED)
+    assert set(zip(ours.ticker, ours.E)) == (set(zip(e1.ticker, e1.E)) - VENDOR_LOST) | VENDOR_GAINED
     assert ours.pre.nunique() == 97
 
 
@@ -450,9 +453,10 @@ def test_rebuild_matches_e1_windows_and_timing(rebuilt_and_artifact):
     diff = m[m.how != m.how_e1]
     assert list(zip(diff.ticker, diff.E.astype(str))) == [("JEF", "2026-06-24")]
     # E1's full counts were postmarket 1593 / premarket 1478 / unresolved 189 and labelled 2988 / 2-session
-    # 189 / inferred 83; VENDOR_LOST removes 3 / 1 / 4 and 3 / 4 / 1.
-    assert ours.timing.value_counts().to_dict() == {"postmarket": 1590, "premarket": 1477, "unresolved": 185}
-    assert ours.how.value_counts().to_dict() == {"labelled": 2985, "2-session": 185, "inferred": 82}
+    # 189 / inferred 83; VENDOR_LOST removes 3 / 1 / 4 and 3 / 4 / 1, VENDOR_GAINED adds SATS
+    # (unresolved, 2-session) and VSCO (premarket, labelled).
+    assert ours.timing.value_counts().to_dict() == {"postmarket": 1590, "premarket": 1478, "unresolved": 186}
+    assert ours.how.value_counts().to_dict() == {"labelled": 2986, "2-session": 186, "inferred": 82}
 
 
 @pytest.mark.integration
@@ -460,7 +464,8 @@ def test_rebuild_matches_e1_windows_and_timing(rebuilt_and_artifact):
 def test_rebuild_matches_e1_pnl(rebuilt_and_artifact):
     ours, e1 = rebuilt_and_artifact
     kept = e1[[k not in VENDOR_LOST for k in zip(e1.ticker, e1.E)]]
-    assert abs(ours.proxy_pnl.mean() - kept.pnl.mean()) < 1e-9
+    same = ours[[k not in VENDOR_GAINED for k in zip(ours.ticker, ours.E)]]
+    assert abs(same.proxy_pnl.mean() - kept.pnl.mean()) < 1e-9
     m = ours.merge(e1, on=["ticker", "E"], suffixes=("", "_e1"))
     assert (m.spot_pre == m.c_pre).all() and (m.close_post == m.c_post).all()
     assert (m.adv_usd_30d.fillna(-1) == m.adv_usd.fillna(-1)).all()

@@ -50,6 +50,18 @@ YAHOO_ALIASES = {
     "UHALB": "UHAL-B",
 }
 
+# Renamed issuers (findings market-analysis D28 addendum, 2026-10-03). Yahoo serves the whole history
+# under the NEW symbol and nothing under the old one, while the panel keyed the old symbol until the
+# switch, so the old ticker's bars are fetched from the new symbol and kept up to and including the
+# last session the panel used the old name (the day both spellings appear). Found by matching the new
+# symbol's closes to the old ticker's screener closes (97-98% of shared days within 1%). CUK -> CCL is
+# NOT here: Carnival plc was exchanged into an existing security, not renamed.
+RENAMES = {
+    "BK": ("BNY", "2026-05-21"),
+    "SATS": ("ECHO", "2026-06-24"),
+    "VSCO": ("VSXY", "2026-06-02"),
+}
+
 
 def yahoo_symbol(ticker: str) -> str:
     """The Yahoo chart-API spelling of a panel symbol (`BRKB` -> `BRK-B`); unchanged otherwise."""

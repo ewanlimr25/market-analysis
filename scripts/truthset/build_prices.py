@@ -34,7 +34,7 @@ START = "2026-01-15"
 # 2026-09-08, when the watch basket hit the same 404 on four names because it had no copy at all,
 # and the one copy that existed was missing BFA and UHALB.
 sys.path.insert(0, os.path.join(HERE, ".."))
-from chart import YAHOO_ALIASES  # noqa: E402
+from chart import RENAMES, YAHOO_ALIASES  # noqa: E402
 
 def resolve_end():
     """Panel tail date. Defaults to TODAY so the truth set cannot silently rot.
@@ -57,10 +57,25 @@ END = resolve_end()
 
 def epoch(d): return int(time.mktime(time.strptime(d, "%Y-%m-%d")))
 
+def query_symbol(sym):
+    """The Yahoo symbol to request for panel symbol `sym`: a share-class alias, or a renamed issuer's
+    new symbol (chart.RENAMES), else `sym` itself."""
+    return YAHOO_ALIASES.get(sym) or RENAMES.get(sym, (sym,))[0]
+
+
+def trim_renamed(sym, rows):
+    """For a renamed issuer, keep only the days the panel still used the old symbol; the new symbol
+    carries the rest under its own name."""
+    if sym not in RENAMES:
+        return rows
+    last = RENAMES[sym][1]
+    return [r for r in rows if r[1] <= last]
+
+
 def fetch(sym, retries=4):
     """Fetch `sym`'s bars, labelling every row with `sym` itself (the panel's symbol)
-    even when the request goes out under a different Yahoo alias."""
-    query = YAHOO_ALIASES.get(sym, sym)
+    even when the request goes out under a different Yahoo alias or a renamed issuer's new symbol."""
+    query = query_symbol(sym)
     p1, p2 = epoch(START), epoch(END) + 86400
     url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{query}"
            f"?period1={p1}&period2={p2}&interval=1d&events=div%2Csplit")
@@ -82,7 +97,7 @@ def fetch(sym, retries=4):
                 day = time.strftime("%Y-%m-%d", time.gmtime(t))
                 ac = adj[j] if adj and adj[j] is not None else c
                 rows.append((sym, day, o, h, l, c, ac, v))
-            return rows
+            return trim_renamed(sym, rows)
         except Exception as e:
             last = e
             time.sleep(0.6 * (i + 1) + 0.2 * (hash(sym) % 5) / 5)

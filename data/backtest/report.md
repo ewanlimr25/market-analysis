@@ -3,7 +3,7 @@
 
 ## §4.3 reproduction and straddle checks
 
-E1 headline from `earnings_events`: N 3317 (ref 3260), 111 pre-dates, mean implied−realized +1.5552% (ref +1.5591%), t 7.31 (ref 7.24) — N match: False, mean match: False, t match: False.
+E1 headline from `earnings_events`: N 3319 (ref 3260), 111 pre-dates, mean implied−realized +1.5439% (ref +1.5591%), t 7.24 (ref 7.24) — N match: False, mean match: False, t match: True.
 
 (a) marked late straddle / vendor implied move on the 205 A1 events: mean 1.253, median 1.188, IQR 1.164–1.225 (07-29 spot check: 1.20).
 
@@ -14,7 +14,7 @@ Mean absolute realized move 8.21% vs mean marked straddle 11.65% of spot (the §
 
 ## Filter funnel (A1, first failing filter)
 
-3317 events → A1 205 traded, A2 123 traded (A2 sector cut removed 82).
+3319 events → A1 205 traded, A2 123 traded (A2 sector cut removed 82).
 
 | filter | first_fail_count |
 |---|---|
@@ -22,9 +22,9 @@ Mean absolute realized move 8.21% vs mean marked straddle 11.65% of spot (the §
 | F2 | 172 |
 | F3 | 741 |
 | F4 | 425 |
-| F5 | 1276 |
+| F5 | 1277 |
 | F6 | 461 |
-| F7 | 33 |
+| F7 | 34 |
 | F8 | 4 |
 
 
