@@ -406,6 +406,15 @@ needs_real_data = pytest.mark.skipif(
     reason="screener panel, price panel or E1 artifact not on disk")
 
 
+# Events whose closes Yahoo stopped serving after their symbols delisted, and which the 10-03 rebuild lost
+# before build_prices kept history (findings market-analysis D28). The rest still match E1 exactly; the
+# set is pinned so a NEW loss, or any construction change, still fails here.
+VENDOR_LOST = {("APGE", date(2026, 5, 11)), ("APGE", date(2026, 8, 10)), ("AVB", date(2026, 7, 22)),
+               ("CRNX", date(2026, 5, 7)), ("FBRX", date(2026, 3, 27)), ("GBTG", date(2026, 8, 4)),
+               ("TWO", date(2026, 7, 27)), ("WBS", date(2026, 7, 21))}
+E1_N = 3260
+
+
 @pytest.fixture(scope="module")
 def rebuilt_and_artifact() -> tuple[pd.DataFrame, pd.DataFrame]:
     con = duckdb.connect()
@@ -421,8 +430,8 @@ def rebuilt_and_artifact() -> tuple[pd.DataFrame, pd.DataFrame]:
 @needs_real_data
 def test_rebuild_matches_e1_event_set(rebuilt_and_artifact):
     ours, e1 = rebuilt_and_artifact
-    assert len(ours) == 3260 and len(e1) == 3260
-    assert set(zip(ours.ticker, ours.E)) == set(zip(e1.ticker, e1.E))
+    assert len(e1) == E1_N and len(ours) == E1_N - len(VENDOR_LOST)
+    assert set(zip(ours.ticker, ours.E)) == set(zip(e1.ticker, e1.E)) - VENDOR_LOST
     assert ours.pre.nunique() == 97
 
 
@@ -431,7 +440,7 @@ def test_rebuild_matches_e1_event_set(rebuilt_and_artifact):
 def test_rebuild_matches_e1_windows_and_timing(rebuilt_and_artifact):
     ours, e1 = rebuilt_and_artifact
     m = ours.merge(e1, on=["ticker", "E"], suffixes=("", "_e1"))
-    assert len(m) == 3260
+    assert len(m) == E1_N - len(VENDOR_LOST)
     for col in ("pre", "post", "timing"):
         assert (m[col] == m[f"{col}_e1"]).all(), col
     # One documented `how` difference: JEF 2026-06-24 carried a 5-5 tie between 'postmarket' and
@@ -440,15 +449,18 @@ def test_rebuild_matches_e1_windows_and_timing(rebuilt_and_artifact):
     # SAME postmarket timing. pre/post/timing/P&L are identical; only the provenance label moves.
     diff = m[m.how != m.how_e1]
     assert list(zip(diff.ticker, diff.E.astype(str))) == [("JEF", "2026-06-24")]
-    assert ours.timing.value_counts().to_dict() == {"postmarket": 1593, "premarket": 1478, "unresolved": 189}
-    assert ours.how.value_counts().to_dict() == {"labelled": 2988, "2-session": 189, "inferred": 83}
+    # E1's full counts were postmarket 1593 / premarket 1478 / unresolved 189 and labelled 2988 / 2-session
+    # 189 / inferred 83; VENDOR_LOST removes 3 / 1 / 4 and 3 / 4 / 1.
+    assert ours.timing.value_counts().to_dict() == {"postmarket": 1590, "premarket": 1477, "unresolved": 185}
+    assert ours.how.value_counts().to_dict() == {"labelled": 2985, "2-session": 185, "inferred": 82}
 
 
 @pytest.mark.integration
 @needs_real_data
 def test_rebuild_matches_e1_pnl(rebuilt_and_artifact):
     ours, e1 = rebuilt_and_artifact
-    assert abs(ours.proxy_pnl.mean() - e1.pnl.mean()) < 1e-9
+    kept = e1[[k not in VENDOR_LOST for k in zip(e1.ticker, e1.E)]]
+    assert abs(ours.proxy_pnl.mean() - kept.pnl.mean()) < 1e-9
     m = ours.merge(e1, on=["ticker", "E"], suffixes=("", "_e1"))
     assert (m.spot_pre == m.c_pre).all() and (m.close_post == m.c_post).all()
     assert (m.adv_usd_30d.fillna(-1) == m.adv_usd.fillna(-1)).all()

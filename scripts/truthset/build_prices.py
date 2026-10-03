@@ -8,6 +8,13 @@ tail for the longest forward horizon we can resolve inside the panel.
 
 Output: data/prices.parquet  (columns: ticker, date, open, high, low, close, adjclose, volume)
 Stdlib + duckdb only. Threaded with retry/backoff; fail-soft per ticker.
+
+The rebuild MERGES into the existing file (2026-10-03, findings market-analysis D28): the fresh fetch
+wins on every (ticker, date) it returns, and rows it no longer returns are kept. Yahoo stops serving a
+symbol's past bars once it delists, so replacing the file deleted the history of every name that had
+delisted since the last rebuild (13 names and 8 E1 events on 2026-10-03), a survivorship bias in every
+backtest that reads this file. Kept rows are listed on stdout. A recycled symbol would therefore carry
+the old issuer's bars before the new one's; the KEPT list is where to spot it.
 """
 from __future__ import annotations
 import urllib.request, json, time, os, sys, datetime, tempfile
@@ -82,6 +89,40 @@ def fetch(sym, retries=4):
     sys.stderr.write(f"FAIL {sym}: {last}\n")
     return []
 
+COLUMNS = ("ticker", "date", "open", "high", "low", "close", "adjclose", "volume")
+_TYPES = {"ticker": "VARCHAR", "date": "DATE", "open": "DOUBLE", "high": "DOUBLE", "low": "DOUBLE",
+          "close": "DOUBLE", "adjclose": "DOUBLE", "volume": "BIGINT"}
+
+
+def write_merged(rows, out_parquet):
+    """Write `rows` (tuples in COLUMNS order) merged over `out_parquet`, atomically. The new rows win
+    on (ticker, date); existing rows the fetch did not return are kept. Returns {ticker: kept rows}."""
+    import duckdb
+    cols = ", ".join(f"{c}::{t} AS {c}" for c, t in _TYPES.items())
+    with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False) as fh:
+        staging = fh.name
+        fh.write(",".join(COLUMNS) + "\n")
+        for r in rows:
+            fh.write(",".join("" if x is None else str(x) for x in r) + "\n")
+    tmp = out_parquet + ".tmp"
+    try:
+        con = duckdb.connect()
+        con.execute(f"CREATE TEMP TABLE fresh AS SELECT {cols} FROM read_csv('{staging}', header=true, all_varchar=true)")
+        if os.path.exists(out_parquet):
+            con.execute(f"""CREATE TEMP TABLE kept AS SELECT {cols} FROM read_parquet('{out_parquet}') o
+                            WHERE NOT EXISTS (SELECT 1 FROM fresh f WHERE f.ticker = o.ticker AND f.date = o.date)""")
+        else:
+            con.execute("CREATE TEMP TABLE kept AS SELECT * FROM fresh WHERE false")
+        con.execute(f"""COPY (SELECT * FROM fresh UNION ALL SELECT * FROM kept ORDER BY ticker, date)
+                        TO '{tmp}' (FORMAT PARQUET)""")
+        os.replace(tmp, out_parquet)
+        return dict(con.execute("SELECT ticker, count(*) FROM kept GROUP BY 1 ORDER BY 1").fetchall())
+    finally:
+        os.unlink(staging)
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+
+
 def main():
     syms = sorted(set(json.load(open(UNIV))) | {"SPY", "QQQ", "IWM"})
     print(f"fetching {len(syms)} symbols {START}..{END}")
@@ -105,26 +146,19 @@ def main():
     # reads as "check passed" unless the caller tests for presence. Treat anything listed
     # here as unpriced -> not tradeable, never as cleared.
     if missing:
-        print(f"\nUNPRICED ({len(missing)}/{len(syms)}) -- no bars, fail these CLOSED downstream:")
+        print(f"\nUNPRICED ({len(missing)}/{len(syms)}) -- no bars this run; rows from earlier builds are kept (KEPT"
+              " below), nothing after them exists, so fail these CLOSED downstream past their last date:")
         print("  " + " ".join(sorted(missing)))
         print("  If a name here is liquid and current, check YAHOO_ALIASES for a symbol-format mismatch.\n")
-    # CSV is a staging format for duckdb's loader, not an output. It used to be written
-    # to data/prices.csv, where it sat as a 12MB duplicate of the parquet that no script
-    # ever read. Staged in a tempfile instead so the only artifact is the parquet.
+    kept = write_merged(all_rows, OUT_PARQUET)
+    if kept:
+        print(f"KEPT {sum(kept.values())} rows the fetch no longer returns, for {len(kept)} tickers "
+              "(delisted or failed this run; their history stays):")
+        print("  " + " ".join(f"{t}:{n}" for t, n in kept.items()))
     import duckdb
-    with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False) as fh:
-        staging = fh.name
-        fh.write("ticker,date,open,high,low,close,adjclose,volume\n")
-        for r in all_rows:
-            fh.write(",".join("" if x is None else str(x) for x in r) + "\n")
-    try:
-        con = duckdb.connect()
-        con.execute(f"""COPY (SELECT ticker, date::DATE AS date, open, high, low, close, adjclose, volume
-                          FROM read_csv_auto('{staging}', header=true)) TO '{OUT_PARQUET}' (FORMAT PARQUET)""")
-        n = con.execute(f"SELECT count(*), count(distinct ticker) FROM read_parquet('{OUT_PARQUET}')").fetchone()
-        print(f"wrote {OUT_PARQUET}: {n[0]} rows, {n[1]} tickers")
-    finally:
-        os.unlink(staging)
+    n = duckdb.connect().execute(f"SELECT count(*), count(distinct ticker) FROM read_parquet('{OUT_PARQUET}')").fetchone()
+    print(f"wrote {OUT_PARQUET}: {n[0]} rows, {n[1]} tickers")
+
 
 if __name__ == "__main__":
     main()
