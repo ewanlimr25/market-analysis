@@ -250,7 +250,7 @@
  "structures": [],
  "ledger_rows": [],
  "context_read": "sheet_only",
- "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/BBAI/2026-09-18/inputs",
+ "inputs_dir": "analyses/ticker/BBAI/2026-09-18/inputs",
  "nulls": [
   {
    "field": "earnings_events",

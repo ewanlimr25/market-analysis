@@ -426,6 +426,6 @@
   }
  ],
  "context_read": "none",
- "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/NVO/2026-09-25/inputs",
+ "inputs_dir": "analyses/ticker/NVO/2026-09-25/inputs",
  "nulls": []
 }

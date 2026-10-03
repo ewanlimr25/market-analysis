@@ -11,6 +11,15 @@ from dataclasses import dataclass
 from datetime import date
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def public_path(path: str) -> str:
+    """A path as a committed output may carry it: repo-relative, forward slashes, when it lies under the
+    repo; unchanged otherwise. Nothing written to `analyses/` or `data/` names the machine (findings D32)."""
+    root = REPO.rstrip(os.sep) + os.sep
+    return path[len(root):].replace(os.sep, "/") if path.startswith(root) else path
+
+
 SCRIPTS = os.path.join(REPO, "scripts")
 DATA = os.path.join(REPO, "data")
 MART = os.path.join(DATA, "mart")

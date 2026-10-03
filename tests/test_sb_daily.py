@@ -168,3 +168,29 @@ def test_nightly_honours_the_ledger_dir_argument(tmp_path, monkeypatch):
     assert state["ledger"]["emitted"] == 2 and state["ledger"]["exploration_emitted"] == 2 and state["refresh"]["ok"] is False
     assert len(L.read_signals(target)) == 4
     assert not (tmp_path / "forward_signals.parquet").exists()
+
+
+def test_grading_stamps_the_source_the_settlement_loader_reports(tmp_path):
+    """findings D31: a close taken from the last print is labelled `daily_contract`, never `prices`."""
+    rows_loader, _ = _loaders()
+    def close_loader(con, ticker, d):
+        return (92.0, "daily_contract") if d == EXP else (None, None)
+    iv = _index_vol()
+    SD.run(None, ENTRY, str(tmp_path), iv, rows_loader, close_loader, force_ledger=True)
+    graded = SD.run(None, EXP, str(tmp_path), iv, rows_loader, close_loader, force_ledger=True)
+    led = L.read_ledger(str(tmp_path))
+    assert graded["ledger"]["graded"] == 4 and len(led) == 4
+    assert set(led.settle_source) == {"daily_contract"} and (led.settle_close == 92.0).all()
+
+
+def test_a_bare_close_from_a_loader_is_a_prices_close(tmp_path):
+    rows_loader, close_loader = _loaders({("SPY", EXP): 92.0})
+    iv = _index_vol()
+    SD.run(None, ENTRY, str(tmp_path), iv, rows_loader, close_loader, force_ledger=True)
+    SD.run(None, EXP, str(tmp_path), iv, rows_loader, close_loader, force_ledger=True)
+    assert set(L.read_ledger(str(tmp_path)).settle_source) == {"prices"}
+
+
+def test_the_default_loader_keeps_the_source_settle_close_reports(monkeypatch):
+    monkeypatch.setattr(SD.sb_data, "settle_close", lambda con, ticker, d: (769.7501, "daily_contract"))
+    assert SD._default_close_loader(None, "SPY", EXP) == (769.7501, "daily_contract")

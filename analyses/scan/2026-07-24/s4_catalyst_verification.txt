@@ -211,7 +211,7 @@ OUTPUT
 ================================================================================
 
 S4 Screen JSON saved to:
-  /Users/ewan/Development/market-analysis/analyses/scan/2026-07-24/s4_screen.json
+  analyses/scan/2026-07-24/s4_screen.json
 
 Final candidate list (advisory/half-cap):
   1. PLD  - $147.63 | PCR 5.42 | $637.2M ADV | ER 10-21 | Valid

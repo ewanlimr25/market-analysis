@@ -444,7 +444,7 @@
   }
  ],
  "context_read": "sheet_only",
- "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/MSFT/2026-09-18/inputs",
+ "inputs_dir": "analyses/ticker/MSFT/2026-09-18/inputs",
  "nulls": [
   {
    "field": "events.earnings.confirmed",

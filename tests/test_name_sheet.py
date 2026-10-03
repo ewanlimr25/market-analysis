@@ -87,3 +87,13 @@ def test_an_invalid_document_is_a_hard_error(tmp_path):
     with pytest.raises(SH.SheetValidationError):
         SH.write({**doc, "premium": {**doc["premium"], "verdict": "MAYBE"}}, str(tmp_path))
     assert not os.path.exists(tmp_path / "ticker.json")
+
+
+def test_the_sheet_records_inputs_dir_relative_to_the_repo(tmp_path, monkeypatch):
+    """findings D32: a committed sheet names no machine; `inputs_dir` is relative to the repo root."""
+    from engine import config
+    root = _stage(tmp_path, "NVDA")
+    monkeypatch.setattr(config, "REPO", str(tmp_path))
+    doc = SH.run("NVDA", D, offline=True, out_root=root, ledger_dir=None)
+    assert doc["inputs_dir"] == f"analyses/NVDA/{D.isoformat()}/inputs"
+    assert "/Users/" not in json.dumps(_public(doc))

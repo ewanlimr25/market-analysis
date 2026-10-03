@@ -22,7 +22,8 @@ from datetime import date, datetime, timezone
 from engine import calendar as cal
 from engine import ledger as L
 from engine import schema as SCH
-from engine.config import ANALYSES_TICKER, LEDGER_NAME_DIR, NAME_PARAMS, NAME_POLICY_ID, NAME_SCHEMA_VERSION, NAME_SIZING
+from engine.config import (ANALYSES_TICKER, LEDGER_NAME_DIR, NAME_PARAMS, NAME_POLICY_ID, NAME_SCHEMA_VERSION, NAME_SIZING,
+                           public_path)
 from engine.mart import cboe_chain
 from engine.name import context as CX
 from engine.name import context_tag as CT
@@ -153,7 +154,7 @@ def run(ticker: str, d: date, *, direction: str | None = None, equity: float | N
         present = [LR.already_present(existing, r) for r in rows]
         L.emit(ledger_dir, LR.frame(rows), d)
     doc = assemble(inputs, secs, structures, rows, direction=direction, sizing=sizing, context_read=context_read,
-                   inputs_dir=inputs_dir, present_before=present)
+                   inputs_dir=public_path(inputs_dir), present_before=present)
     paths = write(doc, out_dir)
     return {**doc, "_paths": paths}
 

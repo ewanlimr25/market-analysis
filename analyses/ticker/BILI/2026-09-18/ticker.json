@@ -263,7 +263,7 @@
  "structures": [],
  "ledger_rows": [],
  "context_read": "sheet_only",
- "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/BILI/2026-09-18/inputs",
+ "inputs_dir": "analyses/ticker/BILI/2026-09-18/inputs",
  "nulls": [
   {
    "field": "events.earnings.confirmed",

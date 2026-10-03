@@ -62,7 +62,7 @@ def sb_open_fn(out_dir: str) -> tuple[Callable[[date], bool], str]:
         return (lambda d: False), "absent (budget cap never binds)"
     sb = pd.read_parquet(path, columns=["entry", "expiry"])
     spans = [(pd.Timestamp(e).date(), pd.Timestamp(x).date()) for e, x in zip(sb["entry"], sb["expiry"])]
-    return (lambda d: any(e <= d < x for e, x in spans)), f"{path} ({len(spans)} positions)"
+    return (lambda d: any(e <= d < x for e, x in spans)), f"{config.public_path(path)} ({len(spans)} positions)"
 
 
 def load_weeks(con) -> tuple[list[sc.WeekInput], list[date]]:

@@ -256,7 +256,7 @@
  "structures": [],
  "ledger_rows": [],
  "context_read": "none",
- "inputs_dir": "/Users/ewan/Development/market-analysis/analyses/ticker/XOM/2026-09-25/inputs",
+ "inputs_dir": "analyses/ticker/XOM/2026-09-25/inputs",
  "nulls": [
   {
    "field": "liquidity.atm_spread",

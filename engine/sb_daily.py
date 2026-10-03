@@ -25,7 +25,8 @@ from engine.strategies import sb_structures as SB
 from engine.validation import stats as S
 
 RowsLoader = Callable[[object, tuple[str, ...], date], pd.DataFrame]
-CloseLoader = Callable[[object, str, date], float | None]
+Settlement = tuple[float | None, str | None]
+CloseLoader = Callable[[object, str, date], "float | None | Settlement"]
 
 
 def ledger_open(d: date) -> bool:
@@ -70,9 +71,16 @@ def open_positions(ledger_dir: str, d: date) -> dict[str, int]:
     return {f"{u}-{s}": int(n) for (u, s), n in open_.groupby(["underlying", "structure"]).size().items()}
 
 
-def _default_close_loader(con, ticker: str, d: date):
-    close, _ = sb_data.settle_close(con, ticker, d)
-    return close
+def _default_close_loader(con, ticker: str, d: date) -> Settlement:
+    return sb_data.settle_close(con, ticker, d)
+
+
+def _settlement(close_loader: CloseLoader, con, ticker: str, d: date) -> Settlement:
+    """The loader's answer as (close, source); a bare close (the tests' loaders) is a `prices` close."""
+    got = close_loader(con, ticker, d)
+    if isinstance(got, tuple):
+        return got
+    return got, (sb_data.SETTLE_PRICES if got is not None else None)
 
 
 def _candidates(con, d: date, index_vol: pd.DataFrame, gates: dict, rows_loader: RowsLoader, params: SBParams,
@@ -107,11 +115,11 @@ def _grade_due(con, d: date, ledger_dir: str, close_loader: CloseLoader) -> tupl
     due = L.pending(ledger_dir, d)
     graded, unsettled = [], []
     for sig in (due.to_dict("records") if len(due) else []):
-        close = close_loader(con, sig["underlying"], d)
-        if close is None:
+        close, source = _settlement(close_loader, con, sig["underlying"], d)
+        if close is None or source is None:
             unsettled.append({k: sig[k] for k in L.KEY} | {"reason": "no_settlement_close"})
             continue
-        graded.append(sb.grade_position(sig, float(close), sb_data.SETTLE_PRICES))
+        graded.append(sb.grade_position(sig, float(close), source))
     return graded, unsettled
 
 
