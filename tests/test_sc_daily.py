@@ -96,3 +96,16 @@ def test_sc_state_matches_the_schema_and_renders(tmp_path):
     err = SCH.clean({"date": FRI.isoformat(), "error": "S-C step failed: boom", "candidates": [], "graded": []})
     jsonschema.validate(err, {**schema["$defs"]["sc_state"], "$defs": schema["$defs"]})
     assert "failed" in R.render_sc(err)
+
+
+def test_the_report_reads_the_graded_ledger_not_the_signals(tmp_path):
+    """D33: `make report-sc` counted 0 graded weeks because it read forward_signals (no `ror`)."""
+    from engine.validation import run_sc_report as RSC
+    from engine.validation import sc_harness as H
+    _run(tmp_path, FRI)
+    assert H.graded(RSC.load_forward(str(tmp_path / "sc"))).empty                 # nothing graded before expiry
+    _run(tmp_path, EXP)
+    fwd = RSC.load_forward(str(tmp_path / "sc"))
+    assert len(fwd) == 6 and set(fwd.role) == {"champion"} and fwd["ror"].notna().all()
+    status = H.count_status(fwd).reset_index().set_index("pair")["forward_weeks"]
+    assert status.to_dict() == {"C1-SS": 1, "C1-IB": 1, "C2-SS": 1, "C2-IB": 1}

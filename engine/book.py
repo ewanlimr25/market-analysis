@@ -5,9 +5,9 @@ Each trade is counted once. Variants that took the same trade (S-A's A1 and A2, 
 (ticker, E, structure) and appear as one row with `variants` = "A1+A2"; exploration rows (one-contract
 copies, DESIGN/100 §6) stay out of the book and are only counted. Structures are NOT summed into one
 total: S-A's SS and IC, and S-C's SS and IB, are alternative trades on the same name, read separately
-at their reads. `risk_usd` is the max loss for defined-risk structures and the 2-sigma stress loss for
-straddles. Closed rows show `post`, the session the position was graded (S-A: the morning after the
-print; S-B and S-C: expiry). Read-only: nothing here writes a ledger or touches a frozen parameter.
+at their reads. `risk_usd` is the max loss for defined-risk structures and the 3-sigma stress loss for
+straddles (S-A: a 3x implied move; S-C: 3 sigma_hold). Closed rows show `post`, the session the position
+was graded (S-A: the morning after the print; S-B and S-C: expiry). Read-only: nothing here writes a ledger or touches a frozen parameter.
 """
 from __future__ import annotations
 
@@ -142,7 +142,7 @@ def render(books: list[Book], asof: date) -> str:
     lines = [f"# Paper book — {asof.isoformat()}", "",
              "Paper only: nothing here is a live order. Champion positions, each trade once (variants that took "
              "it are listed). Structures are not added together: on S-A and S-C they are alternative trades on "
-             "the same name. Risk is the max loss, or the 2-sigma stress loss for straddles; net $ is after costs.",
+             "the same name. Risk is the max loss, or the 3-sigma stress loss for straddles; net $ is after costs.",
              ""]
     for book in books:
         lines += _section(book)

@@ -43,11 +43,12 @@ def _load(path: str) -> pd.DataFrame:
     return as_dates(pd.read_parquet(path), ("entry", "expiry", "E"))
 
 
-def load_forward() -> pd.DataFrame:
-    """Champion rows of `ledger/sc/` (R5); empty until the ledger opens."""
-    if not os.path.isdir(LEDGER_SC_DIR):
+def load_forward(ledger_dir: str = LEDGER_SC_DIR) -> pd.DataFrame:
+    """Graded champion rows of `ledger/sc/` (R5): the graded ledger, which carries `ror`; the signals
+    file never does (D33). Empty until the first expiry is graded."""
+    if not os.path.isdir(ledger_dir):
         return pd.DataFrame()
-    df = L.read_signals(LEDGER_SC_DIR)
+    df = L.read_ledger(ledger_dir)
     if df.empty:
         return df
     return as_dates(df[df["role"] == "champion"], ("entry", "expiry", "E"))
