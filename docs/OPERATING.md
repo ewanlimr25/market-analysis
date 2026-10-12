@@ -30,7 +30,7 @@ make intraday-rv DAYS=5                          # the truth set and intraday_rv
 make ticker-batch DATE=YYYY-MM-DD                # the Friday just closed, never empty: one sheet per watch name, the exploration book (§6b)
 make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the marked backtest -> data/backtest/sb_report.md (read §8)
 make backtest-sc && make report-sc               # S-C panel run + §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
-make test                                        # every unit test (1,239 at 2026-10-12); also proves no frozen parameter moved
+make test                                        # every unit test (1,254 at 2026-10-12); also proves no frozen parameter moved
 make backtest && make report                     # S-A; its E1 line reads N match False once the mart runs past the E1 artifact (expected)
 git add data/backtest analyses/ticker ledger/name && git commit -m "weekly: YYYY-MM-DD" && git push
 ```
@@ -74,7 +74,7 @@ nothing touches real money before 2026-12-01. Sections 1 to 7 below are the deta
 |---|---|---|
 | `analyses/daily/<date>/report.md` + `signals.json` ×5 | each night | preflight, S-A candidates and suppressions, S-B gate tonight and next session, positions entered / skipped / graded, running ledger stats |
 | `data/mart/daily_contract/date=<date>/` ×5 | each night | ~330,000 per-contract marks per day, the priced history the strategies read |
-| `data/mart/index_vol/`, `data/mart/vix/` | each night | CBOE and VIX series extended through the day |
+| `data/mart/index_vol/`, `data/mart/vix/` | each night | CBOE's index vols (the S-B step) and Yahoo's VIX closes behind S-A's `vix_pre` (the S-A step), extended through the day; the VIX file never refreshed before 2026-10-12 (findings D36) |
 | `ledger/sb/` new rows | Friday, only if the gate is ON | up to four paper positions (SPY and QQQ, put spread and condor): strikes, expiry, credit, cost, max loss, one-contract sizing |
 | `ledger/sb/` graded rows | the Friday a position expires (~3 weeks after entry) | net P&L per position from the official close, with `settle_source` |
 | S-A ledger rows | from 2026-10-01, any night with a qualifying print | earnings candidates emitted and graded next morning; measurement only |

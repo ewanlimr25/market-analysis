@@ -47,6 +47,9 @@ Forward use (fixed 2026-10-03; findings/market-analysis DECISIONS D28): until th
   `refresh_final()`    : rewrites the trailing partitions whose post data are on disk (prices and
                          screener through `next_session(next_session(pre))`); `make daily` runs it
                          nightly, so the table catches up whenever the truth set is refreshed.
+`vix_pre` is the VIX close on `pre` (`engine.mart.vix`). Each build asks for its last `pre`, so the stored
+series is refreshed when it falls short (D36: until 2026-10-12 it stopped at 2026-09-04, and every later
+event was built with `vix_pre` null).
 
 Do NOT `--rebuild --force` (or `--date D --force` on a pre-2026-08-31 partition) without a reason: Yahoo
 has stopped serving the closes behind 7 E1 events (APGE x2, AVB, FBRX, GBTG, TWO, WBS; D28), and the
@@ -350,8 +353,9 @@ def default_regime_fn(con: duckdb.DuckDBPyConnection) -> RegimeFn:
     return lambda d: classify_regime(d.isoformat(), con)["label"].split("/")[0]
 
 
-def default_vix_fn(con: duckdb.DuckDBPyConnection) -> VixFn:
-    series = load_vix(con)
+def default_vix_fn(con: duckdb.DuckDBPyConnection, as_of: date | None = None) -> VixFn:
+    """VIX closes by date, the stored series refreshed first when it ends before `as_of` (D36)."""
+    series = load_vix(con, as_of=as_of)
     table = dict(zip(series.date, series.vix))
     return table.get
 
@@ -367,8 +371,9 @@ def build_events(con: duckdb.DuckDBPyConnection, screener: str, prices_path: str
     raw = _build_rows(ctx)
     if pre_only is not None:
         raw = raw[raw.pre == pre_only]
+    last_pre = max(raw.pre) if len(raw) else None
     return _enrich(raw, con, prices_path, ctx.cal,
-                   regime_fn or default_regime_fn(con), vix_fn or default_vix_fn(con))
+                   regime_fn or default_regime_fn(con), vix_fn or default_vix_fn(con, as_of=last_pre))
 
 
 def build_day(d: date, con: duckdb.DuckDBPyConnection | None = None, force: bool = False,
@@ -399,7 +404,8 @@ def provisional_day(d: date, con: duckdb.DuckDBPyConnection | None = None, regim
             for c in ctx.cands.itertuples(index=False)]
     kept = [r for r in rows if r is not None]
     raw = pd.DataFrame(kept) if kept else _empty_events()
-    return _enrich(raw, con, prices_path, ctx.cal, regime_fn or default_regime_fn(con), vix_fn or default_vix_fn(con))
+    return _enrich(raw, con, prices_path, ctx.cal, regime_fn or default_regime_fn(con),
+                   vix_fn or default_vix_fn(con, as_of=d))
 
 
 def complete_through(con: duckdb.DuckDBPyConnection, screener: str, prices_path: str) -> date | None:

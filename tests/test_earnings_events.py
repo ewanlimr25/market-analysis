@@ -7,7 +7,8 @@ from __future__ import annotations
 
 import glob
 import os
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from types import SimpleNamespace
 
 import duckdb
 import pandas as pd
@@ -398,6 +399,137 @@ def test_load_vix_returns_empty_frame_when_nothing_available(tmp_path, monkeypat
     monkeypatch.setattr(vixmod, "fetch_vix", lambda rng=None: (_ for _ in ()).throw(OSError("offline")))
     out = vixmod.load_vix()
     assert out.empty and list(out.columns) == ["date", "vix"]
+
+
+# The file written on 2026-09-05 was never refreshed, so every event after 2026-09-04 was built with
+# vix_pre null (findings market-analysis D36). These pin the refresh and what it may file.
+VIX_NIGHT = date(2026, 10, 12)          # a Monday; Friday 10-09 is the session before it
+AFTER_CLOSE = datetime(2026, 10, 12, 20, 30, tzinfo=vixmod.NEW_YORK)    # the nightly's hour
+MID_SESSION = datetime(2026, 10, 12, 14, 0, tzinfo=vixmod.NEW_YORK)
+
+
+def _vix_bar(d: date, close: float) -> dict:
+    return {"date": d.isoformat(), "open": close, "high": close, "low": close, "close": close, "adj": close,
+            "volume": 0.0}
+
+
+def _fake_chart(daily: list[dict], session: dict | None = None) -> SimpleNamespace:
+    return SimpleNamespace(bars=lambda ticker, rng: daily, session_bar=lambda ticker: session)
+
+
+def _stored_vix(tmp_path, monkeypatch, closes: dict[date, float]) -> None:
+    monkeypatch.setattr(config, "MART", str(tmp_path))
+    os.makedirs(os.path.dirname(vixmod.vix_path()), exist_ok=True)
+    pd.DataFrame({"date": list(closes), "vix": list(closes.values())}).to_parquet(vixmod.vix_path(), index=False)
+
+
+@pytest.mark.unit
+def test_load_vix_refreshes_a_stored_series_that_stops_short_of_as_of(tmp_path, monkeypatch):
+    _stored_vix(tmp_path, monkeypatch, {date(2026, 9, 3): 15.0, date(2026, 9, 4): 16.0})
+    monkeypatch.setattr(vixmod, "_now", lambda: AFTER_CLOSE)
+    monkeypatch.setattr(vixmod, "_chart", lambda: _fake_chart(
+        [_vix_bar(date(2026, 9, 4), 16.5), _vix_bar(date(2026, 10, 8), 17.0), _vix_bar(date(2026, 10, 9), 17.5)]))
+    out = vixmod.load_vix(as_of=date(2026, 10, 9))
+    assert out.date.tolist() == [date(2026, 9, 3), date(2026, 9, 4), date(2026, 10, 8), date(2026, 10, 9)]
+    assert out.vix.tolist() == [15.0, 16.5, 17.0, 17.5]          # kept, re-fetched (the fresh close wins), new
+    assert pd.read_parquet(vixmod.vix_path()).vix.tolist() == out.vix.tolist()
+
+
+@pytest.mark.unit
+def test_load_vix_does_not_fetch_when_the_stored_series_reaches_as_of(tmp_path, monkeypatch):
+    _stored_vix(tmp_path, monkeypatch, {date(2026, 10, 9): 17.5})
+    monkeypatch.setattr(vixmod, "_chart", lambda: pytest.fail("must not fetch"))
+    assert vixmod.load_vix(as_of=date(2026, 10, 9)).vix.tolist() == [17.5]
+
+
+@pytest.mark.unit
+def test_load_vix_keeps_the_stored_series_when_its_refresh_fails(tmp_path, monkeypatch, capsys):
+    _stored_vix(tmp_path, monkeypatch, {date(2026, 9, 4): 16.0})
+
+    def offline(ticker, rng):
+        raise OSError("offline")
+    monkeypatch.setattr(vixmod, "_chart", lambda: SimpleNamespace(bars=offline, session_bar=lambda ticker: None))
+    out = vixmod.load_vix(as_of=date(2026, 10, 9))
+    assert out.date.tolist() == [date(2026, 9, 4)] and "offline" in capsys.readouterr().out
+
+
+@pytest.mark.unit
+def test_fetch_vix_never_files_the_session_still_trading(tmp_path, monkeypatch):
+    # Yahoo's multi-day array carries today's live value while the session trades (and a null close for
+    # hours after it), so today's close is taken only from the single-day endpoint
+    _stored_vix(tmp_path, monkeypatch, {date(2026, 10, 8): 17.0})
+    monkeypatch.setattr(vixmod, "_now", lambda: MID_SESSION)
+    monkeypatch.setattr(vixmod, "_chart", lambda: _fake_chart(
+        [_vix_bar(date(2026, 10, 9), 17.5), _vix_bar(VIX_NIGHT, 21.0)], session=None))
+    assert vixmod.fetch_vix().date.tolist() == [date(2026, 10, 8), date(2026, 10, 9)]
+
+
+@pytest.mark.unit
+def test_fetch_vix_takes_the_closed_session_from_the_single_day_endpoint(tmp_path, monkeypatch):
+    _stored_vix(tmp_path, monkeypatch, {date(2026, 10, 8): 17.0})
+    monkeypatch.setattr(vixmod, "_now", lambda: AFTER_CLOSE)
+    monkeypatch.setattr(vixmod, "_chart", lambda: _fake_chart(
+        [_vix_bar(date(2026, 10, 9), 17.5)], session=_vix_bar(VIX_NIGHT, 18.25)))
+    out = vixmod.fetch_vix()
+    assert (out.date.tolist()[-1], out.vix.tolist()[-1]) == (VIX_NIGHT, 18.25)
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize("now, bar_day", [(AFTER_CLOSE, date(2026, 10, 13)),   # labelled tomorrow
+                                          (MID_SESSION, VIX_NIGHT)])           # today, before 16:15
+def test_fetch_vix_refuses_a_single_day_bar_its_own_clock_cannot_vouch_for(tmp_path, monkeypatch, now, bar_day):
+    _stored_vix(tmp_path, monkeypatch, {date(2026, 10, 8): 17.0})
+    monkeypatch.setattr(vixmod, "_now", lambda: now)
+    monkeypatch.setattr(vixmod, "_chart", lambda: _fake_chart(
+        [_vix_bar(date(2026, 10, 9), 17.5)], session=_vix_bar(bar_day, 30.0)))
+    assert vixmod.fetch_vix().date.tolist() == [date(2026, 10, 8), date(2026, 10, 9)]
+
+
+@pytest.mark.unit
+def test_fetch_vix_prefers_the_official_close_to_one_recovered_from_the_single_day_endpoint(tmp_path, monkeypatch):
+    _stored_vix(tmp_path, monkeypatch, {date(2026, 10, 8): 17.0})
+    monkeypatch.setattr(vixmod, "_now", lambda: AFTER_CLOSE)
+    monkeypatch.setattr(vixmod, "_chart", lambda: _fake_chart(
+        [_vix_bar(date(2026, 10, 9), 17.5)], session=_vix_bar(date(2026, 10, 9), 99.0)))
+    assert vixmod.fetch_vix().vix.tolist() == [17.0, 17.5]
+
+
+@pytest.mark.unit
+def test_load_vix_refetches_over_an_unreadable_file(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(config, "MART", str(tmp_path))
+    os.makedirs(os.path.dirname(vixmod.vix_path()), exist_ok=True)
+    with open(vixmod.vix_path(), "wb") as fh:
+        fh.write(b"not a parquet file")                    # e.g. two runs writing at once
+    monkeypatch.setattr(vixmod, "_now", lambda: AFTER_CLOSE)
+    monkeypatch.setattr(vixmod, "_chart", lambda: _fake_chart([_vix_bar(date(2026, 10, 9), 17.5)]))
+    out = vixmod.load_vix(as_of=date(2026, 10, 9))
+    assert out.vix.tolist() == [17.5] and "unreadable" in capsys.readouterr().out
+
+
+def _vix_loader(seen: list, closes: dict[date, float]):
+    def load(con=None, as_of=None):
+        seen.append(as_of)
+        return pd.DataFrame({"date": list(closes), "vix": list(closes.values())})
+    return load
+
+
+@pytest.mark.unit
+def test_provisional_day_asks_the_vix_loader_for_the_pre_night(panel, tmp_path, monkeypatch):
+    seen = []
+    monkeypatch.setattr(ee, "load_vix", _vix_loader(seen, {E_APR: 19.0}))
+    stale = _stale_prices(panel, tmp_path, cal.prev_session(E_APR_PREV))
+    out = ee.provisional_day(E_APR, duckdb.connect(), regime_fn=_stub_regime,
+                             screener=panel["screener_glob"], prices_path=stale)
+    assert seen == [E_APR] and _row(out, "PM").vix_pre == 19.0
+
+
+@pytest.mark.unit
+def test_build_events_asks_the_vix_loader_for_its_last_pre(panel, monkeypatch):
+    seen = []
+    monkeypatch.setattr(ee, "load_vix", _vix_loader(seen, {}))
+    out = ee.build_events(duckdb.connect(), panel["screener_glob"], panel["prices_path"],
+                          panel["e_min"], panel["e_max"], regime_fn=_stub_regime)
+    assert seen == [max(out.pre)]
 
 
 # ---- integration: rebuild == E1 artifact --------------------------------------------------------
