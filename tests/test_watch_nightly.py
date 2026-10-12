@@ -12,10 +12,12 @@ import pytest
 from engine import calendar as cal
 from engine import policy as POL
 from engine.config import LEDGER_WB_OPEN
+from engine.watch import bars as B
 from engine.watch import basket as BK
 from engine.watch import conditions as C
 from engine.watch import live as LV
 from engine.watch import nightly as N
+from engine.watch import series as S
 from engine.watch.wb_ledger import read_ledger
 
 pytestmark = pytest.mark.unit
@@ -271,3 +273,33 @@ def test_evaluate_universe_records_borrow_provenance_after_the_universe_merges(m
     assert n == 2
     assert cond_df.attrs["borrow"] == {"asof": _date(2026, 6, 8), "stale_days": 1, "names_with_fee": 1}
     assert N.borrow_provenance(pd.DataFrame({"ticker": ["AAA"]}), D0) is None
+
+
+# ---- bars cut at the night (findings D34) ----------------------------------------------------------
+
+def _peak_on_the_night_bars(n: int = 40, night_i: int = 34) -> tuple[pd.DataFrame, date]:
+    """Flat at 100, a steady climb to a peak on the night, then a fall over the next sessions that
+    confirms the peak as a zigzag high: a pivot dated on the night but known only afterwards."""
+    days = [ts.date() for ts in pd.bdate_range("2026-06-01", periods=n)]
+    closes = [100.0 if i < 20 else 100.0 + 2.0 * (i - 19) if i <= night_i else 130.0 - 4.0 * (i - night_i)
+              for i in range(n)]
+    bars = pd.DataFrame({"date": days, "open": closes, "high": [c + 1 for c in closes],
+                         "low": [c - 1 for c in closes], "close": closes, "adj": closes, "volume": [1e6] * n})
+    return bars, days[night_i]
+
+
+def test_series_map_cuts_each_tickers_bars_at_the_night(monkeypatch):
+    """A night run after later sessions are already in the bar cache must see only its own bars. A
+    zigzag pivot is dated at its extreme but confirmed by a later bar, so an uncut series counts on the
+    night a swing confirmed afterwards (findings D34: 14 nights from 09-15 to 10-08, all run late)."""
+    bars, night = _peak_on_the_night_bars()
+    monkeypatch.setattr(B, "load_daily_bars", lambda ticker, **kw: bars)
+    same_night = S.build_ticker_series("X", daily=B.bars_as_of(bars, night))
+    uncut = S.build_ticker_series("X", daily=bars)
+    assert uncut.pivots != same_night.pivots           # the fixture carries a pivot confirmed after the night
+
+    got = N.build_ticker_series_map(["X"], as_of=night)["X"]
+
+    assert got.dates[-1] == night
+    assert got.pivots == same_night.pivots
+    assert S.evaluate_bar_conditions(got, night) == S.evaluate_bar_conditions(same_night, night)

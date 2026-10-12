@@ -3,11 +3,14 @@ strategy and structure, read from the three forward ledgers.
 
 Each trade is counted once. Variants that took the same trade (S-A's A1 and A2, S-C's C1 and C2) share a
 (ticker, E, structure) and appear as one row with `variants` = "A1+A2"; exploration rows (one-contract
-copies, DESIGN/100 §6) stay out of the book and are only counted. Structures are NOT summed into one
-total: S-A's SS and IC, and S-C's SS and IB, are alternative trades on the same name, read separately
-at their reads. `risk_usd` is the max loss for defined-risk structures and the 3-sigma stress loss for
-straddles (S-A: a 3x implied move; S-C: 3 sigma_hold). Closed rows show `post`, the session the position
-was graded (S-A: the morning after the print; S-B and S-C: expiry). Read-only: nothing here writes a ledger or touches a frozen parameter.
+copies, DESIGN/100 §6) stay out of the book and are only counted, and so do champion rows the portfolio
+caps refused (`cap_pass` false: S-A's caps, S-C's budget and sector caps), as in the nightly's open-book
+table; the S-C harness still reads them, since `cap_pass` is only the portfolio view. Structures are NOT
+summed into one total: S-A's SS and IC, and S-C's SS and IB, are alternative trades on the same name,
+read separately at their reads. `risk_usd` is the max loss for defined-risk structures and the 3-sigma
+stress loss for straddles (S-A: a 3x implied move; S-C: 3 sigma_hold). Closed rows show `post`, the
+session the position was graded (S-A: the morning after the print; S-B and S-C: expiry). Read-only:
+nothing here writes a ledger or touches a frozen parameter.
 """
 from __future__ import annotations
 
@@ -42,6 +45,8 @@ class Book:
     open: pd.DataFrame
     closed: pd.DataFrame
     exploration_open: int
+    capped_open: int = 0
+    capped_closed: int = 0
 
 
 STRATEGIES = (Strategy("S-A", LEDGER_DIR, SA_STRIKES), Strategy("S-B", LEDGER_SB_DIR, SB_STRIKES),
@@ -66,13 +71,21 @@ def _role(df: pd.DataFrame, role: str) -> pd.DataFrame:
     return df[df["role"] == role] if len(df) else df
 
 
+def _admitted(df: pd.DataFrame) -> pd.DataFrame:
+    """The rows the portfolio caps let in, read as the nightly's open book reads them (`sc_daily`);
+    a ledger with no `cap_pass` (S-B) has no caps."""
+    return df[df["cap_pass"].astype(bool)] if len(df) and "cap_pass" in df.columns else df
+
+
 def load(strategy: Strategy) -> Book:
     signals, graded = L.read_signals(strategy.ledger_dir), L.read_ledger(strategy.ledger_dir)
     graded_keys = set(_keys(graded, L.KEY))
     is_open = ~_keys(signals, L.KEY).isin(graded_keys) if len(signals) else pd.Series(dtype=bool)
     still_open = signals[is_open] if len(signals) else signals
-    return Book(strategy, _once(_role(still_open, POL.ROLE_CHAMPION)), _once(_role(graded, POL.ROLE_CHAMPION)),
-                int(len(_role(still_open, POL.ROLE_EXPLORATION))))
+    champ_open, champ_closed = _role(still_open, POL.ROLE_CHAMPION), _role(graded, POL.ROLE_CHAMPION)
+    held_open, held_closed = _admitted(champ_open), _admitted(champ_closed)
+    return Book(strategy, _once(held_open), _once(held_closed), int(len(_role(still_open, POL.ROLE_EXPLORATION))),
+                int(len(champ_open) - len(held_open)), int(len(champ_closed) - len(held_closed)))
 
 
 def summary(book: Book) -> pd.DataFrame:
@@ -135,6 +148,9 @@ def _section(book: Book) -> list[str]:
             ["ticker", "structure", "variants", "entered (E)", "closed", "net $", "return on risk"], _closed_rows(book)) + [""]
     if book.exploration_open:
         out += [f"Exploration book: {book.exploration_open} open one-contract rows (not in the totals above).", ""]
+    if book.capped_open or book.capped_closed:
+        out += [f"Refused by the caps: {book.capped_open + book.capped_closed} champion rows ({book.capped_open} open), "
+                "not in the totals above.", ""]
     return out
 
 

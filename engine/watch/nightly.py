@@ -178,9 +178,15 @@ def build_ticker_series_map(tickers: list[str], as_of: date,
     run of a night, ~30 s to repeat one (parquet reads and series construction, no network). The
     steady state is the first figure, not the second -- a session just closed is by definition in
     no cache, so every ticker pays one tail fetch, plus one session fetch while Yahoo's multi-day
-    array still lags."""
+    array still lags.
+
+    The bars are cut at `as_of` (`bars.bars_as_of`) before the series is built. A night run after
+    later sessions are already in the cache would otherwise see them: a zigzag pivot is dated at its
+    extreme but confirmed by a later bar, so C-SWING, C-SWING-LOSS, C-POC-A and C-POC-A-LOSS counted
+    swings confirmed after the night (findings D34; 14 nights from 09-15 to 10-08 ran late). On a
+    night run the same evening the cache already ends at `as_of` and the cut changes nothing."""
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        bars_list = list(pool.map(lambda t: B.load_daily_bars(t, as_of=as_of), tickers))
+        bars_list = list(pool.map(lambda t: B.bars_as_of(B.load_daily_bars(t, as_of=as_of), as_of), tickers))
     return {t: S.build_ticker_series(t, daily=bars) for t, bars in zip(tickers, bars_list)}
 
 

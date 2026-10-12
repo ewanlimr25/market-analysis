@@ -31,10 +31,12 @@ SELECT date, ticker, sector, marketcap, close, prev_close,
   (iv30d - iv30d_1m) AS iv_mom_1m,
   total_volume/nullif(avg30_volume,0) AS vol_accel,
   close/nullif(prev_close,0)-1 AS gap,
-  (net_call_premium-net_put_premium)/nullif(marketcap,0) AS netprem_mcap,
+  -- a market cap at or below zero is unknown, not a value: UW exported negative caps for seven ETFs on
+  -- 2026-10-06/07, and ln() of EEM's, IEMG's, ACWX's or EMXC's stopped this build (findings D34)
+  (net_call_premium-net_put_premium)/(CASE WHEN marketcap>0 THEN marketcap END) AS netprem_mcap,
   (net_call_premium-net_put_premium) AS netprem,
   call_open_interest/nullif(call_open_interest+put_open_interest,0) AS oi_call_share,
-  ln(nullif(marketcap,0)) AS log_mcap,
+  ln(CASE WHEN marketcap>0 THEN marketcap END) AS log_mcap,
   (bullish_premium-bearish_premium)/nullif(bullish_premium+bearish_premium,0) AS bull_bear_skew,
   call_volume/nullif(put_volume,0) AS cv_pv
 FROM read_parquet({SCR!r})

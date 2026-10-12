@@ -72,3 +72,32 @@ def test_render_lists_open_positions_with_strikes_and_closed_totals(tmp_path):
     md = B.render(books, ASOF)
     assert "715/741" in md and "2026-10-23" in md and "2,479.13" in md
     assert "+100.79" in md and "paper" in md.lower()
+
+
+def test_rows_the_caps_refused_stay_out_of_the_book_but_are_counted(tmp_path):
+    """S-C writes every selected structure with `cap_pass` (the harness reads them all); the book holds
+    only what the caps admitted, as the nightly's open-book table does. 2026-10-09: C1 and C2 both picked
+    OKLO and only C2's straddle fit the budget, so the book is one OKLO SS (C2) and no OKLO IB."""
+    E2 = "2026-10-09"
+    sig = [_row("OKLO", "SS", "C1", E=E2, cap_pass=False, cap_reason="cap_budget"),
+           _row("OKLO", "SS", "C2", E=E2, cap_pass=True, cap_reason=None),
+           _row("OKLO", "IB", "C1", E=E2, cap_pass=False, cap_reason="cap_budget"),
+           _row("OKLO", "IB", "C2", E=E2, cap_pass=False, cap_reason="cap_budget"),
+           _row("WULF", "IB", "C1", cap_pass=True, cap_reason=None),
+           _row("MARA", "IB", "C1", cap_pass=False, cap_reason="cap_sector")]
+    graded = [_row("WULF", "IB", "C1", cap_pass=True, cap_reason=None, net=40.0),
+              _row("MARA", "IB", "C1", cap_pass=False, cap_reason="cap_sector", net=-90.0)]
+    book = B.load(B.Strategy("S-C", _ledger(tmp_path, "sc", sig, graded), B.SC_STRIKES))
+    assert list(zip(book.open.ticker, book.open.structure, book.open.variants)) == [("OKLO", "SS", "C2")]
+    assert list(book.closed.ticker) == ["WULF"]
+    assert (book.capped_open, book.capped_closed) == (3, 1)
+    s = B.summary(book).set_index("structure")
+    assert s.loc["IB", "open_n"] == 0 and s.loc["IB", "net_usd"] == 40.0
+    assert "Refused by the caps: 4 champion rows (3 open), not in the totals above." in B.render([book], ASOF)
+
+
+def test_a_ledger_without_cap_pass_keeps_every_champion_row(tmp_path):
+    """S-B has no portfolio caps and writes no `cap_pass`."""
+    book = B.load(B.Strategy("S-B", _ledger(tmp_path, "sb", [_row("SPY", "PS", "base")]), B.SB_STRIKES))
+    assert list(book.open.ticker) == ["SPY"] and (book.capped_open, book.capped_closed) == (0, 0)
+    assert "Refused by the caps" not in B.render([book], ASOF)
