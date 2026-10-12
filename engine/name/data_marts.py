@@ -230,9 +230,11 @@ def resolve_chain(ticker: str, d: date, *, online: bool = True,
     """The chain for `(ticker, d)` and the `chain_meta` that says where it came from.
 
     Order: the stored `cboe_chain` partition (a mart read, so it works offline); else, when online,
-    one CBOE fetch, stored only when the payload's own as-of date IS `d` (a weekend snapshot of a
-    later session must never be filed under `d`); else the yfinance fallback normalised onto the
-    same columns with `source = "yfinance"`; else `None` with the reason.
+    one CBOE fetch, used when the payload's own as-of date IS `d` (a weekend snapshot of a later
+    session must never be filed under `d`) and stored only once session `d` has closed
+    (`cboe_chain.session_closed`: a chain filed mid-session is write-once and would keep the 16:30
+    loader from storing the close); else the yfinance fallback normalised onto the same columns with
+    `source = "yfinance"`; else `None` with the reason.
     """
     if cboe_chain.has_chain(ticker, d):
         df = cboe_chain.load_chain(ticker, d)
@@ -243,8 +245,11 @@ def resolve_chain(ticker: str, d: date, *, online: bool = True,
         payload = fetch(ticker)
         asof = cboe_chain.chain_asof_date(payload)
         if asof == d:
-            df = cboe_chain.parse_chain(payload, now())
+            fetched_at = now()
+            df = cboe_chain.parse_chain(payload, fetched_at)
             if not df.empty:
+                if not cboe_chain.session_closed(d, fetched_at):
+                    return df, _meta("cboe_chain", d, "session still trading: used, not stored", len(df))
                 cboe_chain.store_chain(df, ticker, d)
                 return df, _meta("cboe_chain", d, None, len(df))
             cboe_reason = "cboe chain parsed empty"

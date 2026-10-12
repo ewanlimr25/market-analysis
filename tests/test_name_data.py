@@ -430,3 +430,20 @@ def test_the_fixtures_span_the_liquidity_floor():
     assert len(name_fixtures.load_fixture("NVDA").contracts_today) == 2051
     assert len(name_fixtures.load_fixture("BL").contracts_today) < 300
     assert len(name_fixtures.load_fixture("OKLO").contracts_today) >= 300
+
+
+@pytest.mark.unit
+def test_resolve_chain_uses_but_never_files_a_chain_fetched_before_the_close(tmp_path, monkeypatch):
+    """2026-10-12: `make ticker-batch` without DATE priced the session still trading, and each sheet filed its
+    live chain as that day's write-once partition, which would have kept the 16:30 loader from storing the close."""
+    from engine.name import data_marts as M
+    monkeypatch.setattr(cboe_chain, "CBOE_CHAIN_DIR", str(tmp_path))
+    with open(os.path.join(os.path.dirname(__file__), "fixtures", "cboe_chain_spy_truncated.json")) as fh:
+        payload = json.load(fh)                                           # last trade on Friday 2026-09-04
+    d = date(2026, 9, 4)
+
+    df, meta = M.resolve_chain("SPY", d, fetch=lambda t: payload, now=lambda: datetime(2026, 9, 4, 14, 20, tzinfo=timezone.utc))
+    assert len(df) == 16 and meta["source"] == "cboe_chain" and not cboe_chain.has_chain("SPY", d)
+
+    df, meta = M.resolve_chain("SPY", d, fetch=lambda t: payload, now=lambda: datetime(2026, 9, 4, 20, 30, tzinfo=timezone.utc))
+    assert len(df) == 16 and meta["source"] == "cboe_chain" and cboe_chain.has_chain("SPY", d)

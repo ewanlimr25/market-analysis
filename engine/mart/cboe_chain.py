@@ -17,6 +17,11 @@ not match is a malformed row, dropped and counted, never silent (a `logging.warn
 `store_chain` / `load_chain` follow the mart write-once convention (`engine/mart/store.py`), with a
 two-level partition (`symbol=<SYM>/date=<YYYY-MM-DD>`) because a chain is looked up by (symbol, date).
 
+A chain is filed under its session only once that session has closed (`session_closed`: any earlier
+session, or the same day from 16:15 New York time, when the 15-minute-delayed quotes include the 16:00
+close). A partition is write-once, so a chain fetched while the session still traded and filed under its
+date kept the 16:30 loader from storing the close (2026-10-12, a ticker batch run at 10:20 for 34 names).
+
 `refresh_chains(symbols, d)` is the fail-soft nightly hook: fetch, parse, store one symbol at a
 time, catching every exception so one bad symbol never stops the rest (`engine/mart/index_vol.py`'s
 `refresh_index_vol` fail-soft pattern). It is wired to `make cboe-chain DATE=...`, not into
@@ -32,8 +37,9 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from datetime import date, datetime, timezone
+from datetime import date, datetime, time, timezone
 from typing import Callable, Iterable
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -47,6 +53,8 @@ FETCH_TIMEOUT_S = 20
 
 CBOE_CHAIN_DIR = os.path.join(config.MART, "cboe_chain")
 SOURCE = "cboe_delayed"
+NEW_YORK = ZoneInfo("America/New_York")
+SESSION_CLOSED_AT = time(16, 15)    # New York time: the 16:00 close plus CBOE's 15-minute delay
 
 # OCC option code: root (1-6 letters), YYMMDD, C or P, strike * 1000 (8 digits, no decimal point).
 OCC_RE = re.compile(r"^(?P<root>[A-Z]{1,6})(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})(?P<right>[CP])(?P<strike>\d{8})$")
@@ -109,6 +117,13 @@ def chain_asof_date(payload: dict) -> date | None:
         return datetime.fromisoformat(lt).date()
     except ValueError:
         return None
+
+
+def session_closed(d: date, now: datetime) -> bool:
+    """Whether session `d` has closed in CBOE's delayed quotes at `now`: any earlier session, or `d` itself
+    from 16:15 New York time. Only then may a chain be filed under `d`."""
+    t = now.astimezone(NEW_YORK)
+    return d < t.date() or (d == t.date() and t.time() >= SESSION_CLOSED_AT)
 
 
 def _underlying_price(data: dict) -> float | None:
@@ -221,6 +236,9 @@ def refresh_one(symbol: str, d: date | None = None, fetch: Callable[[str], dict]
         df = parse_chain(payload, fetched_at)
         if df.empty:
             return {"available": False, "rows": 0, "reason": "parsed chain is empty",
+                    "fetched_at": fetched_at.isoformat(), "asof_date": asof.isoformat()}
+        if not session_closed(asof, fetched_at):
+            return {"available": True, "rows": 0, "reason": f"{asof.isoformat()} still trading: not stored",
                     "fetched_at": fetched_at.isoformat(), "asof_date": asof.isoformat()}
         store_chain(df, symbol, asof, force=force)
         return {"available": True, "rows": int(len(df)), "reason": None,

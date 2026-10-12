@@ -36,8 +36,8 @@ git add data/backtest analyses/ticker ledger/name && git commit -m "weekly: YYYY
 ```
 
 **`DATE` is the Friday just closed, and the block belongs on the weekend.** With no `DATE` the batch prices
-today, which has no export until 8 PM: every sheet fails L1, and run during market hours each one also files the
-live chain as today's write-once `cboe_chain` partition, which keeps the 16:30 loader from storing the day's close
+today (the Makefile's default), which has no export until 8 PM: every sheet fails L1 and stores those empty inputs
+beside it, and a later sheet for that date reuses them unless run with `python3 -m engine.name.sheet ... --refresh`
 (2026-10-12, findings `market-analysis/NEXT-SESSION.md`). During market hours `build_prices.py` and
 `backtest-sb REFRESH=1` would also store today's unfinished bar, so on a weekday run the block after the close.
 

@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import os
 from datetime import date, datetime, timezone
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import pytest
@@ -220,3 +221,26 @@ def test_read_symbols_file_is_empty_when_the_file_is_absent(tmp_path):
 
 def test_merge_symbols_keeps_order_and_drops_repeats():
     assert C.merge_symbols(["SPY", "QQQ"], ["NVDA", "SPY", "MU"]) == ["SPY", "QQQ", "NVDA", "MU"]
+
+
+# ---- a chain is filed under its session only once that session has closed (2026-10-12) ---------------
+
+def test_a_session_counts_as_closed_from_1615_new_york_time():
+    et, d = ZoneInfo("America/New_York"), date(2026, 10, 12)
+    assert not C.session_closed(d, datetime(2026, 10, 12, 10, 20, tzinfo=et))
+    assert not C.session_closed(d, datetime(2026, 10, 12, 16, 14, tzinfo=et))
+    assert C.session_closed(d, datetime(2026, 10, 12, 16, 15, tzinfo=et))
+    assert C.session_closed(d, datetime(2026, 10, 12, 20, 30, tzinfo=timezone.utc))          # the 16:30 loader, in UTC
+    assert C.session_closed(date(2026, 10, 9), datetime(2026, 10, 12, 10, 20, tzinfo=et))     # an earlier session
+
+
+def test_refresh_one_does_not_file_a_session_still_trading(tmp_path, monkeypatch):
+    """A chain fetched mid-session and filed under its date (write-once) would keep the 16:30 loader from
+    storing that session's close: on 2026-10-12 a ticker batch did it for 34 names."""
+    monkeypatch.setattr(C, "CBOE_CHAIN_DIR", str(tmp_path))
+    fetch = _fake_fetch({"SPY": _fixture_payload()})                     # last trade on Friday 2026-09-04
+    mid = datetime(2026, 9, 4, 14, 20, tzinfo=timezone.utc)              # 10:20 in New York
+    early = C.refresh_one("SPY", fetch=fetch, now=lambda: mid)
+    assert early["rows"] == 0 and "still trading" in early["reason"] and not C.has_chain("SPY", date(2026, 9, 4))
+    late = C.refresh_one("SPY", fetch=fetch, now=lambda: datetime(2026, 9, 4, 20, 30, tzinfo=timezone.utc))
+    assert late["rows"] == 16 and C.has_chain("SPY", date(2026, 9, 4))
