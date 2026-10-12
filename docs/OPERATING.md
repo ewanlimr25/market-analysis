@@ -27,12 +27,19 @@ has not landed, wait.
 ```
 python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py
 make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
+make ticker-batch DATE=YYYY-MM-DD                # the Friday just closed, never empty: one sheet per watch name, the exploration book (§6b)
 make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the marked backtest -> data/backtest/sb_report.md (read §8)
 make backtest-sc && make report-sc               # S-C panel run + §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
-make test                                        # every unit test (1,213 at 2026-10-03); also proves no frozen parameter moved
+make test                                        # every unit test (1,239 at 2026-10-12); also proves no frozen parameter moved
 make backtest && make report                     # S-A; its E1 line reads N match False once the mart runs past the E1 artifact (expected)
-git add data/backtest && git commit -m "weekly: YYYY-MM-DD" && git push
+git add data/backtest analyses/ticker ledger/name && git commit -m "weekly: YYYY-MM-DD" && git push
 ```
+
+**`DATE` is the Friday just closed, and the block belongs on the weekend.** With no `DATE` the batch prices
+today, which has no export until 8 PM: every sheet fails L1, and run during market hours each one also files the
+live chain as today's write-once `cboe_chain` partition, which keeps the 16:30 loader from storing the day's close
+(2026-10-12, findings `market-analysis/NEXT-SESSION.md`). During market hours `build_prices.py` and
+`backtest-sb REFRESH=1` would also store today's unfinished bar, so on a weekday run the block after the close.
 
 **Dates where the routine changes**
 
@@ -73,6 +80,7 @@ nothing touches real money before 2026-12-01. Sections 1 to 7 below are the deta
 | S-A ledger rows | from 2026-10-01, any night with a qualifying print | earnings candidates emitted and graded next morning; measurement only |
 | `data/backtest/sb_report.md`, `sb_*.parquet` | weekend | proxy extended by one week, marked run re-done, the §8 go/no-go table as of that date (the `.md` reports are committed; the parquet stays local) |
 | `data/backtest/report.md` | weekend, from October | S-A Season 3 tables accruing |
+| `analyses/ticker/<name>/<Friday>/` + `ledger/name/` rows | weekend | one sheet per name in `data/watch_names.txt` for the Friday session (`ticker.json`, `report.md`), and a `sheet-1.0` row for each name that can be priced (§6b) |
 | `make test` result | weekend | all green, which also certifies no frozen parameter moved |
 | six commits, pushed | five nightly, one weekly | the public, append-only record |
 
@@ -245,6 +253,7 @@ before the read.
 ```
 python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py
 make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
+make ticker-batch DATE=YYYY-MM-DD                # the Friday just closed, never empty: one sheet per watch name, the exploration book (§6b)
 make backtest-sb REFRESH=1 && make report-sb     # S-B: proxy + marked run, then the bar tables -> data/backtest/sb_report.md
 make backtest && make report                     # S-A: once Season 3 events exist (from October)
 make backtest-sc && make report-sc               # S-C: panel run, then the §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
@@ -390,7 +399,7 @@ make ticker T=NVDA DATE=2026-09-18      # an earlier session (its inputs/ are ke
 make ticker T=NVDA DIRECTION=long       # your call, priced as shares + two verticals and written to the disc-1.0 book
 make narrate T=NVDA                     # optional: headlines, analyst, Form 4, the disconfirming-facts checklist (changes no number)
 make ticker-batch DATE=...              # one sheet per data/watch_names.txt name (the exploration book)
-                                        # weekly, after the section 4 truth-set refresh, for the Friday session
+                                        # weekly, in the weekend block (§0, §4): DATE = the Friday, never empty
 ```
 
 The sheet answers, in order: **A** can this name be priced at all (L1..L6; the first failing floor is
