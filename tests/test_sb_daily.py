@@ -194,3 +194,36 @@ def test_a_bare_close_from_a_loader_is_a_prices_close(tmp_path):
 def test_the_default_loader_keeps_the_source_settle_close_reports(monkeypatch):
     monkeypatch.setattr(SD.sb_data, "settle_close", lambda con, ticker, d: (769.7501, "daily_contract"))
     assert SD._default_close_loader(None, "SPY", EXP) == (769.7501, "daily_contract")
+
+
+def test_the_weekly_report_counts_the_graded_ledger_in_forward_n(tmp_path, monkeypatch):
+    """2026-10-12: `make report-sb` built its go/no-go without the forward ledger, so `forward_n` read 0 and
+    `c5_scale` could never fire however many positions were graded (since a80b67a; the S-B twin of D33)."""
+    from engine.validation import run_sb_report as RSB
+    from engine.validation import sb_harness as H
+    from test_sb_harness import _positions
+    rows_loader, close_loader = _loaders({("SPY", EXP): 92.0})
+    iv = _index_vol()
+    SD.run(None, ENTRY, str(tmp_path), iv, rows_loader, close_loader, force_ledger=True)
+    assert RSB.load_forward(str(tmp_path)).empty                               # nothing graded before expiry
+    SD.run(None, EXP, str(tmp_path), iv, rows_loader, close_loader, force_ledger=True)
+    fwd = RSB.load_forward(str(tmp_path))
+    assert len(fwd) == 2 and set(fwd.role) == {"champion"} and fwd["ror"].notna().all()
+
+    rors = [0.06, 0.05, 0.07, 0.04, 0.05, 0.06, -0.05]
+    proxy = _positions({("SPY", "PS"): rors, ("SPY", "IC"): rors, ("QQQ", "PS"): rors, ("QQQ", "IC"): rors}, n=150)
+    proxy = proxy.assign(window=proxy.entry.map(lambda d: "P1" if d < date(2024, 9, 6) else ("P2" if d < date(2025, 9, 5) else "P3")))
+    marked = _positions({("SPY", "PS"): rors, ("SPY", "IC"): rors, ("QQQ", "PS"): rors, ("QQQ", "IC"): rors},
+                        n=8, start=date(2026, 3, 13))
+    frames = {"sb_proxy.parquet": proxy, "sb_proxy_sens.parquet": proxy.assign(sensitivity="base"),
+              "sb_marked.parquet": marked.assign(graded=True, entry_tier_max=1),
+              "sb_marked_sens.parquet": marked.assign(sensitivity="base")}
+    monkeypatch.setattr(RSB, "_load", lambda name: frames.get(name, pd.DataFrame()))
+    monkeypatch.setattr(RSB, "alt_structure_table", lambda sens: pd.DataFrame())   # re-prices real proxy rows; descriptive only
+    monkeypatch.setattr(RSB, "load_forward", lambda ledger_dir=None: fwd)
+    seen, real = {}, H.go_no_go
+    monkeypatch.setattr(H, "go_no_go", lambda p, m, forward=None: seen.setdefault("out", real(p, m, forward)))
+
+    RSB.build()
+
+    assert seen["out"].set_index("sleeve")["forward_n"].to_dict() == {"SPY-PS": 1, "SPY-IC": 1, "QQQ-PS": 0, "QQQ-IC": 0}

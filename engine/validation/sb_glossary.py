@@ -125,7 +125,7 @@ def verdict_columns() -> str:
         ("n_marked, mean_marked", "marked positions and their mean `ror` (the `P3` panel window)."),
         ("gap_ror", "on the (entry, sleeve) pairs both layers hold, `proxy mean − marked mean`; criterion 2 allows a gap "
                     "up to the marked round-trip cost."),
-        ("forward_n", f"graded positions in `ledger/sb/`; criterion 5 needs ≥ {SB_SCALE_MIN_POSITIONS} with a positive mean."),
+        ("forward_n", f"graded champion positions in `ledger/sb/`; criterion 5 needs ≥ {SB_SCALE_MIN_POSITIONS} with a positive mean."),
         ("c1_proxy", f"mean > 0, `nw_t ≥ {SB_GO_T_MIN:g}`, `bh_pass`, and a positive mean in every window."),
         ("c2_marked", "marked mean > 0 and the overlap check passes."),
         ("c3_month", "the month rule (`worst_over_median`)."),

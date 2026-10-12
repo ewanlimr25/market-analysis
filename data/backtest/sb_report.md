@@ -301,10 +301,10 @@ Single legs, naked shorts and the call spread re-priced on the same entry rows w
 
 | sleeve | n_proxy | mean_proxy | nw_t_proxy | bh_pass | mean_p1 | mean_p2 | mean_p3 | n_marked | mean_marked | gap_ror | worst_over_median | deflated_sr | deflated_sr_null | forward_n | c1_proxy | c2_marked | c3_month | c4_dsr | c4_dsr_null | c5_scale | verdict | note |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| SPY-PS | 60 | +4.14% | 3.75 | yes | +1.98% | +5.14% | +5.16% | 9 | +5.83% | -0.13% | 1.64 | 0.3348 | 0.2971 | 0 | yes | yes | yes | yes | yes | no | GO-MIN | clears 1-4; one contract until the forward ledger holds >= 40 graded positions (now 0) |
+| SPY-PS | 60 | +4.14% | 3.75 | yes | +1.98% | +5.14% | +5.16% | 9 | +5.83% | -0.13% | 1.64 | 0.3348 | 0.2971 | 1 | yes | yes | yes | yes | yes | no | GO-MIN | clears 1-4; one contract until the forward ledger holds >= 40 graded positions (now 1) |
 | SPY-IC | 60 | +4.42% | 3.19 | yes | -0.90% | +6.80% | +6.93% | 6 | +7.69% | +0.38% | 6.12 | 0.2779 | 0.2402 | 0 | no | no | no | yes | yes | no | NO-GO | fails c1_proxy, c2_marked, c3_month |
-| QQQ-PS | 58 | +4.32% | 2.38 | yes | +0.63% | +6.19% | +6.30% | 8 | +7.02% | -0.63% | 4.88 | 0.1760 | 0.1383 | 0 | yes | yes | no | yes | yes | no | NO-GO | fails c3_month |
-| QQQ-IC | 58 | +4.71% | 1.71 | yes | -3.81% | +7.55% | +10.17% | 4 | +9.59% | +1.18% | 3.85 | 0.1061 | 0.0684 | 0 | no | no | no | yes | yes | no | NO-GO | fails c1_proxy, c2_marked, c3_month |
+| QQQ-PS | 58 | +4.32% | 2.38 | yes | +0.63% | +6.19% | +6.30% | 8 | +7.02% | -0.63% | 4.88 | 0.1760 | 0.1383 | 1 | yes | yes | no | yes | yes | no | NO-GO | fails c3_month |
+| QQQ-IC | 58 | +4.71% | 1.71 | yes | -3.81% | +7.55% | +10.17% | 4 | +9.59% | +1.18% | 3.85 | 0.1061 | 0.0684 | 1 | no | no | no | yes | yes | no | NO-GO | fails c1_proxy, c2_marked, c3_month |
 
 
 ## Appendix: columns and symbols
@@ -390,7 +390,7 @@ Go / no-go columns (§6.7; read 2026-12-01):
 | `mean_p1, mean_p2, mean_p3` | mean `ror` in each proxy window; criterion 1 needs all three > 0. |
 | `n_marked, mean_marked` | marked positions and their mean `ror` (the `P3` panel window). |
 | `gap_ror` | on the (entry, sleeve) pairs both layers hold, `proxy mean − marked mean`; criterion 2 allows a gap up to the marked round-trip cost. |
-| `forward_n` | graded positions in `ledger/sb/`; criterion 5 needs ≥ 40 with a positive mean. |
+| `forward_n` | graded champion positions in `ledger/sb/`; criterion 5 needs ≥ 40 with a positive mean. |
 | `c1_proxy` | mean > 0, `nw_t ≥ 2`, `bh_pass`, and a positive mean in every window. |
 | `c2_marked` | marked mean > 0 and the overlap check passes. |
 | `c3_month` | the month rule (`worst_over_median`). |

@@ -12,7 +12,8 @@ import numpy as np
 import pandas as pd
 
 from engine import backtest_sb as B
-from engine.config import SB_DSR_TRIALS, SB_GO_T_MIN, SB_NW_LAG, SB_WINDOWS
+from engine import ledger as L
+from engine.config import LEDGER_SB_DIR, SB_DSR_TRIALS, SB_GO_T_MIN, SB_NW_LAG, SB_WINDOWS
 from engine.strategies.sa_data import as_dates
 from engine.validation import sb_harness as H
 from engine.validation.sb_alt_structures import TABLE_COLS as ALT_COLS, alt_structure_table
@@ -35,6 +36,17 @@ def _load(name: str) -> pd.DataFrame:
         return pd.DataFrame()
     df = pd.read_parquet(path)
     return as_dates(df, ("entry", "expiry", "gate_asof", "E", "pre", "post"))
+
+
+def load_forward(ledger_dir: str = LEDGER_SB_DIR) -> pd.DataFrame:
+    """Graded champion positions of `ledger/sb/` for §6.7 criterion 5 (`forward_n`, `c5_scale`): the graded
+    ledger, which carries `ror`. Until 2026-10-12 the go/no-go was built without it and `forward_n` read 0."""
+    if not os.path.isdir(ledger_dir):
+        return pd.DataFrame()
+    df = L.read_ledger(ledger_dir)
+    if df.empty:
+        return df
+    return as_dates(df[df["role"] == "champion"], ("entry", "expiry", "E"))
 
 
 def inputs_section() -> str:
@@ -114,7 +126,7 @@ def build() -> str:
         parts.append(section("Marked sensitivities (descriptive)",
                              H.md(H.gate_table(marked_sens), ["sensitivity", "sleeve", "n", "mean_ror", "nw_t", "net_usd_total"], pct_cols=PCT)))
     parts.append(section(f"Go / no-go (DESIGN/80 §6.7; t >= {SB_GO_T_MIN}; read 2026-12-01)",
-                         H.md(H.go_no_go(proxy, marked), ["sleeve", "n_proxy", "mean_proxy", "nw_t_proxy", "bh_pass", "mean_p1", "mean_p2", "mean_p3",
+                         H.md(H.go_no_go(proxy, marked, load_forward()), ["sleeve", "n_proxy", "mean_proxy", "nw_t_proxy", "bh_pass", "mean_p1", "mean_p2", "mean_p3",
                                                          "n_marked", "mean_marked", "gap_ror", "worst_over_median", "deflated_sr", "deflated_sr_null", "forward_n",
                                                          "c1_proxy", "c2_marked", "c3_month", "c4_dsr", "c4_dsr_null", "c5_scale", "verdict", "note"], pct_cols=PCT)
                          if len(proxy) else "_no proxy positions_"))
