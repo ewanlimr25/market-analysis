@@ -1,0 +1,431 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "NBIS",
+ "date": "2026-10-02",
+ "generated": "2026-10-12T19:32:59+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L6",
+  "contracts": 1181,
+  "hot_chain_days": 21,
+  "adv_usd": 3588587064.041748,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-10-30",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-10-02",
+   "close": "screener 2026-10-02",
+   "contracts": "daily_contract 2026-10-02",
+   "hot_chain_days": "daily_contract 2026-09-03..2026-10-02 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-10-02",
+   "atm_spread": "daily_contract late window 2026-10-02",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-10-02"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 242.81 at 2026-10-30 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-11-09",
+   "session": "unknown",
+   "session_date": "2026-11-10",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-11-09",
+     "hour": null
+    },
+    {
+     "name": "screener",
+     "date": "2026-11-10",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-11-10",
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 39
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-10-09",
+   "2026-10-16"
+  ],
+  "macro": [
+   {
+    "date": "2026-10-28",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-11-10",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-10-02 + yfinance calendar",
+   "ex_div": "screener 2026-10-02",
+   "expiries": "cboe_chain 2026-10-02",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.717132928628636,
+  "iv_pct_own": 0.819672131147541,
+  "rv5_21": 56.30885065973607,
+  "rv_c2c_21": 62.212572613697944,
+  "spread_rv5": 15.404442203127523,
+  "spread_c2c": 9.500720249165653,
+  "slope": 3.0100000000000016,
+  "earnings_history": [
+   {
+    "E": "2026-05-13",
+    "implied_move": 0.0950730376358174,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.15722183890429786,
+    "ratio": 1.6536953358589943
+   },
+   {
+    "E": "2026-08-12",
+    "implied_move": 0.1127708913494981,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.3198778601938592,
+    "ratio": 2.8365286144852564
+   }
+  ],
+  "median_ratio_8": 2.2451119751721254,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "RICH",
+  "source": {
+   "iv30d": "screener 2026-10-02 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-03-13..2026-10-02 (122 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-09-03..2026-10-02 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-09-03..2026-10-02",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-10-02) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-09-03..2026-10-02 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-10-02) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-09-03..2026-10-02)",
+   "slope": "cboe_chain 2026-10-02 ATM IV at 2026-10-09 then 2026-10-16, vol points",
+   "earnings_history": "earnings_events <= 2026-08-12 + earnings_history/events.parquet <= 2026-08-12",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-10-02",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-10-02"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-10-09",
+   "strike": 242.5,
+   "mark": 17.8,
+   "mark_source": "cboe_chain 2026-10-02",
+   "tier": null
+  },
+  "box_1s_front": 17.8,
+  "box_1s_21": 49.92067265097632,
+  "atr14": 16.07337719385882,
+  "gex_total": 33139370.43,
+  "gex_sign": "+",
+  "zero_gamma": 242.5,
+  "zero_gamma_all_crossings": [
+   242.5
+  ],
+  "spot": 242.81,
+  "source": {
+   "straddle_front": "cboe_chain 2026-10-02",
+   "box_1s_front": "cboe_chain 2026-10-02",
+   "box_1s_21": "screener 2026-10-02",
+   "atr14": "earnings_history/bars <= 2026-10-02",
+   "gex_total": "cboe_chain 2026-10-02",
+   "gex_sign": "cboe_chain 2026-10-02",
+   "zero_gamma": "cboe_chain 2026-10-02",
+   "spot": "screener 2026-10-02"
+  },
+  "nulls": []
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.3045,
+   "available": 4300000.0,
+   "date": "2026-10-02",
+   "decile": 0.2889797154102331,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.2004,
+   "dtc": 3.6,
+   "settlement": "2026-09-15",
+   "publication": "2026-09-28",
+   "position": 46779540.0
+  },
+  "beta_250": 3.512921866073874,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-09-21",
+    "firm": "Rothschild & Co",
+    "from": "",
+    "to": "Sell",
+    "action": "init"
+   },
+   {
+    "date": "2026-09-24",
+    "firm": "BNP Paribas",
+    "from": "Neutral",
+    "to": "Outperform",
+    "action": "up"
+   },
+   {
+    "date": "2026-09-30",
+    "firm": "William Blair",
+    "from": "",
+    "to": "Outperform",
+    "action": "init"
+   }
+  ],
+  "analyst_n": 3,
+  "form4": {
+   "buys": 0,
+   "sells": 15,
+   "other": 4,
+   "rows": [
+    {
+     "date": "2026-10-01",
+     "name": "Korolenko Andrey",
+     "code": "S",
+     "shares": -29090.0,
+     "price": 234.16
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Shtan Danila",
+     "code": "S",
+     "shares": -14546.0,
+     "price": 234.16
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Volozh Arkadiy",
+     "code": "S",
+     "shares": -37778.0,
+     "price": 234.16
+    },
+    {
+     "date": "2026-09-29",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -50.0,
+     "price": 235.01
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -100.0,
+     "price": 216.52
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -200.0,
+     "price": 215.59
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -900.0,
+     "price": 214.81
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -300.0,
+     "price": 213.4
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -200.0,
+     "price": 211.88
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -400.0,
+     "price": 210.53
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -1100.0,
+     "price": 209.74
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -1900.0,
+     "price": 208.84
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Boynton John Wilson IV",
+     "code": "S",
+     "shares": -1264.0,
+     "price": 207.67
+    },
+    {
+     "date": "2026-09-14",
+     "name": "Boroditsky Marc",
+     "code": "M",
+     "shares": -2000.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-14",
+     "name": "Boroditsky Marc",
+     "code": "M",
+     "shares": -5000.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-14",
+     "name": "Boroditsky Marc",
+     "code": "S",
+     "shares": -2000.0,
+     "price": 208.63
+    },
+    {
+     "date": "2026-09-14",
+     "name": "Boroditsky Marc",
+     "code": "M",
+     "shares": 2000.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-14",
+     "name": "Boroditsky Marc",
+     "code": "S",
+     "shares": -5000.0,
+     "price": 209.26
+    },
+    {
+     "date": "2026-09-14",
+     "name": "Boroditsky Marc",
+     "code": "M",
+     "shares": 5000.0,
+     "price": 0.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 15.31,
+   "vix3m": 18.01,
+   "vxn": 21.2,
+   "term": "contango",
+   "date": "2026-10-02"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-10-02",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-10-02",
+   "si": "short_interest (FINRA) settlement 2026-09-15, published 2026-09-28 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-10-02",
+   "analyst": "yfinance upgrades_downgrades <= 2026-10-02",
+   "form4": "finnhub /stock/insider-transactions <= 2026-10-02",
+   "vix": "index_vol 2026-10-02",
+   "regime": "_regime.classify_regime asof 2026-10-02",
+   "x2": "borrow (IBKR) 2026-10-02",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": 0.18972023085638368,
+  "ret_63": 0.1398459895251445,
+  "w52_pos": 0.7479456099715389,
+  "flow_pct_universe": 99.71664090674909,
+  "flow_pct_self": 67.46031746031746,
+  "vol_pct_universe": 49.1644908616188,
+  "vol_pct_self": 43.65079365079365,
+  "net_premium": 8597014.0,
+  "volume_ratio": 0.7607808004078052,
+  "universe_n": 5823,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-10-02",
+   "ret_63": "earnings_history/bars <= 2026-10-02",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-10-02",
+   "net_premium": "screener 2026-10-02",
+   "volume_ratio": "screener 2026-10-02",
+   "flow_pct_universe": "screener universe 2026-10-02",
+   "vol_pct_universe": "screener universe 2026-10-02",
+   "flow_pct_self": "screener 63 sessions to 2026-10-02",
+   "vol_pct_self": "screener 63 sessions to 2026-10-02",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/NBIS/2026-10-02/inputs",
+ "nulls": [
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 242.81 at 2026-10-30 with 5+ lots on both legs"
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  }
+ ]
+}

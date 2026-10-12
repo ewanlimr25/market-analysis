@@ -1,0 +1,904 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "HOOD",
+ "date": "2026-10-02",
+ "generated": "2026-10-12T19:32:54+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": true,
+  "failing": null,
+  "contracts": 1339,
+  "hot_chain_days": 21,
+  "adv_usd": 2591589878.435478,
+  "atm_spread": 0.014413576785714286,
+  "tier": 1,
+  "atm_strike": 113.0,
+  "atm_expiry": "2026-10-30",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": true
+  },
+  "source": {
+   "issue_type": "screener 2026-10-02",
+   "close": "screener 2026-10-02",
+   "contracts": "daily_contract 2026-10-02",
+   "hot_chain_days": "daily_contract 2026-09-03..2026-10-02 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-10-02",
+   "atm_spread": "daily_contract late window 2026-10-02",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-10-02"
+  },
+  "nulls": []
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-11-03",
+   "session": "post",
+   "session_date": "2026-11-04",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-11-03",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2026-10-27",
+     "hour": "postmarket"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-10-27",
+     "hour": null
+    }
+   ],
+   "confirmed": false,
+   "days_to": 33
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-10-09",
+   "2026-10-16"
+  ],
+  "macro": [
+   {
+    "date": "2026-10-28",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-11-16",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-10-02 + yfinance calendar",
+   "ex_div": "screener 2026-10-02",
+   "expiries": "cboe_chain 2026-10-02",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.earnings.confirmed",
+    "reason": "the earnings sources disagree on the session: finnhub 2026-11-03 amc, screener 2026-10-27 postmarket, yfinance 2026-10-27 None"
+   },
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.613119922250966,
+  "iv_pct_own": 31.967213114754102,
+  "rv5_21": 46.454897911489816,
+  "rv_c2c_21": 72.86220712972319,
+  "spread_rv5": 14.857094313606787,
+  "spread_c2c": -11.550214904626586,
+  "slope": 1.2799999999999923,
+  "earnings_history": [
+   {
+    "E": "2026-04-28",
+    "implied_move": 0.0791090787233307,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.1324479442792974,
+    "ratio": 1.6742445546927613
+   },
+   {
+    "E": "2026-07-29",
+    "implied_move": 0.0811345446158554,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.036064091672308285,
+    "ratio": 0.4444973696846337
+   }
+  ],
+  "median_ratio_8": 1.0593709621886975,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": true,
+  "verdict": "CHEAP",
+  "source": {
+   "iv30d": "screener 2026-10-02 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-03-13..2026-10-02 (122 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-09-03..2026-10-02 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-09-03..2026-10-02",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-10-02) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-09-03..2026-10-02 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-10-02) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-09-03..2026-10-02)",
+   "slope": "cboe_chain 2026-10-02 ATM IV at 2026-10-09 then 2026-10-16, vol points",
+   "earnings_history": "earnings_events <= 2026-07-29 + earnings_history/events.parquet <= 2026-07-29",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-10-02",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-10-02"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-10-09",
+   "strike": 113.0,
+   "mark": 6.375,
+   "mark_source": "cboe_chain 2026-10-02",
+   "tier": null
+  },
+  "box_1s_front": 6.375,
+  "box_1s_21": 19.816988328972407,
+  "atr14": 6.2615065991122005,
+  "gex_total": 43913258.0971,
+  "gex_sign": "+",
+  "zero_gamma": 120.0,
+  "zero_gamma_all_crossings": [
+   120.0
+  ],
+  "spot": 112.74,
+  "source": {
+   "straddle_front": "cboe_chain 2026-10-02",
+   "box_1s_front": "cboe_chain 2026-10-02",
+   "box_1s_21": "screener 2026-10-02",
+   "atr14": "earnings_history/bars <= 2026-10-02",
+   "gex_total": "cboe_chain 2026-10-02",
+   "gex_sign": "cboe_chain 2026-10-02",
+   "zero_gamma": "cboe_chain 2026-10-02",
+   "spot": "screener 2026-10-02"
+  },
+  "nulls": []
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.25,
+   "available": 10000000.0,
+   "date": "2026-10-02",
+   "decile": 0.12463417095569684,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.0526,
+   "dtc": 1.52,
+   "settlement": "2026-09-15",
+   "publication": "2026-09-28",
+   "position": 36165147.0
+  },
+  "beta_250": 3.1340487763736644,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-09-29",
+    "firm": "Deutsche Bank",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-29",
+    "firm": "Keefe, Bruyette & Woods",
+    "from": "Market Perform",
+    "to": "Market Perform",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-29",
+    "firm": "BTIG",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-09-30",
+    "firm": "Morgan Stanley",
+    "from": "Overweight",
+    "to": "Overweight",
+    "action": "reit"
+   },
+   {
+    "date": "2026-09-30",
+    "firm": "Deutsche Bank",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "reit"
+   },
+   {
+    "date": "2026-10-02",
+    "firm": "Wells Fargo",
+    "from": "",
+    "to": "Equal-Weight",
+    "action": "init"
+   }
+  ],
+  "analyst_n": 6,
+  "form4": {
+   "buys": 0,
+   "sells": 35,
+   "other": 24,
+   "rows": [
+    {
+     "date": "2026-10-01",
+     "name": "Bhatt Baiju",
+     "code": "M",
+     "shares": -822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Bhatt Baiju",
+     "code": "M",
+     "shares": 822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Loop Paula",
+     "code": "M",
+     "shares": -822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Loop Paula",
+     "code": "M",
+     "shares": 822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Treseder Oluwadara Johnson",
+     "code": "M",
+     "shares": -822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Treseder Oluwadara Johnson",
+     "code": "M",
+     "shares": 822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Zoellick Robert B.",
+     "code": "M",
+     "shares": -822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Zoellick Robert B.",
+     "code": "M",
+     "shares": 822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Malka Meyer",
+     "code": "M",
+     "shares": -822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "Malka Meyer",
+     "code": "M",
+     "shares": 822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "RUBINSTEIN JONATHAN",
+     "code": "M",
+     "shares": -822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-01",
+     "name": "RUBINSTEIN JONATHAN",
+     "code": "M",
+     "shares": 822.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-30",
+     "name": "Hegeman John William",
+     "code": "A",
+     "shares": 144.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-30",
+     "name": "Bhatt Baiju",
+     "code": "A",
+     "shares": 111.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-30",
+     "name": "Payne Christopher D",
+     "code": "A",
+     "shares": 211.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-30",
+     "name": "Malka Meyer",
+     "code": "A",
+     "shares": 144.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-30",
+     "name": "RUBINSTEIN JONATHAN",
+     "code": "A",
+     "shares": 333.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-30",
+     "name": "SEGAL SUSAN",
+     "code": "A",
+     "shares": 216.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": -240834.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -1302.0,
+     "price": 126.1408
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -239532.0,
+     "price": 125.3282
+    },
+    {
+     "date": "2026-09-22",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": 240834.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": -259166.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -11030.0,
+     "price": 126.1489
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "S",
+     "shares": -248136.0,
+     "price": 125.5528
+    },
+    {
+     "date": "2026-09-21",
+     "name": "Tenev Vladimir",
+     "code": "C",
+     "shares": 259166.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -200.0,
+     "price": 112.825
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -1800.0,
+     "price": 112.1811
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -1289.0,
+     "price": 111.0825
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -6032.0,
+     "price": 110.2586
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -1851.0,
+     "price": 109.2267
+    },
+    {
+     "date": "2026-09-15",
+     "name": "Verma Shiv",
+     "code": "S",
+     "shares": -300.0,
+     "price": 106.1767
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "C",
+     "shares": -43373.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -100.0,
+     "price": 116.26
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -6000.0,
+     "price": 115.5387
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -18889.0,
+     "price": 114.5114
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -15984.0,
+     "price": 113.7372
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "S",
+     "shares": -2400.0,
+     "price": 112.7717
+    },
+    {
+     "date": "2026-09-10",
+     "name": "Bhatt Baiju",
+     "code": "C",
+     "shares": 43373.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-09-08",
+     "name": "Treseder Oluwadara Johnson",
+     "code": "S",
+     "shares": -1875.0,
+     "price": 125.0
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -700.0,
+     "price": 124.6192
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -2700.0,
+     "price": 123.9133
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -3800.0,
+     "price": 122.996
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -800.0,
+     "price": 121.6575
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -400.0,
+     "price": 120.7725
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -900.0,
+     "price": 119.6022
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -300.0,
+     "price": 118.3733
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -200.0,
+     "price": 117.165
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -100.0,
+     "price": 115.84
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Gallagher Daniel Martin Jr",
+     "code": "S",
+     "shares": -100.0,
+     "price": 113.45
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -812.0,
+     "price": 124.5807
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -2700.0,
+     "price": 123.8826
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -3599.0,
+     "price": 122.9652
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -800.0,
+     "price": 121.6975
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -400.0,
+     "price": 120.6325
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -13208.0,
+     "price": 119.9285
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -300.0,
+     "price": 117.86
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -200.0,
+     "price": 116.28
+    },
+    {
+     "date": "2026-09-03",
+     "name": "Quirk Steven M.",
+     "code": "S",
+     "shares": -2397.0,
+     "price": 113.2475
+    }
+   ]
+  },
+  "vix": {
+   "vix": 15.31,
+   "vix3m": 18.01,
+   "vxn": 21.2,
+   "term": "contango",
+   "date": "2026-10-02"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-10-02",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-10-02",
+   "si": "short_interest (FINRA) settlement 2026-09-15, published 2026-09-28 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-10-02",
+   "analyst": "yfinance upgrades_downgrades <= 2026-10-02",
+   "form4": "finnhub /stock/insider-transactions <= 2026-10-02",
+   "vix": "index_vol 2026-10-02",
+   "regime": "_regime.classify_regime asof 2026-10-02",
+   "x2": "borrow (IBKR) 2026-10-02",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": 0.05374334157218574,
+  "ret_63": -0.04091880104733314,
+  "w52_pos": 0.544855806176478,
+  "flow_pct_universe": 0.16314614459900395,
+  "flow_pct_self": 8.73015873015873,
+  "vol_pct_universe": 81.0704960835509,
+  "vol_pct_self": 84.92063492063492,
+  "net_premium": -10030215.0,
+  "volume_ratio": 1.1876784810516552,
+  "universe_n": 5823,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-10-02",
+   "ret_63": "earnings_history/bars <= 2026-10-02",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-10-02",
+   "net_premium": "screener 2026-10-02",
+   "volume_ratio": "screener 2026-10-02",
+   "flow_pct_universe": "screener universe 2026-10-02",
+   "vol_pct_universe": "screener universe 2026-10-02",
+   "flow_pct_self": "screener 63 sessions to 2026-10-02",
+   "vol_pct_self": "screener 63 sessions to 2026-10-02",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [
+  {
+   "family": "IB",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 75.0,
+     "side": 1,
+     "mark": 0.11,
+     "half_spread": 0.009999999999999995,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    },
+    {
+     "right": "P",
+     "strike": 113.0,
+     "side": -1,
+     "mark": 7.6,
+     "half_spread": 0.1499999999999999,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    },
+    {
+     "right": "C",
+     "strike": 113.0,
+     "side": -1,
+     "mark": 7.75,
+     "half_spread": 0.09999999999999964,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    },
+    {
+     "right": "C",
+     "strike": 150.0,
+     "side": 1,
+     "mark": 0.675,
+     "half_spread": 0.034999999999999976,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    }
+   ],
+   "expiry": "2026-10-30",
+   "dte_cal": 28,
+   "mark": 14.565,
+   "mark_source": "cboe_chain 2026-10-02",
+   "max_loss": 2343.5,
+   "credit_debit": "credit",
+   "breakevens": [
+    98.435,
+    127.565
+   ],
+   "p_inside": 0.5038048201956791,
+   "p_touch": null,
+   "cost": 19.82799999999997,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "rank": 1
+  },
+  {
+   "family": "IC",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 75.0,
+     "side": 1,
+     "mark": 0.11,
+     "half_spread": 0.009999999999999995,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    },
+    {
+     "right": "P",
+     "strike": 94.0,
+     "side": -1,
+     "mark": 1.32,
+     "half_spread": 0.030000000000000027,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    },
+    {
+     "right": "C",
+     "strike": 132.0,
+     "side": -1,
+     "mark": 2.3200000000000003,
+     "half_spread": 0.1399999999999999,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    },
+    {
+     "right": "C",
+     "strike": 150.0,
+     "side": 1,
+     "mark": 0.675,
+     "half_spread": 0.034999999999999976,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    }
+   ],
+   "expiry": "2026-10-30",
+   "dte_cal": 28,
+   "mark": 2.8550000000000004,
+   "mark_source": "cboe_chain 2026-10-02",
+   "max_loss": 1614.5,
+   "credit_debit": "credit",
+   "breakevens": [
+    91.145,
+    134.855
+   ],
+   "p_inside": 0.6971684853810938,
+   "p_touch": null,
+   "cost": 15.155999999999995,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "rank": 2
+  },
+  {
+   "family": "SS",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 113.0,
+     "side": -1,
+     "mark": 7.6,
+     "half_spread": 0.1499999999999999,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    },
+    {
+     "right": "C",
+     "strike": 113.0,
+     "side": -1,
+     "mark": 7.75,
+     "half_spread": 0.09999999999999964,
+     "mark_source": "cboe_chain 2026-10-02",
+     "expiry": "2026-10-30"
+    }
+   ],
+   "expiry": "2026-10-30",
+   "dte_cal": 28,
+   "mark": 15.35,
+   "mark_source": "cboe_chain 2026-10-02",
+   "max_loss": null,
+   "credit_debit": "credit",
+   "breakevens": [
+    97.65,
+    128.35
+   ],
+   "p_inside": 0.5271348842903169,
+   "p_touch": null,
+   "cost": 15.899999999999974,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "stress_loss_3s": 4234.508876999565,
+   "rank": 3
+  }
+ ],
+ "ledger_rows": [
+  {
+   "policy_id": "sheet-1.0",
+   "role": "exploration",
+   "gate_verdict": "X1",
+   "structure": "IB",
+   "written": true,
+   "reason": null
+  }
+ ],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/HOOD/2026-10-02/inputs",
+ "nulls": [
+  {
+   "field": "events.earnings.confirmed",
+   "reason": "the earnings sources disagree on the session: finnhub 2026-11-03 amc, screener 2026-10-27 postmarket, yfinance 2026-10-27 None"
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  }
+ ]
+}
