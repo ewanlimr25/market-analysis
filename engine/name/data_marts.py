@@ -19,6 +19,7 @@ from datetime import date, datetime, timezone
 import pandas as pd
 
 from engine import config
+from engine import screener as SC
 from engine.mart import borrow as borrow_mart
 from engine.mart import cboe_chain, earnings_history, index_vol, short_interest, store
 from engine.name import data_sources as src
@@ -46,12 +47,13 @@ def _read_paths(con, table: str, days: list[date], where: str, params: list) -> 
 # --- Screener (DESIGN/70 §1 rows 2 and 10) --------------------------------------------------------
 
 def screener_day(con, d: date, stocks_dir: str = config.STOCKS) -> tuple[pd.DataFrame, str, str | None]:
-    """Every screener row of session `d`, all 52 columns (the sheet's spine and its universe)."""
+    """Every screener row of session `d`, all its columns (the sheet's spine and its universe), the
+    old names filled in for an export in the 2026-10-12 format (`engine.screener`)."""
     path = sc_data.screener_path(d, stocks_dir)
     source = f"screener {d.isoformat()}"
     if not os.path.exists(path):
         return pd.DataFrame(), source, f"no screener export for {d.isoformat()}"
-    df = con.execute(f"SELECT * FROM read_parquet('{path}')").df()
+    df = SC.with_old_names(con.execute(f"SELECT * FROM read_parquet('{path}')").df())
     return df, source, None
 
 
@@ -83,10 +85,10 @@ def screener_history(con, ticker: str, d: date, sessions: int, columns,
     files, restrict it to the named session paths the way `_read_paths` does.
     """
     glob = os.path.join(stocks_dir, config.SCREENER_GLOB)
-    cols = ", ".join(columns)
+    scan = f"read_parquet('{glob}', union_by_name=true)"
     try:
         df = con.execute(
-            f"SELECT {cols} FROM read_parquet('{glob}', union_by_name=true) "
+            f"SELECT {SC.select_list(con, scan, columns)} FROM {scan} "
             f"WHERE ticker = ? AND date <= DATE '{d.isoformat()}' ORDER BY date DESC LIMIT {sessions}",
             [ticker]).df()
     except Exception as exc:

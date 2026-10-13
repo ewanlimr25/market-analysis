@@ -8,6 +8,7 @@ from typing import Iterable
 
 import pandas as pd
 
+from engine import screener as SC
 from engine.config import PRICES, SCREENER_FILE, STOCKS
 from engine.mart import store
 from engine.strategies.sa_data import as_dates
@@ -24,12 +25,14 @@ def screener_path(d: date, stocks_dir: str = STOCKS) -> str:
 
 
 def load_screener_rows(con, d: date, stocks_dir: str = STOCKS) -> pd.DataFrame:
-    """The screener export of session `d`, `SCREENER_COLUMNS` only; empty when the file is absent."""
+    """The screener export of session `d`, `SCREENER_COLUMNS` only, in either export format
+    (`engine.screener`); empty when the file is absent."""
     import os
     path = screener_path(d, stocks_dir)
     if not os.path.exists(path):
         return pd.DataFrame(columns=SCREENER_COLUMNS)
-    df = con.execute(f"SELECT {', '.join(SCREENER_COLUMNS)} FROM read_parquet('{path}')").df()
+    source = f"read_parquet('{path}')"
+    df = con.execute(f"SELECT {SC.select_list(con, source, SCREENER_COLUMNS)} FROM {source}").df()
     df["date"] = pd.to_datetime(df["date"]).dt.date
     df["next_earnings_date"] = pd.to_datetime(df["next_earnings_date"], errors="coerce").dt.date
     return df

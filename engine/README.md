@@ -32,6 +32,7 @@ make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"   # the 
 |---|---|
 | `config.py` | paths, session windows, marking constants, `SAParams` / `SizingParams` (frozen), seasons, the go/no-go bar |
 | `calendar.py` | NYSE calendar 2026–2027 (`next_session`, `prev_session`, `trading_days_between`) |
+| `screener.py` | UW's Stock Screener export under the engine's column names in either format: from 2026-10-12 `is_index` is `issue_type = 'Index'` and `total_volume` is `stock_volume` (`select_list` for a DuckDB scan, `with_old_names` for a frame; D37) |
 | `mart/daily_contract.py` | one row per (contract, day) from All Options + Hot Chains; integer-scaled sums so a rebuild is bit-for-bit |
 | `book.py` | `make book`: the paper book on one page from the three forward ledgers -- open champion positions with strikes and risk, closed net $ and return on risk per structure, each trade once (variants merged, exploration only counted); read-only |
 | `mart/earnings_events.py` | one row per (ticker, print), E1's construction reproduced exactly (3,260 events); `provisional_day` is S-A's pre-night view (labelled timing, nothing after `pre`), `refresh_final` rewrites the trailing complete partitions nightly (D28) |

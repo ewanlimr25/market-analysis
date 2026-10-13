@@ -16,6 +16,10 @@ def g(d,p): return sorted(glob.glob(f"{S}/{d}/{p}"))
 SCR=g("Stock Screener","stock-screener-*.parquet"); DP=g("Dark pool","dp-eod-report-*.parquet")
 OI=g("OI changes","chain-oi-changes-*.parquet"); HC=g("Hot Option Chains","hot-chains-*.parquet")
 AO=g("All Options","bot-eod-report-*.parquet")
+# UW's screener export renamed total_volume to stock_volume on 2026-10-12 (findings D37): one scan reads both
+SCR_SCAN=f"read_parquet({SCR!r}, union_by_name=true)"
+_scr_cols={r[0] for r in con.execute(f"DESCRIBE SELECT * FROM {SCR_SCAN}").fetchall()}
+TOTAL_VOLUME="COALESCE("+", ".join(c for c in ("total_volume","stock_volume") if c in _scr_cols)+")"
 
 # ---- spine: screener-derived factors ----
 con.execute(f"""CREATE TEMP TABLE spine AS
@@ -23,13 +27,13 @@ SELECT date, ticker, sector, marketcap, close, prev_close,
   put_call_ratio AS pcr, iv_rank, iv30d, iv30d_1d, iv30d_1w, iv30d_1m,
   implied_move_perc, volatility, net_call_premium, net_put_premium,
   call_open_interest AS call_oi, put_open_interest AS put_oi,
-  total_volume, avg30_volume, week_52_high AS w52h, week_52_low AS w52l,
+  {TOTAL_VOLUME} AS total_volume, avg30_volume, week_52_high AS w52h, week_52_low AS w52l,
   bullish_premium, bearish_premium, call_volume, put_volume,
   -- derived
   CASE WHEN w52h>w52l THEN (close-week_52_low)/(week_52_high-week_52_low) END AS pct_52w_range,
   (iv30d - iv30d_1w) AS iv_mom_1w,
   (iv30d - iv30d_1m) AS iv_mom_1m,
-  total_volume/nullif(avg30_volume,0) AS vol_accel,
+  {TOTAL_VOLUME}/nullif(avg30_volume,0) AS vol_accel,
   close/nullif(prev_close,0)-1 AS gap,
   -- a market cap at or below zero is unknown, not a value: UW exported negative caps for seven ETFs on
   -- 2026-10-06/07, and ln() of EEM's, IEMG's, ACWX's or EMXC's stopped this build (findings D34)
@@ -39,7 +43,7 @@ SELECT date, ticker, sector, marketcap, close, prev_close,
   ln(CASE WHEN marketcap>0 THEN marketcap END) AS log_mcap,
   (bullish_premium-bearish_premium)/nullif(bullish_premium+bearish_premium,0) AS bull_bear_skew,
   call_volume/nullif(put_volume,0) AS cv_pv
-FROM read_parquet({SCR!r})
+FROM {SCR_SCAN}
 WHERE close>=5 AND close*avg30_volume>=50e6""")
 
 # ---- dark pool agg per ticker-day ----

@@ -11,6 +11,7 @@ from datetime import date
 import duckdb
 import pandas as pd
 
+from engine import screener as SC
 from engine.config import SCREENER_GLOB, STOCKS
 from engine.mart import store
 
@@ -26,13 +27,14 @@ SCREENER_COLUMNS = (
 
 
 def load_screener_panel(dates: list[date], stocks_dir: str = STOCKS) -> pd.DataFrame:
-    """One row per (ticker, date) for exactly `dates`, `SCREENER_COLUMNS` only."""
+    """One row per (ticker, date) for exactly `dates`, `SCREENER_COLUMNS` only, across the export's
+    2026-10-12 format change (`engine.screener`)."""
     if not dates:
         return pd.DataFrame({c: pd.Series(dtype=object) for c in SCREENER_COLUMNS})
     con = duckdb.connect()
     date_list = ", ".join(f"DATE '{d.isoformat()}'" for d in sorted(set(dates)))
-    cols = ", ".join(SCREENER_COLUMNS)
-    q = (f"SELECT {cols} FROM read_parquet('{stocks_dir}/{SCREENER_GLOB}') "
+    source = f"read_parquet('{stocks_dir}/{SCREENER_GLOB}', union_by_name=true)"
+    q = (f"SELECT {SC.select_list(con, source, SCREENER_COLUMNS)} FROM {source} "
          f"WHERE date IN ({date_list})")
     df = con.execute(q).df()
     df["date"] = pd.to_datetime(df["date"]).dt.date
