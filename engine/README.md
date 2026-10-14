@@ -31,7 +31,7 @@ make adjudicate ARGS="basket --policy wb-1.0 [--basket LONG|SHORT|VOL]"   # the 
 | module | what |
 |---|---|
 | `config.py` | paths, session windows, marking constants, `SAParams` / `SizingParams` (frozen), seasons, the go/no-go bar |
-| `calendar.py` | NYSE calendar 2026–2027 (`next_session`, `prev_session`, `trading_days_between`) |
+| `calendar.py` | NYSE calendar 2026–2027 (`next_session`, `prev_session`, `trading_days_between`) and `session_closed`, the rule for filing anything under a session (from 16:15 New York; D35, D36, D38) |
 | `screener.py` | UW's Stock Screener export under the engine's column names in either format: from 2026-10-12 `is_index` is `issue_type = 'Index'` and `total_volume` is `stock_volume` (`select_list` for a DuckDB scan, `with_old_names` for a frame; D37) |
 | `mart/daily_contract.py` | one row per (contract, day) from All Options + Hot Chains; integer-scaled sums so a rebuild is bit-for-bit |
 | `book.py` | `make book`: the paper book on one page from the three forward ledgers -- open champion positions with strikes and risk, closed net $ and return on risk per structure, each trade once (variants merged, exploration only counted); read-only |
@@ -89,7 +89,7 @@ The S-A forward ledger opens 2026-10-01 and the S-B ledger (`ledger/sb/`) on 202
 The backtest write-ups live in `~/Development/findings/market-analysis/RESEARCH/45-sa-backtest.md` (S-A) and
 `RESEARCH/46-sb-backtest.md` (S-B); the S-B parameters are frozen by `tests/test_sb_frozen_params.py`.
 
-| `watch/bars.py` | cached daily OHLCV, reusing `mart/earnings_history/bars/` read-only, refreshing into its own cache `data/mart/watch/bars/` via `scripts/chart.py`; a caller that names an `as_of` session gets a cache that reaches it (tail refresh, then `chart.session_bar` for the session Yahoo's multi-day array has not published yet); weekly resample |
+| `watch/bars.py` | cached daily OHLCV, reusing `mart/earnings_history/bars/` read-only, refreshing into its own cache `data/mart/watch/bars/` via `scripts/chart.py`; a caller that names an `as_of` session gets a cache that reaches it (tail refresh, then `chart.session_bar` for the session Yahoo's multi-day array has not published yet); never files a session still trading: today never from the multi-day array, and from the single-day endpoint only from 16:15 New York (`calendar.session_closed`, D38); weekly resample |
 | `watch/indicators.py` | Wilder RSI/ATR series, ATR-zigzag pivots (2x reversal), swing structure, anchored VWAP, crossed-within, 60-session/50-bin volume profile (POC + 70% value area), RSI bullish divergence |
 | `watch/conditions.py` | the 20 watch-basket conditions as null-safe pure predicates, thresholds as module constants (DESIGN/110 §2; C-DIV-D and C-POC-A/C-POC-A-LOSS added 2026-09-07 evening) |
 | `watch/basket.py` | `stacks`/`baskets` (LONG/SHORT/VOL/CONFLICT, DESIGN/110 §3) and `assign_episodes`/`episode_count` (the 21-session re-entry rule, §4), generic over baskets, conditions and counts |

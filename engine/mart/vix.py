@@ -17,27 +17,25 @@ market-analysis D36). `fetch_vix` merges into the file (a re-fetched session win
 no longer returns are kept) and never files today from Yahoo's multi-day array, which serves the live
 value while the session trades and a null close for hours after it (`chart.session_bar`); today's close
 comes from the single-day endpoint, once Yahoo itself reports the session closed and the New York clock
-agrees (`cboe_chain.session_closed`: from 16:15, VIX's own close).
+agrees (`calendar.session_closed`: from 16:15, VIX's own close).
 """
 from __future__ import annotations
 
 import os
 import sys
 from datetime import date, datetime
-from zoneinfo import ZoneInfo
 
 import duckdb
 import pandas as pd
 
 from engine import config
-from engine.mart.cboe_chain import session_closed
+from engine.calendar import NEW_YORK, session_closed
 
 VIX_TICKER = "^VIX"
 DEFAULT_RANGE = "1y"
 E4_VRP_FALLBACK = os.path.expanduser(
     "~/Development/findings/market-analysis/artifacts/vol/out/e4_index_vrp.parquet")
 COLUMNS = ["date", "vix"]
-NEW_YORK = ZoneInfo("America/New_York")
 
 
 def vix_path() -> str:

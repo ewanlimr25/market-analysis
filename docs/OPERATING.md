@@ -30,7 +30,7 @@ make intraday-rv DAYS=5                          # the truth set and intraday_rv
 make ticker-batch DATE=YYYY-MM-DD                # the Friday just closed, never empty: one sheet per watch name, the exploration book (§6b)
 make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the marked backtest -> data/backtest/sb_report.md (read §8)
 make backtest-sc && make report-sc               # S-C panel run + §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
-make test                                        # every unit test (1,261 at 2026-10-12); also proves no frozen parameter moved
+make test                                        # every unit test (1,265 at 2026-10-12); also proves no frozen parameter moved
 make backtest && make report                     # S-A; its E1 line reads N match False once the mart runs past the E1 artifact (expected)
 git add data/backtest analyses/ticker ledger/name && git commit -m "weekly: YYYY-MM-DD" && git push
 ```

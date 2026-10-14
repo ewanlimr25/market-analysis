@@ -19,6 +19,13 @@ conditions as null for all 2,041 universe names. So callers that need a specific
      `chart.session_bar` -- Yahoo publishes the current session into its multi-day arrays hours
      late, long after the nightly runs (`scripts/chart.py:session_bar`).
 
+**Never a session still trading** (findings market-analysis D38). Yahoo's multi-day array carries the live,
+partial bar while the session trades, and a cache that holds one already reaches the night, so step 1 would
+serve it as the close: on 2026-10-12 a ticker batch run at 10:20 for that day filed its 10:20 bar for the 34
+watch names and SPY. So the multi-day array never supplies today, and step 3 asks for today only once the
+session has closed (`calendar.session_closed`: from 16:15 New York, D35's rule); the next night's tail
+refresh then brings Yahoo's official bar for it.
+
 Every loader in this package fails soft (`DESIGN/110` §1: "a condition whose input is missing is
 null, never false"): a fetch failure returns whatever was already cached -- an empty frame when
 that is nothing -- and never an exception. A genuine failure is not written, so it is retried on
@@ -28,11 +35,12 @@ from __future__ import annotations
 
 import os
 import sys
-from datetime import date
+from datetime import date, datetime
 
 import pandas as pd
 
 from engine import config
+from engine.calendar import NEW_YORK, session_closed
 
 EARNINGS_HISTORY_BARS_DIR = os.path.join(config.MART, "earnings_history", "bars")
 WATCH_DIR = os.path.join(config.MART, "watch")
@@ -185,19 +193,26 @@ def _chart():
 
 
 def _fetch_daily(ticker: str, rng: str) -> pd.DataFrame | None:
-    """Yahoo's multi-day daily array. None when the CALL failed (not cached, retried next time);
-    an empty frame is a real answer and is cached."""
+    """Yahoo's multi-day daily array, without today's bar (module doc: never a session still
+    trading). None when the CALL failed (not cached, retried next time); an empty frame is a real
+    answer and is cached."""
     try:
         rows = _chart().bars(ticker, rng)
     except Exception as exc:  # noqa: BLE001 -- one bad ticker must not abort a nightly/panel run
         print(f"[watch.bars] Yahoo fetch failed for {ticker}: {exc}")
         return None
-    return _frame(rows)
+    frame = _frame(rows)
+    return frame[frame["date"] < _today()].reset_index(drop=True) if not frame.empty else frame
+
+
+def _now() -> datetime:
+    """Now in New York; indirected so a test can pin it."""
+    return datetime.now(NEW_YORK)
 
 
 def _today() -> date:
-    """Indirected so a test can pin it; `_fetch_session` is the only caller."""
-    return date.today()
+    """Today in New York; indirected so a test can pin it."""
+    return _now().date()
 
 
 def _fetch_session(ticker: str, as_of: date) -> pd.DataFrame | None:
@@ -205,9 +220,10 @@ def _fetch_session(ticker: str, as_of: date) -> pd.DataFrame | None:
 
     Only TODAY is reachable this way -- the endpoint always answers about the current session --
     so a backfill or a retro panel returns before the request rather than paying a round-trip per
-    ticker for a result that would be discarded. The returned bar's date is checked even then.
+    ticker for a result that would be discarded, and so does a call before the session has closed
+    (D38). The returned bar's date is checked even then.
     """
-    if as_of != _today():
+    if as_of != _today() or not session_closed(as_of, _now()):
         return None
     try:
         bar = _chart().session_bar(ticker)

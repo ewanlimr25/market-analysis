@@ -8,8 +8,9 @@ hard-coded for 2026 and 2027 and cross-checked against the price panel in
 """
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 from functools import lru_cache
+from zoneinfo import ZoneInfo
 
 import numpy as np
 
@@ -24,6 +25,8 @@ NYSE_HOLIDAYS: tuple[date, ...] = (
 EARLY_CLOSES: tuple[date, ...] = (date(2026, 7, 2), date(2026, 11, 27), date(2026, 12, 24))
 CALENDAR_START = date(2025, 1, 1)
 CALENDAR_END = date(2027, 12, 31)
+NEW_YORK = ZoneInfo("America/New_York")
+SESSION_CLOSED_AT = time(16, 15)    # New York: the 16:00 close plus CBOE's 15-minute delay, and VIX's own close
 
 
 @lru_cache(maxsize=1)
@@ -85,3 +88,10 @@ def parse_date(s: str | date) -> date:
 
 def shift_days(d: date, n: int) -> date:
     return d + timedelta(days=n)
+
+
+def session_closed(d: date, now: datetime) -> bool:
+    """Whether session `d` has closed at `now`: any earlier session, or `d` itself from 16:15 New York time.
+    Nothing is filed under `d` before then: a CBOE chain (findings D35), a VIX close (D36), a watch-basket bar (D38)."""
+    t = now.astimezone(NEW_YORK)
+    return d < t.date() or (d == t.date() and t.time() >= SESSION_CLOSED_AT)

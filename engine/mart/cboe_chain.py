@@ -37,13 +37,13 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from datetime import date, datetime, time, timezone
+from datetime import date, datetime, timezone
 from typing import Callable, Iterable
-from zoneinfo import ZoneInfo
 
 import pandas as pd
 
 from engine import config
+from engine.calendar import session_closed      # D35's rule, kept in the calendar since D38
 
 log = logging.getLogger(__name__)
 
@@ -53,8 +53,6 @@ FETCH_TIMEOUT_S = 20
 
 CBOE_CHAIN_DIR = os.path.join(config.MART, "cboe_chain")
 SOURCE = "cboe_delayed"
-NEW_YORK = ZoneInfo("America/New_York")
-SESSION_CLOSED_AT = time(16, 15)    # New York time: the 16:00 close plus CBOE's 15-minute delay
 
 # OCC option code: root (1-6 letters), YYMMDD, C or P, strike * 1000 (8 digits, no decimal point).
 OCC_RE = re.compile(r"^(?P<root>[A-Z]{1,6})(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})(?P<right>[CP])(?P<strike>\d{8})$")
@@ -117,13 +115,6 @@ def chain_asof_date(payload: dict) -> date | None:
         return datetime.fromisoformat(lt).date()
     except ValueError:
         return None
-
-
-def session_closed(d: date, now: datetime) -> bool:
-    """Whether session `d` has closed in CBOE's delayed quotes at `now`: any earlier session, or `d` itself
-    from 16:15 New York time. Only then may a chain be filed under `d`."""
-    t = now.astimezone(NEW_YORK)
-    return d < t.date() or (d == t.date() and t.time() >= SESSION_CLOSED_AT)
 
 
 def _underlying_price(data: dict) -> float | None:

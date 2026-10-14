@@ -4,12 +4,13 @@ from __future__ import annotations
 
 import os
 import sys
-from datetime import date
+from datetime import date, datetime
 
 import pandas as pd
 import pytest
 
 from engine import config
+from engine.calendar import NEW_YORK
 from engine.watch import bars as B
 
 pytestmark = pytest.mark.unit
@@ -398,3 +399,63 @@ def test_load_daily_bars_rejects_as_of_and_force_passed_positionally(tmp_path, m
     _mart(tmp_path, monkeypatch)
     with pytest.raises(TypeError):
         B.load_daily_bars("AI", "10y", True)
+
+
+# ---- a session still trading is never filed (findings market-analysis D38) ---------------------------
+# On 2026-10-12 a ticker batch run at 10:20 without DATE asked for that day's bars: the tail refresh merged
+# Yahoo's live 10:20 bar for the 34 watch names and SPY into this cache, and the cache, already reaching
+# the night, would have served it to the nightly as 10-12's close. Today now comes only from the
+# single-day endpoint, and only once the session has closed (calendar.session_closed: from 16:15 New York).
+OCT9, OCT12 = date(2026, 10, 9), date(2026, 10, 12)
+
+
+def _at(monkeypatch, hour: int, minute: int) -> None:
+    monkeypatch.setattr(B, "_now", lambda: datetime(2026, 10, 12, hour, minute, tzinfo=NEW_YORK))
+
+
+def test_a_refresh_during_the_session_never_files_the_live_bar(tmp_path, monkeypatch):
+    _mart(tmp_path, monkeypatch)
+    _seed(B.watch_bars_path("SPY"), [date(2026, 10, 8), OCT9], [771.0, 772.0])
+    chart = _FakeChart(daily=[_row("2026-10-09", 772.0), _row("2026-10-12", 778.26, volume=3_285_255)])
+    monkeypatch.setitem(sys.modules, "chart", chart)
+    _at(monkeypatch, 10, 20)
+
+    out = B.load_daily_bars("SPY", as_of=OCT12)
+
+    assert list(out["date"]) == [date(2026, 10, 8), OCT9]
+    assert list(B._read(B.watch_bars_path("SPY"))["date"])[-1] == OCT9
+    assert chart.session_calls == []                     # nothing to ask before the session has closed
+
+
+def test_a_read_naming_no_session_never_files_the_live_bar_either(tmp_path, monkeypatch):
+    _mart(tmp_path, monkeypatch)
+    monkeypatch.setitem(sys.modules, "chart", _FakeChart(daily=[_row("2026-10-09", 772.0), _row("2026-10-12", 778.26)]))
+    _at(monkeypatch, 10, 20)
+
+    assert list(B.load_daily_bars("SPY")["date"]) == [OCT9]
+    assert list(B._read(B.watch_bars_path("SPY"))["date"]) == [OCT9]
+
+
+def test_after_the_close_today_comes_from_the_single_day_endpoint_not_the_multi_day_array(tmp_path, monkeypatch):
+    _mart(tmp_path, monkeypatch)
+    _seed(B.watch_bars_path("SPY"), [OCT9], [772.0])
+    chart = _FakeChart(daily=[_row("2026-10-09", 772.0), _row("2026-10-12", 778.26)],
+                       session=_row("2026-10-12", 775.5, volume=60_000_000))
+    monkeypatch.setitem(sys.modules, "chart", chart)
+    _at(monkeypatch, 20, 30)
+
+    out = B.load_daily_bars("SPY", as_of=OCT12)
+
+    assert (out["date"].iloc[-1], out["close"].iloc[-1], out["volume"].iloc[-1]) == (OCT12, 775.5, 60_000_000)
+
+
+def test_a_single_day_bar_is_not_taken_before_16_15_new_york(tmp_path, monkeypatch):
+    # Yahoo calls the session closed at 16:00; the engine's rule for anything filed under today is 16:15 (D35).
+    _mart(tmp_path, monkeypatch)
+    _seed(B.watch_bars_path("SPY"), [OCT9], [772.0])
+    chart = _FakeChart(daily=[_row("2026-10-09", 772.0)], session=_row("2026-10-12", 775.5))
+    monkeypatch.setitem(sys.modules, "chart", chart)
+    _at(monkeypatch, 16, 5)
+
+    assert list(B.load_daily_bars("SPY", as_of=OCT12)["date"]) == [OCT9]
+    assert chart.session_calls == []
