@@ -1,0 +1,6477 @@
+{
+ "schema_version": "d1.6",
+ "report_kind": "engine-daily",
+ "date": "2026-10-16",
+ "season": "S3",
+ "preflight": {
+  "date": "2026-10-16",
+  "panel": {
+   "All Options": {
+    "present": true,
+    "rows": 14568754
+   },
+   "Dark pool": {
+    "present": true,
+    "rows": 513126
+   },
+   "Hot Option Chains": {
+    "present": true,
+    "rows": 36220
+   },
+   "OI changes": {
+    "present": true,
+    "rows": 306240
+   },
+   "Stock Screener": {
+    "present": true,
+    "rows": 5999
+   }
+  },
+  "truth_set": {
+   "prices": {
+    "max_date": "2026-10-09",
+    "stale_vs_trade_date": true
+   },
+   "returns": {
+    "max_date": "2026-10-09",
+    "stale_vs_trade_date": true
+   },
+   "features": {
+    "max_date": "2026-10-09",
+    "stale_vs_trade_date": true
+   }
+  },
+  "ok": false,
+  "warnings": [
+   "prices.parquet ends 2026-10-09, BEFORE the 2026-10-16 trade date -- any lane reading it gets a stale regime/factor read. Rebuild: python3 scripts/truthset/build_prices.py",
+   "returns.parquet ends 2026-10-09, BEFORE the 2026-10-16 trade date -- any lane reading it gets a stale regime/factor read. Rebuild: python3 scripts/truthset/build_returns.py",
+   "features.parquet ends 2026-10-09, BEFORE the 2026-10-16 trade date -- any lane reading it gets a stale regime/factor read. Rebuild: python3 scripts/truthset/build_features.py"
+  ]
+ },
+ "mart": {
+  "daily_contract_rows": 372303,
+  "earnings_events_rows": 25
+ },
+ "candidates": [
+  {
+   "ticker": "CLF",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-10-23T00:00:00.000",
+   "k": 12.0,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 2,
+   "notional_usd": 2419.0,
+   "credit_entry": 1.5313712293,
+   "debit_exit": null,
+   "gross_usd": null,
+   "entry_cost_usd": 15.8045929636,
+   "exit_cost_usd": null,
+   "cost_usd": null,
+   "net_usd": null,
+   "n_touches": 4,
+   "gross_pct": null,
+   "cost_pct": null,
+   "net_pct": null,
+   "credit_net_pct": 0.1200784014,
+   "stress_loss_usd": 380.2523770743,
+   "risk_usd": 760.5047541486,
+   "straddle_over_implied": 0.8613056102,
+   "exit_tier_max": null,
+   "entry_tier_max": 1,
+   "model_exit": null,
+   "model_entry": false,
+   "dte": 5,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"CLF261023C00012000\", \"option_type\": \"call\", \"strike\": 12.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 0.7890771637122002, \"entry_spread\": 0.08970129718456726, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"CLF261023P00012000\", \"option_type\": \"put\", \"strike\": 12.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 0.7422940655447299, \"entry_spread\": 0.0825342506643047, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "CLF261023C00012000",
+   "call_entry": 0.7890771637,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.0897012972,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "CLF261023P00012000",
+   "put_entry": 0.7422940655,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.0825342507,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Basic Materials",
+   "mcap_bucket": "2-10B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.147,
+   "spot": 12.095,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.76,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "gate_verdict": "PASS",
+   "variant": "A1",
+   "cap_pass": true,
+   "cap_rank": 1
+  },
+  {
+   "ticker": "FITB",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-11-20T00:00:00.000",
+   "k": 50.0,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 2,
+   "notional_usd": 10087.0,
+   "credit_entry": 3.546025641,
+   "debit_exit": null,
+   "gross_usd": null,
+   "entry_cost_usd": 17.6769168552,
+   "exit_cost_usd": null,
+   "cost_usd": null,
+   "net_usd": null,
+   "n_touches": 4,
+   "gross_pct": null,
+   "cost_pct": null,
+   "net_pct": null,
+   "credit_net_pct": 0.0685563806,
+   "stress_loss_usd": 462.4444358974,
+   "risk_usd": 924.8888717949,
+   "straddle_over_implied": 1.3020152969,
+   "exit_tier_max": null,
+   "entry_tier_max": 1,
+   "model_exit": null,
+   "model_entry": false,
+   "dte": 25,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"FITB261120C00050000\", \"option_type\": \"call\", \"strike\": 50.0, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 2.115, \"entry_spread\": 0.041667375, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"FITB261120P00050000\", \"option_type\": \"put\", \"strike\": 50.0, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 1.431025641025641, \"entry_spread\": 0.04377466666666667, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "FITB261120C00050000",
+   "call_entry": 2.115,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.041667375,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "FITB261120P00050000",
+   "put_entry": 1.431025641,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.0437746667,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Financial Services",
+   "mcap_bucket": "10-50B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.054,
+   "spot": 50.435,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.277,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "gate_verdict": "PASS",
+   "variant": "A1",
+   "cap_pass": true,
+   "cap_rank": 2
+  },
+  {
+   "ticker": "CLF",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-10-23T00:00:00.000",
+   "k": 12.0,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 2,
+   "notional_usd": 2419.0,
+   "credit_entry": 1.5313712293,
+   "debit_exit": null,
+   "gross_usd": null,
+   "entry_cost_usd": 15.8045929636,
+   "exit_cost_usd": null,
+   "cost_usd": null,
+   "net_usd": null,
+   "n_touches": 4,
+   "gross_pct": null,
+   "cost_pct": null,
+   "net_pct": null,
+   "credit_net_pct": 0.1200784014,
+   "stress_loss_usd": 380.2523770743,
+   "risk_usd": 760.5047541486,
+   "straddle_over_implied": 0.8613056102,
+   "exit_tier_max": null,
+   "entry_tier_max": 1,
+   "model_exit": null,
+   "model_entry": false,
+   "dte": 5,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"CLF261023C00012000\", \"option_type\": \"call\", \"strike\": 12.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 0.7890771637122002, \"entry_spread\": 0.08970129718456726, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"CLF261023P00012000\", \"option_type\": \"put\", \"strike\": 12.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 0.7422940655447299, \"entry_spread\": 0.0825342506643047, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "CLF261023C00012000",
+   "call_entry": 0.7890771637,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.0897012972,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "CLF261023P00012000",
+   "put_entry": 0.7422940655,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.0825342507,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Basic Materials",
+   "mcap_bucket": "2-10B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.147,
+   "spot": 12.095,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.76,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "gate_verdict": "PASS",
+   "variant": "A2",
+   "cap_pass": true,
+   "cap_rank": 1
+  },
+  {
+   "ticker": "FITB",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-11-20T00:00:00.000",
+   "k": 50.0,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 2,
+   "notional_usd": 10087.0,
+   "credit_entry": 3.546025641,
+   "debit_exit": null,
+   "gross_usd": null,
+   "entry_cost_usd": 17.6769168552,
+   "exit_cost_usd": null,
+   "cost_usd": null,
+   "net_usd": null,
+   "n_touches": 4,
+   "gross_pct": null,
+   "cost_pct": null,
+   "net_pct": null,
+   "credit_net_pct": 0.0685563806,
+   "stress_loss_usd": 462.4444358974,
+   "risk_usd": 924.8888717949,
+   "straddle_over_implied": 1.3020152969,
+   "exit_tier_max": null,
+   "entry_tier_max": 1,
+   "model_exit": null,
+   "model_entry": false,
+   "dte": 25,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"FITB261120C00050000\", \"option_type\": \"call\", \"strike\": 50.0, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 2.115, \"entry_spread\": 0.041667375, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"FITB261120P00050000\", \"option_type\": \"put\", \"strike\": 50.0, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 1.431025641025641, \"entry_spread\": 0.04377466666666667, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "FITB261120C00050000",
+   "call_entry": 2.115,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.041667375,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "FITB261120P00050000",
+   "put_entry": 1.431025641,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.0437746667,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Financial Services",
+   "mcap_bucket": "10-50B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.054,
+   "spot": 50.435,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.277,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "gate_verdict": "PASS",
+   "variant": "A2",
+   "cap_pass": true,
+   "cap_rank": 2
+  }
+ ],
+ "suppressed": [
+  {
+   "ticker": "DX",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "variant": "A1",
+   "first_fail": "F5",
+   "sector": "Real Estate",
+   "mcap_bucket": "2-10B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.077,
+   "spot": 10.925,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.247,
+   "iv30d_post": null
+  },
+  {
+   "ticker": "DX",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "variant": "A2",
+   "first_fail": "F5",
+   "sector": "Real Estate",
+   "mcap_bucket": "2-10B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.077,
+   "spot": 10.925,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.247,
+   "iv30d_post": null
+  }
+ ],
+ "dropped": [
+  {
+   "ticker": "CLF",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "IC",
+   "reason": "unmarkable_wing_entry"
+  },
+  {
+   "ticker": "FITB",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "IC",
+   "reason": "unmarkable_wing_entry"
+  }
+ ],
+ "graded": [
+  {
+   "ticker": "AA",
+   "E": "2026-10-15T00:00:00.000",
+   "pre": "2026-10-15T00:00:00.000",
+   "post": "2026-10-16T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-10-23T00:00:00.000",
+   "k": 40.5,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 1,
+   "notional_usd": 4028.5,
+   "credit_entry": 2.8653544495,
+   "debit_exit": 3.375,
+   "gross_usd": -50.9645550528,
+   "entry_cost_usd": 18.192327738,
+   "exit_cost_usd": 22.8,
+   "cost_usd": 40.992327738,
+   "net_usd": -91.9568827908,
+   "n_touches": 4,
+   "gross_pct": -0.0126510004,
+   "cost_pct": 0.0101755809,
+   "net_pct": -0.0228265813,
+   "credit_net_pct": 0.0666111747,
+   "stress_loss_usd": 861.5870550528,
+   "risk_usd": 861.5870550528,
+   "straddle_over_implied": 0.7487061135,
+   "exit_tier_max": 2,
+   "entry_tier_max": 1,
+   "model_exit": false,
+   "model_entry": false,
+   "dte": 6,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"AA261023C00040500\", \"option_type\": \"call\", \"strike\": 40.5, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 1.411764705882353, \"entry_spread\": 0.0976125, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"AA261023P00040500\", \"option_type\": \"put\", \"strike\": 40.5, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 1.4535897435897436, \"entry_spread\": 0.13761838461538461, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "AA261023C00040500",
+   "call_entry": 1.4117647059,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.0976125,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "AA261023P00040500",
+   "put_entry": 1.4535897436,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.1376183846,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Basic Materials",
+   "mcap_bucket": "10-50B",
+   "timing": "postmarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 16.4599990845,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.095,
+   "spot": 40.285,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.493,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "gate_verdict": "F6",
+   "variant": "A1",
+   "max_loss_usd": null,
+   "wing_call_id": null,
+   "wing_call_entry": null,
+   "wing_call_entry_tier": null,
+   "wing_call_entry_spread": null,
+   "wing_call_exit": null,
+   "wing_call_exit_tier": null,
+   "wing_call_exit_spread": null,
+   "wing_put_id": null,
+   "wing_put_entry": null,
+   "wing_put_entry_tier": null,
+   "wing_put_entry_spread": null,
+   "wing_put_exit": null,
+   "wing_put_exit_tier": null,
+   "wing_put_exit_spread": null,
+   "cap_pass": true,
+   "cap_rank": 0,
+   "emitted_at": "2026-10-15"
+  },
+  {
+   "ticker": "CFG",
+   "E": "2026-10-16T00:00:00.000",
+   "pre": "2026-10-15T00:00:00.000",
+   "post": "2026-10-16T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-11-20T00:00:00.000",
+   "k": 62.5,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 1,
+   "notional_usd": 6347.0,
+   "credit_entry": 4.8286805556,
+   "debit_exit": 4.3260689655,
+   "gross_usd": 50.2611590038,
+   "entry_cost_usd": 27.2361185485,
+   "exit_cost_usd": 63.3856780532,
+   "cost_usd": 90.6217966017,
+   "net_usd": -40.3606375979,
+   "n_touches": 4,
+   "gross_pct": 0.0079188844,
+   "cost_pct": 0.0142778945,
+   "net_pct": -0.0063590102,
+   "credit_net_pct": 0.0717869761,
+   "stress_loss_usd": 697.6739444444,
+   "risk_usd": 697.6739444444,
+   "straddle_over_implied": 1.2270670308,
+   "exit_tier_max": 1,
+   "entry_tier_max": 1,
+   "model_exit": false,
+   "model_entry": false,
+   "dte": 26,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"CFG261120C00062500\", \"option_type\": \"call\", \"strike\": 62.5, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 2.8355555555555556, \"entry_spread\": 0.09836183333333333, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"CFG261120P00062500\", \"option_type\": \"put\", \"strike\": 62.5, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 1.993125, \"entry_spread\": 0.1203195625, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "CFG261120C00062500",
+   "call_entry": 2.8355555556,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.0983618333,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "CFG261120P00062500",
+   "put_entry": 1.993125,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.1203195625,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Financial Services",
+   "mcap_bucket": "10-50B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 16.4599990845,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.062,
+   "spot": 63.47,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.319,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "gate_verdict": "F6",
+   "variant": "A1",
+   "max_loss_usd": null,
+   "wing_call_id": null,
+   "wing_call_entry": null,
+   "wing_call_entry_tier": null,
+   "wing_call_entry_spread": null,
+   "wing_call_exit": null,
+   "wing_call_exit_tier": null,
+   "wing_call_exit_spread": null,
+   "wing_put_id": null,
+   "wing_put_entry": null,
+   "wing_put_entry_tier": null,
+   "wing_put_entry_spread": null,
+   "wing_put_exit": null,
+   "wing_put_exit_tier": null,
+   "wing_put_exit_spread": null,
+   "cap_pass": true,
+   "cap_rank": 0,
+   "emitted_at": "2026-10-15"
+  },
+  {
+   "ticker": "CFG",
+   "E": "2026-10-16T00:00:00.000",
+   "pre": "2026-10-15T00:00:00.000",
+   "post": "2026-10-16T00:00:00.000",
+   "structure": "IC",
+   "expiry": "2026-11-20T00:00:00.000",
+   "k": 62.5,
+   "k_up": 72.5,
+   "k_dn": 55.0,
+   "contracts": 1,
+   "notional_usd": 6347.0,
+   "credit_entry": 4.2876805556,
+   "debit_exit": 3.4760689655,
+   "gross_usd": 81.1611590038,
+   "entry_cost_usd": 51.5694546485,
+   "exit_cost_usd": 100.8106780532,
+   "cost_usd": 152.3801327017,
+   "net_usd": -71.2189736979,
+   "n_touches": 8,
+   "gross_pct": 0.0127873261,
+   "cost_pct": 0.0240082138,
+   "net_pct": -0.0112208876,
+   "credit_net_pct": 0.0594294314,
+   "stress_loss_usd": null,
+   "risk_usd": 571.2319444444,
+   "straddle_over_implied": 1.2270670308,
+   "exit_tier_max": 2,
+   "entry_tier_max": 2,
+   "model_exit": false,
+   "model_entry": false,
+   "dte": 26,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"CFG261120C00062500\", \"option_type\": \"call\", \"strike\": 62.5, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 2.8355555555555556, \"entry_spread\": 0.09836183333333333, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"CFG261120P00062500\", \"option_type\": \"put\", \"strike\": 62.5, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 1.993125, \"entry_spread\": 0.1203195625, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"wing_call\", \"option_chain_id\": \"CFG261120C00072500\", \"option_type\": \"call\", \"strike\": 72.5, \"expiry\": \"2026-11-20\", \"side\": 1, \"entry_price\": 0.166, \"entry_spread\": 0.666667, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"wing_put\", \"option_chain_id\": \"CFG261120P00055000\", \"option_type\": \"put\", \"strike\": 55.0, \"expiry\": \"2026-11-20\", \"side\": 1, \"entry_price\": 0.375, \"entry_spread\": 0.9333333333333335, \"entry_tier\": 2, \"entry_source\": \"print_nbbo\"}]",
+   "call_id": "CFG261120C00062500",
+   "call_entry": 2.8355555556,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.0983618333,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "CFG261120P00062500",
+   "put_entry": 1.993125,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.1203195625,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Financial Services",
+   "mcap_bucket": "10-50B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 16.4599990845,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.062,
+   "spot": 63.47,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.319,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "gate_verdict": "F6",
+   "variant": "A1",
+   "max_loss_usd": 571.2319444444,
+   "wing_call_id": "CFG261120C00072500",
+   "wing_call_entry": 0.166,
+   "wing_call_entry_tier": 1.0,
+   "wing_call_entry_spread": 0.666667,
+   "wing_call_exit": null,
+   "wing_call_exit_tier": null,
+   "wing_call_exit_spread": null,
+   "wing_put_id": "CFG261120P00055000",
+   "wing_put_entry": 0.375,
+   "wing_put_entry_tier": 2.0,
+   "wing_put_entry_spread": 0.9333333333,
+   "wing_put_exit": null,
+   "wing_put_exit_tier": null,
+   "wing_put_exit_spread": null,
+   "cap_pass": true,
+   "cap_rank": 0,
+   "emitted_at": "2026-10-15"
+  },
+  {
+   "ticker": "IBKR",
+   "E": "2026-10-15T00:00:00.000",
+   "pre": "2026-10-15T00:00:00.000",
+   "post": "2026-10-16T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-10-23T00:00:00.000",
+   "k": 86.0,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 1,
+   "notional_usd": 8602.0,
+   "credit_entry": 5.5422352941,
+   "debit_exit": 4.0077647059,
+   "gross_usd": 153.4470588235,
+   "entry_cost_usd": 34.8100464493,
+   "exit_cost_usd": 60.8018061237,
+   "cost_usd": 95.611852573,
+   "net_usd": 57.8352062505,
+   "n_touches": 4,
+   "gross_pct": 0.0178385328,
+   "cost_pct": 0.0111150724,
+   "net_pct": 0.0067234604,
+   "credit_net_pct": 0.0603828741,
+   "stress_loss_usd": 1458.6444705882,
+   "risk_usd": 1458.6444705882,
+   "straddle_over_implied": 0.8260206771,
+   "exit_tier_max": 1,
+   "entry_tier_max": 1,
+   "model_exit": false,
+   "model_entry": false,
+   "dte": 6,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"IBKR261023C00086000\", \"option_type\": \"call\", \"strike\": 86.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 2.558235294117647, \"entry_spread\": 0.0675211568627451, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"IBKR261023P00086000\", \"option_type\": \"put\", \"strike\": 86.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 2.984, \"entry_spread\": 0.1667111, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "IBKR261023C00086000",
+   "call_entry": 2.5582352941,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.0675211569,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "IBKR261023P00086000",
+   "put_entry": 2.984,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.1667111,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Financial Services",
+   "mcap_bucket": "10-50B",
+   "timing": "postmarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 16.4599990845,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.078,
+   "spot": 86.02,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.399,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "gate_verdict": "F6",
+   "variant": "A1",
+   "max_loss_usd": null,
+   "wing_call_id": null,
+   "wing_call_entry": null,
+   "wing_call_entry_tier": null,
+   "wing_call_entry_spread": null,
+   "wing_call_exit": null,
+   "wing_call_exit_tier": null,
+   "wing_call_exit_spread": null,
+   "wing_put_id": null,
+   "wing_put_entry": null,
+   "wing_put_entry_tier": null,
+   "wing_put_entry_spread": null,
+   "wing_put_exit": null,
+   "wing_put_exit_tier": null,
+   "wing_put_exit_spread": null,
+   "cap_pass": true,
+   "cap_rank": 0,
+   "emitted_at": "2026-10-15"
+  }
+ ],
+ "season_running": [
+  {
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "variant": "A1",
+   "structure": "IC",
+   "n": 2,
+   "dates": 2,
+   "mean_net_pct": 0.026934226457559347,
+   "t": 3.4187920313598505,
+   "net_usd_total": 232.75881978454743
+  },
+  {
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "variant": "A1",
+   "structure": "SS",
+   "n": 2,
+   "dates": 2,
+   "mean_net_pct": 0.03828439052860788,
+   "t": 3.9834712156548564,
+   "net_usd_total": 328.86458658306174
+  },
+  {
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "variant": "A2",
+   "structure": "IC",
+   "n": 2,
+   "dates": 2,
+   "mean_net_pct": 0.026934226457559347,
+   "t": 3.4187920313598505,
+   "net_usd_total": 232.75881978454743
+  },
+  {
+   "policy_id": "sa-1.0",
+   "role": "champion",
+   "variant": "A2",
+   "structure": "SS",
+   "n": 2,
+   "dates": 2,
+   "mean_net_pct": 0.03828439052860788,
+   "t": 3.9834712156548564,
+   "net_usd_total": 328.86458658306174
+  },
+  {
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "variant": "A1",
+   "structure": "IC",
+   "n": 10,
+   "dates": 8,
+   "mean_net_pct": -0.005604891062564792,
+   "t": -0.6542055039670243,
+   "net_usd_total": -1053.1431748500995
+  },
+  {
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "variant": "A1",
+   "structure": "SS",
+   "n": 18,
+   "dates": 9,
+   "mean_net_pct": 0.0025585904654306527,
+   "t": 0.47720602134113227,
+   "net_usd_total": -162.39161368256163
+  }
+ ],
+ "exploration": [
+  {
+   "ticker": "CLF",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-10-23T00:00:00.000",
+   "k": 12.0,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 1,
+   "notional_usd": 1209.5,
+   "credit_entry": 1.5313712293,
+   "debit_exit": null,
+   "gross_usd": null,
+   "entry_cost_usd": 7.9022964818,
+   "exit_cost_usd": null,
+   "cost_usd": null,
+   "net_usd": null,
+   "n_touches": 4,
+   "gross_pct": null,
+   "cost_pct": null,
+   "net_pct": null,
+   "credit_net_pct": 0.1200784014,
+   "stress_loss_usd": 380.2523770743,
+   "risk_usd": 380.2523770743,
+   "straddle_over_implied": 0.8613056102,
+   "exit_tier_max": null,
+   "entry_tier_max": 1,
+   "model_exit": null,
+   "model_entry": false,
+   "dte": 5,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"CLF261023C00012000\", \"option_type\": \"call\", \"strike\": 12.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 0.7890771637122002, \"entry_spread\": 0.08970129718456726, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"CLF261023P00012000\", \"option_type\": \"put\", \"strike\": 12.0, \"expiry\": \"2026-10-23\", \"side\": -1, \"entry_price\": 0.7422940655447299, \"entry_spread\": 0.0825342506643047, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "CLF261023C00012000",
+   "call_entry": 0.7890771637,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.0897012972,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "CLF261023P00012000",
+   "put_entry": 0.7422940655,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.0825342507,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Basic Materials",
+   "mcap_bucket": "2-10B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.147,
+   "spot": 12.095,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.76,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "gate_verdict": "PASS",
+   "variant": "A1",
+   "cap_pass": true,
+   "cap_rank": 0
+  },
+  {
+   "ticker": "FITB",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "SS",
+   "expiry": "2026-11-20T00:00:00.000",
+   "k": 50.0,
+   "k_up": null,
+   "k_dn": null,
+   "contracts": 1,
+   "notional_usd": 5043.5,
+   "credit_entry": 3.546025641,
+   "debit_exit": null,
+   "gross_usd": null,
+   "entry_cost_usd": 8.8384584276,
+   "exit_cost_usd": null,
+   "cost_usd": null,
+   "net_usd": null,
+   "n_touches": 4,
+   "gross_pct": null,
+   "cost_pct": null,
+   "net_pct": null,
+   "credit_net_pct": 0.0685563806,
+   "stress_loss_usd": 462.4444358974,
+   "risk_usd": 462.4444358974,
+   "straddle_over_implied": 1.3020152969,
+   "exit_tier_max": null,
+   "entry_tier_max": 1,
+   "model_exit": null,
+   "model_entry": false,
+   "dte": 25,
+   "legs_json": "[{\"name\": \"call\", \"option_chain_id\": \"FITB261120C00050000\", \"option_type\": \"call\", \"strike\": 50.0, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 2.115, \"entry_spread\": 0.041667375, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"put\", \"option_chain_id\": \"FITB261120P00050000\", \"option_type\": \"put\", \"strike\": 50.0, \"expiry\": \"2026-11-20\", \"side\": -1, \"entry_price\": 1.431025641025641, \"entry_spread\": 0.04377466666666667, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+   "call_id": "FITB261120C00050000",
+   "call_entry": 2.115,
+   "call_entry_tier": 1,
+   "call_entry_spread": 0.041667375,
+   "call_exit": null,
+   "call_exit_tier": null,
+   "call_exit_spread": null,
+   "put_id": "FITB261120P00050000",
+   "put_entry": 1.431025641,
+   "put_entry_tier": 1,
+   "put_entry_spread": 0.0437746667,
+   "put_exit": null,
+   "put_exit_tier": null,
+   "put_exit_spread": null,
+   "sector": "Financial Services",
+   "mcap_bucket": "10-50B",
+   "timing": "premarket",
+   "how": "labelled",
+   "regime_pre": "CHOP",
+   "vix_pre": 19.9899997711,
+   "month": "2026-10",
+   "season": "S3",
+   "implied": 0.054,
+   "spot": 50.435,
+   "realized_move": null,
+   "gap_signed": null,
+   "iv30d_pre": 0.277,
+   "iv30d_post": null,
+   "policy_id": "sa-1.0",
+   "role": "exploration",
+   "gate_verdict": "PASS",
+   "variant": "A1",
+   "cap_pass": true,
+   "cap_rank": 0
+  }
+ ],
+ "exploration_dropped": [
+  {
+   "ticker": "CLF",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "IC",
+   "reason": "unmarkable_wing_entry"
+  },
+  {
+   "ticker": "DX",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "both",
+   "reason": "no_atm_pair"
+  },
+  {
+   "ticker": "FITB",
+   "E": "2026-10-19T00:00:00.000",
+   "pre": "2026-10-16T00:00:00.000",
+   "post": "2026-10-19T00:00:00.000",
+   "structure": "IC",
+   "reason": "unmarkable_wing_entry"
+  }
+ ],
+ "ledger": {
+  "emitted": 4,
+  "skipped": 0,
+  "graded": 4,
+  "ledger_open": true,
+  "exploration_emitted": 2,
+  "exploration_skipped": 0,
+  "wb_emitted": 151,
+  "wb_graded": 639
+ },
+ "sb_state": {
+  "date": "2026-10-16",
+  "index_vol_through": "2026-10-16",
+  "is_entry_day": true,
+  "gate": {
+   "SPY": {
+    "date": "2026-10-16",
+    "asof": "2026-10-15",
+    "reason": "ON",
+    "on": true,
+    "known": true,
+    "vix": 16.46,
+    "vix3m": 18.49,
+    "x": 16.46,
+    "x_median": 15.29
+   },
+   "QQQ": {
+    "date": "2026-10-16",
+    "asof": "2026-10-15",
+    "reason": "ON",
+    "on": true,
+    "known": true,
+    "vix": 16.46,
+    "vix3m": 18.49,
+    "x": 22.89,
+    "x_median": 21.145
+   }
+  },
+  "gate_next": {
+   "SPY": {
+    "date": "2026-10-19",
+    "asof": "2026-10-16",
+    "reason": "ON",
+    "on": true,
+    "known": true,
+    "vix": 19.99,
+    "vix3m": 20.5,
+    "x": 19.99,
+    "x_median": 15.29
+   },
+   "QQQ": {
+    "date": "2026-10-19",
+    "asof": "2026-10-16",
+    "reason": "ON",
+    "on": true,
+    "known": true,
+    "vix": 19.99,
+    "vix3m": 20.5,
+    "x": 27.13,
+    "x_median": 21.174999999999997
+   }
+  },
+  "candidates": [
+   {
+    "ticker": "SPY",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "pre": "2026-10-16",
+    "post": "2026-11-06",
+    "underlying": "SPY",
+    "structure": "PS",
+    "entry": "2026-10-16",
+    "expiry": "2026-11-06",
+    "dte_cal": 21,
+    "spot": 762.61,
+    "x": 19.99,
+    "m": 0.047948608618949,
+    "k_p1": 727.0,
+    "k_p2": 690.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 37.0,
+    "credit_entry": 1.6884782608695652,
+    "debit_exit": null,
+    "gross_usd": null,
+    "entry_cost_usd": 9.17641606385213,
+    "exit_cost_usd": null,
+    "cost_usd": null,
+    "net_usd": null,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 3531.1521739130435,
+    "risk_usd": 3531.1521739130435,
+    "ror": null,
+    "credit_over_width": 0.04563454759106933,
+    "cost_over_credit": null,
+    "window": "P3",
+    "entry_month": "2026-10",
+    "month": "2026-11",
+    "entry_tier_max": 1,
+    "graded": false,
+    "settle_close": null,
+    "settle_source": null,
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"SPY261106P00727000\", \"option_type\": \"put\", \"strike\": 727.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 3.2183333333333333, \"entry_spread\": 0.03489333333333333, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"SPY261106P00690000\", \"option_type\": \"put\", \"strike\": 690.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 1.529855072463768, \"entry_spread\": 0.02956485507246377, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "SPY261106P00727000",
+    "p1_entry": 3.2183333333333333,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.03489333333333333,
+    "p1_exit": null,
+    "p1_exit_tier": null,
+    "p2_id": "SPY261106P00690000",
+    "p2_entry": 1.529855072463768,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.02956485507246377,
+    "p2_exit": null,
+    "p2_exit_tier": null,
+    "gate_reason": "ON",
+    "gate_asof": "2026-10-15",
+    "gate_vix": 16.46,
+    "gate_vix3m": 18.49,
+    "gate_x": 16.46,
+    "gate_x_median": 15.29,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "gate_verdict": "ON"
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "pre": "2026-10-16",
+    "post": "2026-11-06",
+    "underlying": "QQQ",
+    "structure": "PS",
+    "entry": "2026-10-16",
+    "expiry": "2026-11-06",
+    "dte_cal": 21,
+    "spot": 709.58,
+    "x": 27.13,
+    "m": 0.06507482500410637,
+    "k_p1": 665.0,
+    "k_p2": 615.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 50.0,
+    "credit_entry": 3.137846531279815,
+    "debit_exit": null,
+    "gross_usd": null,
+    "entry_cost_usd": 6.70159022525472,
+    "exit_cost_usd": null,
+    "cost_usd": null,
+    "net_usd": null,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 4686.215346872019,
+    "risk_usd": 4686.215346872019,
+    "ror": null,
+    "credit_over_width": 0.0627569306255963,
+    "cost_over_credit": null,
+    "window": "P3",
+    "entry_month": "2026-10",
+    "month": "2026-11",
+    "entry_tier_max": 1,
+    "graded": false,
+    "settle_close": null,
+    "settle_source": null,
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261106P00665000\", \"option_type\": \"put\", \"strike\": 665.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 5.072194357366771, \"entry_spread\": 0.015022996865203761, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261106P00615000\", \"option_type\": \"put\", \"strike\": 615.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 1.9343478260869564, \"entry_spread\": 0.01645631884057971, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261106P00665000",
+    "p1_entry": 5.072194357366771,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.015022996865203761,
+    "p1_exit": null,
+    "p1_exit_tier": null,
+    "p2_id": "QQQ261106P00615000",
+    "p2_entry": 1.9343478260869564,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.01645631884057971,
+    "p2_exit": null,
+    "p2_exit_tier": null,
+    "gate_reason": "ON",
+    "gate_asof": "2026-10-15",
+    "gate_vix": 16.46,
+    "gate_vix3m": 18.49,
+    "gate_x": 22.89,
+    "gate_x_median": 21.145,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "gate_verdict": "ON"
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "pre": "2026-10-16",
+    "post": "2026-11-06",
+    "underlying": "QQQ",
+    "structure": "IC",
+    "entry": "2026-10-16",
+    "expiry": "2026-11-06",
+    "dte_cal": 21,
+    "spot": 709.58,
+    "x": 27.13,
+    "m": 0.06507482500410637,
+    "k_p1": 665.0,
+    "k_p2": 615.0,
+    "k_c1": 756.0,
+    "k_c2": 800.0,
+    "width": 50.0,
+    "credit_entry": 4.436926133269865,
+    "debit_exit": null,
+    "gross_usd": null,
+    "entry_cost_usd": 12.841460091870028,
+    "exit_cost_usd": null,
+    "cost_usd": null,
+    "net_usd": null,
+    "n_touches": 8,
+    "contracts": 1,
+    "max_loss_usd": 4556.307386673014,
+    "risk_usd": 4556.307386673014,
+    "ror": null,
+    "credit_over_width": 0.0887385226653973,
+    "cost_over_credit": null,
+    "window": "P3",
+    "entry_month": "2026-10",
+    "month": "2026-11",
+    "entry_tier_max": 1,
+    "graded": false,
+    "settle_close": null,
+    "settle_source": null,
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261106P00665000\", \"option_type\": \"put\", \"strike\": 665.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 5.072194357366771, \"entry_spread\": 0.015022996865203761, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261106P00615000\", \"option_type\": \"put\", \"strike\": 615.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 1.9343478260869564, \"entry_spread\": 0.01645631884057971, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c1\", \"option_chain_id\": \"QQQ261106C00756000\", \"option_type\": \"call\", \"strike\": 756.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 1.3783333333333334, \"entry_spread\": 0.058043166666666667, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c2\", \"option_chain_id\": \"QQQ261106C00800000\", \"option_type\": \"call\", \"strike\": 800.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 0.07925373134328358, \"entry_spread\": 0.21190883582089554, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261106P00665000",
+    "p1_entry": 5.072194357366771,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.015022996865203761,
+    "p1_exit": null,
+    "p1_exit_tier": null,
+    "p2_id": "QQQ261106P00615000",
+    "p2_entry": 1.9343478260869564,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.01645631884057971,
+    "p2_exit": null,
+    "p2_exit_tier": null,
+    "c1_id": "QQQ261106C00756000",
+    "c1_entry": 1.3783333333333334,
+    "c1_entry_tier": 1,
+    "c1_entry_spread": 0.058043166666666667,
+    "c1_exit": null,
+    "c1_exit_tier": null,
+    "c2_id": "QQQ261106C00800000",
+    "c2_entry": 0.07925373134328358,
+    "c2_entry_tier": 1,
+    "c2_entry_spread": 0.21190883582089554,
+    "c2_exit": null,
+    "c2_exit_tier": null,
+    "gate_reason": "ON",
+    "gate_asof": "2026-10-15",
+    "gate_vix": 16.46,
+    "gate_vix3m": 18.49,
+    "gate_x": 22.89,
+    "gate_x_median": 21.145,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "gate_verdict": "ON"
+   }
+  ],
+  "skipped": [
+   {
+    "ticker": "SPY",
+    "underlying": "SPY",
+    "entry": "2026-10-16",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "structure": "IC",
+    "reason": "no_tier1_c2",
+    "gate_reason": "ON"
+   }
+  ],
+  "graded": [
+   {
+    "ticker": "SPY",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "SPY",
+    "structure": "PS",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 771.4,
+    "x": 14.87,
+    "m": 0.035667624320348756,
+    "k_p1": 744.0,
+    "k_p2": 717.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 27.0,
+    "credit_entry": 1.3255868544600937,
+    "debit_exit": 0.0,
+    "gross_usd": 132.55868544600938,
+    "entry_cost_usd": 3.1833948996230905,
+    "exit_cost_usd": 1.3,
+    "cost_usd": 4.48339489962309,
+    "net_usd": 128.07529054638627,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 2567.4413145539907,
+    "risk_usd": 2567.4413145539907,
+    "ror": 0.049884408192845175,
+    "credit_over_width": 0.04909580942444792,
+    "cost_over_credit": 0.033821962586141965,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 762.61,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"SPY261016P00744000\", \"option_type\": \"put\", \"strike\": 744.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.1722535211267604, \"entry_spread\": 0.012763859154929577, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"SPY261016P00717000\", \"option_type\": \"put\", \"strike\": 717.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.8466666666666667, \"entry_spread\": 0.011742, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "SPY261016P00744000",
+    "p1_entry": 2.1722535211267604,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.012763859154929577,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "SPY261016P00717000",
+    "p2_entry": 0.8466666666666667,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.011742,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 15.67,
+    "gate_x_median": 15.205,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "gate_verdict": "ON",
+    "c1_id": null,
+    "c1_entry": null,
+    "c1_entry_tier": null,
+    "c1_entry_spread": null,
+    "c1_exit": null,
+    "c1_exit_tier": null,
+    "c2_id": null,
+    "c2_entry": null,
+    "c2_entry_tier": null,
+    "c2_entry_spread": null,
+    "c2_exit": null,
+    "c2_exit_tier": null,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   },
+   {
+    "ticker": "SPY",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "SPY",
+    "structure": "IC",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 771.4,
+    "x": 14.87,
+    "m": 0.035667624320348756,
+    "k_p1": 744.0,
+    "k_p2": 717.0,
+    "k_c1": 799.0,
+    "k_c2": 825.0,
+    "width": 27.0,
+    "credit_entry": 2.070170187793427,
+    "debit_exit": 0.0,
+    "gross_usd": 207.01701877934272,
+    "entry_cost_usd": 5.682741457782813,
+    "exit_cost_usd": 2.6,
+    "cost_usd": 8.282741457782812,
+    "net_usd": 198.73427732155992,
+    "n_touches": 8,
+    "contracts": 1,
+    "max_loss_usd": 2492.982981220657,
+    "risk_usd": 2492.982981220657,
+    "ror": 0.07971746250118893,
+    "credit_over_width": 0.07667296991827507,
+    "cost_over_credit": 0.04000995428598699,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 762.61,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"SPY261016P00744000\", \"option_type\": \"put\", \"strike\": 744.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.1722535211267604, \"entry_spread\": 0.012763859154929577, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"SPY261016P00717000\", \"option_type\": \"put\", \"strike\": 717.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.8466666666666667, \"entry_spread\": 0.011742, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c1\", \"option_chain_id\": \"SPY261016C00799000\", \"option_type\": \"call\", \"strike\": 799.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 0.8545833333333334, \"entry_spread\": 0.016342708333333334, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c2\", \"option_chain_id\": \"SPY261016C00825000\", \"option_type\": \"call\", \"strike\": 825.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.11, \"entry_spread\": 0.0910975, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "SPY261016P00744000",
+    "p1_entry": 2.1722535211267604,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.012763859154929577,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "SPY261016P00717000",
+    "p2_entry": 0.8466666666666667,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.011742,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 15.67,
+    "gate_x_median": 15.205,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "gate_verdict": "ON",
+    "c1_id": "SPY261016C00799000",
+    "c1_entry": 0.8545833333333334,
+    "c1_entry_tier": 1,
+    "c1_entry_spread": 0.016342708333333334,
+    "c1_exit": 0.0,
+    "c1_exit_tier": 4,
+    "c2_id": "SPY261016C00825000",
+    "c2_entry": 0.11,
+    "c2_entry_tier": 1,
+    "c2_entry_spread": 0.0910975,
+    "c2_exit": 0.0,
+    "c2_exit_tier": 4,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "QQQ",
+    "structure": "PS",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 744.58,
+    "x": 20.87,
+    "m": 0.05005940279527092,
+    "k_p1": 707.0,
+    "k_p2": 670.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 37.0,
+    "credit_entry": 1.9305217391304348,
+    "debit_exit": 0.0,
+    "gross_usd": 193.05217391304348,
+    "entry_cost_usd": 2.8030684701701323,
+    "exit_cost_usd": 1.3,
+    "cost_usd": 4.1030684701701325,
+    "net_usd": 188.94910544287333,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 3506.9478260869564,
+    "risk_usd": 3506.9478260869564,
+    "ror": 0.05387850484610781,
+    "credit_over_width": 0.05217626321974148,
+    "cost_over_credit": 0.021253676594277973,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 709.58,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261016P00707000\", \"option_type\": \"put\", \"strike\": 707.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.924, \"entry_spread\": 0.0047889, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261016P00670000\", \"option_type\": \"put\", \"strike\": 670.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.9934782608695653, \"entry_spread\": 0.016164043478260868, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261016P00707000",
+    "p1_entry": 2.924,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.0047889,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "QQQ261016P00670000",
+    "p2_entry": 0.9934782608695653,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.016164043478260868,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 21.24,
+    "gate_x_median": 20.89,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "gate_verdict": "ON",
+    "c1_id": null,
+    "c1_entry": null,
+    "c1_entry_tier": null,
+    "c1_entry_spread": null,
+    "c1_exit": null,
+    "c1_exit_tier": null,
+    "c2_id": null,
+    "c2_entry": null,
+    "c2_entry_tier": null,
+    "c2_entry_spread": null,
+    "c2_exit": null,
+    "c2_exit_tier": null,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "QQQ",
+    "structure": "IC",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 744.58,
+    "x": 20.87,
+    "m": 0.05005940279527092,
+    "k_p1": 707.0,
+    "k_p2": 670.0,
+    "k_c1": 780.0,
+    "k_c2": 825.0,
+    "width": 45.0,
+    "credit_entry": 3.7093352984524683,
+    "debit_exit": 0.0,
+    "gross_usd": 370.9335298452468,
+    "entry_cost_usd": 6.093479180890574,
+    "exit_cost_usd": 2.6,
+    "cost_usd": 8.693479180890574,
+    "net_usd": 362.2400506643562,
+    "n_touches": 8,
+    "contracts": 1,
+    "max_loss_usd": 4129.066470154753,
+    "risk_usd": 4129.066470154753,
+    "ror": 0.08772928536817182,
+    "credit_over_width": 0.08242967329894374,
+    "cost_over_credit": 0.023436757481906493,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 709.58,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261016P00707000\", \"option_type\": \"put\", \"strike\": 707.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.924, \"entry_spread\": 0.0047889, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261016P00670000\", \"option_type\": \"put\", \"strike\": 670.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.9934782608695653, \"entry_spread\": 0.016164043478260868, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c1\", \"option_chain_id\": \"QQQ261016C00780000\", \"option_type\": \"call\", \"strike\": 780.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 1.8788135593220339, \"entry_spread\": 0.01054293765133172, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c2\", \"option_chain_id\": \"QQQ261016C00825000\", \"option_type\": \"call\", \"strike\": 825.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.1, \"entry_spread\": 0.2, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261016P00707000",
+    "p1_entry": 2.924,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.0047889,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "QQQ261016P00670000",
+    "p2_entry": 0.9934782608695653,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.016164043478260868,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 21.24,
+    "gate_x_median": 20.89,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "gate_verdict": "ON",
+    "c1_id": "QQQ261016C00780000",
+    "c1_entry": 1.8788135593220339,
+    "c1_entry_tier": 1,
+    "c1_entry_spread": 0.01054293765133172,
+    "c1_exit": 0.0,
+    "c1_exit_tier": 4,
+    "c2_id": "QQQ261016C00825000",
+    "c2_entry": 0.1,
+    "c2_entry_tier": 1,
+    "c2_entry_spread": 0.2,
+    "c2_exit": 0.0,
+    "c2_exit_tier": 4,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   },
+   {
+    "ticker": "SPY",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "SPY",
+    "structure": "PS",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 771.4,
+    "x": 14.87,
+    "m": 0.035667624320348756,
+    "k_p1": 744.0,
+    "k_p2": 717.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 27.0,
+    "credit_entry": 1.3255868544600937,
+    "debit_exit": 0.0,
+    "gross_usd": 132.55868544600938,
+    "entry_cost_usd": 3.1833948996230905,
+    "exit_cost_usd": 1.3,
+    "cost_usd": 4.48339489962309,
+    "net_usd": 128.07529054638627,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 2567.4413145539907,
+    "risk_usd": 2567.4413145539907,
+    "ror": 0.049884408192845175,
+    "credit_over_width": 0.04909580942444792,
+    "cost_over_credit": 0.033821962586141965,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 762.61,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"SPY261016P00744000\", \"option_type\": \"put\", \"strike\": 744.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.1722535211267604, \"entry_spread\": 0.012763859154929577, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"SPY261016P00717000\", \"option_type\": \"put\", \"strike\": 717.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.8466666666666667, \"entry_spread\": 0.011742, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "SPY261016P00744000",
+    "p1_entry": 2.1722535211267604,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.012763859154929577,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "SPY261016P00717000",
+    "p2_entry": 0.8466666666666667,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.011742,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 15.67,
+    "gate_x_median": 15.205,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "gate_verdict": "ON",
+    "c1_id": null,
+    "c1_entry": null,
+    "c1_entry_tier": null,
+    "c1_entry_spread": null,
+    "c1_exit": null,
+    "c1_exit_tier": null,
+    "c2_id": null,
+    "c2_entry": null,
+    "c2_entry_tier": null,
+    "c2_entry_spread": null,
+    "c2_exit": null,
+    "c2_exit_tier": null,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   },
+   {
+    "ticker": "SPY",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "SPY",
+    "structure": "IC",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 771.4,
+    "x": 14.87,
+    "m": 0.035667624320348756,
+    "k_p1": 744.0,
+    "k_p2": 717.0,
+    "k_c1": 799.0,
+    "k_c2": 825.0,
+    "width": 27.0,
+    "credit_entry": 2.070170187793427,
+    "debit_exit": 0.0,
+    "gross_usd": 207.01701877934272,
+    "entry_cost_usd": 5.682741457782813,
+    "exit_cost_usd": 2.6,
+    "cost_usd": 8.282741457782812,
+    "net_usd": 198.73427732155992,
+    "n_touches": 8,
+    "contracts": 1,
+    "max_loss_usd": 2492.982981220657,
+    "risk_usd": 2492.982981220657,
+    "ror": 0.07971746250118893,
+    "credit_over_width": 0.07667296991827507,
+    "cost_over_credit": 0.04000995428598699,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 762.61,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"SPY261016P00744000\", \"option_type\": \"put\", \"strike\": 744.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.1722535211267604, \"entry_spread\": 0.012763859154929577, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"SPY261016P00717000\", \"option_type\": \"put\", \"strike\": 717.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.8466666666666667, \"entry_spread\": 0.011742, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c1\", \"option_chain_id\": \"SPY261016C00799000\", \"option_type\": \"call\", \"strike\": 799.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 0.8545833333333334, \"entry_spread\": 0.016342708333333334, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c2\", \"option_chain_id\": \"SPY261016C00825000\", \"option_type\": \"call\", \"strike\": 825.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.11, \"entry_spread\": 0.0910975, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "SPY261016P00744000",
+    "p1_entry": 2.1722535211267604,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.012763859154929577,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "SPY261016P00717000",
+    "p2_entry": 0.8466666666666667,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.011742,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 15.67,
+    "gate_x_median": 15.205,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "gate_verdict": "ON",
+    "c1_id": "SPY261016C00799000",
+    "c1_entry": 0.8545833333333334,
+    "c1_entry_tier": 1,
+    "c1_entry_spread": 0.016342708333333334,
+    "c1_exit": 0.0,
+    "c1_exit_tier": 4,
+    "c2_id": "SPY261016C00825000",
+    "c2_entry": 0.11,
+    "c2_entry_tier": 1,
+    "c2_entry_spread": 0.0910975,
+    "c2_exit": 0.0,
+    "c2_exit_tier": 4,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "QQQ",
+    "structure": "PS",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 744.58,
+    "x": 20.87,
+    "m": 0.05005940279527092,
+    "k_p1": 707.0,
+    "k_p2": 670.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 37.0,
+    "credit_entry": 1.9305217391304348,
+    "debit_exit": 0.0,
+    "gross_usd": 193.05217391304348,
+    "entry_cost_usd": 2.8030684701701323,
+    "exit_cost_usd": 1.3,
+    "cost_usd": 4.1030684701701325,
+    "net_usd": 188.94910544287333,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 3506.9478260869564,
+    "risk_usd": 3506.9478260869564,
+    "ror": 0.05387850484610781,
+    "credit_over_width": 0.05217626321974148,
+    "cost_over_credit": 0.021253676594277973,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 709.58,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261016P00707000\", \"option_type\": \"put\", \"strike\": 707.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.924, \"entry_spread\": 0.0047889, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261016P00670000\", \"option_type\": \"put\", \"strike\": 670.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.9934782608695653, \"entry_spread\": 0.016164043478260868, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261016P00707000",
+    "p1_entry": 2.924,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.0047889,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "QQQ261016P00670000",
+    "p2_entry": 0.9934782608695653,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.016164043478260868,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 21.24,
+    "gate_x_median": 20.89,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "gate_verdict": "ON",
+    "c1_id": null,
+    "c1_entry": null,
+    "c1_entry_tier": null,
+    "c1_entry_spread": null,
+    "c1_exit": null,
+    "c1_exit_tier": null,
+    "c2_id": null,
+    "c2_entry": null,
+    "c2_entry_tier": null,
+    "c2_entry_spread": null,
+    "c2_exit": null,
+    "c2_exit_tier": null,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-09-25",
+    "variant": "B1",
+    "pre": "2026-09-25",
+    "post": "2026-10-16",
+    "underlying": "QQQ",
+    "structure": "IC",
+    "entry": "2026-09-25",
+    "expiry": "2026-10-16",
+    "dte_cal": 21,
+    "spot": 744.58,
+    "x": 20.87,
+    "m": 0.05005940279527092,
+    "k_p1": 707.0,
+    "k_p2": 670.0,
+    "k_c1": 780.0,
+    "k_c2": 825.0,
+    "width": 45.0,
+    "credit_entry": 3.7093352984524683,
+    "debit_exit": 0.0,
+    "gross_usd": 370.9335298452468,
+    "entry_cost_usd": 6.093479180890574,
+    "exit_cost_usd": 2.6,
+    "cost_usd": 8.693479180890574,
+    "net_usd": 362.2400506643562,
+    "n_touches": 8,
+    "contracts": 1,
+    "max_loss_usd": 4129.066470154753,
+    "risk_usd": 4129.066470154753,
+    "ror": 0.08772928536817182,
+    "credit_over_width": 0.08242967329894374,
+    "cost_over_credit": 0.023436757481906493,
+    "window": "P3",
+    "entry_month": "2026-09",
+    "month": "2026-10",
+    "entry_tier_max": 1,
+    "graded": true,
+    "settle_close": 709.58,
+    "settle_source": "daily_contract",
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261016P00707000\", \"option_type\": \"put\", \"strike\": 707.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 2.924, \"entry_spread\": 0.0047889, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261016P00670000\", \"option_type\": \"put\", \"strike\": 670.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.9934782608695653, \"entry_spread\": 0.016164043478260868, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c1\", \"option_chain_id\": \"QQQ261016C00780000\", \"option_type\": \"call\", \"strike\": 780.0, \"expiry\": \"2026-10-16\", \"side\": -1, \"entry_price\": 1.8788135593220339, \"entry_spread\": 0.01054293765133172, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c2\", \"option_chain_id\": \"QQQ261016C00825000\", \"option_type\": \"call\", \"strike\": 825.0, \"expiry\": \"2026-10-16\", \"side\": 1, \"entry_price\": 0.1, \"entry_spread\": 0.2, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261016P00707000",
+    "p1_entry": 2.924,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.0047889,
+    "p1_exit": 0.0,
+    "p1_exit_tier": 4,
+    "p2_id": "QQQ261016P00670000",
+    "p2_entry": 0.9934782608695653,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.016164043478260868,
+    "p2_exit": 0.0,
+    "p2_exit_tier": 4,
+    "gate_reason": "ON",
+    "gate_asof": "2026-09-24",
+    "gate_vix": 15.67,
+    "gate_vix3m": 18.43,
+    "gate_x": 21.24,
+    "gate_x_median": 20.89,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "gate_verdict": "ON",
+    "c1_id": "QQQ261016C00780000",
+    "c1_entry": 1.8788135593220339,
+    "c1_entry_tier": 1,
+    "c1_entry_spread": 0.01054293765133172,
+    "c1_exit": 0.0,
+    "c1_exit_tier": 4,
+    "c2_id": "QQQ261016C00825000",
+    "c2_entry": 0.1,
+    "c2_entry_tier": 1,
+    "c2_entry_spread": 0.2,
+    "c2_exit": 0.0,
+    "c2_exit_tier": 4,
+    "emitted_at": "2026-09-25",
+    "exit_tier_max": 4
+   }
+  ],
+  "unsettled": [],
+  "exploration": [
+   {
+    "ticker": "SPY",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "pre": "2026-10-16",
+    "post": "2026-11-06",
+    "underlying": "SPY",
+    "structure": "PS",
+    "entry": "2026-10-16",
+    "expiry": "2026-11-06",
+    "dte_cal": 21,
+    "spot": 762.61,
+    "x": 19.99,
+    "m": 0.047948608618949,
+    "k_p1": 727.0,
+    "k_p2": 690.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 37.0,
+    "credit_entry": 1.6884782608695652,
+    "debit_exit": null,
+    "gross_usd": null,
+    "entry_cost_usd": 9.17641606385213,
+    "exit_cost_usd": null,
+    "cost_usd": null,
+    "net_usd": null,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 3531.1521739130435,
+    "risk_usd": 3531.1521739130435,
+    "ror": null,
+    "credit_over_width": 0.04563454759106933,
+    "cost_over_credit": null,
+    "window": "P3",
+    "entry_month": "2026-10",
+    "month": "2026-11",
+    "entry_tier_max": 1,
+    "graded": false,
+    "settle_close": null,
+    "settle_source": null,
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"SPY261106P00727000\", \"option_type\": \"put\", \"strike\": 727.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 3.2183333333333333, \"entry_spread\": 0.03489333333333333, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"SPY261106P00690000\", \"option_type\": \"put\", \"strike\": 690.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 1.529855072463768, \"entry_spread\": 0.02956485507246377, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "SPY261106P00727000",
+    "p1_entry": 3.2183333333333333,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.03489333333333333,
+    "p1_exit": null,
+    "p1_exit_tier": null,
+    "p2_id": "SPY261106P00690000",
+    "p2_entry": 1.529855072463768,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.02956485507246377,
+    "p2_exit": null,
+    "p2_exit_tier": null,
+    "gate_reason": "ON",
+    "gate_asof": "2026-10-15",
+    "gate_vix": 16.46,
+    "gate_vix3m": 18.49,
+    "gate_x": 16.46,
+    "gate_x_median": 15.29,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "gate_verdict": "ON"
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "pre": "2026-10-16",
+    "post": "2026-11-06",
+    "underlying": "QQQ",
+    "structure": "PS",
+    "entry": "2026-10-16",
+    "expiry": "2026-11-06",
+    "dte_cal": 21,
+    "spot": 709.58,
+    "x": 27.13,
+    "m": 0.06507482500410637,
+    "k_p1": 665.0,
+    "k_p2": 615.0,
+    "k_c1": null,
+    "k_c2": null,
+    "width": 50.0,
+    "credit_entry": 3.137846531279815,
+    "debit_exit": null,
+    "gross_usd": null,
+    "entry_cost_usd": 6.70159022525472,
+    "exit_cost_usd": null,
+    "cost_usd": null,
+    "net_usd": null,
+    "n_touches": 4,
+    "contracts": 1,
+    "max_loss_usd": 4686.215346872019,
+    "risk_usd": 4686.215346872019,
+    "ror": null,
+    "credit_over_width": 0.0627569306255963,
+    "cost_over_credit": null,
+    "window": "P3",
+    "entry_month": "2026-10",
+    "month": "2026-11",
+    "entry_tier_max": 1,
+    "graded": false,
+    "settle_close": null,
+    "settle_source": null,
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261106P00665000\", \"option_type\": \"put\", \"strike\": 665.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 5.072194357366771, \"entry_spread\": 0.015022996865203761, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261106P00615000\", \"option_type\": \"put\", \"strike\": 615.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 1.9343478260869564, \"entry_spread\": 0.01645631884057971, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261106P00665000",
+    "p1_entry": 5.072194357366771,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.015022996865203761,
+    "p1_exit": null,
+    "p1_exit_tier": null,
+    "p2_id": "QQQ261106P00615000",
+    "p2_entry": 1.9343478260869564,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.01645631884057971,
+    "p2_exit": null,
+    "p2_exit_tier": null,
+    "gate_reason": "ON",
+    "gate_asof": "2026-10-15",
+    "gate_vix": 16.46,
+    "gate_vix3m": 18.49,
+    "gate_x": 22.89,
+    "gate_x_median": 21.145,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "gate_verdict": "ON"
+   },
+   {
+    "ticker": "QQQ",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "pre": "2026-10-16",
+    "post": "2026-11-06",
+    "underlying": "QQQ",
+    "structure": "IC",
+    "entry": "2026-10-16",
+    "expiry": "2026-11-06",
+    "dte_cal": 21,
+    "spot": 709.58,
+    "x": 27.13,
+    "m": 0.06507482500410637,
+    "k_p1": 665.0,
+    "k_p2": 615.0,
+    "k_c1": 756.0,
+    "k_c2": 800.0,
+    "width": 50.0,
+    "credit_entry": 4.436926133269865,
+    "debit_exit": null,
+    "gross_usd": null,
+    "entry_cost_usd": 12.841460091870028,
+    "exit_cost_usd": null,
+    "cost_usd": null,
+    "net_usd": null,
+    "n_touches": 8,
+    "contracts": 1,
+    "max_loss_usd": 4556.307386673014,
+    "risk_usd": 4556.307386673014,
+    "ror": null,
+    "credit_over_width": 0.0887385226653973,
+    "cost_over_credit": null,
+    "window": "P3",
+    "entry_month": "2026-10",
+    "month": "2026-11",
+    "entry_tier_max": 1,
+    "graded": false,
+    "settle_close": null,
+    "settle_source": null,
+    "legs_json": "[{\"name\": \"p1\", \"option_chain_id\": \"QQQ261106P00665000\", \"option_type\": \"put\", \"strike\": 665.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 5.072194357366771, \"entry_spread\": 0.015022996865203761, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"p2\", \"option_chain_id\": \"QQQ261106P00615000\", \"option_type\": \"put\", \"strike\": 615.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 1.9343478260869564, \"entry_spread\": 0.01645631884057971, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c1\", \"option_chain_id\": \"QQQ261106C00756000\", \"option_type\": \"call\", \"strike\": 756.0, \"expiry\": \"2026-11-06\", \"side\": -1, \"entry_price\": 1.3783333333333334, \"entry_spread\": 0.058043166666666667, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}, {\"name\": \"c2\", \"option_chain_id\": \"QQQ261106C00800000\", \"option_type\": \"call\", \"strike\": 800.0, \"expiry\": \"2026-11-06\", \"side\": 1, \"entry_price\": 0.07925373134328358, \"entry_spread\": 0.21190883582089554, \"entry_tier\": 1, \"entry_source\": \"print_vwap\"}]",
+    "p1_id": "QQQ261106P00665000",
+    "p1_entry": 5.072194357366771,
+    "p1_entry_tier": 1,
+    "p1_entry_spread": 0.015022996865203761,
+    "p1_exit": null,
+    "p1_exit_tier": null,
+    "p2_id": "QQQ261106P00615000",
+    "p2_entry": 1.9343478260869564,
+    "p2_entry_tier": 1,
+    "p2_entry_spread": 0.01645631884057971,
+    "p2_exit": null,
+    "p2_exit_tier": null,
+    "c1_id": "QQQ261106C00756000",
+    "c1_entry": 1.3783333333333334,
+    "c1_entry_tier": 1,
+    "c1_entry_spread": 0.058043166666666667,
+    "c1_exit": null,
+    "c1_exit_tier": null,
+    "c2_id": "QQQ261106C00800000",
+    "c2_entry": 0.07925373134328358,
+    "c2_entry_tier": 1,
+    "c2_entry_spread": 0.21190883582089554,
+    "c2_exit": null,
+    "c2_exit_tier": null,
+    "gate_reason": "ON",
+    "gate_asof": "2026-10-15",
+    "gate_vix": 16.46,
+    "gate_vix3m": 18.49,
+    "gate_x": 22.89,
+    "gate_x_median": 21.145,
+    "gate_mode": "both",
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "gate_verdict": "ON"
+   }
+  ],
+  "exploration_skipped": [
+   {
+    "ticker": "SPY",
+    "underlying": "SPY",
+    "entry": "2026-10-16",
+    "E": "2026-10-16",
+    "variant": "B1",
+    "structure": "IC",
+    "reason": "no_tier1_c2",
+    "gate_reason": "ON"
+   }
+  ],
+  "open_positions": {
+   "QQQ-IC": 2,
+   "QQQ-PS": 3,
+   "SPY-IC": 1,
+   "SPY-PS": 2
+  },
+  "running": [
+   {
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "sleeve": "QQQ-IC",
+    "n": 2,
+    "mean_ror": null,
+    "nw_t": null,
+    "net_usd_total": 683.8746436386215
+   },
+   {
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "sleeve": "QQQ-PS",
+    "n": 2,
+    "mean_ror": null,
+    "nw_t": null,
+    "net_usd_total": 413.47791476578743
+   },
+   {
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "sleeve": "SPY-IC",
+    "n": 1,
+    "mean_ror": null,
+    "nw_t": null,
+    "net_usd_total": 198.73427732155992
+   },
+   {
+    "policy_id": "sb-1.0",
+    "role": "champion",
+    "sleeve": "SPY-PS",
+    "n": 2,
+    "mean_ror": null,
+    "nw_t": null,
+    "net_usd_total": 283.47694471026836
+   },
+   {
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "sleeve": "QQQ-IC",
+    "n": 2,
+    "mean_ror": null,
+    "nw_t": null,
+    "net_usd_total": 683.8746436386215
+   },
+   {
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "sleeve": "QQQ-PS",
+    "n": 3,
+    "mean_ror": 0.05844287445945114,
+    "nw_t": 28.909621906524887,
+    "net_usd_total": 625.6686596677708
+   },
+   {
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "sleeve": "SPY-IC",
+    "n": 2,
+    "mean_ror": null,
+    "nw_t": null,
+    "net_usd_total": 369.54836754022034
+   },
+   {
+    "policy_id": "sb-1.0",
+    "role": "exploration",
+    "sleeve": "SPY-PS",
+    "n": 3,
+    "mean_ror": 0.052335739007828785,
+    "nw_t": 56.305118757015585,
+    "net_usd_total": 407.7956464289288
+   }
+  ],
+  "ledger": {
+   "emitted": 3,
+   "skipped": 0,
+   "graded": 8,
+   "ledger_open": true,
+   "exploration_emitted": 3,
+   "exploration_skipped": 0
+  },
+  "refresh": {
+   "ok": true,
+   "through": "2026-10-16"
+  }
+ },
+ "watch_basket": {
+  "available": true,
+  "reason": null,
+  "universe_n": 2073,
+  "count_distribution": {
+   "bull": {
+    "0": 688,
+    "1": 887,
+    "2": 356,
+    "3": 121,
+    "4": 21,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0
+   },
+   "bear": {
+    "0": 751,
+    "1": 752,
+    "2": 394,
+    "3": 131,
+    "4": 40,
+    "5": 5,
+    "6": 0,
+    "7": 0,
+    "8": 0
+   }
+  },
+  "top_bull": [
+   {
+    "ticker": "ACA",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "AMGN",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BFB",
+    "bull": 4,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-POC",
+     "C-POC-A",
+     "C-SHORT",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BIIB",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "BRKB",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-LEAP",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "DRH",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "FUL",
+    "bull": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "GGG",
+    "bull": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-POC",
+     "C-POC-A"
+    ]
+   },
+   {
+    "ticker": "HLF",
+    "bull": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-POC-A",
+     "C-SWING",
+     "C-CROWD"
+    ]
+   },
+   {
+    "ticker": "HST",
+    "bull": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "MD",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A"
+    ]
+   },
+   {
+    "ticker": "MQ",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "MTD",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "MUR",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-SHORT"
+    ]
+   },
+   {
+    "ticker": "NHC",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "PAYP",
+    "bull": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-DIV-D",
+     "C-AVWAP"
+    ]
+   },
+   {
+    "ticker": "PK",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-SHORT",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "PRSU",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING"
+    ]
+   },
+   {
+    "ticker": "RGA",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "WABC",
+    "bull": 4,
+    "true_ids": [
+     "C-HIGH",
+     "C-DIV-D",
+     "C-POC",
+     "C-SWING"
+    ]
+   }
+  ],
+  "top_bear": [
+   {
+    "ticker": "ASTS",
+    "bear": 5,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "ENPH",
+    "bear": 5,
+    "true_ids": [
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "FLG",
+    "bear": 5,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "NVAX",
+    "bear": 5,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "RIVN",
+    "bear": 5,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "ALB",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "APLD",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "ATHM",
+    "bear": 4,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ]
+   },
+   {
+    "ticker": "BIDU",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "CAR",
+    "bear": 4,
+    "true_ids": [
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ]
+   },
+   {
+    "ticker": "CBRS",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "CELC",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-RSI",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "CORZ",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "CPNG",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "CVNA",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "CZR",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "DKNG",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   },
+   {
+    "ticker": "FSK",
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ]
+   },
+   {
+    "ticker": "GEO",
+    "bear": 4,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS"
+    ]
+   },
+   {
+    "ticker": "GLNG",
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ]
+   }
+  ],
+  "long": [
+   {
+    "ticker": "ABBV",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ABM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ACA",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "AEM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AMGN",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "AWI",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-POC-A"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "BBWI",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BBY",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BFA",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-AVWAP",
+     "C-POC",
+     "C-POC-A"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BIIB",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CAH",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CBC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CE",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-POC",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CFG",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CHT",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CNK",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "COLM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-AVWAP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CON",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "COO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CUBI",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "DRH",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "DSGR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "E",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "EG",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "EMR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FERG",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FIZZ",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-AVWAP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FRHC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FUL",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "GGG",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-POC",
+     "C-POC-A"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "GIC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "GILD",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "HALO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "HBT",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-DIV-D"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HCSG",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HG",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HLI",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "HLT",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "HMC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "HONA",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING",
+     "C-RSI",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HRTG",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "HST",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "JOE",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "KO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LQDT",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MAR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "MCBS",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MCK",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "MD",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-POC-A"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "MO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MQ",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "MSM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "NHC",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "NVS",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NWE",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "OPLN",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "OSBC",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "PAYP",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-DIV-D",
+     "C-AVWAP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PBH",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "PM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PRSU",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "PSO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "REYN",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "RGA",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "RSG",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SHEL",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SHO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SHOP",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SSD",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-DIV-D",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TALO",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "TDY",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TILE",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC-A",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TR",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "TRGP",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TW",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-DIV",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "USPH",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "VTRS",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WABC",
+    "bull": 4,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-DIV-D",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WMK",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-AVWAP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WS",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-AVWAP",
+     "C-POC",
+     "C-SWING"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WSM",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-POC-A",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "ZION",
+    "bull": 3,
+    "bear": 0,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SWING",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   }
+  ],
+  "short": [
+   {
+    "ticker": "AA",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "AG",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "AI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ALB",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "ALK",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "AMSC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "ATHM",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "AVAV",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "BBVA",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BDC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BEPC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BHVN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "BIDU",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CDE",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CGON",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CIEN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CPNG",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "CRSP",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FLNG",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FLS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FSK",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "FSLR",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "FSLY",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GEO",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GIL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "GNTX",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "GPGI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "GSL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HYMC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "IDCC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "INSM",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "INTC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "KEP",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "KOD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LEU",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LIF",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "LNN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MAIN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "MC",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "META",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "MRCY",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MRVL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MSDL",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "MU",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "MWH",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "NAMS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "NVAX",
+    "bull": 0,
+    "bear": 5,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OMER",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OSIS",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "PFG",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "PTGX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "QURE",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "REPL",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "RKT",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SAN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SIRI",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SNDX",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "SPCX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "STRD",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-AVWAP-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SUPN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "TRIN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-POC-LOSS",
+     "C-POC-A-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "VERA",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "VKTX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WHR",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-RSI",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": false
+   },
+   {
+    "ticker": "WIX",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-SHORT",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WLDN",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WOLF",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-LOW",
+     "C-SHORT",
+     "C-CROWD"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "WRBY",
+    "bull": 0,
+    "bear": 3,
+    "true_ids": [
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   },
+   {
+    "ticker": "XE",
+    "bull": 0,
+    "bear": 4,
+    "true_ids": [
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": false
+   }
+  ],
+  "vol": [],
+  "conflict": [
+   {
+    "ticker": "AAON",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ACM",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "AM",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-POC-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AMTM",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-AVWAP",
+     "C-SWING",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "APP",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "AVLN",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "AXON",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "BHF",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BILI",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "BROS",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CG",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-RSI",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CNQ",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-POC",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CPB",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CRK",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-AVWAP",
+     "C-LOW",
+     "C-OIBUILD"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CW",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-RSI",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "CXW",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "DYN",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ECHO",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SHORT",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "EEFT",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "EVR",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FIGS",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FLG",
+    "bull": 2,
+    "bear": 5,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FLUT",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FN",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "FTAI",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-CROWD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GCT",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-CROWD",
+     "C-AVWAP-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GME",
+    "bull": 3,
+    "bear": 3,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "GOLF",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HGV",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "HLNE",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "IONS",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "IOVA",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "IRT",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "JPM",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-SWING",
+     "C-OIBUILD",
+     "C-POC-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KARD",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KDP",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-POC",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KGC",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "KNF",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "KYMR",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "LII",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MAA",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "MPWR",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MRK",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-IVUP",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "MRNA",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NBR",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NLY",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-RSI",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NOV",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "NXT",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OLED",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "OLN",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ORCL",
+    "bull": 2,
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-LEAP",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PFSI",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PGY",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-CROWD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-LEAP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PIPR",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "PRMB",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "PTCT",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "QNT",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-DIV",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "QXO",
+    "bull": 3,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "RYAAY",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SEDG",
+    "bull": 2,
+    "bear": 4,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SFM",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SGI",
+    "bull": 3,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SNY",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-POC-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "SPXC",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TBBK",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TDS",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "TTD",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-RSI",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "UPST",
+    "bull": 3,
+    "bear": 4,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-CROWD"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "URBN",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-HIGH",
+     "C-SWING",
+     "C-SHORT",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "UVV",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "VALE",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "VG",
+    "bull": 3,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-OIBUILD",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "VOYA",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-POC-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "VSEC",
+    "bull": 2,
+    "bear": 3,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SHORT",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WD",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-LOW",
+     "C-SWING-LOSS",
+     "C-RSI"
+    ],
+    "null_ids": [
+     "C-SHORT"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WGS",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SHORT",
+     "C-CROWD"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "WLK",
+    "bull": 3,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-DIV-D",
+     "C-SWING",
+     "C-LOW",
+     "C-SHORT"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WMB",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-IVUP",
+     "C-AVWAP",
+     "C-AVWAP-LOSS",
+     "C-SWING-LOSS",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WSBC",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-SHORT",
+     "C-POC-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "WYNN",
+    "bull": 2,
+    "bear": 4,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-CROWD",
+     "C-SWING-LOSS",
+     "C-RSI",
+     "C-DP"
+    ],
+    "null_ids": [],
+    "episode": true
+   },
+   {
+    "ticker": "Z",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-AVWAP",
+     "C-SWING",
+     "C-LOW",
+     "C-OIBUILD",
+     "C-DP"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   },
+   {
+    "ticker": "ZYME",
+    "bull": 2,
+    "bear": 2,
+    "true_ids": [
+     "C-DIV-D",
+     "C-AVWAP",
+     "C-CROWD",
+     "C-SWING-LOSS"
+    ],
+    "null_ids": [
+     "C-POC-A",
+     "C-SHORT",
+     "C-POC-A-LOSS"
+    ],
+    "episode": true
+   }
+  ],
+  "ledger_open": true,
+  "wb_emitted": 151,
+  "wb_skipped": 0,
+  "wb_graded": 639,
+  "borrow": {
+   "asof": "2026-10-16",
+   "stale_days": 0,
+   "names_with_fee": 2064
+  },
+  "elapsed_s": 65.64
+ },
+ "sc_state": {
+  "date": "2026-10-16",
+  "is_entry_day": true,
+  "ledger_open": true,
+  "funnel": {
+   "F1": 2272,
+   "F3": 1005,
+   "F5": 704,
+   "F8": 72,
+   "F2": 1125,
+   "F4": 756,
+   "F6": 14,
+   "F9": 1,
+   "F7": 50
+  },
+  "candidates": [],
+  "graded": [],
+  "unsettled": [],
+  "exploration": {
+   "names": 149,
+   "by_verdict": {
+    "F1": 43,
+    "F3": 59,
+    "F5": 27,
+    "F2": 15,
+    "F6": 1,
+    "F9": 1,
+    "F4": 3
+   },
+   "graded": 0
+  },
+  "open_book": {
+   "sb_open": true,
+   "sleeves": [
+    {
+     "pair": "C1-SS",
+     "positions": 5,
+     "open_risk_usd": 6688.69359247134,
+     "budget_usd": 8000.0,
+     "max_sector_positions": 3
+    },
+    {
+     "pair": "C1-IB",
+     "positions": 5,
+     "open_risk_usd": 3962.468691111905,
+     "budget_usd": 4000.0,
+     "max_sector_positions": 3
+    },
+    {
+     "pair": "C2-SS",
+     "positions": 5,
+     "open_risk_usd": 7496.6379292003285,
+     "budget_usd": 8000.0,
+     "max_sector_positions": 3
+    },
+    {
+     "pair": "C2-IB",
+     "positions": 4,
+     "open_risk_usd": 3571.316109644668,
+     "budget_usd": 4000.0,
+     "max_sector_positions": 3
+    }
+   ]
+  },
+  "running": [],
+  "progress": [
+   {
+    "pair": "C1-SS",
+    "forward_weeks": 0,
+    "required": 40
+   },
+   {
+    "pair": "C1-IB",
+    "forward_weeks": 0,
+    "required": 40
+   },
+   {
+    "pair": "C2-SS",
+    "forward_weeks": 0,
+    "required": 40
+   },
+   {
+    "pair": "C2-IB",
+    "forward_weeks": 0,
+    "required": 40
+   }
+  ],
+  "ledger": {
+   "emitted": 0,
+   "skipped": 0,
+   "exploration_emitted": 296,
+   "exploration_skipped": 0,
+   "graded": 0
+  }
+ }
+}
