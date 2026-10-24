@@ -3,7 +3,7 @@
 
 ## §4.3 reproduction and straddle checks
 
-E1 headline from `earnings_events`: N 3329 (ref 3260), 116 pre-dates, mean implied−realized +1.5458% (ref +1.5591%), t 7.27 (ref 7.24) — N match: False, mean match: False, t match: False.
+E1 headline from `earnings_events`: N 3359 (ref 3260), 120 pre-dates, mean implied−realized +1.5623% (ref +1.5591%), t 7.42 (ref 7.24) — N match: False, mean match: False, t match: False.
 
 (a) marked late straddle / vendor implied move on the 207 A1 events: mean 1.253, median 1.188, IQR 1.164–1.224 (07-29 spot check: 1.20).
 
@@ -14,16 +14,16 @@ Mean absolute realized move 8.15% vs mean marked straddle 11.64% of spot (the §
 
 ## Filter funnel (A1, first failing filter)
 
-3329 events → A1 207 traded, A2 125 traded (A2 sector cut removed 82).
+3359 events → A1 207 traded, A2 125 traded (A2 sector cut removed 82).
 
 | filter | first_fail_count |
 |---|---|
 | F1 | 0 |
-| F2 | 172 |
-| F3 | 742 |
-| F4 | 426 |
-| F5 | 1279 |
-| F6 | 464 |
+| F2 | 174 |
+| F3 | 762 |
+| F4 | 429 |
+| F5 | 1280 |
+| F6 | 468 |
 | F7 | 35 |
 | F8 | 4 |
 
@@ -272,10 +272,10 @@ Worst 10 events, A1 IC (S2):
 | spread_12.5pct | A1 | IC | 288 | 71 | -1.16% | -5.95 | +1.90% |
 | spread_12.5pct | A2 | SS | 178 | 68 | -0.31% | -1.22 | +1.29% |
 | spread_12.5pct | A2 | IC | 178 | 68 | -0.96% | -4.67 | +1.77% |
-| mcap_1B_100B | A1 | SS | 260 | 70 | -0.75% | -2.18 | +1.23% |
-| mcap_1B_100B | A1 | IC | 260 | 70 | -1.14% | -4.74 | +1.67% |
-| mcap_1B_100B | A2 | SS | 153 | 62 | -0.16% | -0.5543 | +1.13% |
-| mcap_1B_100B | A2 | IC | 153 | 62 | -0.80% | -3.40 | +1.54% |
+| mcap_1B_100B | A1 | SS | 261 | 71 | -0.75% | -2.17 | +1.23% |
+| mcap_1B_100B | A1 | IC | 261 | 71 | -1.14% | -4.73 | +1.66% |
+| mcap_1B_100B | A2 | SS | 154 | 63 | -0.16% | -0.5463 | +1.12% |
+| mcap_1B_100B | A2 | IC | 154 | 63 | -0.79% | -3.38 | +1.53% |
 
 
 ## Go / no-go (DESIGN/70 §4.2, read on Season 3 alone)
