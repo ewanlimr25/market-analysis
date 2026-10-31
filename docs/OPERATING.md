@@ -11,6 +11,7 @@ off, and the dates that matter. Design and evidence live in `~/Development/findi
 
 ```
 cd ~/Development/market-analysis
+python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py   # FRIDAY ONLY (see below)
 make daily DATE=YYYY-MM-DD                       # the session that just closed; ~2 s
 git add analyses/daily ledger && git commit -m "daily: YYYY-MM-DD" && git push
 ```
@@ -22,9 +23,17 @@ a gate ON lists the SPY/QQQ put spreads and condors and the ledger gains rows, a
 four sleeves as skipped. The command is the same either way. Skip weekends and holidays; if the export
 has not landed, wait.
 
+**Friday is also the expiry night, so rebuild the truth set before `make daily`** (the first line above; the
+last session of the week, so Thursday before a Friday holiday). S-B and S-C settle at the official close in
+`prices.parquet`; without that day's close every grade falls back to the last print, and the ledger keeps it.
+From 10-09 to 10-30 every Friday graded that way, and the QQQ rows on 10-23 and 10-30 carry the wrong
+P&L (findings D39). Monday to Thursday the preflight still warns that the truth set is behind; nothing settles
+on those nights, so the warning is expected.
+
 **Every weekend**
 
 ```
+python3 scripts/truthset/build_universe.py       # the ticker spine for prices AND the Saturday FINRA loader; first, before the builds
 python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py
 make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
 make ticker-batch DATE=YYYY-MM-DD                # the Friday just closed, never empty: one sheet per watch name, the exploration book (§6b)
@@ -32,8 +41,12 @@ make backtest-sb REFRESH=1 && make report-sb     # extend the proxy, re-run the 
 make backtest-sc && make report-sc               # S-C panel run + §6 harness -> data/backtest/sc_report.md (NOT DUE until 40 forward weeks)
 make test                                        # every unit test (1,265 at 2026-10-12); also proves no frozen parameter moved
 make backtest && make report                     # S-A; its E1 line reads N match False once the mart runs past the E1 artifact (expected)
-git add data/backtest analyses/ticker ledger/name && git commit -m "weekly: YYYY-MM-DD" && git push
+git add data/universe.json data/backtest analyses/ticker ledger/name && git commit -m "weekly: YYYY-MM-DD" && git push
 ```
+
+Before the commit, check that `sb_report.md` and `sc_report.md` were rewritten (their `Inputs` line names the
+Friday just closed): on 10-31 the backtests ran but the two report steps did not, and the weekly commit carried
+the previous week's scorecards (findings D39).
 
 **`DATE` is the Friday just closed, and the block belongs on the weekend.** With no `DATE` the batch prices
 today (the Makefile's default), which has no export until 8 PM: every sheet fails L1 and stores those empty inputs
@@ -100,6 +113,7 @@ did the week before.
 
 ```
 cd ~/Development/market-analysis
+python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py   # FRIDAY ONLY: expiries settle on this close (§0, D39)
 make daily DATE=YYYY-MM-DD          # the session that just closed; about 2 seconds
 git add analyses/daily ledger && git commit -m "daily: YYYY-MM-DD"
 ```
@@ -251,6 +265,7 @@ before the read.
 ## 4. Weekly (weekend)
 
 ```
+python3 scripts/truthset/build_universe.py       # the ticker spine for prices AND the Saturday FINRA loader (see note)
 python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && python3 scripts/truthset/build_features.py
 make intraday-rv DAYS=5                          # the truth set and intraday_rv are NOT nightly: refresh them first (see note)
 make ticker-batch DATE=YYYY-MM-DD                # the Friday just closed, never empty: one sheet per watch name, the exploration book (§6b)
@@ -264,8 +279,16 @@ make test                                        # every unit test; must stay gr
 `data/mart/intraday_rv` are manual rebuilds; no loader or `make daily` touches them. Left alone they go stale
 silently until preflight trips: they sat at 2026-09-04 for three weeks in September, which made `rv5_21` and
 the regime label on every ticker sheet 10+ sessions old and would have pushed S-B and S-C settlement onto the
-last-print fallback. Run the two refresh lines every weekend, and again before any `make daily` or
-`make ticker` whose date is past the truth set's last session.
+last-print fallback. Run the refresh lines every weekend, the truth-set line again before Friday's `make daily`
+(§0), and before any `make ticker` whose date is past the truth set's last session.
+
+**Why the universe comes before them.** `data/universe.json` is the ticker list `build_prices.py` fetches and the
+Saturday FINRA loader (`make loaders-weekly`) pulls short interest for; the screener spine behind S-A, S-C and the
+watch basket is live. Left alone the two drift apart and fail open: a name missing from the list has no truth-set
+close, so its expiry settles on the last print however fresh the parquet is, and no `days_to_cover`, so the
+basket's `C-SHORT` reads null. Frozen from 2026-08-08 to 10-31 it fell 112 names behind (findings D39).
+`build_universe.py` takes every name that cleared the liquid gate on any panel day, and a FINRA settlement
+partition is written once, so a newly added name's short interest starts at the next settlement, not before.
 
 Read `data/backtest/sb_report.md` §8 (go/no-go as of today). The report ends with an appendix that defines every column, symbol and
 verdict it prints (`engine/validation/sb_glossary.py`). Between the sensitivities and the marked tables it also carries

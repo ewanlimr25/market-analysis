@@ -77,16 +77,21 @@ data/
 └── backtest/            ← backtest outputs; the *.md reports are tracked
 ```
 
-The truth set is a manual rebuild, not part of `make daily`. Build it in order, and refresh it every weekend:
+The truth set is a manual rebuild, not part of `make daily`. Build it in order, every weekend and again before
+Friday's nightly (the night positions expire):
 
 ```bash
+python3 scripts/truthset/build_universe.py    # weekend only: the ticker spine, from the screener panel's liquid gate
 python3 scripts/truthset/build_prices.py      # network: Yahoo chart API; end date defaults to today
 python3 scripts/truthset/build_returns.py
 python3 scripts/truthset/build_features.py    # reads the external panel
 ```
 
-`make daily` appends the night's marts itself and runs the preflight first (a missing or empty export, or a
-truth set that does not reach the trade date, stops the run). The SPY/QQQ chains, Reg SHO, IBKR borrow and
+`universe.json` is also the list the weekly FINRA loader fetches, so a name missing from it has neither prices
+nor short interest.
+
+`make daily` appends the night's marts itself and runs the preflight first (a missing or empty export stops the
+run; a truth set that does not reach the trade date is a warning). The SPY/QQQ chains, Reg SHO, IBKR borrow and
 FINRA short interest are fetched by two scheduled loaders (`make loaders`, `make loaders-weekly`; launchd
 setup in `docs/OPERATING.md §1`).
 
