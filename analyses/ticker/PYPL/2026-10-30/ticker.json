@@ -1,0 +1,438 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "PYPL",
+ "date": "2026-10-30",
+ "generated": "2026-10-31T14:08:24+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L6",
+  "contracts": 423,
+  "hot_chain_days": 21,
+  "adv_usd": 644704833.18573,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-11-27",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-10-30",
+   "close": "screener 2026-10-30",
+   "contracts": "daily_contract 2026-10-30",
+   "hot_chain_days": "daily_contract 2026-10-02..2026-10-30 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-10-30",
+   "atm_spread": "daily_contract late window 2026-10-30",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-10-30"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 57.015 at 2026-11-27 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2027-02-01",
+   "session": "post",
+   "session_date": "2027-02-02",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2027-02-01",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2027-02-02",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-10-27",
+     "hour": null
+    }
+   ],
+   "confirmed": false,
+   "days_to": 95
+  },
+  "ex_div": "2026-12-04",
+  "expiries": [
+   "2026-11-06",
+   "2026-11-13"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-12-14",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-10-30 + yfinance calendar",
+   "ex_div": "screener 2026-10-30",
+   "expiries": "cboe_chain 2026-10-30",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.earnings.confirmed",
+    "reason": "the earnings sources disagree on the session: finnhub 2027-02-01 amc, screener 2027-02-02 unknown, yfinance 2026-10-27 None"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.31,
+  "iv_pct_own": 23.809523809523807,
+  "rv5_21": 22.232048905021927,
+  "rv_c2c_21": 20.20605338454932,
+  "spread_rv5": 8.767951094978073,
+  "spread_c2c": 10.793946615450679,
+  "slope": 2.62,
+  "earnings_history": [
+   {
+    "E": "2026-05-05",
+    "implied_move": 0.0788922760570887,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.07739626430681823,
+    "ratio": 0.9810372849531186
+   },
+   {
+    "E": "2026-07-28",
+    "implied_move": 0.0717976568644886,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.040128411133337316,
+    "ratio": 0.5589097595354117
+   }
+  ],
+  "median_ratio_8": 0.7699735222442652,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": true,
+  "verdict": "FAIR",
+  "source": {
+   "iv30d": "screener 2026-10-30 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-04..2026-10-30 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-02..2026-10-30 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-02..2026-10-30",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-10-30) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-02..2026-10-30 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-10-30) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-02..2026-10-30)",
+   "slope": "cboe_chain 2026-10-30 ATM IV at 2026-11-06 then 2026-11-13, vol points",
+   "earnings_history": "earnings_events <= 2026-07-28 + earnings_history/events.parquet <= 2026-07-28",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-10-30",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-10-30"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-11-06",
+   "strike": 57.0,
+   "mark": 1.78,
+   "mark_source": "cboe_chain 2026-10-30",
+   "tier": null
+  },
+  "box_1s_front": 1.78,
+  "box_1s_21": 5.067164665746962,
+  "atr14": 1.396373771553274,
+  "gex_total": 81417170.2286,
+  "gex_sign": "+",
+  "zero_gamma": 57.0,
+  "zero_gamma_all_crossings": [
+   57.0
+  ],
+  "spot": 57.015,
+  "source": {
+   "straddle_front": "cboe_chain 2026-10-30",
+   "box_1s_front": "cboe_chain 2026-10-30",
+   "box_1s_21": "screener 2026-10-30",
+   "atr14": "earnings_history/bars <= 2026-10-30",
+   "gex_total": "cboe_chain 2026-10-30",
+   "gex_sign": "cboe_chain 2026-10-30",
+   "zero_gamma": "cboe_chain 2026-10-30",
+   "spot": "screener 2026-10-30"
+  },
+  "nulls": []
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.4081,
+   "available": 10000000.0,
+   "date": "2026-10-30",
+   "decile": 0.33850637704264647,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.0329,
+   "dtc": 2.79,
+   "settlement": "2026-10-15",
+   "publication": "2026-10-28",
+   "position": 27266432.0
+  },
+  "beta_250": 0.9792447653280443,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-10-23",
+    "firm": "Truist Securities",
+    "from": "Hold",
+    "to": "Hold",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-27",
+    "firm": "Needham",
+    "from": "Hold",
+    "to": "Hold",
+    "action": "reit"
+   },
+   {
+    "date": "2026-10-27",
+    "firm": "BTIG",
+    "from": "Neutral",
+    "to": "Neutral",
+    "action": "reit"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "UBS",
+    "from": "Neutral",
+    "to": "Neutral",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "Citigroup",
+    "from": "Neutral",
+    "to": "Neutral",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "BMO Capital",
+    "from": "Market Perform",
+    "to": "Market Perform",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "TD Cowen",
+    "from": "Hold",
+    "to": "Hold",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "Evercore ISI Group",
+    "from": "In-Line",
+    "to": "In-Line",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "Canaccord Genuity",
+    "from": "Hold",
+    "to": "Hold",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "Morgan Stanley",
+    "from": "Underweight",
+    "to": "Underweight",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-28",
+    "firm": "B of A Securities",
+    "from": "Underperform",
+    "to": "Underperform",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-29",
+    "firm": "Barclays",
+    "from": "Equal-Weight",
+    "to": "Underweight",
+    "action": "down"
+   }
+  ],
+  "analyst_n": 12,
+  "form4": {
+   "buys": 0,
+   "sells": 0,
+   "other": 11,
+   "rows": [
+    {
+     "date": "2026-10-15",
+     "name": "Keller Frank",
+     "code": "M",
+     "shares": -1639.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Keller Frank",
+     "code": "F",
+     "shares": -907.0,
+     "price": 56.1
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Keller Frank",
+     "code": "M",
+     "shares": 1639.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Natali Chris",
+     "code": "M",
+     "shares": -2727.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Natali Chris",
+     "code": "F",
+     "shares": -1291.0,
+     "price": 56.1
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Natali Chris",
+     "code": "M",
+     "shares": 2727.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Webster Aaron",
+     "code": "M",
+     "shares": -2622.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Webster Aaron",
+     "code": "M",
+     "shares": -5900.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Webster Aaron",
+     "code": "F",
+     "shares": -3883.0,
+     "price": 56.1
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Webster Aaron",
+     "code": "M",
+     "shares": 2622.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "Webster Aaron",
+     "code": "M",
+     "shares": 5900.0,
+     "price": 0.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 19.42,
+   "vix3m": 20.78,
+   "vxn": 28.5,
+   "term": "contango",
+   "date": "2026-10-30"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-10-30",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-10-30",
+   "si": "short_interest (FINRA) settlement 2026-10-15, published 2026-10-28 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-10-30",
+   "analyst": "yfinance upgrades_downgrades <= 2026-10-30",
+   "form4": "finnhub /stock/insider-transactions <= 2026-10-30",
+   "vix": "index_vol 2026-10-30",
+   "regime": "_regime.classify_regime asof 2026-10-30",
+   "x2": "borrow (IBKR) 2026-10-30",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": 0.07444396618938853,
+  "ret_63": -0.014860905930961121,
+  "w52_pos": 0.5741256774600608,
+  "flow_pct_universe": 98.28936170212766,
+  "flow_pct_self": 67.46031746031746,
+  "vol_pct_universe": 58.548999309868876,
+  "vol_pct_self": 84.92063492063492,
+  "net_premium": 727171.0,
+  "volume_ratio": 0.9372337392090238,
+  "universe_n": 5875,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-10-30",
+   "ret_63": "earnings_history/bars <= 2026-10-30",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-10-30",
+   "net_premium": "screener 2026-10-30",
+   "volume_ratio": "screener 2026-10-30",
+   "flow_pct_universe": "screener universe 2026-10-30",
+   "vol_pct_universe": "screener universe 2026-10-30",
+   "flow_pct_self": "screener 63 sessions to 2026-10-30",
+   "vol_pct_self": "screener 63 sessions to 2026-10-30",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/PYPL/2026-10-30/inputs",
+ "nulls": [
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 57.015 at 2026-11-27 with 5+ lots on both legs"
+  },
+  {
+   "field": "events.earnings.confirmed",
+   "reason": "the earnings sources disagree on the session: finnhub 2027-02-01 amc, screener 2027-02-02 unknown, yfinance 2026-10-27 None"
+  }
+ ]
+}

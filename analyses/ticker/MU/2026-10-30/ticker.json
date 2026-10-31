@@ -1,0 +1,1449 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "MU",
+ "date": "2026-10-30",
+ "generated": "2026-10-31T14:07:19+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": true,
+  "failing": null,
+  "contracts": 5048,
+  "hot_chain_days": 21,
+  "adv_usd": 24747461137.055664,
+  "atm_spread": 0.03346102259887006,
+  "tier": 1,
+  "atm_strike": 885.0,
+  "atm_expiry": "2026-11-27",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": true
+  },
+  "source": {
+   "issue_type": "screener 2026-10-30",
+   "close": "screener 2026-10-30",
+   "contracts": "daily_contract 2026-10-30",
+   "hot_chain_days": "daily_contract 2026-10-02..2026-10-30 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-10-30",
+   "atm_spread": "daily_contract late window 2026-10-30",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-10-30"
+  },
+  "nulls": []
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-12-15",
+   "session": "post",
+   "session_date": "2026-12-16",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-12-15",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2026-12-16",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-12-23",
+     "hour": null
+    }
+   ],
+   "confirmed": false,
+   "days_to": 47
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-11-06",
+   "2026-11-09"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-12-14",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-10-30 + yfinance calendar",
+   "ex_div": "screener 2026-10-30",
+   "expiries": "cboe_chain 2026-10-30",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.earnings.confirmed",
+    "reason": "the earnings sources disagree on the session: finnhub 2026-12-15 amc, screener 2026-12-16 unknown, yfinance 2026-12-23 None"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.55,
+  "iv_pct_own": 17.46031746031746,
+  "rv5_21": 36.56997841365969,
+  "rv_c2c_21": 57.52866455315457,
+  "spread_rv5": 18.430021586340317,
+  "spread_c2c": -2.528664553154563,
+  "slope": -5.970000000000009,
+  "earnings_history": [
+   {
+    "E": "2026-03-18",
+    "implied_move": 0.0655627568501189,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.03781435375049347,
+    "ratio": 0.5767657671403256
+   },
+   {
+    "E": "2026-06-24",
+    "implied_move": 0.0942283512822345,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.15741389904805847,
+    "ratio": 1.6705577133210094
+   },
+   {
+    "E": "2026-09-30",
+    "implied_move": 0.0621031907862286,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.03030675680523287,
+    "ratio": 0.4880064360872325
+   }
+  ],
+  "median_ratio_8": 0.5767657671403256,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": true,
+  "verdict": "FAIR",
+  "source": {
+   "iv30d": "screener 2026-10-30 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-04..2026-10-30 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-02..2026-10-30 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-02..2026-10-30",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-10-30) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-02..2026-10-30 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-10-30) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-02..2026-10-30)",
+   "slope": "cboe_chain 2026-10-30 ATM IV at 2026-11-06 then 2026-11-09, vol points",
+   "earnings_history": "earnings_events <= 2026-09-30 + earnings_history/events.parquet <= 2026-06-24",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-10-30",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-10-30"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-11-06",
+   "strike": 885.0,
+   "mark": 61.05,
+   "mark_source": "cboe_chain 2026-10-30",
+   "tier": null
+  },
+  "box_1s_front": 61.05,
+  "box_1s_21": 139.5468878338374,
+  "atr14": 49.57678729723134,
+  "gex_total": -26848847.274000008,
+  "gex_sign": "-",
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 885.0,
+  "source": {
+   "straddle_front": "cboe_chain 2026-10-30",
+   "box_1s_front": "cboe_chain 2026-10-30",
+   "box_1s_21": "screener 2026-10-30",
+   "atr14": "earnings_history/bars <= 2026-10-30",
+   "gex_total": "cboe_chain 2026-10-30",
+   "gex_sign": "cboe_chain 2026-10-30",
+   "zero_gamma": "cboe_chain 2026-10-30",
+   "spot": "screener 2026-10-30"
+  },
+  "nulls": [
+   {
+    "field": "zero_gamma",
+    "reason": "cumulative GEX never changes sign over the listed strikes"
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.25,
+   "available": 10000000.0,
+   "date": "2026-10-30",
+   "decile": 0.12270825029892388,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.02,
+   "dtc": 1.0,
+   "settlement": "2026-10-15",
+   "publication": "2026-10-28",
+   "position": 22533635.0
+  },
+  "beta_250": 3.378871528224169,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-10-22",
+    "firm": "Rosenblatt",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-22",
+    "firm": "Needham",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "reit"
+   }
+  ],
+  "analyst_n": 2,
+  "form4": {
+   "buys": 0,
+   "sells": 31,
+   "other": 109,
+   "rows": [
+    {
+     "date": "2026-10-16",
+     "name": "Deboer Scott J",
+     "code": "S",
+     "shares": -1.0,
+     "price": 902.01
+    },
+    {
+     "date": "2026-10-16",
+     "name": "Deboer Scott J",
+     "code": "S",
+     "shares": -100.0,
+     "price": 901.0
+    },
+    {
+     "date": "2026-10-16",
+     "name": "Deboer Scott J",
+     "code": "S",
+     "shares": -28444.0,
+     "price": 900.0
+    },
+    {
+     "date": "2026-10-15",
+     "name": "ALLEN SCOTT R.",
+     "code": "F",
+     "shares": -218.0,
+     "price": 914.13
+    },
+    {
+     "date": "2026-10-15",
+     "name": "ALLEN SCOTT R.",
+     "code": "F",
+     "shares": -583.0,
+     "price": 914.13
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -40.0,
+     "price": 947.29
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -120.0,
+     "price": 945.91
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 944.98
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -240.0,
+     "price": 943.81
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -320.0,
+     "price": 942.58
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 941.0
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -560.0,
+     "price": 939.78
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -160.0,
+     "price": 938.73
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -280.0,
+     "price": 937.64
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 936.14
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -160.0,
+     "price": 934.95
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -160.0,
+     "price": 934.05
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -40.0,
+     "price": 932.04
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -120.0,
+     "price": 930.97
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -240.0,
+     "price": 929.96
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -240.0,
+     "price": 928.31
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 927.17
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 926.15
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -160.0,
+     "price": 924.53
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -320.0,
+     "price": 923.69
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -400.0,
+     "price": 922.63
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -480.0,
+     "price": 921.65
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 920.62
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 919.36
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -200.0,
+     "price": 917.92
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -80.0,
+     "price": 916.38
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -120.0,
+     "price": 915.5
+    },
+    {
+     "date": "2026-10-14",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "S",
+     "shares": -488.0,
+     "price": 914.13
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Simons Anna C",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Liu Teyin M",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Bjorlin Alexis",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Haynesworth Linnie M",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "A",
+     "shares": 28755.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "A",
+     "shares": 25877.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "A",
+     "shares": 25877.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "M",
+     "shares": -20471.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "M",
+     "shares": -24113.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "M",
+     "shares": -24113.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "F",
+     "shares": -10039.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "M",
+     "shares": 20471.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "F",
+     "shares": -11828.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "M",
+     "shares": 24113.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "F",
+     "shares": -13721.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "M",
+     "shares": 24113.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "F",
+     "shares": -5137.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "F",
+     "shares": -7535.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "F",
+     "shares": -10828.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "BHATIA MANISH H",
+     "code": "A",
+     "shares": 10111.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ALLEN SCOTT R.",
+     "code": "A",
+     "shares": 9081.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ALLEN SCOTT R.",
+     "code": "A",
+     "shares": 8171.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ALLEN SCOTT R.",
+     "code": "A",
+     "shares": 8171.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ALLEN SCOTT R.",
+     "code": "F",
+     "shares": -615.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ALLEN SCOTT R.",
+     "code": "F",
+     "shares": -2686.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ALLEN SCOTT R.",
+     "code": "F",
+     "shares": -2081.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ALLEN SCOTT R.",
+     "code": "A",
+     "shares": 1012.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "A",
+     "shares": 16043.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "A",
+     "shares": 14437.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "A",
+     "shares": 14437.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "M",
+     "shares": -11372.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "M",
+     "shares": -13397.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "M",
+     "shares": -13397.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "G",
+     "shares": -1013.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "F",
+     "shares": -4869.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "M",
+     "shares": 11372.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "F",
+     "shares": -5737.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "M",
+     "shares": 13397.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "F",
+     "shares": -6793.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "M",
+     "shares": 13397.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "F",
+     "shares": -2459.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "F",
+     "shares": -3689.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "F",
+     "shares": -5335.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "ARNZEN APRIL S",
+     "code": "A",
+     "shares": 3944.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "A",
+     "shares": 18162.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "A",
+     "shares": 16345.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "A",
+     "shares": 16345.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "F",
+     "shares": -3035.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "F",
+     "shares": -5954.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "RAY MICHAEL CHARLES",
+     "code": "A",
+     "shares": 4298.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "A",
+     "shares": 24972.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "A",
+     "shares": 22473.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "A",
+     "shares": 22473.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "M",
+     "shares": -16490.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "M",
+     "shares": -19424.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "M",
+     "shares": -19424.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "F",
+     "shares": -7060.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "M",
+     "shares": 16490.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "F",
+     "shares": -8318.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "M",
+     "shares": 19424.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "F",
+     "shares": -9961.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "M",
+     "shares": 19424.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "F",
+     "shares": -3791.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "F",
+     "shares": -5742.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "F",
+     "shares": -7736.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Deboer Scott J",
+     "code": "A",
+     "shares": 9100.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "A",
+     "shares": 27242.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "A",
+     "shares": 24516.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "A",
+     "shares": 24516.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "M",
+     "shares": -19332.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "M",
+     "shares": -22774.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "M",
+     "shares": -22774.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "F",
+     "shares": -8515.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "M",
+     "shares": 19332.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "F",
+     "shares": -10033.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "M",
+     "shares": 22774.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "F",
+     "shares": -11825.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "M",
+     "shares": 22774.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "F",
+     "shares": -4212.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "F",
+     "shares": -6438.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "F",
+     "shares": -9320.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Murphy Mark J.",
+     "code": "A",
+     "shares": 7078.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Dugle Lynn A",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "Wright MaryAnn",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "A",
+     "shares": 99791.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "A",
+     "shares": 89805.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "A",
+     "shares": 89805.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "M",
+     "shares": -70224.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "M",
+     "shares": -82721.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "M",
+     "shares": -82721.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "F",
+     "shares": -34438.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "M",
+     "shares": 70224.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "F",
+     "shares": -40575.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "M",
+     "shares": 82721.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "F",
+     "shares": -47143.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "M",
+     "shares": 82721.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "F",
+     "shares": -9807.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "F",
+     "shares": -14080.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "F",
+     "shares": -20213.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "MEHROTRA SANJAY",
+     "code": "A",
+     "shares": 21233.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "GOMO STEVEN J",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "SWAN ROBERT HOLMES",
+     "code": "A",
+     "shares": 304.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "CORDANO MICHAEL D",
+     "code": "A",
+     "shares": 25566.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "CORDANO MICHAEL D",
+     "code": "A",
+     "shares": 22494.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "CORDANO MICHAEL D",
+     "code": "A",
+     "shares": 22494.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-13",
+     "name": "CORDANO MICHAEL D",
+     "code": "F",
+     "shares": -4694.0,
+     "price": 989.04
+    },
+    {
+     "date": "2026-10-13",
+     "name": "CORDANO MICHAEL D",
+     "code": "A",
+     "shares": 4298.0,
+     "price": 0.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 19.42,
+   "vix3m": 20.78,
+   "vxn": 28.5,
+   "term": "contango",
+   "date": "2026-10-30"
+  },
+  "regime": "CHOP",
+  "regime_asof": "2026-10-30",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-10-30",
+   "si": "short_interest (FINRA) settlement 2026-10-15, published 2026-10-28 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-10-30",
+   "analyst": "yfinance upgrades_downgrades <= 2026-10-30",
+   "form4": "finnhub /stock/insider-transactions <= 2026-10-30",
+   "vix": "index_vol 2026-10-30",
+   "regime": "_regime.classify_regime asof 2026-10-30",
+   "x2": "borrow (IBKR) 2026-10-30",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": -0.1937779837391609,
+  "ret_63": 0.06659432216320083,
+  "w52_pos": 0.6514904712028831,
+  "flow_pct_universe": 0.07659574468085106,
+  "flow_pct_self": 34.12698412698413,
+  "vol_pct_universe": 59.20462387853692,
+  "vol_pct_self": 80.15873015873017,
+  "net_premium": -59962339.0,
+  "volume_ratio": 0.9454361771067432,
+  "universe_n": 5875,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-10-30",
+   "ret_63": "earnings_history/bars <= 2026-10-30",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-10-30",
+   "net_premium": "screener 2026-10-30",
+   "volume_ratio": "screener 2026-10-30",
+   "flow_pct_universe": "screener universe 2026-10-30",
+   "vol_pct_universe": "screener universe 2026-10-30",
+   "flow_pct_self": "screener 63 sessions to 2026-10-30",
+   "vol_pct_self": "screener 63 sessions to 2026-10-30",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [
+  {
+   "family": "IB",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 620.0,
+     "side": 1,
+     "mark": 3.375,
+     "half_spread": 0.07500000000000018,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    },
+    {
+     "right": "P",
+     "strike": 885.0,
+     "side": -1,
+     "mark": 53.125,
+     "half_spread": 0.32500000000000284,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    },
+    {
+     "right": "C",
+     "strike": 885.0,
+     "side": -1,
+     "mark": 55.7,
+     "half_spread": 1.0999999999999979,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    },
+    {
+     "right": "C",
+     "strike": 1155.0,
+     "side": 1,
+     "mark": 3.375,
+     "half_spread": 0.07500000000000018,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    }
+   ],
+   "expiry": "2026-11-27",
+   "dte_cal": 28,
+   "mark": 102.075,
+   "mark_source": "cboe_chain 2026-10-30",
+   "max_loss": 16792.5,
+   "credit_debit": "credit",
+   "breakevens": [
+    782.925,
+    987.075
+   ],
+   "p_inside": 0.5516638770464926,
+   "p_touch": null,
+   "cost": 94.58000000000007,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "rank": 1
+  },
+  {
+   "family": "IC",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 620.0,
+     "side": 1,
+     "mark": 3.375,
+     "half_spread": 0.07500000000000018,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    },
+    {
+     "right": "P",
+     "strike": 750.0,
+     "side": -1,
+     "mark": 11.7,
+     "half_spread": 0.14999999999999947,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    },
+    {
+     "right": "C",
+     "strike": 1020.0,
+     "side": -1,
+     "mark": 13.024999999999999,
+     "half_spread": 0.17499999999999982,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    },
+    {
+     "right": "C",
+     "strike": 1155.0,
+     "side": 1,
+     "mark": 3.375,
+     "half_spread": 0.07500000000000018,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    }
+   ],
+   "expiry": "2026-11-27",
+   "dte_cal": 28,
+   "mark": 17.974999999999998,
+   "mark_source": "cboe_chain 2026-10-30",
+   "max_loss": 11702.5,
+   "credit_debit": "credit",
+   "breakevens": [
+    732.025,
+    1037.975
+   ],
+   "p_inside": 0.7469554534541645,
+   "p_touch": null,
+   "cost": 30.33999999999998,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "rank": 2
+  },
+  {
+   "family": "SS",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 885.0,
+     "side": -1,
+     "mark": 53.125,
+     "half_spread": 0.32500000000000284,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    },
+    {
+     "right": "C",
+     "strike": 885.0,
+     "side": -1,
+     "mark": 55.7,
+     "half_spread": 1.0999999999999979,
+     "mark_source": "cboe_chain 2026-10-30",
+     "expiry": "2026-11-27"
+    }
+   ],
+   "expiry": "2026-11-27",
+   "dte_cal": 28,
+   "mark": 108.825,
+   "mark_source": "cboe_chain 2026-10-30",
+   "max_loss": null,
+   "credit_debit": "credit",
+   "breakevens": [
+    776.175,
+    993.825
+   ],
+   "p_inside": 0.5814673011012479,
+   "p_touch": null,
+   "cost": 84.52000000000005,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "stress_loss_3s": 29562.030507167543,
+   "rank": 3
+  }
+ ],
+ "ledger_rows": [
+  {
+   "policy_id": "sheet-1.0",
+   "role": "exploration",
+   "gate_verdict": "X1",
+   "structure": "IB",
+   "written": true,
+   "reason": null
+  }
+ ],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/MU/2026-10-30/inputs",
+ "nulls": [
+  {
+   "field": "events.earnings.confirmed",
+   "reason": "the earnings sources disagree on the session: finnhub 2026-12-15 amc, screener 2026-12-16 unknown, yfinance 2026-12-23 None"
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cumulative GEX never changes sign over the listed strikes"
+  }
+ ]
+}
