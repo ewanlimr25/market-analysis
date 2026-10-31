@@ -282,12 +282,13 @@ the regime label on every ticker sheet 10+ sessions old and would have pushed S-
 last-print fallback. Run the refresh lines every weekend, the truth-set line again before Friday's `make daily`
 (§0), and before any `make ticker` whose date is past the truth set's last session.
 
-**Why the universe comes before them.** `data/universe.json` is the ticker list `build_prices.py` fetches and the
-Saturday FINRA loader (`make loaders-weekly`) pulls short interest for; the screener spine behind S-A, S-C and the
-watch basket is live. Left alone the two drift apart and fail open: a name missing from the list has no truth-set
-close, so its expiry settles on the last print however fresh the parquet is, and no `days_to_cover`, so the
-basket's `C-SHORT` reads null. Frozen from 2026-08-08 to 10-31 it fell 112 names behind (findings D39).
-`build_universe.py` takes every name that cleared the liquid gate on any panel day, and a FINRA settlement
+**Why the universe comes before them.** `data/universe.json` is the liquid core of the ticker list `build_prices.py`
+fetches and the Saturday FINRA loader (`make loaders-weekly`) pulls short interest for. Both add every name the
+books hold (`engine/fetch_list.py`, D39 O14), but the screener spine behind S-A, S-C and the watch basket is live,
+and a newly liquid name the books do not yet hold is on the list only through `universe.json`. Left alone the two
+drift apart and fail open: a name missing from the list has no truth-set close, so S-C's F4 reads no `adv_usd_20d`
+and drops it for lack of data, not liquidity. Frozen from 2026-08-08 to 10-31 it fell 112 names behind (findings
+D39). `build_universe.py` takes every name that cleared the liquid gate on any panel day, and a FINRA settlement
 partition is written once, so a newly added name's short interest starts at the next settlement, not before.
 
 Read `data/backtest/sb_report.md` §8 (go/no-go as of today). The report ends with an appendix that defines every column, symbol and

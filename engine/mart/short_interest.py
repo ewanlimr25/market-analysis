@@ -195,8 +195,8 @@ def main() -> int:
     if not a.refresh:
         print("short_interest: nothing to do without --refresh")
         return 0
-    with open(a.universe) as f:
-        universe = json.load(f)
+    from engine import fetch_list as FL
+    universe = FL.load(a.universe)          # the universe file plus every name the books hold (D39, O14)
     errors: list[tuple[str, str]] = []
     df = refresh(universe, on_error=lambda s, e: errors.append((s, str(e))), max_workers=a.workers)
     n_symbols = df.symbol.nunique() if not df.empty else 0

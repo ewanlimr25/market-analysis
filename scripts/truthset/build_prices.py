@@ -2,8 +2,8 @@
 """Truth-set price cache builder.
 
 Fetches daily OHLC (+adjclose, volume) from the Yahoo chart API (the same path the
-calibration-audit uses for path-aware outcome resolution) for every ticker in
-universe.json plus benchmarks, over a window with enough lead for ATR(14) and enough
+calibration-audit uses for path-aware outcome resolution) for every ticker on the
+fetch list (`engine/fetch_list.py`: universe.json plus the held names) plus benchmarks, over a window with enough lead for ATR(14) and enough
 tail for the longest forward horizon we can resolve inside the panel.
 
 Output: data/prices.parquet  (columns: ticker, date, open, high, low, close, adjclose, volume)
@@ -35,6 +35,13 @@ START = "2026-01-15"
 # and the one copy that existed was missing BFA and UHALB.
 sys.path.insert(0, os.path.join(HERE, ".."))
 from chart import RENAMES, YAHOO_ALIASES  # noqa: E402
+
+# The fetch list is universe.json plus every name the books hold (findings D39, O14): an open S-C or
+# S-A row on a name outside the liquid gate otherwise has no close to settle on.
+sys.path.insert(0, os.path.join(HERE, "..", ".."))
+from engine import fetch_list as FL  # noqa: E402
+
+BENCHMARKS = ("SPY", "QQQ", "IWM")
 
 def resolve_end():
     """Panel tail date. Defaults to TODAY so the truth set cannot silently rot.
@@ -138,8 +145,13 @@ def write_merged(rows, out_parquet):
             os.unlink(tmp)
 
 
+def symbols():
+    """The fetch list (universe.json plus the held names) and the benchmarks, sorted."""
+    return sorted(set(FL.load(UNIV)) | set(BENCHMARKS))
+
+
 def main():
-    syms = sorted(set(json.load(open(UNIV))) | {"SPY", "QQQ", "IWM"})
+    syms = symbols()
     print(f"fetching {len(syms)} symbols {START}..{END}")
     all_rows = []
     ok = 0

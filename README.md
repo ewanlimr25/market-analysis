@@ -87,8 +87,9 @@ python3 scripts/truthset/build_returns.py
 python3 scripts/truthset/build_features.py    # reads the external panel
 ```
 
-`universe.json` is also the list the weekly FINRA loader fetches, so a name missing from it has neither prices
-nor short interest.
+`build_prices.py` and the weekly FINRA loader fetch `universe.json` plus every name the books hold (open ledger
+rows of any role, the watch basket's universe), less index underlyings (`engine/fetch_list.py`); a held name
+outside the liquid gate still gets a settlement close and short interest.
 
 `make daily` appends the night's marts itself and runs the preflight first (a missing or empty export stops the
 run; a truth set that does not reach the trade date is a warning). The SPY/QQQ chains, Reg SHO, IBKR borrow and
