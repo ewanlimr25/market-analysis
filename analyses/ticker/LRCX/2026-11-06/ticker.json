@@ -1,0 +1,303 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "LRCX",
+ "date": "2026-11-06",
+ "generated": "2026-11-09T14:18:30+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L6",
+  "contracts": 1104,
+  "hot_chain_days": 21,
+  "adv_usd": 3199359297.2348785,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-12-04",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-11-06",
+   "close": "screener 2026-11-06",
+   "contracts": "daily_contract 2026-11-06",
+   "hot_chain_days": "daily_contract 2026-10-09..2026-11-06 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-11-06",
+   "atm_spread": "daily_contract late window 2026-11-06",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-11-06"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 200.845 at 2026-12-04 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2027-01-26",
+   "session": "unknown",
+   "session_date": "2027-01-27",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2027-01-26",
+     "hour": null
+    },
+    {
+     "name": "screener",
+     "date": "2027-01-27",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2027-01-27",
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 82
+  },
+  "ex_div": "2026-12-02",
+  "expiries": [
+   "2026-11-13",
+   "2026-11-20"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2027-01-27",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-11-06 + yfinance calendar",
+   "ex_div": "screener 2026-11-06",
+   "expiries": "cboe_chain 2026-11-06",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": []
+ },
+ "premium": {
+  "iv30d": 0.709,
+  "iv_pct_own": 67.46031746031747,
+  "rv5_21": 46.07680597354311,
+  "rv_c2c_21": 88.43443877979003,
+  "spread_rv5": 24.823194026456882,
+  "spread_c2c": -17.534438779790037,
+  "slope": -4.684999999999995,
+  "earnings_history": [
+   {
+    "E": "2026-07-29",
+    "implied_move": 0.0789468116021735,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.17978995054423108,
+    "ratio": 2.277355435837275
+   },
+   {
+    "E": "2026-10-21",
+    "implied_move": 0.115,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.11755685728734877,
+    "ratio": 1.0222335416291197
+   }
+  ],
+  "median_ratio_8": 1.6497944887331975,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "CHEAP",
+  "source": {
+   "iv30d": "screener 2026-11-06 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-11..2026-11-06 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-09..2026-11-06 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-09..2026-11-06",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-11-06) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-09..2026-11-06 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-11-06) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-09..2026-11-06)",
+   "slope": "cboe_chain 2026-11-06 ATM IV at 2026-11-13 then 2026-11-20, vol points",
+   "earnings_history": "earnings_events <= 2026-10-21 + earnings_history/events.parquet <= 2026-07-29",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-11-06",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-11-06"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-11-13",
+   "strike": 200.0,
+   "mark": 19.200000000000003,
+   "mark_source": "cboe_chain 2026-11-06",
+   "tier": null
+  },
+  "box_1s_front": 19.200000000000003,
+  "box_1s_21": 40.82455456204176,
+  "atr14": 16.674696735237937,
+  "gex_total": -16532230.0,
+  "gex_sign": "-",
+  "zero_gamma": 150.0,
+  "zero_gamma_all_crossings": [
+   126.0,
+   150.0
+  ],
+  "spot": 200.845,
+  "source": {
+   "straddle_front": "cboe_chain 2026-11-06",
+   "box_1s_front": "cboe_chain 2026-11-06",
+   "box_1s_21": "screener 2026-11-06",
+   "atr14": "earnings_history/bars <= 2026-11-06",
+   "gex_total": "cboe_chain 2026-11-06",
+   "gex_sign": "cboe_chain 2026-11-06",
+   "zero_gamma": "cboe_chain 2026-11-06",
+   "spot": "screener 2026-11-06"
+  },
+  "nulls": []
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.25,
+   "available": 9500000.0,
+   "date": "2026-11-06",
+   "decile": 0.12165835976438605,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.0227,
+   "dtc": 3.59,
+   "settlement": "2026-10-15",
+   "publication": "2026-10-28",
+   "position": 28325154.0
+  },
+  "beta_250": 3.295235385165003,
+  "beta_n": 249,
+  "analyst": [],
+  "analyst_n": 0,
+  "form4": {
+   "buys": 0,
+   "sells": 2,
+   "other": 3,
+   "rows": [
+    {
+     "date": "2026-11-02",
+     "name": "Mayer Bethany",
+     "code": "S",
+     "shares": -719.0,
+     "price": 242.59
+    },
+    {
+     "date": "2026-10-30",
+     "name": "Kang Ho Kyu",
+     "code": "F",
+     "shares": -491.0,
+     "price": 239.11
+    },
+    {
+     "date": "2026-10-23",
+     "name": "ARCHER TIMOTHY",
+     "code": "M",
+     "shares": -31400.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-23",
+     "name": "ARCHER TIMOTHY",
+     "code": "S",
+     "shares": -31400.0,
+     "price": 227.02
+    },
+    {
+     "date": "2026-10-23",
+     "name": "ARCHER TIMOTHY",
+     "code": "M",
+     "shares": 31400.0,
+     "price": 30.033
+    }
+   ]
+  },
+  "vix": {
+   "vix": 25.64,
+   "vix3m": 24.6,
+   "vxn": 34.02,
+   "term": "backwardation",
+   "date": "2026-11-06"
+  },
+  "regime": "PULLBACK",
+  "regime_asof": "2026-11-06",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-11-06",
+   "si": "short_interest (FINRA) settlement 2026-10-15, published 2026-10-28 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-11-06",
+   "analyst": "yfinance upgrades_downgrades <= 2026-11-06",
+   "form4": "finnhub /stock/insider-transactions <= 2026-11-06",
+   "vix": "index_vol 2026-11-06",
+   "regime": "_regime.classify_regime asof 2026-11-06",
+   "x2": "borrow (IBKR) 2026-11-06",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": -0.37477773875966636,
+  "ret_63": -0.3458224333087818,
+  "w52_pos": 0.2143234404006807,
+  "flow_pct_universe": 2.44546693933197,
+  "flow_pct_self": 34.12698412698413,
+  "vol_pct_universe": 74.77095937770095,
+  "vol_pct_self": 91.26984126984127,
+  "net_premium": -668390.0,
+  "volume_ratio": 1.1818246531235945,
+  "universe_n": 5868,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-11-06",
+   "ret_63": "earnings_history/bars <= 2026-11-06",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-11-06",
+   "net_premium": "screener 2026-11-06",
+   "volume_ratio": "screener 2026-11-06",
+   "flow_pct_universe": "screener universe 2026-11-06",
+   "vol_pct_universe": "screener universe 2026-11-06",
+   "flow_pct_self": "screener 63 sessions to 2026-11-06",
+   "vol_pct_self": "screener 63 sessions to 2026-11-06",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/LRCX/2026-11-06/inputs",
+ "nulls": [
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 200.845 at 2026-12-04 with 5+ lots on both legs"
+  }
+ ]
+}

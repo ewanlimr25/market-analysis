@@ -1,0 +1,310 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "CRM",
+ "date": "2026-11-06",
+ "generated": "2026-11-09T14:18:18+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L6",
+  "contracts": 685,
+  "hot_chain_days": 21,
+  "adv_usd": 1743299082.0938873,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": "2026-12-04",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-11-06",
+   "close": "screener 2026-11-06",
+   "contracts": "daily_contract 2026-11-06",
+   "hot_chain_days": "daily_contract 2026-10-09..2026-11-06 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-11-06",
+   "atm_spread": "daily_contract late window 2026-11-06",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-11-06"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no ATM pair within 2.5% of 213.89 at 2026-12-04 with 5+ lots on both legs"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2026-12-01",
+   "session": "post",
+   "session_date": "2026-12-02",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2026-12-01",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2026-12-02",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-12-02",
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 26
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-11-13",
+   "2026-11-20"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-12-02",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-11-06 + yfinance calendar",
+   "ex_div": "screener 2026-11-06",
+   "expiries": "cboe_chain 2026-11-06",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": []
+ },
+ "premium": {
+  "iv30d": 0.531,
+  "iv_pct_own": 87.3015873015873,
+  "rv5_21": 32.16616906589489,
+  "rv_c2c_21": 35.79713933137848,
+  "spread_rv5": 20.93383093410511,
+  "spread_c2c": 17.30286066862152,
+  "slope": 0.379999999999997,
+  "earnings_history": [
+   {
+    "E": "2026-05-27",
+    "implied_move": 0.0748069205466537,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.007548850089334147,
+    "ratio": 0.10091111937466093
+   },
+   {
+    "E": "2026-08-26",
+    "implied_move": 0.0607678889711346,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.22580492674415642,
+    "ratio": 3.715859322534903
+   }
+  ],
+  "median_ratio_8": 1.9083852209547818,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": {
+   "window_days": 30,
+   "days_to": 26,
+   "timing": "postmarket",
+   "filters": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F7": true,
+    "F8": true
+   },
+   "first_fail": "F3",
+   "note": "S-A is closed at retail execution (market-analysis RESEARCH/48 G1, D23); no earnings trade is recommended",
+   "source": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-11-06"
+  },
+  "x1": true,
+  "verdict": "FAIR",
+  "source": {
+   "iv30d": "screener 2026-11-06 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-11..2026-11-06 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-09..2026-11-06 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-09..2026-11-06",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-11-06) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-09..2026-11-06 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-11-06) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-09..2026-11-06)",
+   "slope": "cboe_chain 2026-11-06 ATM IV at 2026-11-13 then 2026-11-20, vol points",
+   "earnings_history": "earnings_events <= 2026-08-26 + earnings_history/events.parquet <= 2026-08-26",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-11-06",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-11-06"
+  },
+  "nulls": []
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-11-13",
+   "strike": 215.0,
+   "mark": 10.75,
+   "mark_source": "cboe_chain 2026-11-06",
+   "tier": null
+  },
+  "box_1s_front": 10.75,
+  "box_1s_21": 32.561109642304885,
+  "atr14": 9.460689116051581,
+  "gex_total": -10237395.483272,
+  "gex_sign": "-",
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 213.89,
+  "source": {
+   "straddle_front": "cboe_chain 2026-11-06",
+   "box_1s_front": "cboe_chain 2026-11-06",
+   "box_1s_21": "screener 2026-11-06",
+   "atr14": "earnings_history/bars <= 2026-11-06",
+   "gex_total": "cboe_chain 2026-11-06",
+   "gex_sign": "cboe_chain 2026-11-06",
+   "zero_gamma": "cboe_chain 2026-11-06",
+   "spot": "screener 2026-11-06"
+  },
+  "nulls": [
+   {
+    "field": "zero_gamma",
+    "reason": "cumulative GEX never changes sign over the listed strikes"
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.25,
+   "available": 4900000.0,
+   "date": "2026-11-06",
+   "decile": 0.12165835976438605,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": 0.035,
+   "dtc": 3.84,
+   "settlement": "2026-10-15",
+   "publication": "2026-10-28",
+   "position": 27934805.0
+  },
+  "beta_250": 0.38514926353263784,
+  "beta_n": 249,
+  "analyst": [],
+  "analyst_n": 0,
+  "form4": {
+   "buys": 0,
+   "sells": 0,
+   "other": 3,
+   "rows": [
+    {
+     "date": "2026-10-22",
+     "name": "Harris Parker",
+     "code": "M",
+     "shares": -1785.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-22",
+     "name": "Harris Parker",
+     "code": "F",
+     "shares": -886.0,
+     "price": 250.29
+    },
+    {
+     "date": "2026-10-22",
+     "name": "Harris Parker",
+     "code": "M",
+     "shares": 1785.0,
+     "price": 0.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 25.64,
+   "vix3m": 24.6,
+   "vxn": 34.02,
+   "term": "backwardation",
+   "date": "2026-11-06"
+  },
+  "regime": "PULLBACK",
+  "regime_asof": "2026-11-06",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-11-06",
+   "si": "short_interest (FINRA) settlement 2026-10-15, published 2026-10-28 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-11-06",
+   "analyst": "yfinance upgrades_downgrades <= 2026-11-06",
+   "form4": "finnhub /stock/insider-transactions <= 2026-11-06",
+   "vix": "index_vol 2026-11-06",
+   "regime": "_regime.classify_regime asof 2026-11-06",
+   "x2": "borrow (IBKR) 2026-11-06",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": -0.062115930490389215,
+  "ret_63": 0.0817173805809095,
+  "w52_pos": 0.5483345436976306,
+  "flow_pct_universe": 0.48568507157464214,
+  "flow_pct_self": 5.555555555555555,
+  "vol_pct_universe": 42.618841832324975,
+  "vol_pct_self": 76.98412698412699,
+  "net_premium": -4042373.0,
+  "volume_ratio": 0.7520825548136276,
+  "universe_n": 5868,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-11-06",
+   "ret_63": "earnings_history/bars <= 2026-11-06",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-11-06",
+   "net_premium": "screener 2026-11-06",
+   "volume_ratio": "screener 2026-11-06",
+   "flow_pct_universe": "screener universe 2026-11-06",
+   "vol_pct_universe": "screener universe 2026-11-06",
+   "flow_pct_self": "screener 63 sessions to 2026-11-06",
+   "vol_pct_self": "screener 63 sessions to 2026-11-06",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/CRM/2026-11-06/inputs",
+ "nulls": [
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no ATM pair within 2.5% of 213.89 at 2026-12-04 with 5+ lots on both legs"
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cumulative GEX never changes sign over the listed strikes"
+  }
+ ]
+}
