@@ -27,7 +27,7 @@ from engine import report as R
 from engine import schema as SCH
 from engine import sb_daily as SD
 from engine import sc_daily as SCD
-from engine.config import ANALYSES_DAILY, LEDGER_DIR, SA_PARAMS, SCRIPTS, SIZING
+from engine.config import ANALYSES_DAILY, DATA, LEDGER_DIR, SA_PARAMS, SCRIPTS, SIZING
 from engine.mart import daily_contract, earnings_events
 from engine.strategies import sa, sa_data
 from engine.strategies import sa_filters as F
@@ -38,6 +38,9 @@ from engine.watch import nightly as WB
 from engine.name import grading as NG
 
 LEDGER_OPENS = date(2026, 10, 1)      # Season 3 ledger opens (DESIGN/70 §7 P7)
+TRUTH_SETS = ("prices", "returns", "features")
+TRUTH_SET_BENCHMARKS = ("QQQ", "SPY")   # S-B settles on these; read per ticker, because max(date) across all names false-clears
+EXIT_STALE_TRUTH = 2
 
 
 def ledger_open(d: date) -> bool:
@@ -80,6 +83,51 @@ def preflight(d: date) -> dict:
         return json.loads(out.stdout) if out.stdout.strip() else {"ok": False, "warnings": [out.stderr.strip()[:200]]}
     except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError) as exc:
         return {"ok": False, "warnings": [f"preflight failed: {exc}"]}
+
+
+def is_last_session_of_week(d: date) -> bool:
+    """Friday, or the Thursday before a Friday holiday: the night expiries settle (findings D39, D40)."""
+    return cal.next_session(d).isocalendar()[:2] != d.isocalendar()[:2]
+
+
+def truth_set_behind(d: date, data_dir: str) -> list[str]:
+    """What keeps the truth set from reaching d for each benchmark; empty when every set reaches it."""
+    behind: list[str] = []
+    con = duckdb.connect()
+    try:
+        for name in TRUTH_SETS:
+            filename = f"{name}.parquet"
+            path = os.path.join(data_dir, filename)
+            if not os.path.exists(path):
+                behind.append(f"{filename} missing")
+                continue
+            ends = dict(con.execute(
+                "SELECT ticker, max(CAST(date AS DATE)) FROM read_parquet(?) WHERE ticker IN (SELECT unnest(?)) GROUP BY ticker",
+                [path, list(TRUTH_SET_BENCHMARKS)]).fetchall())
+            for ticker in TRUTH_SET_BENCHMARKS:
+                end = ends.get(ticker)
+                if end is None:
+                    behind.append(f"{filename}: {ticker} has no rows")
+                elif end < d:
+                    behind.append(f"{filename}: {ticker} ends {end.isoformat()}")
+    finally:
+        con.close()
+    return behind
+
+
+def stale_truth_message(d: date, behind: list[str], allowed: bool) -> str:
+    """The stderr text for a last-session nightly whose truth set does not reach d."""
+    detail = "\n".join(f"  {line}" for line in behind)
+    if allowed:
+        return (f"WARN {d} runs on a stale truth set (--allow-stale-truth): expiries due tonight settle on the "
+                f"last print, and the ledger keeps it.\n{detail}")
+    return (f"STOP {d} is the last session of the week and the truth set does not reach it, so expiries due tonight "
+            f"would settle on the last print, not the official close. Nothing was written.\n{detail}\n"
+            "Rebuild, then rerun:\n"
+            "  python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py && "
+            "python3 scripts/truthset/build_features.py\n"
+            "If the rebuild cannot reach the session (Yahoo down), run anyway with "
+            "make daily DATE=... ALLOW_STALE_TRUTH=1 (--allow-stale-truth) and note it in findings.")
 
 
 def append_mart(d: date, con) -> dict:
@@ -263,6 +311,8 @@ def main() -> int:
     ap.add_argument("--out-root", default=ANALYSES_DAILY)
     ap.add_argument("--force-ledger", action="store_true", help="write the ledger before 2026-10-01 (testing)")
     ap.add_argument("--sa-backfill", action="store_true", help="S-A only: emit and grade a missed night (D28)")
+    ap.add_argument("--allow-stale-truth", action="store_true",
+                    help="run the last session of the week past the truth set; expiries settle on the last print (D40)")
     a = ap.parse_args()
     d = cal.parse_date(a.date)
     if not cal.is_trading_day(d):
@@ -271,6 +321,11 @@ def main() -> int:
     if a.sa_backfill:
         print(json.dumps(sa_backfill(d, a.ledger_dir, date.today())))
         return 0
+    behind = truth_set_behind(d, DATA) if is_last_session_of_week(d) else []
+    if behind:
+        print(stale_truth_message(d, behind, a.allow_stale_truth), file=sys.stderr)
+        if not a.allow_stale_truth:
+            return EXIT_STALE_TRUTH
     sig = run_daily(d, a.ledger_dir, a.out_root, force_ledger=a.force_ledger)
     print(f"{d}: {len(sig['candidates'])} candidates, {len(sig['suppressed'])} suppressed, "
           f"{len(sig['graded'])} graded; report at {os.path.join(a.out_root, d.isoformat(), 'report.md')}")

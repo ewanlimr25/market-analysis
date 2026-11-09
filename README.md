@@ -92,7 +92,8 @@ rows of any role, the watch basket's universe), less index underlyings (`engine/
 outside the liquid gate still gets a settlement close and short interest.
 
 `make daily` appends the night's marts itself and runs the preflight first (a missing or empty export stops the
-run; a truth set that does not reach the trade date is a warning). The SPY/QQQ chains, Reg SHO, IBKR borrow and
+run; a truth set that does not reach the trade date is a warning, except on the last session of the week, when
+expiries settle on it and the run stops until it is rebuilt). The SPY/QQQ chains, Reg SHO, IBKR borrow and
 FINRA short interest are fetched by two scheduled loaders (`make loaders`, `make loaders-weekly`; launchd
 setup in `docs/OPERATING.md §1`).
 

@@ -27,8 +27,10 @@ has not landed, wait.
 last session of the week, so Thursday before a Friday holiday). S-B and S-C settle at the official close in
 `prices.parquet`; without that day's close every grade falls back to the last print, and the ledger keeps it.
 From 10-09 to 10-30 every Friday graded that way, and the QQQ rows on 10-23 and 10-30 carry the wrong
-P&L (findings D39). Monday to Thursday the preflight still warns that the truth set is behind; nothing settles
-on those nights, so the warning is expected.
+P&L (findings D39); 11-06 repeated it (D40). So on that night `make daily` now stops, before writing anything, if
+SPY or QQQ in any of the three files does not reach the session: rebuild and rerun. If the rebuild cannot reach it
+(Yahoo down), `make daily DATE=... ALLOW_STALE_TRUTH=1` runs on the fallback; note it in findings. Monday to Thursday
+the preflight still warns that the truth set is behind; nothing settles on those nights, so the warning is expected.
 
 **Every weekend**
 
@@ -336,6 +338,8 @@ picked it is still good enough. Neither is a verdict before 2026-12-01.
 |---|---|---|
 | Preflight not clear: a panel export missing or empty | the export did not finish | do not run; re-export, then run |
 | Preflight not clear: truth set stale (`prices`/`returns` behind the trade date) | the truth-set build has not run | `python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py`, then rerun `make daily`. S-B settlement falls back to the last print's underlying price when `prices.parquet` is stale and records `settle_source` |
+| `make daily` prints `STOP ... the truth set does not reach it` and exits 2 | the last session of the week, and the truth-set line was not run first (D40) | nothing was written; run the three `build_*.py` lines, then `make daily` again. Only if they cannot reach the session: `ALLOW_STALE_TRUTH=1`, and note it in findings |
+| `short_interest: 0 rows, 0/N symbols` in `loaders.log`, every error `nodename nor servname` | the Saturday loader fired on a background wake with no network | no partition is touched. Run `make loaders-weekly` by hand if a settlement has published since the last partition; otherwise the next Saturday collects it |
 | `CBOE refresh: failed` two sessions running | CBOE site or network | run `make index-vol` by hand; if still failing the gate reads `UNKNOWN` and fails closed, which is safe |
 | A report shows a `model` tier on an entry leg | no print in the late window | the engine already refuses the entry; nothing to do |
 | `make daily` for a date already run | re-run | safe; ledger keys are unique and nothing is duplicated |

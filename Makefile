@@ -5,7 +5,7 @@ DATE ?= $(shell date +%F)
 .PHONY: daily validate mart backtest report book test test-unit test-integration
 
 daily:            ## preflight, append mart, candidates, grade, signals.json + report.md
-	$(PY) -m engine.daily --date $(DATE)
+	$(PY) -m engine.daily --date $(DATE) $(if $(ALLOW_STALE_TRUTH),--allow-stale-truth,)
 
 validate:         ## check analyses/daily/$(DATE)/signals.json against schemas/signals.schema.json
 	$(PY) scripts/validate_signals.py --file analyses/daily/$(DATE)/signals.json
