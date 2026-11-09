@@ -1,0 +1,15 @@
+```
+SMH — 2026-11-07 — sheet-1.0 — E $100,000
+A  CANNOT_PRICE (L1)   contracts — · hot-chain 21/21 · ADV $6,070,973,295 · ATM spread — (tier —)
+B  Earnings ?  session ? [NOT CONFIRMED (X1 for 45d): finnhub ? = screener ? = yfinance ?] · ex-div — · expiries 2026-11-16, 2026-11-18 · FOMC 2026-12-09
+C  Premium CANNOT_MEASURE   iv30d — (own pct —) · rv5_21 31.9 / c2c 59.1 · spread — / — · slope +0.0
+   prior prints: 0, median realized/implied — · S-C: fails F1; F6 fails at — · X1: no premium structure on this sheet
+D  Range  1σ box to ? ±$— (straddle —, —) · 1σ 30d ±$— · ATR14 23.08 · GEX —, ZGL — (yfinance 2026-11-07)
+E  Flags  borrow +0.4% (decile 0.3, IBKR 2026-11-06) · SI — / DTC 1.7 (FINRA 2026-10-15, pub 2026-10-28) · beta 2.43
+          analyst: 0 changes last 10 sessions · Form 4: 0 buys / 0 sells 30d · VIX 25.6 backwardation, PULLBACK
+F  Direction: no input on this sheet has a measured directional edge at 1–4 weeks; the engine emits none.
+   context: ret21 -23.6% · ret63 -18.5% · 52w pos 0.42 · flow pct universe — / self 69
+G  Structures: none (CANNOT_PRICE)
+H  Ledger: no row (CANNOT_PRICE or unpriced)
+nulls: screener (no screener export for 2026-11-07), universe_today (no screener export for 2026-11-07), contracts_today (no daily_contract partition for 2026-11-07), earnings_events (no earnings_events rows for SMH), earnings_history (no earnings_history rows for SMH), short_interest.short_float (Short Float/Short Ratio/Short Interest absent from fz quote's fundamentals grid (known fz regression, see module docstring); yfinance info shortPercentOfFloat: shortPercentOfFloat absent), earnings_dates.finnhub (finnhub /calendar/earnings: no print scheduled on or after 2026-11-07), earnings_dates.screener (no screener row), earnings_dates.yfinance (yfinance calendar: no Earnings Date in the calendar block), liquidity.screener (no screener row for SMH on 2026-11-07), liquidity.contracts (no daily_contract rows for SMH on 2026-11-07), liquidity.atm_spread (no close), events.earnings.date (finnhub /calendar/earnings: no print scheduled on or after 2026-11-07), events.ex_div (screener next_dividend_date is null), premium.iv30d (screener iv30d is null), premium.iv_pct_own (screener iv30d is null), range.straddle_front (no ATM call/put pair at 2026-11-16 carries a quote or a tier <= 2 print (the stored chain is yfinance 2026-11-07)), range.box_1s_front (no front straddle to measure), range.box_1s_21 (no screener row), range.gex_total (no strike on the chain carries positive gamma and open interest), range.zero_gamma (cumulative GEX never changes sign over the listed strikes), flags.si.pct_float (Short Float/Short Ratio/Short Interest absent from fz quote's fundamentals grid (known fz regression, see module docstring); yfinance info shortPercentOfFloat: shortPercentOfFloat absent), flags.x5 (X5 cannot fire on a missing short float: it is unevaluated, not passed), context.flow_pct_universe (no universe rows on the date), context.vol_pct_universe (no universe rows on the date)
+```

@@ -1,0 +1,481 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "FSLR",
+ "date": "2026-11-07",
+ "generated": "2026-11-09T13:35:21+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": false,
+  "failing": "L1",
+  "contracts": null,
+  "hot_chain_days": 20,
+  "adv_usd": 539238461.1663055,
+  "atm_spread": null,
+  "tier": null,
+  "atm_strike": null,
+  "atm_expiry": null,
+  "verdicts": {
+   "L1": false,
+   "L2": false,
+   "L3": false,
+   "L4": true,
+   "L5": true,
+   "L6": false
+  },
+  "source": {
+   "issue_type": "screener 2026-11-07",
+   "close": "screener 2026-11-07",
+   "contracts": "daily_contract 2026-11-07",
+   "hot_chain_days": "daily_contract 2026-10-09..2026-11-06 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-11-07",
+   "atm_spread": "daily_contract late window 2026-11-07",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-11-07"
+  },
+  "nulls": [
+   {
+    "field": "liquidity.screener",
+    "reason": "no screener row for FSLR on 2026-11-07"
+   },
+   {
+    "field": "liquidity.contracts",
+    "reason": "no daily_contract rows for FSLR on 2026-11-07"
+   },
+   {
+    "field": "liquidity.atm_spread",
+    "reason": "no close"
+   }
+  ]
+ },
+ "events": {
+  "earnings": {
+   "date": "2027-02-22",
+   "session": "post",
+   "session_date": "2027-02-23",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2027-02-22",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": null,
+     "hour": null
+    },
+    {
+     "name": "yfinance",
+     "date": "2026-10-29",
+     "hour": null
+    }
+   ],
+   "confirmed": false,
+   "days_to": 108
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-11-20",
+   "2026-11-27"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2026-12-22",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-11-07 + yfinance calendar",
+   "ex_div": "screener 2026-11-07",
+   "expiries": "yfinance 2026-11-07",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.earnings.confirmed",
+    "reason": "the earnings sources disagree on the session: finnhub 2027-02-22 amc, yfinance 2026-10-29 None"
+   },
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is null"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": null,
+  "iv_pct_own": null,
+  "rv5_21": 46.89571349989489,
+  "rv_c2c_21": 38.531234525002425,
+  "spread_rv5": null,
+  "spread_c2c": null,
+  "slope": 0.0,
+  "earnings_history": [
+   {
+    "E": "2026-04-30",
+    "implied_move": 0.068754208261485,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.04864038513005342,
+    "ratio": 0.7074532070104715
+   },
+   {
+    "E": "2026-07-30",
+    "implied_move": 0.0640763450228257,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.024367770527241817,
+    "ratio": 0.3802927666763978
+   }
+  ],
+  "median_ratio_8": 0.5438729868434347,
+  "sc": {
+   "pass": false,
+   "failing": "F1",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": false,
+    "F2": false,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": false,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": true,
+  "verdict": "CANNOT_MEASURE",
+  "source": {
+   "iv30d": "screener 2026-11-07 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-11..2026-11-07 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-09..2026-11-06 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-09..2026-11-06",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-11-07) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-09..2026-11-06 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-11-07) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-09..2026-11-06)",
+   "slope": "yfinance 2026-11-07 ATM IV at 2026-11-20 then 2026-11-27, vol points",
+   "earnings_history": "earnings_events <= 2026-07-30 + earnings_history/events.parquet <= 2026-07-30",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-11-07",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-11-07"
+  },
+  "nulls": [
+   {
+    "field": "premium.iv30d",
+    "reason": "screener iv30d is null"
+   },
+   {
+    "field": "premium.iv_pct_own",
+    "reason": "screener iv30d is null"
+   }
+  ]
+ },
+ "range": {
+  "straddle_front": null,
+  "box_1s_front": null,
+  "box_1s_21": null,
+  "atr14": 10.447176332235577,
+  "gex_total": null,
+  "gex_sign": null,
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 201.14,
+  "source": {
+   "straddle_front": "events.expiries[0] 2026-11-20",
+   "box_1s_front": "events.expiries[0] 2026-11-20",
+   "box_1s_21": "screener 2026-11-07",
+   "atr14": "earnings_history/bars <= 2026-11-06",
+   "gex_total": "yfinance 2026-11-07",
+   "gex_sign": "yfinance 2026-11-07",
+   "zero_gamma": "yfinance 2026-11-07",
+   "spot": "yfinance 2026-11-07"
+  },
+  "nulls": [
+   {
+    "field": "straddle_front",
+    "reason": "no ATM call/put pair at 2026-11-20 carries a quote or a tier <= 2 print (the stored chain is yfinance 2026-11-07)"
+   },
+   {
+    "field": "box_1s_front",
+    "reason": "no front straddle to measure"
+   },
+   {
+    "field": "box_1s_21",
+    "reason": "no screener row"
+   },
+   {
+    "field": "gex_total",
+    "reason": "no strike on the chain carries positive gamma and open interest"
+   },
+   {
+    "field": "zero_gamma",
+    "reason": "cumulative GEX never changes sign over the listed strikes"
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.4081,
+   "available": 2100000.0,
+   "date": "2026-11-06",
+   "decile": 0.3386698887378543,
+   "stale_days": 1
+  },
+  "si": {
+   "pct_float": 0.1142,
+   "dtc": 5.83,
+   "settlement": "2026-10-15",
+   "publication": "2026-10-28",
+   "position": 11595120.0
+  },
+  "beta_250": 1.5853813222276376,
+  "beta_n": 249,
+  "analyst": [
+   {
+    "date": "2026-10-27",
+    "firm": "Guggenheim",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "JP Morgan",
+    "from": "Overweight",
+    "to": "Overweight",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "Morgan Stanley",
+    "from": "Overweight",
+    "to": "Overweight",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "RBC Capital",
+    "from": "Outperform",
+    "to": "Outperform",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "Wells Fargo",
+    "from": "Overweight",
+    "to": "Overweight",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "GLJ Research",
+    "from": "Buy",
+    "to": "Hold",
+    "action": "down"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "Evercore ISI Group",
+    "from": "In-Line",
+    "to": "In-Line",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "Needham",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-10-30",
+    "firm": "Bernstein",
+    "from": "Underperform",
+    "to": "Underperform",
+    "action": "main"
+   },
+   {
+    "date": "2026-11-02",
+    "firm": "Barclays",
+    "from": "Overweight",
+    "to": "Overweight",
+    "action": "main"
+   },
+   {
+    "date": "2026-11-02",
+    "firm": "Citigroup",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-11-02",
+    "firm": "Guggenheim",
+    "from": "Buy",
+    "to": "Buy",
+    "action": "main"
+   },
+   {
+    "date": "2026-11-02",
+    "firm": "Baird",
+    "from": "Outperform",
+    "to": "Outperform",
+    "action": "main"
+   },
+   {
+    "date": "2026-11-05",
+    "firm": "William Blair",
+    "from": "Market Perform",
+    "to": "Outperform",
+    "action": "up"
+   }
+  ],
+  "analyst_n": 14,
+  "form4": {
+   "buys": 0,
+   "sells": 0,
+   "other": 0,
+   "rows": []
+  },
+  "vix": {
+   "vix": 25.64,
+   "vix3m": 24.6,
+   "vxn": 34.02,
+   "term": "backwardation",
+   "date": "2026-11-06"
+  },
+  "regime": "PULLBACK",
+  "regime_asof": "2026-11-06",
+  "regime_stale": true,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-11-06",
+   "si": "short_interest (FINRA) settlement 2026-10-15, published 2026-10-28 + short float finviz fz quote",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-11-06",
+   "analyst": "yfinance upgrades_downgrades <= 2026-11-07",
+   "form4": "finnhub /stock/insider-transactions <= 2026-11-07",
+   "vix": "index_vol 2026-11-06",
+   "regime": "_regime.classify_regime asof 2026-11-06",
+   "x2": "borrow (IBKR) 2026-11-06",
+   "x5": "short float finviz fz quote"
+  },
+  "nulls": []
+ },
+ "context": {
+  "ret_21": 0.12462953606628169,
+  "ret_63": -0.159570476535428,
+  "w52_pos": 0.22748079270923327,
+  "flow_pct_universe": null,
+  "flow_pct_self": 24.603174603174605,
+  "vol_pct_universe": null,
+  "vol_pct_self": 84.92063492063492,
+  "net_premium": -1771849.0,
+  "volume_ratio": 1.2648169262489193,
+  "universe_n": 0,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-11-06",
+   "ret_63": "earnings_history/bars <= 2026-11-06",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-11-06",
+   "net_premium": "screener 2026-11-07",
+   "volume_ratio": "screener 2026-11-07",
+   "flow_pct_universe": "screener universe 2026-11-07",
+   "vol_pct_universe": "screener universe 2026-11-07",
+   "flow_pct_self": "screener 63 sessions to 2026-11-06",
+   "vol_pct_self": "screener 63 sessions to 2026-11-06",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": [
+   {
+    "field": "flow_pct_universe",
+    "reason": "no universe rows on the date"
+   },
+   {
+    "field": "vol_pct_universe",
+    "reason": "no universe rows on the date"
+   }
+  ]
+ },
+ "structures": [],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/FSLR/2026-11-07/inputs",
+ "nulls": [
+  {
+   "field": "screener",
+   "reason": "no screener export for 2026-11-07"
+  },
+  {
+   "field": "universe_today",
+   "reason": "no screener export for 2026-11-07"
+  },
+  {
+   "field": "contracts_today",
+   "reason": "no daily_contract partition for 2026-11-07"
+  },
+  {
+   "field": "earnings_dates.screener",
+   "reason": "no screener row"
+  },
+  {
+   "field": "liquidity.screener",
+   "reason": "no screener row for FSLR on 2026-11-07"
+  },
+  {
+   "field": "liquidity.contracts",
+   "reason": "no daily_contract rows for FSLR on 2026-11-07"
+  },
+  {
+   "field": "liquidity.atm_spread",
+   "reason": "no close"
+  },
+  {
+   "field": "events.earnings.confirmed",
+   "reason": "the earnings sources disagree on the session: finnhub 2027-02-22 amc, yfinance 2026-10-29 None"
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is null"
+  },
+  {
+   "field": "premium.iv30d",
+   "reason": "screener iv30d is null"
+  },
+  {
+   "field": "premium.iv_pct_own",
+   "reason": "screener iv30d is null"
+  },
+  {
+   "field": "range.straddle_front",
+   "reason": "no ATM call/put pair at 2026-11-20 carries a quote or a tier <= 2 print (the stored chain is yfinance 2026-11-07)"
+  },
+  {
+   "field": "range.box_1s_front",
+   "reason": "no front straddle to measure"
+  },
+  {
+   "field": "range.box_1s_21",
+   "reason": "no screener row"
+  },
+  {
+   "field": "range.gex_total",
+   "reason": "no strike on the chain carries positive gamma and open interest"
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cumulative GEX never changes sign over the listed strikes"
+  },
+  {
+   "field": "context.flow_pct_universe",
+   "reason": "no universe rows on the date"
+  },
+  {
+   "field": "context.vol_pct_universe",
+   "reason": "no universe rows on the date"
+  }
+ ]
+}
