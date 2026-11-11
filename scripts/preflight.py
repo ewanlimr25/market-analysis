@@ -38,6 +38,22 @@ GROUPS = {
     "Stock Screener": "stock-screener-{d}.parquet",
 }
 TRUTH_SETS = ("prices", "returns", "features")
+FINRA_FAILED_MARKER = os.path.join("logs", "short_interest_failed.json")   # written by engine.mart.short_interest
+
+
+def finra_warning(data_dir: str) -> str | None:
+    """The weekly FINRA pull failed on every symbol and has not succeeded since (findings D40, O17). The
+    text reaches the public report, so it names no path."""
+    path = os.path.join(data_dir, FINRA_FAILED_MARKER)
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path) as fh:
+            marker = json.load(fh)
+        detail = f"on all {marker['symbols']} symbols at {marker['failed_at']} ({marker['error']})"
+    except (OSError, ValueError, KeyError) as exc:
+        detail = f"(its marker is unreadable: {type(exc).__name__})"
+    return f"FINRA short interest: the weekly pull failed {detail}; no new settlement was stored. Rerun: make loaders-weekly"
 
 
 def check(date: str) -> dict:
@@ -80,6 +96,11 @@ def check(date: str) -> dict:
             out["warnings"].append(
                 f"{name}.parquet ends {mx}, BEFORE the {date} trade date -- any lane reading it "
                 f"gets a stale regime/factor read. Rebuild: python3 scripts/truthset/build_{name}.py")
+
+    finra = finra_warning(DATA)
+    if finra:                    # first: Monday to Thursday the line already opens with the expected truth-set warning
+        out["ok"] = False
+        out["warnings"].insert(0, finra)
     return out
 
 

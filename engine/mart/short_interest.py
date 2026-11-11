@@ -28,9 +28,11 @@ import argparse
 import io
 import json
 import os
+import sys
+import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
-from datetime import date
+from datetime import date, datetime, timezone
 from typing import Callable, Iterable
 
 import pandas as pd
@@ -43,6 +45,9 @@ TABLE = "short_interest"
 FINRA_SI_URL = "https://api.finra.org/data/group/otcMarket/name/consolidatedShortInterest"
 USER_AGENT = {"User-Agent": "Mozilla/5.0 (research; market-analysis engine)"}
 FETCH_TIMEOUT_S = 30
+RETRY_WAIT_S = 300                                          # a wake's network usually returns within minutes
+FAILED_MARKER = os.path.join("logs", "short_interest_failed.json")   # under config.DATA; scripts/preflight.py reads it
+EXIT_TOTAL_FAILURE = 1
 PAGE_LIMIT = 5000                # a single symbol's full history has always been well under this
 
 # FINRA's short-interest dissemination calendar documents publication at about 9 business days after
@@ -165,6 +170,42 @@ def refresh(universe: Iterable[str], fetch_text: Callable[[str], str] = fetch_sy
     return combined
 
 
+def refresh_with_retry(universe: Iterable[str], fetch_text: Callable[[str], str] = fetch_symbol_text,
+                       max_workers: int = 1, wait_s: float = RETRY_WAIT_S) -> tuple[pd.DataFrame, list[tuple[str, str]]]:
+    """`refresh`, run once more after `wait_s` when every symbol failed: launchd can fire this job on a
+    background wake with no network (2026-11-08; findings D40, O17). A partial failure is FINRA having no
+    row for some names, not an outage, and is not retried. Returns the last attempt's frame and errors."""
+    symbols = list(universe)
+
+    def attempt() -> tuple[pd.DataFrame, list[tuple[str, str]]]:
+        errors: list[tuple[str, str]] = []
+        df = refresh(symbols, fetch_text=fetch_text, on_error=lambda s, e: errors.append((s, str(e))),
+                     max_workers=max_workers)
+        return df, errors
+
+    df, errors = attempt()
+    if symbols and len(errors) == len(symbols):
+        print(f"short_interest: all {len(symbols)} symbols failed; retrying once in {wait_s:.0f} s", file=sys.stderr)
+        time.sleep(wait_s)
+        df, errors = attempt()
+    return df, errors
+
+
+def record_outcome(n_symbols: int, errors: list[tuple[str, str]]) -> bool:
+    """Leave the marker the nightly's preflight reads when every symbol failed; clear it otherwise, since a
+    run that reached FINRA collected whatever had published. Returns whether this was a total failure."""
+    path = os.path.join(config.DATA, FAILED_MARKER)
+    failed = n_symbols > 0 and len(errors) == n_symbols
+    if failed:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w") as fh:
+            json.dump({"failed_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                       "symbols": n_symbols, "error": errors[0][1][:200]}, fh)
+    elif os.path.exists(path):
+        os.remove(path)
+    return failed
+
+
 def load_short_interest(as_of: date) -> pd.DataFrame:
     """Per ticker, the latest settlement row whose `publication_date` is on or before `as_of`.
     Point-in-time safe by construction: a row settled 2026-08-14 (publication_date ~2026-08-27) is
@@ -197,12 +238,15 @@ def main() -> int:
         return 0
     from engine import fetch_list as FL
     universe = FL.load(a.universe)          # the universe file plus every name the books hold (D39, O14)
-    errors: list[tuple[str, str]] = []
-    df = refresh(universe, on_error=lambda s, e: errors.append((s, str(e))), max_workers=a.workers)
+    df, errors = refresh_with_retry(universe, fetch_text=fetch_symbol_text, max_workers=a.workers)
     n_symbols = df.symbol.nunique() if not df.empty else 0
     print(f"short_interest: {len(df)} rows, {n_symbols}/{len(universe)} symbols, {len(errors)} errors")
     for symbol, err in errors[:20]:
         print(f"  {symbol}: {err}")
+    if record_outcome(len(universe), errors):
+        print("short_interest: FAILED, every symbol on both attempts; no partition written. Rerun: make loaders-weekly",
+              file=sys.stderr)
+        return EXIT_TOTAL_FAILURE
     return 0
 
 

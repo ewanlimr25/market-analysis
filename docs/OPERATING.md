@@ -154,8 +154,10 @@ asleep runs when the Mac wakes; cron never caught up, and in the week of 09-14 i
 A job missed because the Mac was shut down (not asleep) still does not run; then `make loaders` by hand
 the same evening stores the chain under the payload's own date, and the CBOE payload holds a session's
 close until the next open. A holiday logs one `already exists` / `no file` line per loader and nothing
-else. `data/logs/` is gitignored; glance at `loaders.log` weekly and at `launchd-loaders*.err` if a row in
-`launchctl list` shows a non-zero exit. The Reg SHO line catches up on its own: FINRA posts a session's
+else. `data/logs/` is gitignored; glance at `loaders.log` weekly. Each job sends its own output there, stderr
+included, so the `launchd-loaders*.err` files stay empty unless launchd itself could not start the job. A non-zero
+exit in `launchctl list` on the weekly job means the FINRA pull failed on every symbol, and the nightly's preflight
+says so too (§5). The Reg SHO line catches up on its own: FINRA posts a session's
 file in the evening, after the 16:30 run, and its CDN answers a missing file with HTTP 403, so each run
 stores the prior session and lists today as `not published`; a run after a sleep gap refills the trailing
 two weeks.
@@ -339,7 +341,7 @@ picked it is still good enough. Neither is a verdict before 2026-12-01.
 | Preflight not clear: a panel export missing or empty | the export did not finish | do not run; re-export, then run |
 | Preflight not clear: truth set stale (`prices`/`returns` behind the trade date) | the truth-set build has not run | `python3 scripts/truthset/build_prices.py && python3 scripts/truthset/build_returns.py`, then rerun `make daily`. S-B settlement falls back to the last print's underlying price when `prices.parquet` is stale and records `settle_source` |
 | `make daily` prints `STOP ... the truth set does not reach it` and exits 2 | the last session of the week, and the truth-set line was not run first (D40) | nothing was written; run the three `build_*.py` lines, then `make daily` again. Only if they cannot reach the session: `ALLOW_STALE_TRUTH=1`, and note it in findings |
-| `short_interest: 0 rows, 0/N symbols` in `loaders.log`, every error `nodename nor servname` | the Saturday loader fired on a background wake with no network | no partition is touched. Run `make loaders-weekly` by hand if a settlement has published since the last partition; otherwise the next Saturday collects it |
+| The report's preflight opens `FINRA short interest: the weekly pull failed` | the Saturday loader failed on every symbol twice, five minutes apart: usually a background wake with no network (D40, O17) | no partition was touched. Run `make loaders-weekly` by hand; the warning clears once a pull reaches FINRA. If FINRA still has nothing new, that run writes nothing and that is fine |
 | `CBOE refresh: failed` two sessions running | CBOE site or network | run `make index-vol` by hand; if still failing the gate reads `UNKNOWN` and fails closed, which is safe |
 | A report shows a `model` tier on an entry leg | no print in the late window | the engine already refuses the entry; nothing to do |
 | `make daily` for a date already run | re-run | safe; ledger keys are unique and nothing is duplicated |
@@ -422,7 +424,7 @@ sleeve or per priceable event, entered whatever the gate or the filters said, wi
 When you want to look at one stock, run the sheet, not a research skill:
 
 ```
-make ticker T=NVDA                      # today's sheet -> analyses/ticker/NVDA/<date>/{ticker.json, report.md}
+make ticker T=NVDA                      # today's sheet -> analyses/ticker/NVDA/<date>/{ticker.json, report.md}; on a weekend or holiday it refuses and names the DATE= to use (D40, O16)
 make ticker T=NVDA DATE=2026-09-18      # an earlier session (its inputs/ are kept beside it; a rerun is offline and identical)
 make ticker T=NVDA DIRECTION=long       # your call, priced as shares + two verticals and written to the disc-1.0 book
 make narrate T=NVDA                     # optional: headlines, analyst, Form 4, the disconfirming-facts checklist (changes no number)

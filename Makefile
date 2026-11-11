@@ -141,7 +141,7 @@ loaders:           ## nightly (launchd, weekdays): CBOE chain SPY/QQQ + data/wat
 	-$(MAKE) -s index-vol-ext
 
 loaders-weekly:    ## weekly (cron, Saturday): FINRA short interest, full universe, new settlements only
-	-$(PY) -m engine.mart.short_interest --refresh
+	$(PY) -m engine.mart.short_interest --refresh
 
 # ---- Watch basket (findings/market-analysis DESIGN/110-watch-basket.md; exploration-only, R1) --
 .PHONY: watch-retro

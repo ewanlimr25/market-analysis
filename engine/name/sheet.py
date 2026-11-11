@@ -186,6 +186,9 @@ def main() -> int:
     if a.direction and len(syms) != 1:
         ap.error("--direction takes exactly one --ticker")
     d = cal.parse_date(a.date)
+    if not cal.is_trading_day(d):  # no export, so every sheet would fail L1 and be written anyway (findings D40, O16)
+        print(f"{d} is not a trading day: no export, so no sheet. For the last session: DATE={cal.prev_session(d)}", file=sys.stderr)
+        return 1
     failures = 0
     for sym in syms:
         try:

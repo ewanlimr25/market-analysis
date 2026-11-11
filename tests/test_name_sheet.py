@@ -97,3 +97,27 @@ def test_the_sheet_records_inputs_dir_relative_to_the_repo(tmp_path, monkeypatch
     doc = SH.run("NVDA", D, offline=True, out_root=root, ledger_dir=None)
     assert doc["inputs_dir"] == f"analyses/NVDA/{D.isoformat()}/inputs"
     assert "/Users/" not in json.dumps(_public(doc))
+
+
+@pytest.mark.parametrize("day, last_session", [
+    ("2026-11-07", "2026-11-06"),   # a Saturday: the batch of 2026-11-09 (findings D40, O16)
+    ("2026-11-08", "2026-11-06"),   # a Sunday
+    ("2026-11-26", "2026-11-25"),   # Thanksgiving
+])
+def test_a_date_that_is_not_a_session_writes_nothing_and_names_the_last_session(tmp_path, monkeypatch, capsys, day, last_session):
+    called = []
+    monkeypatch.setattr(SH, "run", lambda *a, **k: called.append(a))
+    monkeypatch.setattr("sys.argv", ["sheet", "--ticker", "NVDA", "--date", day, "--out-root", str(tmp_path)])
+    assert SH.main() == 1
+    assert called == []
+    assert os.listdir(tmp_path) == []
+    err = capsys.readouterr().err
+    assert f"{day} is not a trading day" in err and f"DATE={last_session}" in err
+
+
+def test_a_session_still_writes_its_sheet(tmp_path, monkeypatch):
+    root = _stage(tmp_path, "NVDA")
+    monkeypatch.setattr("sys.argv", ["sheet", "--ticker", "NVDA", "--date", D.isoformat(), "--offline", "--no-ledger",
+                                     "--out-root", root])
+    assert SH.main() == 0
+    assert os.path.exists(os.path.join(root, "NVDA", D.isoformat(), "report.md"))
