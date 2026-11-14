@@ -41,12 +41,8 @@ Preflight: clear
 | XPEV | SS | 2026-11-20T00:00:00.000 | 9.50 | 0.79 | +7.97% | 241.09 | F2 |
 | XPEV | IC | 2026-11-20T00:00:00.000 | 9.50 | 0.75 | +7.29% | 174.64 | F2 |
 
-## Graded today (3)
-| ticker | variant | structure | role | net_pct | net_usd | exit_tier_max | model_exit |
-|---|---|---|---|---|---|---|---|
-| ARWR | A1 | SS | exploration | -2.97% | -140.16 | 2 | no |
-| CBRS | A1 | SS | exploration | -3.45% | -338.23 | 1 | no |
-| DLO | A1 | SS | exploration | +2.78% | 38.08 | 1 | no |
+## Graded today (0)
+_none due_
 
 ## Season to date (forward ledger)
 | policy_id | role | variant | structure | n | dates | mean_net_pct | t | net_usd_total |
@@ -58,7 +54,7 @@ Preflight: clear
 | sa-1.0 | exploration | A1 | IC | 58 | 23 | -1.11% | -1.67 | -9,252.44 |
 | sa-1.0 | exploration | A1 | SS | 286 | 28 | -0.97% | -3.41 | -25,430.76 |
 
-Ledger: emitted 2 (skipped 0), exploration 6 (skipped 0), graded 3; ledger open.
+Ledger: emitted 0 (skipped 2), exploration 0 (skipped 6), graded 0; ledger open.
 
 ## S-B state
 Gate (2026-11-13, from 2026-11-12 closes): SPY OFF:G2 (VIX 18.7, VIX3M 20.06, X 18.7 vs median 18.735) · QQQ ON (VIX 18.7, VIX3M 20.06, X 28.55 vs median 26.935)
@@ -89,15 +85,8 @@ Entry day: yes.
 | QQQ | PS | 2026-12-04 | 630.00 | 575.00 | — | — | 2.97 | 5,203.45 | ON |
 | QQQ | IC | 2026-12-04 | 630.00 | 575.00 | 728.00 | 770.00 | 4.34 | 5,066.36 | ON |
 
-### S-B graded at expiry today (6)
-| underlying | structure | entry | expiry | settle_close | net_usd | ror | role |
-|---|---|---|---|---|---|---|---|
-| SPY | PS | 2026-10-23 | 2026-11-13 | 754.37 | 196.74 | +5.18% | champion |
-| QQQ | PS | 2026-10-23 | 2026-11-13 | 679.89 | 303.42 | +7.24% | champion |
-| QQQ | IC | 2026-10-23 | 2026-11-13 | 679.89 | 469.34 | +11.67% | champion |
-| SPY | PS | 2026-10-23 | 2026-11-13 | 754.37 | 196.74 | +5.18% | exploration |
-| QQQ | PS | 2026-10-23 | 2026-11-13 | 679.89 | 303.42 | +7.24% | exploration |
-| QQQ | IC | 2026-10-23 | 2026-11-13 | 679.89 | 469.34 | +11.67% | exploration |
+### S-B graded at expiry today (0)
+_none due_
 
 Open positions: QQQ-IC 2, QQQ-PS 2, SPY-IC 1, SPY-PS 1
 
@@ -113,7 +102,7 @@ Open positions: QQQ-IC 2, QQQ-PS 2, SPY-IC 1, SPY-PS 1
 | sb-1.0 | exploration | SPY-IC | 4 | +6.91% | 31.77 | 724.42 |
 | sb-1.0 | exploration | SPY-PS | 7 | +4.94% | 29.94 | 999.78 |
 
-S-B ledger: emitted 2 (skipped 0), exploration 4 (skipped 0), graded 6; ledger open.
+S-B ledger: emitted 0 (skipped 2), exploration 0 (skipped 4), graded 0; ledger open.
 
 
 ## S-C state
@@ -158,7 +147,7 @@ _none due_
 
 Progress to the read: graded entry-weeks 2 of 40 (C1-SS), 2 of 40 (C1-IB), 2 of 40 (C2-SS), 2 of 40 (C2-IB)
 
-S-C ledger: emitted 8 (skipped 0), exploration 86 (skipped 0), graded 110.
+S-C ledger: emitted 0 (skipped 8), exploration 0 (skipped 86), graded 0.
 
 
 ## Watch basket (wb-1.0, exploration, paper only)
@@ -348,6 +337,6 @@ _none_
 
 CONFLICT (logged only, never a basket, DESIGN/110 §3): 62.
 
-Ledger: emitted 168 (skipped 0), graded 468; ledger open.
+Ledger: emitted 0 (skipped 168), graded 0; ledger open.
 
 Paper rows; read on the later of 2026-12-01 and 100 LONG episodes (DESIGN/110 §6); nothing here is a trade.
