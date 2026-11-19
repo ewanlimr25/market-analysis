@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- market-analysis's nightly on its own: scripts/nightly.py (docs/OPERATING.md §1; findings DESIGN/120 §4(2)).
+       A template: ops/launchd/install-nightly.sh fills in __HOME__, __REPO__, __PYTHON__ and __DRY_RUN__ and
+       installs it. It fires when ~/Downloads changes (tonight's zips landing), every 15 minutes as a sweep, and at
+       20:05 on weekdays for the reminder. A sweep with nothing to do exits at once. -->
+  <key>Label</key><string>com.market-analysis.nightly</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>__PYTHON__</string>
+    <string>__REPO__/scripts/nightly.py</string>
+  </array>
+  <key>WorkingDirectory</key><string>__REPO__</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>__HOME__/.pyenv/shims:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOME</key><string>__HOME__</string>
+    <key>MA_NIGHTLY_DRY_RUN</key><string>__DRY_RUN__</string>
+  </dict>
+  <key>WatchPaths</key>
+  <array>
+    <string>__HOME__/Downloads</string>
+  </array>
+  <key>StartInterval</key><integer>900</integer>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>5</integer></dict>
+    <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>5</integer></dict>
+    <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>5</integer></dict>
+    <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>5</integer></dict>
+    <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>20</integer><key>Minute</key><integer>5</integer></dict>
+  </array>
+  <key>ThrottleInterval</key><integer>30</integer>
+  <key>StandardOutPath</key><string>__REPO__/data/logs/launchd-nightly.err</string>
+  <key>StandardErrorPath</key><string>__REPO__/data/logs/launchd-nightly.err</string>
+  <key>RunAtLoad</key><false/>
+</dict>
+</plist>

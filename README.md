@@ -95,7 +95,8 @@ outside the liquid gate still gets a settlement close and short interest.
 run; a truth set that does not reach the trade date is a warning, except on the last session of the week, when
 expiries settle on it and the run stops until it is rebuilt). The SPY/QQQ chains, Reg SHO, IBKR borrow and
 FINRA short interest are fetched by two scheduled loaders (`make loaders`, `make loaders-weekly`; launchd
-setup in `docs/OPERATING.md §1`).
+setup in `docs/OPERATING.md §1`). An optional third LaunchAgent, `scripts/nightly.py`, runs the nightly itself once
+the export is downloaded: the ingest, `make daily`, the commit and the push (`docs/OPERATING.md §1`).
 
 ### 3. Credentials
 
@@ -123,7 +124,7 @@ analyses/
   daily/<date>/      the nightly report.md + signals.json                       (tracked)
   ticker/<T>/<date>/ one ticker sheet: ticker.json, report.md                    (tracked; inputs/ local)
   scan/, weekly/     the frozen journal of the old Claude Code fleet, 2026-06-22 to 2026-09-04 (read-only)
-ops/launchd/         the two loader LaunchAgents
+ops/launchd/         the two loader LaunchAgents, and the nightly agent's template and installer
 docs/OPERATING.md    the operator's guide
 legacy/              the frozen Claude Code fleet: agents, commands, scripts, docs, June research (legacy/README.md)
 ```

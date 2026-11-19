@@ -44,9 +44,13 @@ make backtest-sb REFRESH=1 && make report-sb     # weekend, S-B scorecard -> dat
 make backtest-sc && make report-sc               # weekend, S-C scorecard -> data/backtest/sc_report.md
 make ticker T=NVDA [DATE=] [DIRECTION=long|short] # one-name sheet
 make adjudicate ARGS="..."       # challenger / champion / gate / basket reads; NOT_DUE before their dates
+python3 scripts/nightly.py --dry-run             # what the nightly agent would run now (docs/OPERATING.md §1)
 ```
 
-Never run on your own: `make mart` (full rebuild), `make index-vol`, `--force-ledger`, `make seed-name`.
+Never run on your own:
+- `make mart` (full rebuild), `make index-vol`, `--force-ledger`, `make seed-name`;
+- `scripts/nightly.py` without `--dry-run`: it commits and pushes the night;
+- `ops/launchd/install-nightly.sh`: installing or removing the agent is the owner's call.
 
 ## Data
 

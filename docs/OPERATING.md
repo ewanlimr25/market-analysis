@@ -16,6 +16,10 @@ make daily DATE=YYYY-MM-DD                       # the session that just closed;
 git add analyses/daily ledger && git commit -m "daily: YYYY-MM-DD" && git push
 ```
 
+**With the nightly agent installed (§1, from 2026-11-19), the night is five clicks.** Download the five Unusual
+Whales files from the download page; the agent ingests them, runs the block above, commits and pushes, then posts a
+notification with the S-B gate. The commands above stay the way to run a night by hand.
+
 Then read `analyses/daily/YYYY-MM-DD/report.md` (one page). On most nights the two lines that matter
 are `no event tonight clears the filters` and the S-B gate verdict. Two nights carry extra meaning:
 **Thursday**, where the `Next session` line previews Friday's gate; **Friday**, the entry night, where
@@ -125,6 +129,84 @@ machine copy is `signals.json` in the same folder; its shape is pinned by `schem
 (`schema_version d1.0`, `report_kind engine-daily`), and the command's last line reads
 `signals.json: VALID`. A `WARN ... does not match` line means a key drifted: the file is still the
 record, but tell the next session so the schema (not the ledger) is fixed.
+
+### The nightly agent: the routine above, run by launchd (findings DESIGN/120, D41)
+
+`scripts/nightly.py`, run by the LaunchAgent `com.market-analysis.nightly`, does the night once the five files
+are downloaded. Unusual Whales' terms forbid scripting the download (§4(D)), so the clicks stay yours.
+
+**When it runs:** whenever `~/Downloads` changes, every 15 minutes, and at 20:05 on weekdays. A run with nothing to do
+exits at once, with no network call (a dry run also checks the push credentials once a day).
+
+**What each run does:**
+1. **Ingest.** `python convert.py --ingest` in `~/Development/unusual-whales-mcp` moves the zips into the panel.
+   It keeps a damaged or unusual file back and says why (`--accept-changes` there lets a known short session in).
+2. **Nights.** For each session after the last committed `analyses/daily/<date>/` whose five files are in the panel,
+   oldest first:
+   - on the last session of the week, the three truth-set builds (never between 09:00 and 16:15 on a session day,
+     checked before each build; then it waits);
+   - `make daily DATE=<session>`;
+   - `git commit -m "daily: <session>" -- analyses/daily ledger`: that session's outputs alone. Anything else you have
+     staged stays staged, and git refuses this commit during a merge.
+
+   A missing session stops the sessions after it; it never skips one. Before each session, and again before each
+   commit, it checks the repo afresh (below).
+3. **Push.** It pushes the tip it checked, when every commit ahead of `origin/main` is a nightly commit (no merge
+   commits, nothing outside `analyses/daily` and `ledger`). It never pulls, and pushes nothing during a git operation.
+4. **Tell.** A macOS notification gives the session, the S-B gate and the S-A candidate count. A healthchecks.io
+   check is pinged when the keychain holds its URL.
+
+**It runs no night, and says why, when:**
+- `analyses/daily` or `ledger` hold uncommitted changes (a hand run);
+- `engine/`, `scripts/`, `schemas/` or the `Makefile` do;
+- a merge, cherry-pick, revert, rebase or bisect is underway;
+- the checkout is not `main`;
+- the date is past the engine's holiday calendar (`engine/calendar.py` ends 2027-12-31; it warns a month ahead).
+
+If the code changes, or another night's files appear, while a night runs, its outputs are left uncommitted for you.
+
+A failed build or `make daily` commits nothing, and **the session is held**:
+- one more try two hours later;
+- after that, nothing until `HEAD` moves, i.e. you commit a fix or run the night by hand.
+
+A stale truth set on the last session of the week is left to you (`ALLOW_STALE_TRUTH=1` stays a hand call, D40).
+Each problem is told once a day. While the agent is running a night (the log is being written), don't run
+`make daily` by hand.
+
+**The reminder:** at 20:05 on a session day, if tonight's files are neither in the panel nor downloading, it posts a
+reminder and opens the download page, once a night.
+
+Install, dry run first, from the repo:
+
+```
+ops/launchd/install-nightly.sh --dry-run
+launchctl kickstart gui/$(id -u)/com.market-analysis.nightly
+tail -n 40 data/logs/nightly.log
+```
+
+The dry run ingests, then only says what it would run (no `make daily`, commit, push or ping), each thing once a day.
+Once a day it also runs `git push --dry-run`, to prove the credentials.
+
+macOS guards `~/Downloads` and `~/Documents`. The first run may ask whether `python3` may use them: allow it. If
+the log shows `Operation not permitted` and no prompt came, add the interpreter the install printed under System
+Settings → Privacy & Security → Full Disk Access.
+
+The notifications come from Script Editor (`osascript`). If none appear while the log shows `told:` lines, allow
+Script Editor under System Settings → Notifications.
+
+After a clean dry night, `ops/launchd/install-nightly.sh` installs it live, and `--remove` takes it out.
+
+**The healthcheck, optional:**
+1. Create a check at healthchecks.io: cron `5 20 * * 1-5`, time zone America/New_York, grace 3 h 25 min. It alerts
+   at 23:30 when no night was pushed.
+2. Put its ping URL in the keychain from your own terminal:
+   `security add-generic-password -s market-analysis-nightly-healthcheck -a nightly -w`
+   (it asks for the URL). Never put the URL in a file or a chat.
+
+The agent pings on success, pings `/fail` on a problem, and pings on a market-holiday evening.
+
+**Files:** the log is `data/logs/nightly.log`; `data/logs/nightly-state.json` records what was told today and the
+reminder. Both are gitignored.
 
 ### The loaders run from launchd, not from `make daily` (D23, 2026-09-07; moved from cron 2026-09-18)
 
