@@ -9,6 +9,7 @@ import json
 import os
 import plistlib
 import subprocess
+import sys
 from collections.abc import Callable
 from datetime import date, datetime
 from pathlib import Path
@@ -503,6 +504,28 @@ def test_a_busy_ingest_is_not_a_problem(world: World) -> None:
 
     assert code == 0
     assert world.notes == []
+
+
+def test_a_step_past_its_timeout_comes_back_as_timed_out(tmp_path: Path) -> None:
+    result = nightly.run([sys.executable, "-c", "import time; time.sleep(30)"], tmp_path, 1)
+
+    assert result.code == nightly.TIMED_OUT
+    assert "timed out after 1s" in result.text
+
+
+def test_an_ingest_timeout_points_at_the_macos_prompt_once_a_day(world: World) -> None:
+    world.runner.ingest = nightly.Result(nightly.TIMED_OUT, "", "timed out after 3600s\n")
+
+    world.sweep(at("2026-11-18", 19, 0))
+    code = world.sweep(at("2026-11-18", 19, 15))
+
+    assert code == 1
+    assert len(world.notes) == 1
+    title, message = world.notes[0]
+    assert title == f"{nightly.TITLE}: needs a look"
+    assert "click Allow" in message and "Full Disk Access" in message and sys.executable in message
+    assert "kept something back" not in message
+    assert world.pings == ["/fail"]
 
 
 def test_the_reminder_comes_once_on_a_session_evening(world: World) -> None:

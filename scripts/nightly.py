@@ -89,6 +89,11 @@ HEALTHCHECK_ITEM = "market-analysis-nightly-healthcheck"  # the keychain item ho
 INGEST_BUSY = 3  # convert.py --ingest: another ingest holds its lock
 TIMEOUT_GIT = 300
 TIMEOUT_STEP = 3600
+TIMED_OUT = 124  # run()'s code for a step stopped at its timeout, as timeout(1) exits
+INGEST_TIMED_OUT = (  # the likeliest cause: macOS's privacy prompt with nobody there to answer it (D42)
+    f"the ingest was stopped after {TIMEOUT_STEP // 60} min. If macOS is asking whether Python may use Downloads or "
+    f"Documents, click Allow (or add {sys.executable} under Privacy & Security → Full Disk Access)"
+)
 TITLE = "market-analysis nightly"
 EXIT_OK, EXIT_FAILED = 0, 1
 
@@ -150,7 +155,7 @@ def run(argv: Sequence[str], cwd: Path, timeout: int) -> Result:
     try:
         done = subprocess.run(list(argv), cwd=cwd, capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired as e:
-        return Result(124, _text(e.stdout), f"timed out after {timeout}s\n{_text(e.stderr)}")
+        return Result(TIMED_OUT, _text(e.stdout), f"timed out after {timeout}s\n{_text(e.stderr)}")
     except OSError as e:
         return Result(127, "", str(e))
     return Result(done.returncode, done.stdout, done.stderr)
@@ -516,6 +521,8 @@ def ingest(ctx: Context) -> Problem | None:
         ctx.log(result.text)  # a sweep with nothing to ingest leaves no lines
     if result.code in (0, INGEST_BUSY):
         return None
+    if result.code == TIMED_OUT:
+        return Problem("ingest:timed out", INGEST_TIMED_OUT)
     failed = [line.strip() for line in result.text.splitlines() if "FAILED" in line]
     detail = "; ".join(failed[:3]) or _last_line(result.text)
     return Problem(ingest_key(failed or [detail]), f"the ingest kept something back: {detail}")
