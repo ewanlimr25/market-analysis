@@ -1,0 +1,503 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "FSLR",
+ "date": "2026-11-20",
+ "generated": "2026-11-21T04:05:11+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": true,
+  "failing": null,
+  "contracts": 642,
+  "hot_chain_days": 21,
+  "adv_usd": 636230193.7626648,
+  "atm_spread": 0.06670818235294118,
+  "tier": 1,
+  "atm_strike": 135.0,
+  "atm_expiry": "2026-12-18",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": true
+  },
+  "source": {
+   "issue_type": "screener 2026-11-20",
+   "close": "screener 2026-11-20",
+   "contracts": "daily_contract 2026-11-20",
+   "hot_chain_days": "daily_contract 2026-10-23..2026-11-20 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-11-20",
+   "atm_spread": "daily_contract late window 2026-11-20",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-11-20"
+  },
+  "nulls": []
+ },
+ "events": {
+  "earnings": {
+   "date": "2027-02-22",
+   "session": "post",
+   "session_date": "2027-02-23",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2027-02-22",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2027-02-23",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": null,
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 95
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-11-27",
+   "2026-12-04"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2027-02-23",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-11-20 + yfinance calendar",
+   "ex_div": "screener 2026-11-20",
+   "expiries": "daily_contract 2026-11-20",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.654,
+  "iv_pct_own": 59.523809523809526,
+  "rv5_21": 50.847528939526285,
+  "rv_c2c_21": 59.12173509561953,
+  "spread_rv5": 14.55247106047372,
+  "spread_c2c": 6.278264904380478,
+  "slope": null,
+  "earnings_history": [
+   {
+    "E": "2026-04-30",
+    "implied_move": 0.068754208261485,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.04864038513005342,
+    "ratio": 0.7074532070104715
+   },
+   {
+    "E": "2026-07-30",
+    "implied_move": 0.0640763450228257,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.024367770527241817,
+    "ratio": 0.3802927666763978
+   },
+   {
+    "E": "2026-10-29",
+    "implied_move": 0.121,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.014076575848017026,
+    "ratio": 0.11633533758691757
+   }
+  ],
+  "median_ratio_8": 0.3802927666763978,
+  "sc": {
+   "pass": true,
+   "failing": null,
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "sigma_hold": 24.81323255289794,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": true,
+    "F4": true,
+    "F5": true,
+    "F6": true,
+    "F7": true,
+    "F8": true,
+    "F9": true
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "RICH",
+  "source": {
+   "iv30d": "screener 2026-11-20 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-26..2026-11-20 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-23..2026-11-20 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-23..2026-11-20",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-11-20) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-23..2026-11-20 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-11-20) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-23..2026-11-20)",
+   "slope": "none 2026-11-20 ATM IV at 2026-11-27 then 2026-12-04, vol points",
+   "earnings_history": "earnings_events <= 2026-10-29 + earnings_history/events.parquet <= 2026-07-30",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-11-20",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-11-20"
+  },
+  "nulls": [
+   {
+    "field": "premium.slope",
+    "reason": "no live chain to read ATM IV from"
+   }
+  ]
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-11-27",
+   "strike": 140.0,
+   "mark": 9.791818181818183,
+   "mark_source": "daily_contract tier 2",
+   "tier": 2
+  },
+  "box_1s_front": 9.791818181818183,
+  "box_1s_21": 25.684135801061146,
+  "atr14": 10.19148564441265,
+  "gex_total": null,
+  "gex_sign": null,
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 136.985,
+  "source": {
+   "straddle_front": "daily_contract tier 2",
+   "box_1s_front": "daily_contract tier 2",
+   "box_1s_21": "screener 2026-11-20",
+   "atr14": "earnings_history/bars <= 2026-11-20",
+   "gex_total": "none 2026-11-20",
+   "gex_sign": "none 2026-11-20",
+   "zero_gamma": "none 2026-11-20",
+   "spot": "screener 2026-11-20"
+  },
+  "nulls": [
+   {
+    "field": "gex_total",
+    "reason": "cboe fetch failed: cboe_chain fetch failed for 'FSLR': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+   },
+   {
+    "field": "zero_gamma",
+    "reason": "cboe fetch failed: cboe_chain fetch failed for 'FSLR': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.3026,
+   "available": 2500000.0,
+   "date": "2026-11-20",
+   "decile": 0.29027532205102297,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": null,
+   "dtc": 5.35,
+   "settlement": "2026-10-30",
+   "publication": "2026-11-12",
+   "position": 11230097.0
+  },
+  "beta_250": 1.5484502790132288,
+  "beta_n": 249,
+  "analyst": [],
+  "analyst_n": 0,
+  "form4": {
+   "buys": 0,
+   "sells": 0,
+   "other": 0,
+   "rows": []
+  },
+  "vix": {
+   "vix": 35.89,
+   "vix3m": 30.94,
+   "vxn": 45.25,
+   "term": "backwardation",
+   "date": "2026-11-20"
+  },
+  "regime": "PULLBACK",
+  "regime_asof": "2026-11-20",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-11-20",
+   "si": "short_interest (FINRA) settlement 2026-10-30, published 2026-11-12 + short float n/a",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-11-20",
+   "analyst": "yfinance upgrades_downgrades <= 2026-11-20",
+   "form4": "finnhub /stock/insider-transactions <= 2026-11-20",
+   "vix": "index_vol 2026-11-20",
+   "regime": "_regime.classify_regime asof 2026-11-20",
+   "x2": "borrow (IBKR) 2026-11-20",
+   "x5": "short float None"
+  },
+  "nulls": [
+   {
+    "field": "si.pct_float",
+    "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+   },
+   {
+    "field": "x5",
+    "reason": "X5 cannot fire on a missing short float: it is unevaluated, not passed"
+   }
+  ]
+ },
+ "context": {
+  "ret_21": -0.19655476591012777,
+  "ret_63": -0.33949403316953564,
+  "w52_pos": 0.0047763221764346294,
+  "flow_pct_universe": 0.7418144611186903,
+  "flow_pct_self": 3.9682539682539684,
+  "vol_pct_universe": 50.54329078992756,
+  "vol_pct_self": 76.98412698412699,
+  "net_premium": -7322577.0,
+  "volume_ratio": 0.9957108603464472,
+  "universe_n": 5864,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-11-20",
+   "ret_63": "earnings_history/bars <= 2026-11-20",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-11-20",
+   "net_premium": "screener 2026-11-20",
+   "volume_ratio": "screener 2026-11-20",
+   "flow_pct_universe": "screener universe 2026-11-20",
+   "vol_pct_universe": "screener universe 2026-11-20",
+   "flow_pct_self": "screener 63 sessions to 2026-11-20",
+   "vol_pct_self": "screener 63 sessions to 2026-11-20",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [
+  {
+   "family": "IB",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 100.0,
+     "side": 1,
+     "mark": 0.44,
+     "half_spread": 0.32,
+     "mark_source": "daily_contract tier 2",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "P",
+     "strike": 135.0,
+     "side": -1,
+     "mark": 7.606941176470588,
+     "half_spread": 0.28018024455986157,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 135.0,
+     "side": -1,
+     "mark": 12.286875,
+     "half_spread": 0.3670826775,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 185.0,
+     "side": 1,
+     "mark": 0.435,
+     "half_spread": 0.20500000000000002,
+     "mark_source": "daily_contract tier 2",
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": 19.018816176470587,
+   "mark_source": "daily_contract tier 2 + daily_contract tier 1",
+   "max_loss": 3098.1183823529414,
+   "credit_debit": "credit",
+   "breakevens": [
+    115.981184,
+    154.018816
+   ],
+   "p_inside": 0.6751557429935151,
+   "p_touch": null,
+   "cost": 71.0601546482959,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": null,
+   "note": "max loss exceeds 0.5% of E at one contract",
+   "unit": "contract",
+   "rank": 1
+  },
+  {
+   "family": "IC",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 100.0,
+     "side": 1,
+     "mark": 0.44,
+     "half_spread": 0.32,
+     "mark_source": "daily_contract tier 2",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "P",
+     "strike": 110.0,
+     "side": -1,
+     "mark": 1.1600000000000001,
+     "half_spread": 0.62,
+     "mark_source": "daily_contract tier 2",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 160.0,
+     "side": -1,
+     "mark": 2.806153846153846,
+     "half_spread": 0.2188970527810651,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 185.0,
+     "side": 1,
+     "mark": 0.435,
+     "half_spread": 0.20500000000000002,
+     "mark_source": "daily_contract tier 2",
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": 3.0911538461538464,
+   "mark_source": "daily_contract tier 2 + daily_contract tier 1",
+   "max_loss": 2190.8846153846152,
+   "credit_debit": "credit",
+   "breakevens": [
+    106.908846,
+    163.091154
+   ],
+   "p_inside": 0.8525779638047585,
+   "p_touch": null,
+   "cost": 82.2515878824142,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": null,
+   "note": "max loss exceeds 0.5% of E at one contract",
+   "unit": "contract",
+   "rank": 2
+  },
+  {
+   "family": "SS",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 135.0,
+     "side": -1,
+     "mark": 7.606941176470588,
+     "half_spread": 0.28018024455986157,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 135.0,
+     "side": -1,
+     "mark": 12.286875,
+     "half_spread": 0.3670826775,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": 19.893816176470587,
+   "mark_source": "daily_contract tier 1",
+   "max_loss": null,
+   "credit_debit": "credit",
+   "breakevens": [
+    115.106184,
+    154.893816
+   ],
+   "p_inside": 0.6968941339318133,
+   "p_touch": null,
+   "cost": 39.10015464829591,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": null,
+   "note": "ALLOW_UNDEFINED=0: measurement only",
+   "unit": "contract",
+   "stress_loss_3s": 5653.088148222326,
+   "rank": 3
+  }
+ ],
+ "ledger_rows": [
+  {
+   "policy_id": "sheet-1.0",
+   "role": "champion",
+   "gate_verdict": "PASS",
+   "structure": "IB",
+   "written": true,
+   "reason": null
+  }
+ ],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/FSLR/2026-11-20/inputs",
+ "nulls": [
+  {
+   "field": "chain",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'FSLR': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "short_interest.short_float",
+   "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "earnings_dates.yfinance",
+   "reason": "yfinance calendar: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "analyst",
+   "reason": "yfinance upgrades_downgrades: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  },
+  {
+   "field": "premium.slope",
+   "reason": "no live chain to read ATM IV from"
+  },
+  {
+   "field": "range.gex_total",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'FSLR': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'FSLR': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "flags.si.pct_float",
+   "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "flags.x5",
+   "reason": "X5 cannot fire on a missing short float: it is unevaluated, not passed"
+  }
+ ]
+}

@@ -1,0 +1,1133 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "NOW",
+ "date": "2026-11-20",
+ "generated": "2026-11-21T04:04:09+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": true,
+  "failing": null,
+  "contracts": 1176,
+  "hot_chain_days": 21,
+  "adv_usd": 2344986848.5618973,
+  "atm_spread": 0.018436733870967743,
+  "tier": 1,
+  "atm_strike": 88.0,
+  "atm_expiry": "2026-12-18",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": true
+  },
+  "source": {
+   "issue_type": "screener 2026-11-20",
+   "close": "screener 2026-11-20",
+   "contracts": "daily_contract 2026-11-20",
+   "hot_chain_days": "daily_contract 2026-10-23..2026-11-20 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-11-20",
+   "atm_spread": "daily_contract late window 2026-11-20",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-11-20"
+  },
+  "nulls": []
+ },
+ "events": {
+  "earnings": {
+   "date": "2027-01-26",
+   "session": "post",
+   "session_date": "2027-01-27",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2027-01-26",
+     "hour": "amc"
+    },
+    {
+     "name": "screener",
+     "date": "2027-01-27",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": null,
+     "hour": null
+    }
+   ],
+   "confirmed": true,
+   "days_to": 68
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-11-27",
+   "2026-12-04"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2027-01-27",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-11-20 + yfinance calendar",
+   "ex_div": "screener 2026-11-20",
+   "expiries": "daily_contract 2026-11-20",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.ex_div",
+    "reason": "screener next_dividend_date is not a date: 'NaT'"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.62,
+  "iv_pct_own": 67.46031746031747,
+  "rv5_21": 40.09737719131728,
+  "rv_c2c_21": 109.37777837721057,
+  "spread_rv5": 21.90262280868272,
+  "spread_c2c": -47.377778377210575,
+  "slope": null,
+  "earnings_history": [
+   {
+    "E": "2026-07-22",
+    "implied_move": 0.0991432811105741,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.036874048573492635,
+    "ratio": 0.3719268533423577
+   },
+   {
+    "E": "2026-10-28",
+    "implied_move": 0.124,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.2694998028238872,
+    "ratio": 2.1733855066442516
+   }
+  ],
+  "median_ratio_8": 1.2726561799933047,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": true,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": false,
+  "verdict": "CHEAP",
+  "source": {
+   "iv30d": "screener 2026-11-20 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-26..2026-11-20 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-23..2026-11-20 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-23..2026-11-20",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-11-20) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-23..2026-11-20 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-11-20) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-23..2026-11-20)",
+   "slope": "none 2026-11-20 ATM IV at 2026-11-27 then 2026-12-04, vol points",
+   "earnings_history": "earnings_events <= 2026-10-28 + earnings_history/events.parquet <= 2026-07-22",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-11-20",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-11-20"
+  },
+  "nulls": [
+   {
+    "field": "premium.slope",
+    "reason": "no live chain to read ATM IV from"
+   }
+  ]
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-11-27",
+   "strike": 87.5,
+   "mark": 5.770737704918033,
+   "mark_source": "daily_contract tier 2",
+   "tier": 2
+  },
+  "box_1s_front": 5.770737704918033,
+  "box_1s_21": 15.54765915330656,
+  "atr14": 5.958201124686011,
+  "gex_total": null,
+  "gex_sign": null,
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 87.47,
+  "source": {
+   "straddle_front": "daily_contract tier 2",
+   "box_1s_front": "daily_contract tier 2",
+   "box_1s_21": "screener 2026-11-20",
+   "atr14": "earnings_history/bars <= 2026-11-20",
+   "gex_total": "none 2026-11-20",
+   "gex_sign": "none 2026-11-20",
+   "zero_gamma": "none 2026-11-20",
+   "spot": "screener 2026-11-20"
+  },
+  "nulls": [
+   {
+    "field": "gex_total",
+    "reason": "cboe fetch failed: cboe_chain fetch failed for 'NOW': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+   },
+   {
+    "field": "zero_gamma",
+    "reason": "cboe fetch failed: cboe_chain fetch failed for 'NOW': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.4081,
+   "available": 10000000.0,
+   "date": "2026-11-20",
+   "decile": 0.34205607476635513,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": null,
+   "dtc": 1.21,
+   "settlement": "2026-10-30",
+   "publication": "2026-11-12",
+   "position": 27126589.0
+  },
+  "beta_250": 0.7856486524573516,
+  "beta_n": 249,
+  "analyst": [],
+  "analyst_n": 0,
+  "form4": {
+   "buys": 0,
+   "sells": 3,
+   "other": 90,
+   "rows": [
+    {
+     "date": "2026-11-18",
+     "name": "Canney Jacqueline P",
+     "code": "S",
+     "shares": -474.0,
+     "price": 93.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": -485.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fontaine Danielle",
+     "code": "F",
+     "shares": -168.0,
+     "price": 92.9
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": 485.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": -295.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": -340.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fipps Paul",
+     "code": "F",
+     "shares": -118.0,
+     "price": 92.9
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": 295.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fipps Paul",
+     "code": "F",
+     "shares": -136.0,
+     "price": 92.9
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": 340.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": -970.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Canney Jacqueline P",
+     "code": "F",
+     "shares": -496.0,
+     "price": 92.9
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": 970.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": -1595.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Mastantuono Gina",
+     "code": "F",
+     "shares": -858.0,
+     "price": 92.9
+    },
+    {
+     "date": "2026-11-17",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": 1595.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": -4160.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-17",
+     "name": "McDermott William R",
+     "code": "F",
+     "shares": -2236.0,
+     "price": 92.9
+    },
+    {
+     "date": "2026-11-17",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": 4160.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-16",
+     "name": "Canney Jacqueline P",
+     "code": "S",
+     "shares": -2475.0,
+     "price": 101.03
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": -740.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": -235.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fontaine Danielle",
+     "code": "F",
+     "shares": -256.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": 740.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fontaine Danielle",
+     "code": "F",
+     "shares": -82.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": 235.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Nowbar Hossein",
+     "code": "M",
+     "shares": -2210.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Nowbar Hossein",
+     "code": "M",
+     "shares": -2857.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Nowbar Hossein",
+     "code": "F",
+     "shares": -870.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Nowbar Hossein",
+     "code": "M",
+     "shares": 2210.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Nowbar Hossein",
+     "code": "F",
+     "shares": -1125.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Nowbar Hossein",
+     "code": "M",
+     "shares": 2857.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Zavery Amit",
+     "code": "M",
+     "shares": -7180.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Zavery Amit",
+     "code": "M",
+     "shares": -3135.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Zavery Amit",
+     "code": "F",
+     "shares": -3860.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Zavery Amit",
+     "code": "M",
+     "shares": 7180.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Zavery Amit",
+     "code": "F",
+     "shares": -1686.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Zavery Amit",
+     "code": "M",
+     "shares": 3135.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": -5602.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": -1105.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": -940.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "F",
+     "shares": -2237.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": 5602.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "F",
+     "shares": -442.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": 1105.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "F",
+     "shares": -376.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": 940.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": -3567.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": -1490.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Canney Jacqueline P",
+     "code": "F",
+     "shares": -1821.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": 3567.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Canney Jacqueline P",
+     "code": "F",
+     "shares": -761.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": 1490.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": -5602.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": -2355.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Mastantuono Gina",
+     "code": "F",
+     "shares": -3012.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": 5602.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Mastantuono Gina",
+     "code": "F",
+     "shares": -1266.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": 2355.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": -8876.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": -6275.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "McDermott William R",
+     "code": "F",
+     "shares": -4771.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": 8876.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-13",
+     "name": "McDermott William R",
+     "code": "F",
+     "shares": -3373.0,
+     "price": 102.25
+    },
+    {
+     "date": "2026-11-13",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": 6275.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-09",
+     "name": "Canney Jacqueline P",
+     "code": "S",
+     "shares": -1289.0,
+     "price": 101.7
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": -305.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fontaine Danielle",
+     "code": "F",
+     "shares": -106.0,
+     "price": 101.97
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fontaine Danielle",
+     "code": "M",
+     "shares": 305.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Zavery Amit",
+     "code": "M",
+     "shares": -9995.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Zavery Amit",
+     "code": "F",
+     "shares": -5373.0,
+     "price": 101.97
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Zavery Amit",
+     "code": "M",
+     "shares": 9995.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": -70.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": -320.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fipps Paul",
+     "code": "F",
+     "shares": -28.0,
+     "price": 101.97
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": 70.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fipps Paul",
+     "code": "F",
+     "shares": -128.0,
+     "price": 101.97
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Fipps Paul",
+     "code": "M",
+     "shares": 320.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": -2635.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Canney Jacqueline P",
+     "code": "F",
+     "shares": -1346.0,
+     "price": 101.97
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Canney Jacqueline P",
+     "code": "M",
+     "shares": 2635.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": -3950.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Mastantuono Gina",
+     "code": "F",
+     "shares": -2124.0,
+     "price": 101.97
+    },
+    {
+     "date": "2026-11-06",
+     "name": "Mastantuono Gina",
+     "code": "M",
+     "shares": 3950.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": -8775.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-06",
+     "name": "McDermott William R",
+     "code": "F",
+     "shares": -4717.0,
+     "price": 101.97
+    },
+    {
+     "date": "2026-11-06",
+     "name": "McDermott William R",
+     "code": "M",
+     "shares": 8775.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-26",
+     "name": "Nowbar Hossein",
+     "code": "A",
+     "shares": 79078.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-26",
+     "name": "Zavery Amit",
+     "code": "A",
+     "shares": 174950.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-26",
+     "name": "Fipps Paul",
+     "code": "A",
+     "shares": 157455.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-26",
+     "name": "Canney Jacqueline P",
+     "code": "A",
+     "shares": 79078.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-26",
+     "name": "Mastantuono Gina",
+     "code": "A",
+     "shares": 124215.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-10-26",
+     "name": "McDermott William R",
+     "code": "A",
+     "shares": 349900.0,
+     "price": 0.0
+    }
+   ]
+  },
+  "vix": {
+   "vix": 35.89,
+   "vix3m": 30.94,
+   "vxn": 45.25,
+   "term": "backwardation",
+   "date": "2026-11-20"
+  },
+  "regime": "PULLBACK",
+  "regime_asof": "2026-11-20",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-11-20",
+   "si": "short_interest (FINRA) settlement 2026-10-30, published 2026-11-12 + short float n/a",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-11-20",
+   "analyst": "yfinance upgrades_downgrades <= 2026-11-20",
+   "form4": "finnhub /stock/insider-transactions <= 2026-11-20",
+   "vix": "index_vol 2026-11-20",
+   "regime": "_regime.classify_regime asof 2026-11-20",
+   "x2": "borrow (IBKR) 2026-11-20",
+   "x5": "short float None"
+  },
+  "nulls": [
+   {
+    "field": "si.pct_float",
+    "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+   },
+   {
+    "field": "x5",
+    "reason": "X5 cannot fire on a missing short float: it is unevaluated, not passed"
+   }
+  ]
+ },
+ "context": {
+  "ret_21": -0.441974518405404,
+  "ret_63": -0.315814146642858,
+  "w52_pos": 0.0679394475410379,
+  "flow_pct_universe": 97.91098226466576,
+  "flow_pct_self": 56.34920634920635,
+  "vol_pct_universe": 34.779234218696104,
+  "vol_pct_self": 62.698412698412696,
+  "net_premium": 677339.0,
+  "volume_ratio": 0.8076525508459809,
+  "universe_n": 5864,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-11-20",
+   "ret_63": "earnings_history/bars <= 2026-11-20",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-11-20",
+   "net_premium": "screener 2026-11-20",
+   "volume_ratio": "screener 2026-11-20",
+   "flow_pct_universe": "screener universe 2026-11-20",
+   "vol_pct_universe": "screener universe 2026-11-20",
+   "flow_pct_self": "screener 63 sessions to 2026-11-20",
+   "vol_pct_self": "screener 63 sessions to 2026-11-20",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [
+  {
+   "family": "IB",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 55.0,
+     "side": 1,
+     "mark": null,
+     "half_spread": null,
+     "mark_source": null,
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "P",
+     "strike": 88.0,
+     "side": -1,
+     "mark": 5.597483870967742,
+     "half_spread": 0.04210698213735692,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 88.0,
+     "side": -1,
+     "mark": 6.08925,
+     "half_spread": 0.0664595968125,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 118.0,
+     "side": 1,
+     "mark": null,
+     "half_spread": null,
+     "mark_source": null,
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": null,
+   "mark_source": "daily_contract tier 1",
+   "max_loss": null,
+   "credit_debit": null,
+   "breakevens": [],
+   "p_inside": null,
+   "p_touch": null,
+   "cost": null,
+   "n": 0,
+   "usd_at_risk": null,
+   "excluded_by": null,
+   "note": "unpriced: 2026-12-18 55P",
+   "unit": "contract",
+   "rank": 1
+  },
+  {
+   "family": "IC",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 55.0,
+     "side": 1,
+     "mark": null,
+     "half_spread": null,
+     "mark_source": null,
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "P",
+     "strike": 72.0,
+     "side": -1,
+     "mark": 1.2557692307692307,
+     "half_spread": 0.005549195931952662,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 102.0,
+     "side": -1,
+     "mark": 1.395,
+     "half_spread": 0.06499999999999995,
+     "mark_source": "daily_contract tier 2",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 118.0,
+     "side": 1,
+     "mark": null,
+     "half_spread": null,
+     "mark_source": null,
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": null,
+   "mark_source": "daily_contract tier 1 + daily_contract tier 2",
+   "max_loss": null,
+   "credit_debit": null,
+   "breakevens": [],
+   "p_inside": null,
+   "p_touch": null,
+   "cost": null,
+   "n": 0,
+   "usd_at_risk": null,
+   "excluded_by": null,
+   "note": "unpriced: 2026-12-18 55P",
+   "unit": "contract",
+   "rank": 2
+  },
+  {
+   "family": "SS",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 88.0,
+     "side": -1,
+     "mark": 5.597483870967742,
+     "half_spread": 0.04210698213735692,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 88.0,
+     "side": -1,
+     "mark": 6.08925,
+     "half_spread": 0.0664595968125,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": 11.686733870967743,
+   "mark_source": "daily_contract tier 1",
+   "max_loss": null,
+   "credit_debit": "credit",
+   "breakevens": [
+    76.313266,
+    99.686734
+   ],
+   "p_inside": 0.45234879006479844,
+   "p_touch": null,
+   "cost": 7.640288210671644,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": null,
+   "note": "ALLOW_UNDEFINED=0: measurement only",
+   "unit": "contract",
+   "stress_loss_3s": 3390.4663391413465,
+   "rank": 3
+  }
+ ],
+ "ledger_rows": [],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/NOW/2026-11-20/inputs",
+ "nulls": [
+  {
+   "field": "chain",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'NOW': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "short_interest.short_float",
+   "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "earnings_dates.yfinance",
+   "reason": "yfinance calendar: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "analyst",
+   "reason": "yfinance upgrades_downgrades: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "events.ex_div",
+   "reason": "screener next_dividend_date is not a date: 'NaT'"
+  },
+  {
+   "field": "premium.slope",
+   "reason": "no live chain to read ATM IV from"
+  },
+  {
+   "field": "range.gex_total",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'NOW': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'NOW': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "flags.si.pct_float",
+   "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "flags.x5",
+   "reason": "X5 cannot fire on a missing short float: it is unevaluated, not passed"
+  }
+ ]
+}

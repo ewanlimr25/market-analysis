@@ -1,0 +1,553 @@
+{
+ "schema": "n1.0",
+ "policy_id": "sheet-1.0",
+ "ticker": "AAPL",
+ "date": "2026-11-20",
+ "generated": "2026-11-21T04:03:38+00:00",
+ "E": 100000.0,
+ "direction": null,
+ "liquidity": {
+  "can_price": true,
+  "failing": null,
+  "contracts": 1894,
+  "hot_chain_days": 21,
+  "adv_usd": 17237663755.111694,
+  "atm_spread": 0.025460074501237804,
+  "tier": 1,
+  "atm_strike": 340.0,
+  "atm_expiry": "2026-12-18",
+  "verdicts": {
+   "L1": true,
+   "L2": true,
+   "L3": true,
+   "L4": true,
+   "L5": true,
+   "L6": true
+  },
+  "source": {
+   "issue_type": "screener 2026-11-20",
+   "close": "screener 2026-11-20",
+   "contracts": "daily_contract 2026-11-20",
+   "hot_chain_days": "daily_contract 2026-10-23..2026-11-20 (21 sessions)",
+   "adv_usd": "prices.parquet 20 sessions to 2026-11-20",
+   "atm_spread": "daily_contract late window 2026-11-20",
+   "tier": "engine.marking.print_mark late, daily_contract 2026-11-20"
+  },
+  "nulls": []
+ },
+ "events": {
+  "earnings": {
+   "date": "2027-01-27",
+   "session": "unknown",
+   "session_date": "2027-01-27",
+   "sources": [
+    {
+     "name": "finnhub",
+     "date": "2027-01-27",
+     "hour": null
+    },
+    {
+     "name": "screener",
+     "date": "2027-02-04",
+     "hour": "unknown"
+    },
+    {
+     "name": "yfinance",
+     "date": null,
+     "hour": null
+    }
+   ],
+   "confirmed": false,
+   "days_to": 68
+  },
+  "ex_div": null,
+  "expiries": [
+   "2026-11-27",
+   "2026-11-30"
+  ],
+  "macro": [
+   {
+    "date": "2026-12-09",
+    "event": "FOMC"
+   }
+  ],
+  "x1_window_end": "2027-01-04",
+  "source": {
+   "earnings": "finnhub /calendar/earnings + screener 2026-11-20 + yfinance calendar",
+   "ex_div": "screener 2026-11-20",
+   "expiries": "daily_contract 2026-11-20",
+   "macro": "FOMC published calendar (engine.name.data.FOMC_DATES)"
+  },
+  "nulls": [
+   {
+    "field": "events.earnings.confirmed",
+    "reason": "the earnings sources disagree on the session: finnhub 2027-01-27 None, screener 2027-02-04 unknown"
+   }
+  ]
+ },
+ "premium": {
+  "iv30d": 0.293,
+  "iv_pct_own": 92.85714285714286,
+  "rv5_21": 20.042073928826017,
+  "rv_c2c_21": 26.61678392703915,
+  "spread_rv5": 9.25792607117398,
+  "spread_c2c": 2.683216072960846,
+  "slope": null,
+  "earnings_history": [
+   {
+    "E": "2026-04-30",
+    "implied_move": 0.03202491431984532,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.032393618379240596,
+    "ratio": 1.0115130381212853
+   },
+   {
+    "E": "2026-07-30",
+    "implied_move": 0.03162503606084025,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.07353864245054431,
+    "ratio": 2.325329916116796
+   },
+   {
+    "E": "2026-11-02",
+    "implied_move": 0.059,
+    "implied_source": "screener implied_move_perc",
+    "realized_move": 0.018976156564048385,
+    "ratio": 0.32162977227200656
+   }
+  ],
+  "median_ratio_8": 1.0115130381212853,
+  "sc": {
+   "pass": false,
+   "failing": "F3",
+   "expiry": null,
+   "dte_cal": null,
+   "sigma_hold": null,
+   "verdicts": {
+    "F1": true,
+    "F2": true,
+    "F3": false,
+    "F4": true,
+    "F5": null,
+    "F6": false,
+    "F7": null,
+    "F8": null,
+    "F9": null
+   }
+  },
+  "sa": null,
+  "x1": true,
+  "verdict": "FAIR",
+  "source": {
+   "iv30d": "screener 2026-11-20 (a decimal, as the screener carries it)",
+   "iv_pct_own": "screener 2026-05-26..2026-11-20 (126 sessions)",
+   "rv5_21": "intraday_rv rv5, 21 quality sessions 2026-10-23..2026-11-20 (the panel lags the sheet date)",
+   "rv_c2c_21": "daily bars close-to-close, 21 returns 2026-10-23..2026-11-20",
+   "spread_rv5": "vol points: 100 x iv30d (screener 2026-11-20) - rv5_21 (intraday_rv rv5, 21 quality sessions 2026-10-23..2026-11-20 (the panel lags the sheet date))",
+   "spread_c2c": "vol points: 100 x iv30d (screener 2026-11-20) - rv_c2c_21 (daily bars close-to-close, 21 returns 2026-10-23..2026-11-20)",
+   "slope": "none 2026-11-20 ATM IV at 2026-11-27 then 2026-11-30, vol points",
+   "earnings_history": "earnings_events <= 2026-11-02 + earnings_history/events.parquet <= 2026-07-30",
+   "sc": "engine.strategies.sc_filters.evaluate_name on SC_PARAMS, daily_contract 2026-11-20",
+   "sa": "engine.strategies.sa_filters.cheap_filters on SA_PARAMS, screener 2026-11-20"
+  },
+  "nulls": [
+   {
+    "field": "premium.slope",
+    "reason": "no live chain to read ATM IV from"
+   }
+  ]
+ },
+ "range": {
+  "straddle_front": {
+   "expiry": "2026-11-27",
+   "strike": 342.5,
+   "mark": 12.40309976022211,
+   "mark_source": "daily_contract tier 1",
+   "tier": 1
+  },
+  "box_1s_front": 12.40309976022211,
+  "box_1s_21": 28.76050750685075,
+  "atr14": 8.180983631238558,
+  "gex_total": null,
+  "gex_sign": null,
+  "zero_gamma": null,
+  "zero_gamma_all_crossings": [],
+  "spot": 342.385,
+  "source": {
+   "straddle_front": "daily_contract tier 1",
+   "box_1s_front": "daily_contract tier 1",
+   "box_1s_21": "screener 2026-11-20",
+   "atr14": "earnings_history/bars <= 2026-11-20",
+   "gex_total": "none 2026-11-20",
+   "gex_sign": "none 2026-11-20",
+   "zero_gamma": "none 2026-11-20",
+   "spot": "screener 2026-11-20"
+  },
+  "nulls": [
+   {
+    "field": "gex_total",
+    "reason": "cboe fetch failed: cboe_chain fetch failed for 'AAPL': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+   },
+   {
+    "field": "zero_gamma",
+    "reason": "cboe fetch failed: cboe_chain fetch failed for 'AAPL': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+   }
+  ]
+ },
+ "flags": {
+  "borrow": {
+   "fee": 0.25,
+   "available": 10000000.0,
+   "date": "2026-11-20",
+   "decile": 0.12152058600656732,
+   "stale_days": 0
+  },
+  "si": {
+   "pct_float": null,
+   "dtc": 3.36,
+   "settlement": "2026-10-30",
+   "publication": "2026-11-12",
+   "position": 144791472.0
+  },
+  "beta_250": 0.5909624179273993,
+  "beta_n": 249,
+  "analyst": [],
+  "analyst_n": 0,
+  "form4": {
+   "buys": 0,
+   "sells": 6,
+   "other": 1,
+   "rows": [
+    {
+     "date": "2026-11-17",
+     "name": "Newstead Jennifer",
+     "code": "S",
+     "shares": -2398.0,
+     "price": 352.77
+    },
+    {
+     "date": "2026-11-16",
+     "name": "LEVINSON ARTHUR D",
+     "code": "G",
+     "shares": -50000.0,
+     "price": 0.0
+    },
+    {
+     "date": "2026-11-16",
+     "name": "LEVINSON ARTHUR D",
+     "code": "S",
+     "shares": -53208.0,
+     "price": 353.43
+    },
+    {
+     "date": "2026-11-16",
+     "name": "LEVINSON ARTHUR D",
+     "code": "S",
+     "shares": -36792.0,
+     "price": 352.26
+    },
+    {
+     "date": "2026-11-10",
+     "name": "Newstead Jennifer",
+     "code": "S",
+     "shares": -2399.0,
+     "price": 351.36
+    },
+    {
+     "date": "2026-11-03",
+     "name": "Newstead Jennifer",
+     "code": "S",
+     "shares": -2399.0,
+     "price": 325.75
+    },
+    {
+     "date": "2026-10-27",
+     "name": "Newstead Jennifer",
+     "code": "S",
+     "shares": -2399.0,
+     "price": 343.36
+    }
+   ]
+  },
+  "vix": {
+   "vix": 35.89,
+   "vix3m": 30.94,
+   "vxn": 45.25,
+   "term": "backwardation",
+   "date": "2026-11-20"
+  },
+  "regime": "PULLBACK",
+  "regime_asof": "2026-11-20",
+  "regime_stale": false,
+  "x2": false,
+  "x2_reason": null,
+  "x5": false,
+  "source": {
+   "borrow": "borrow (IBKR) 2026-11-20",
+   "si": "short_interest (FINRA) settlement 2026-10-30, published 2026-11-12 + short float n/a",
+   "beta_250": "earnings_history/bars x SPY 250 sessions to 2026-11-20",
+   "analyst": "yfinance upgrades_downgrades <= 2026-11-20",
+   "form4": "finnhub /stock/insider-transactions <= 2026-11-20",
+   "vix": "index_vol 2026-11-20",
+   "regime": "_regime.classify_regime asof 2026-11-20",
+   "x2": "borrow (IBKR) 2026-11-20",
+   "x5": "short float None"
+  },
+  "nulls": [
+   {
+    "field": "si.pct_float",
+    "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+   },
+   {
+    "field": "x5",
+    "reason": "X5 cannot fire on a missing short float: it is unevaluated, not passed"
+   }
+  ]
+ },
+ "context": {
+  "ret_21": -0.016254102700212325,
+  "ret_63": 0.10382162016146568,
+  "w52_pos": 0.8443915269720339,
+  "flow_pct_universe": 0.298431105047749,
+  "flow_pct_self": 29.365079365079364,
+  "vol_pct_universe": 61.90927906174543,
+  "vol_pct_self": 88.0952380952381,
+  "net_premium": -20367686.0,
+  "volume_ratio": 1.1709974994926189,
+  "universe_n": 5864,
+  "self_n": 63,
+  "sentence": "Direction: no input on this sheet has a measured directional edge at 1\u20134 weeks; the engine emits none.",
+  "source": {
+   "ret_21": "earnings_history/bars <= 2026-11-20",
+   "ret_63": "earnings_history/bars <= 2026-11-20",
+   "w52_pos": "earnings_history/bars 252 sessions to 2026-11-20",
+   "net_premium": "screener 2026-11-20",
+   "volume_ratio": "screener 2026-11-20",
+   "flow_pct_universe": "screener universe 2026-11-20",
+   "vol_pct_universe": "screener universe 2026-11-20",
+   "flow_pct_self": "screener 63 sessions to 2026-11-20",
+   "vol_pct_self": "screener 63 sessions to 2026-11-20",
+   "sentence": "DESIGN/70 \u00a74F, DECISIONS D3 (frozen 2026-09-20)"
+  },
+  "nulls": []
+ },
+ "structures": [
+  {
+   "family": "IB",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 285.0,
+     "side": 1,
+     "mark": 0.9440243902439024,
+     "half_spread": 0.002561866335886377,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "P",
+     "strike": 340.0,
+     "side": -1,
+     "mark": 9.43683995922528,
+     "half_spread": 0.09974571974661275,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 340.0,
+     "side": -1,
+     "mark": 13.902666666666667,
+     "half_spread": 0.20701421543492063,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 400.0,
+     "side": 1,
+     "mark": 0.091625,
+     "half_spread": 0.01573433118515625,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": 22.303857235648042,
+   "mark_source": "daily_contract tier 1",
+   "max_loss": 3769.614276435196,
+   "credit_debit": "credit",
+   "breakevens": [
+    317.696143,
+    362.303857
+   ],
+   "p_inside": 0.7135892828980133,
+   "p_touch": null,
+   "cost": 21.583278149830438,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "rank": 1
+  },
+  {
+   "family": "IC",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 285.0,
+     "side": 1,
+     "mark": 0.9440243902439024,
+     "half_spread": 0.002561866335886377,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "P",
+     "strike": 315.0,
+     "side": -1,
+     "mark": 3.844542429284526,
+     "half_spread": 0.12310819451279205,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 370.0,
+     "side": -1,
+     "mark": 1.7617785096747633,
+     "half_spread": 0.028260581727781214,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 400.0,
+     "side": 1,
+     "mark": 0.091625,
+     "half_spread": 0.01573433118515625,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": 4.570671548715387,
+   "mark_source": "daily_contract tier 1",
+   "max_loss": 2542.932845128461,
+   "credit_debit": "credit",
+   "breakevens": [
+    310.429328,
+    374.570672
+   ],
+   "p_inside": 0.8749016537217386,
+   "p_touch": null,
+   "cost": 12.508434467678367,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "rank": 2
+  },
+  {
+   "family": "SS",
+   "legs": [
+    {
+     "right": "P",
+     "strike": 340.0,
+     "side": -1,
+     "mark": 9.43683995922528,
+     "half_spread": 0.09974571974661275,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    },
+    {
+     "right": "C",
+     "strike": 340.0,
+     "side": -1,
+     "mark": 13.902666666666667,
+     "half_spread": 0.20701421543492063,
+     "mark_source": "daily_contract tier 1",
+     "expiry": "2026-12-18"
+    }
+   ],
+   "expiry": "2026-12-18",
+   "dte_cal": 28,
+   "mark": 23.339506625891946,
+   "mark_source": "daily_contract tier 1",
+   "max_loss": null,
+   "credit_debit": "credit",
+   "breakevens": [
+    316.660493,
+    363.339507
+   ],
+   "p_inside": 0.735249954615009,
+   "p_touch": null,
+   "cost": 19.214780214601547,
+   "n": 0,
+   "usd_at_risk": 0.0,
+   "excluded_by": "X1",
+   "note": null,
+   "unit": "contract",
+   "stress_loss_3s": 6240.136331278478,
+   "rank": 3
+  }
+ ],
+ "ledger_rows": [
+  {
+   "policy_id": "sheet-1.0",
+   "role": "exploration",
+   "gate_verdict": "X1",
+   "structure": "IB",
+   "written": true,
+   "reason": null
+  }
+ ],
+ "context_read": "none",
+ "inputs_dir": "analyses/ticker/AAPL/2026-11-20/inputs",
+ "nulls": [
+  {
+   "field": "chain",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'AAPL': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "short_interest.short_float",
+   "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "earnings_dates.yfinance",
+   "reason": "yfinance calendar: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "analyst",
+   "reason": "yfinance upgrades_downgrades: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "events.earnings.confirmed",
+   "reason": "the earnings sources disagree on the session: finnhub 2027-01-27 None, screener 2027-02-04 unknown"
+  },
+  {
+   "field": "premium.slope",
+   "reason": "no live chain to read ATM IV from"
+  },
+  {
+   "field": "range.gex_total",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'AAPL': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "range.zero_gamma",
+   "reason": "cboe fetch failed: cboe_chain fetch failed for 'AAPL': HTTP Error 403: Forbidden; yfinance option_chain: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "flags.si.pct_float",
+   "reason": "fz is not on PATH; yfinance info shortPercentOfFloat: Too Many Requests. Rate limited. Try after a while."
+  },
+  {
+   "field": "flags.x5",
+   "reason": "X5 cannot fire on a missing short float: it is unevaluated, not passed"
+  }
+ ]
+}
