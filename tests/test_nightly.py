@@ -134,13 +134,18 @@ class World:
         git(self.repo, "remote", "add", "origin", str(self.origin))
         git(self.repo, "push", "-q", "-u", "origin", "main")
 
-    def sweep(self, now: datetime, dry_run: bool = False, clock: datetime | None = None) -> int:
+    def sweep(
+        self, now: datetime, dry_run: bool = False, clock: datetime | Callable[[], datetime] | None = None,
+        posted: Callable[[date], str] | None = None, week: Callable[..., tuple[int, dict]] | None = None,
+    ) -> int:
+        """One sweep started at `now`; `clock` is the time read during it (a fixed time, or one a test moves)."""
+        tick = clock if callable(clock) else (lambda: clock or now)
         ctx = nightly.Context(
             repo=self.repo, stocks=self.stocks, uw_mcp=self.uw, downloads=self.downloads, state_file=self.state,
             now=now, dry_run=dry_run, run=self.runner,
             notify=lambda title, message: self.notes.append((title, message)),
             ping=self.pings.append, log=self.logs.append,
-            clock=lambda: clock or now, sleep=self.sleep,
+            clock=tick, sleep=self.sleep, posted=posted, week=week,
         )
         return nightly.run_agent(ctx)
 
@@ -267,6 +272,122 @@ def test_a_failed_make_daily_commits_nothing_and_stops(world: World) -> None:
     assert world.subjects()[0] == "daily: 2026-11-17"
     assert "make daily failed" in world.told() and "KeyError" in world.told()
     assert world.pings == ["/fail"]
+
+
+def test_the_last_session_waits_for_yahoos_close_without_using_up_a_try(world: World) -> None:
+    for day in ("2026-11-18", "2026-11-19", "2026-11-20"):
+        complete(world.stocks, day)
+    empty = {"2026-11-20": "Yahoo has not posted the close for SPY and QQQ yet"}
+
+    first = world.sweep(at("2026-11-20", 21, 26), posted=lambda day: empty.get(day.isoformat(), ""))
+    world.sweep(at("2026-11-20", 21, 41), posted=lambda day: empty.get(day.isoformat(), ""))
+
+    assert first == 0
+    assert world.runner.made() == ["2026-11-18", "2026-11-19"]
+    assert world.runner.built() == []
+    waits = [(t, m) for t, m in world.notes if "waits for it" in m]
+    assert len(waits) == 1 and waits[0][0] == nightly.TITLE  # told once, and not as a failure
+    assert "held" not in json.loads(world.state.read_text())
+    assert world.pushed()
+
+    world.sweep(at("2026-11-20", 21, 56), posted=lambda day: "")
+
+    assert world.runner.made() == ["2026-11-18", "2026-11-19", "2026-11-20"]
+    assert len(world.runner.built()) == 3
+    assert world.subjects()[0] == "daily: 2026-11-20"
+
+
+def test_past_the_evenings_deadline_the_night_goes_ahead_and_a_stale_close_is_held(world: World) -> None:
+    for day in ("2026-11-18", "2026-11-19", "2026-11-20"):
+        complete(world.stocks, day)
+    world.runner.daily["2026-11-20"] = nightly.Result(2, STALE)
+
+    world.sweep(at("2026-11-20", 23, 5), posted=lambda day: "Yahoo has not posted the close for SPY and QQQ yet")
+
+    assert len(world.runner.built()) == 3  # no longer waiting: the rebuild ran, and make daily's STOP decides
+    assert "the truth set does not reach it" in world.told()
+    assert json.loads(world.state.read_text())["held"]["session"] == "2026-11-20"
+
+
+def test_yahoo_out_of_reach_is_a_failure_told_once_and_the_later_nights_wait(world: World) -> None:
+    for day in ("2026-11-18", "2026-11-19", "2026-11-20", "2026-11-23"):
+        complete(world.stocks, day)
+
+    def unreachable(day: date) -> str:
+        raise OSError("no route to host")
+
+    first = world.sweep(at("2026-11-20", 21, 30), posted=unreachable)
+    world.sweep(at("2026-11-20", 21, 45), posted=unreachable)
+
+    assert first == 1
+    assert world.runner.made() == ["2026-11-18", "2026-11-19"]
+    failures = [m for t, m in world.notes if t.endswith("needs a look")]
+    assert failures == ["2026-11-20 is the last session of its week and Yahoo could not be asked for its close "
+                        "(OSError), so its night waits; the next sweep asks again"]
+    assert world.pings == ["/fail"]
+
+
+def test_a_dry_run_never_asks_yahoo(world: World) -> None:
+    for day in ("2026-11-18", "2026-11-19", "2026-11-20"):
+        complete(world.stocks, day)
+    asked: list[date] = []
+
+    world.sweep(at("2026-11-20", 21, 30), dry_run=True, posted=lambda day: asked.append(day) or "")
+
+    assert asked == []
+
+
+def test_the_agent_starts_as_a_script() -> None:
+    repo = Path(__file__).resolve().parent.parent
+    done = subprocess.run([sys.executable, "scripts/nightly.py", "--help"], cwd=repo, capture_output=True, text=True,
+                          timeout=60)
+
+    assert done.returncode == 0, done.stderr
+    assert "--dry-run" in done.stdout
+
+
+def test_yahoos_close_is_read_from_the_sessions_daily_bar(monkeypatch: pytest.MonkeyPatch) -> None:
+    from urllib.parse import parse_qs, urlsplit
+
+    from scripts import yahoo_close
+
+    friday = int(datetime(2026, 11, 20, 14, 30, tzinfo=ZoneInfo("UTC")).timestamp())
+    bars = {"SPY": [715.87, 689.81], "QQQ": [645.04, None]}
+
+    class Reply:
+        """Yahoo's daily bars for the session and the one before, within the asked period only."""
+
+        def __init__(self, url: str) -> None:
+            symbol = url.split("/chart/")[1].split("?")[0]
+            asked = {k: int(v[0]) for k, v in parse_qs(urlsplit(url).query).items() if k.startswith("period")}
+            kept = [(t, c) for t, c in zip((friday - 86400, friday), bars[symbol])
+                    if asked["period1"] <= t < asked["period2"]]
+            self.body = {"chart": {"result": [{"timestamp": [t for t, _ in kept],
+                                               "indicators": {"quote": [{"close": [c for _, c in kept]}]}}]}}
+
+        def __enter__(self) -> Reply:
+            return self
+
+        def __exit__(self, *exc: object) -> None:
+            return None
+
+        def read(self) -> bytes:
+            return json.dumps(self.body).encode()
+
+    monkeypatch.setattr(yahoo_close.urllib.request, "urlopen", lambda request, timeout: Reply(request.full_url))
+
+    assert yahoo_close.close_of("SPY", date(2026, 11, 20)) == 689.81
+    assert yahoo_close.posted(date(2026, 11, 20)) == "Yahoo has not posted the close for QQQ yet"
+    bars["QQQ"][1] = 608.45
+    assert yahoo_close.posted(date(2026, 11, 20)) == ""
+    assert yahoo_close.close_of("SPY", date(2026, 11, 23)) is None  # no bar yet for that session
+
+    def unreachable(request: object, timeout: int) -> None:
+        raise OSError("no route")
+
+    monkeypatch.setattr(yahoo_close.urllib.request, "urlopen", unreachable)
+    with pytest.raises(OSError):  # the agent tells this as a failure (close_wait), never as a quiet wait
+        yahoo_close.posted(date(2026, 11, 20))
 
 
 def test_a_stale_truth_set_is_left_to_the_owner(world: World) -> None:

@@ -96,7 +96,8 @@ run; a truth set that does not reach the trade date is a warning, except on the 
 expiries settle on it and the run stops until it is rebuilt). The SPY/QQQ chains, Reg SHO, IBKR borrow and
 FINRA short interest are fetched by two scheduled loaders (`make loaders`, `make loaders-weekly`; launchd
 setup in `docs/OPERATING.md §1`). An optional third LaunchAgent, `scripts/nightly.py`, runs the nightly itself once
-the export is downloaded: the ingest, `make daily`, the commit and the push (`docs/OPERATING.md §1`).
+the export is downloaded: the ingest, `make daily`, the commit and the push. After the week's last night it runs the
+weekend block too (`scripts/weekly.py`), committed as `weekly: <session>` (`docs/OPERATING.md §1`, §4).
 
 ### 3. Credentials
 

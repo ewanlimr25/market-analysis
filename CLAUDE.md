@@ -49,7 +49,8 @@ python3 scripts/nightly.py --dry-run             # what the nightly agent would 
 
 Never run on your own:
 - `make mart` (full rebuild), `make index-vol`, `--force-ledger`, `make seed-name`;
-- `scripts/nightly.py` without `--dry-run`: it commits and pushes the night;
+- `scripts/nightly.py` without `--dry-run`: it commits and pushes the night, and after the week's last night the
+  weekend block (`scripts/weekly.py`, which only the agent's sweep runs);
 - `ops/launchd/install-nightly.sh`: installing or removing the agent is the owner's call.
 
 ## Data

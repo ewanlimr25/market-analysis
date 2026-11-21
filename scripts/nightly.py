@@ -5,11 +5,14 @@ Run by the LaunchAgent `com.market-analysis.nightly` (install with `ops/launchd/
 
 1. moves the downloaded zips into the panel (`convert.py --ingest` in unusual-whales-mcp);
 2. for each session after the last committed `analyses/daily/<date>/` whose five files are in the panel, oldest
-   first and stopping at the first that is not, runs the truth-set rebuild (last session of the week only), then
-   `make daily DATE=<session>`, then commits that session's outputs under `analyses/daily` and `ledger` alone as
-   `daily: <session>`;
-3. pushes the checked tip of `main` when every commit ahead of `origin/main` is such a commit; it never pulls;
-4. tells the owner: a macOS notification, and a healthchecks.io ping when the keychain holds the check's URL.
+   first and stopping at the first that is not, runs the truth-set rebuild (last session of the week only, once
+   Yahoo has posted the session's close: `scripts/yahoo_close.py`), then `make daily DATE=<session>`, then commits
+   that session's outputs under `analyses/daily` and `ledger` alone as `daily: <session>`;
+3. pushes the checked tip of `main` when every commit ahead of `origin/main` is such a commit, or a weekly one; it
+   never pulls;
+4. tells the owner: a macOS notification, and a healthchecks.io ping when the keychain holds the check's URL;
+5. after the last session of a week is committed, runs the weekend block (`scripts/weekly.py`), commits it as
+   `weekly: <session>`, pushes it and tells the owner.
 
 Before each session it looks again, and runs nothing, if `analyses/daily` or `ledger` hold uncommitted changes (a hand
 run), if the code does (`engine/`, `scripts/`, `schemas/`, `Makefile`), if a git operation is underway, or off
@@ -33,14 +36,17 @@ import traceback
 import urllib.request
 from collections.abc import Callable, Iterator, Sequence
 from contextlib import contextmanager
-from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from time import sleep
-from zoneinfo import ZoneInfo
 
 REPO = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO))  # run as a script, `engine` must still import
+sys.path.insert(0, str(REPO))  # run as a script, `engine` and `scripts` must still import
+
+from scripts.agent_core import (  # noqa: E402  importable from here on
+    EXIT_FAILED, EXIT_OK, NY, TIMED_OUT, TIMEOUT_GIT, TIMEOUT_STEP, TITLE, Context, Problem, Result, Runner, Slot,
+    last_line, run, within,
+)
 
 try:  # a broken engine must still reach the owner: main() tells them instead of dying in a log
     from engine import calendar as cal
@@ -50,7 +56,6 @@ except Exception as _error:  # noqa: BLE001
 else:
     IMPORT_ERROR = None
 
-NY = ZoneInfo("America/New_York")
 STOCKS = Path(config.STOCKS) if IMPORT_ERROR is None else Path.home() / "Documents" / "Stocks"
 UW_MCP = Path(os.path.expanduser(os.environ.get("UW_MCP_DIR", "~/Development/unusual-whales-mcp")))
 DOWNLOADS = Path.home() / "Downloads"
@@ -65,7 +70,10 @@ PANEL_FILES = {
 }
 NIGHT_PATHS = ("analyses/daily", "ledger")  # all a night commits
 CODE_PATHS = ("engine", "scripts", "schemas", "Makefile")  # a night never runs on uncommitted code
+WEEKLY_PATHS = ("data/universe.json", "data/backtest", "analyses/ticker", "ledger/name")  # all a weekly commits
 NIGHT_SUBJECT = re.compile(r"daily: \d{4}-\d{2}-\d{2}")
+WEEKLY_SUBJECT = re.compile(r"weekly: \d{4}-\d{2}-\d{2}")
+PUSHABLE = ((NIGHT_SUBJECT, NIGHT_PATHS), (WEEKLY_SUBJECT, WEEKLY_PATHS))  # the agent's own commits, by subject
 NIGHT_DIR = re.compile(r"analyses/daily/(\d{4}-\d{2}-\d{2})")
 IN_PROGRESS = ("MERGE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD", "rebase-merge", "rebase-apply", "BISECT_LOG")
 TRUTH_SET_BUILDS = (
@@ -80,6 +88,7 @@ HEALTHCHECK_URL = re.compile(r"https://\S+")
 DOWNLOAD_PAGE = "https://unusualwhales.com/data/download"
 REMIND_FROM = time(20, 5)  # New York; the export lands around 8 PM
 NO_REBUILD_FROM = time(9, 0)  # to the session's close (16:15): a rebuild would file the unfinished bar (D35, D36)
+CLOSE_WAIT_UNTIL = time(23, 0)  # on the session's evening: Yahoo posted 11-20's close by 21:36; hand runs went at 22-23
 STALLED_AFTER = timedelta(minutes=30)  # a .crdownload untouched this long no longer counts as downloading
 RETRY_AFTER = timedelta(hours=2)
 MAX_ATTEMPTS = 2  # a failed session is tried at most twice before HEAD moves
@@ -87,83 +96,13 @@ LOCK_RETRIES, LOCK_PAUSE = 5, 2.0  # git add/commit against another process's in
 CALENDAR_WARNING = timedelta(days=30)
 HEALTHCHECK_ITEM = "market-analysis-nightly-healthcheck"  # the keychain item holding the check's ping URL
 INGEST_BUSY = 3  # convert.py --ingest: another ingest holds its lock
-TIMEOUT_GIT = 300
-TIMEOUT_STEP = 3600
-TIMED_OUT = 124  # run()'s code for a step stopped at its timeout, as timeout(1) exits
 INGEST_TIMED_OUT = (  # the likeliest cause: macOS's privacy prompt with nobody there to answer it (D42)
     f"the ingest was stopped after {TIMEOUT_STEP // 60} min. If macOS is asking whether Python may use Downloads or "
     f"Documents, click Allow (or add {sys.executable} under Privacy & Security → Full Disk Access)"
 )
-TITLE = "market-analysis nightly"
-EXIT_OK, EXIT_FAILED = 0, 1
 
 
-@dataclass(frozen=True)
-class Result:
-    code: int
-    out: str  # stdout: what is parsed
-    err: str = ""  # stderr
-
-    @property
-    def text(self) -> str:
-        return self.out + self.err
-
-
-Runner = Callable[[Sequence[str], Path, int], Result]
-
-
-@dataclass(frozen=True)
-class Problem:
-    key: str  # the same key on two sweeps the same day is told once
-    message: str
-    failure: bool = True  # False: a wait, told but never a healthcheck failure
-    hold: bool = False  # True: the session's own night failed, so it is held (not retried every sweep)
-
-
-@dataclass(frozen=True)
-class Context:
-    repo: Path
-    stocks: Path
-    uw_mcp: Path
-    downloads: Path
-    state_file: Path
-    now: datetime  # the sweep's start: its day decides what is due and what was told
-    dry_run: bool
-    run: Runner
-    notify: Callable[[str, str], None]
-    ping: Callable[[str], None]
-    log: Callable[[str], None]
-    clock: Callable[[], datetime]  # read again right before each truth-set build
-    sleep: Callable[[float], None]
-
-    @property
-    def today(self) -> date:
-        return self.now.astimezone(NY).date()
-
-    def git(self, *args: str) -> Result:
-        return self.run(["git", *args], self.repo, TIMEOUT_GIT)
-
-
-def _text(value: object) -> str:
-    if isinstance(value, bytes):
-        return value.decode("utf-8", "replace")
-    return value if isinstance(value, str) else ""
-
-
-def run(argv: Sequence[str], cwd: Path, timeout: int) -> Result:
-    """Run a command. A timeout or a missing program comes back as a result, never an exception."""
-    try:
-        done = subprocess.run(list(argv), cwd=cwd, capture_output=True, text=True, timeout=timeout)
-    except subprocess.TimeoutExpired as e:
-        return Result(TIMED_OUT, _text(e.stdout), f"timed out after {timeout}s\n{_text(e.stderr)}")
-    except OSError as e:
-        return Result(127, "", str(e))
-    return Result(done.returncode, done.stdout, done.stderr)
-
-
-def _last_line(text: str) -> str:
-    lines = [line.strip() for line in text.splitlines() if line.strip() and not line.startswith("make: ***")]
-    return lines[-1][:200] if lines else "no output"
+NIGHT_SLOT = Slot("held", "{day}", "run the night by hand")
 
 
 # ---- git ----------------------------------------------------------------------------------------
@@ -270,18 +209,22 @@ def calendar_problem(ctx: Context) -> Problem | None:
     return None
 
 
-def refusal(ctx: Context) -> Problem | None:
-    """Why no night may run now: another branch, a git operation underway, a hand run, or uncommitted code."""
+def refusal(
+    ctx: Context, groups: Sequence[Sequence[str]] = (NIGHT_PATHS, CODE_PATHS), allow: Sequence[str] = ()
+) -> Problem | None:
+    """Why no night may run now: another branch, a git operation underway, a hand run, or uncommitted code. Changes
+    under `allow` are not in the way (the weekly's own outputs, when it retries its held try)."""
     branch = current_branch(ctx)
     if branch != "main":
         return Problem(f"branch:{branch}", f"the repo is on {branch or 'an unknown branch'}, not main; nothing was run")
     underway = operation_underway(ctx)
     if underway:
         return Problem(f"underway:{underway}", f"a git operation is underway ({underway}); nothing was run")
-    for paths in (NIGHT_PATHS, CODE_PATHS):
+    for paths in groups:
         found = changed(ctx, *paths)
         if found is None:
             return Problem("status", "git status failed; nothing was run")
+        found = [path for path in found if not within(path, allow)]
         if found:
             shown = ", ".join(found[:4]) + (" ..." if len(found) > 4 else "")
             return Problem(f"dirty:{shown}", f"uncommitted changes in {shown}; nothing was run")
@@ -295,6 +238,25 @@ def no_rebuild_now(now: datetime) -> bool:
     local = now.astimezone(NY)
     session = local.date()
     return cal.is_trading_day(session) and local.time() >= NO_REBUILD_FROM and not cal.session_closed(session, now)
+
+
+def close_wait(ctx: Context, day: date) -> Problem | None:
+    """A rebuild before Yahoo posts the session's close stops short of it, hours after the bell (21:36 ET on
+    2026-11-20), so the night waits for the close until CLOSE_WAIT_UNTIL that evening; a wait uses up no try. Past
+    it the night goes ahead, and a close still missing is make daily's STOP, held for the owner (D40). Yahoo out of
+    reach is a failure, told; the next sweep asks again. A dry run asks nothing."""
+    if ctx.posted is None or ctx.dry_run or ctx.clock() >= datetime.combine(day, CLOSE_WAIT_UNTIL, tzinfo=NY):
+        return None
+    try:
+        why = ctx.posted(day)
+    except Exception as e:  # noqa: BLE001  unattended: any failed look is told, never a crash
+        return Problem(f"close-check:{day}", f"{day} is the last session of its week and Yahoo could not be asked "
+                                             f"for its close ({type(e).__name__}), so its night waits; the next sweep "
+                                             "asks again")
+    if not why:
+        return None
+    return Problem(f"close-wait:{day}", f"{day} is the last session of its week and {why}, so its night waits for "
+                                        f"it until {CLOSE_WAIT_UNTIL:%H:%M}; the next sweep looks again", failure=False)
 
 
 def rebuild_truth_set(ctx: Context, day: date) -> Problem | None:
@@ -316,7 +278,7 @@ def rebuild_truth_set(ctx: Context, day: date) -> Problem | None:
         if result.code != 0:
             return Problem(
                 f"truth:{day}",
-                f"{day}: {script} failed (exit {result.code}): {_last_line(result.text)}; nothing was committed",
+                f"{day}: {script} failed (exit {result.code}): {last_line(result.text)}; nothing was committed",
                 hold=True,
             )
     return None
@@ -343,7 +305,7 @@ def daily_problem(day: date, result: Result) -> Problem:
         )
     return Problem(
         f"daily:{day}",
-        f"{day}: make daily failed (exit {result.code}): {_last_line(result.text)}; nothing was committed",
+        f"{day}: make daily failed (exit {result.code}): {last_line(result.text)}; nothing was committed",
         hold=True,
     )
 
@@ -364,7 +326,7 @@ def commit(ctx: Context, day: date) -> Problem | None:
     for args in (("add", "--", *NIGHT_PATHS), ("commit", "-q", "-m", f"daily: {day}", "--", *NIGHT_PATHS)):
         result = git_retrying(ctx, *args)
         if result.code != 0:
-            return Problem(f"commit:{day}", f"{day}: git {args[0]} failed ({_last_line(result.text)}); the "
+            return Problem(f"commit:{day}", f"{day}: git {args[0]} failed ({last_line(result.text)}); the "
                                             "outputs are left uncommitted", hold=True)
     return None
 
@@ -374,8 +336,8 @@ def run_session(ctx: Context, day: date) -> tuple[str, Problem | None]:
     from engine.daily import is_last_session_of_week  # about a second of imports, paid only when a session is due
 
     rebuild = is_last_session_of_week(day)
-    if rebuild:
-        problem = rebuild_truth_set(ctx, day) or refusal(ctx)  # the rebuild takes minutes: look again after it
+    if rebuild:  # the rebuild takes minutes: look at the repo again after it
+        problem = close_wait(ctx, day) or rebuild_truth_set(ctx, day) or refusal(ctx)
         if problem is not None:
             return "", problem
     if ctx.dry_run:
@@ -395,34 +357,38 @@ def run_session(ctx: Context, day: date) -> tuple[str, Problem | None]:
 # ---- holding a failed session -------------------------------------------------------------------
 
 
-def hold_status(ctx: Context, state: dict, day: date) -> tuple[bool, Problem | None]:
-    """(skip it, what to tell) for a session whose night failed before. It gets one more try after RETRY_AFTER,
-    then none until HEAD moves (the owner committed a fix, or the night by hand)."""
-    held = state.get("held") or {}
-    if held.get("session") != day.isoformat() or held.get("head") != head(ctx):
+def held_here(ctx: Context, state: dict, day: date, slot: Slot = NIGHT_SLOT) -> bool:
+    """A failed try of this session's run is held, and HEAD has not moved since."""
+    held = state.get(slot.key) or {}
+    return held.get("session") == day.isoformat() and held.get("head") == head(ctx)
+
+
+def hold_status(ctx: Context, state: dict, day: date, slot: Slot = NIGHT_SLOT) -> tuple[bool, Problem | None]:
+    """(skip it, what to tell) for a session whose run failed before. It gets one more try after RETRY_AFTER,
+    then none until HEAD moves (the owner committed a fix, or ran it by hand)."""
+    if not held_here(ctx, state, day, slot):
         return False, None
+    held = state[slot.key]
     attempts = int(held.get("attempts", 0))
     if attempts >= MAX_ATTEMPTS:
         return True, Problem(
-            f"held:{day}",
-            f"{day} is held after {attempts} failed tries ({held.get('reason', 'see the log')}). Commit a fix or "
-            "run the night by hand; the agent tries again once HEAD moves",
+            f"{slot.key}:{day}",
+            f"{slot.name.format(day=day)} is held after {attempts} failed tries ({held.get('reason', 'see the log')})."
+            f" Commit a fix or {slot.by_hand}; the agent tries again once HEAD moves",
         )
     return ctx.now < datetime.fromisoformat(held["retry_after"]), None
 
 
-def hold(ctx: Context, state: dict, day: date, problem: Problem) -> dict:
-    held = state.get("held") or {}
-    same = held.get("session") == day.isoformat() and held.get("head") == head(ctx)
-    attempts = int(held.get("attempts", 0)) + 1 if same else 1
-    entry = {"session": day.isoformat(), "head": head(ctx), "attempts": attempts,
-             "retry_after": (ctx.now + RETRY_AFTER).isoformat(), "reason": problem.message[:200]}
-    return {**state, "held": entry}
+def hold(ctx: Context, state: dict, day: date, problem: Problem, slot: Slot = NIGHT_SLOT) -> dict:
+    attempts = int(state[slot.key].get("attempts", 0)) + 1 if held_here(ctx, state, day, slot) else 1
+    entry = {"session": day.isoformat(), "head": head(ctx), "attempts": attempts,  # from the failure, not the sweep
+             "retry_after": (ctx.clock() + RETRY_AFTER).isoformat(), "reason": problem.message[:200]}
+    return {**state, slot.key: entry}
 
 
-def release(state: dict, day: date) -> dict:
-    held = state.get("held") or {}
-    return {k: v for k, v in state.items() if k != "held"} if held.get("session") == day.isoformat() else state
+def release(state: dict, day: date, slot: Slot = NIGHT_SLOT) -> dict:
+    held = state.get(slot.key) or {}
+    return {k: v for k, v in state.items() if k != slot.key} if held.get("session") == day.isoformat() else state
 
 
 def run_nights(ctx: Context, state: dict) -> tuple[list[str], list[Problem], dict]:
@@ -454,21 +420,24 @@ def run_nights(ctx: Context, state: dict) -> tuple[list[str], list[Problem], dic
 
 
 def stranger(ctx: Context, shas_ahead: Sequence[str]) -> str:
-    """The first commit that is not a nightly one: a merge, another subject, or a file outside the night's paths."""
+    """The first commit that is not the agent's: a merge, another subject, or a file outside its subject's paths
+    (a `daily:` commit's or a `weekly:` commit's)."""
     for sha in shas_ahead:
         subject = ctx.git("log", "-1", "--format=%s", sha).out.strip()
         if len(ctx.git("log", "-1", "--format=%P", sha).out.split()) > 1:
             return f"{sha[:7]} '{subject}' (a merge commit)"
         files = ctx.git("diff-tree", "--no-commit-id", "--name-only", "-r", sha).out.splitlines()
-        outside = [f for f in files if f and not f.startswith(("analyses/daily/", "ledger/"))]
-        if not NIGHT_SUBJECT.fullmatch(subject) or outside:
+        paths = next((paths for pattern, paths in PUSHABLE if pattern.fullmatch(subject)), None)
+        allowed = paths if paths is not None else NIGHT_PATHS + WEEKLY_PATHS  # a stranger's files are named too
+        outside = [f for f in files if f and not within(f, allowed)]
+        if paths is None or outside:
             touches = f" (it touches {', '.join(outside[:3])})" if outside else ""
             return f"{sha[:7]} '{subject}'{touches}"
     return ""
 
 
 def push(ctx: Context, probe: bool) -> tuple[str, Problem | None]:
-    """Push the checked tip of `main` when every commit ahead of `origin/main` is a nightly one; never pull.
+    """Push the checked tip of `main` when every commit ahead of `origin/main` is the agent's own; never pull.
     `probe` (a dry run, once a day) checks the credentials even with nothing to push. (line, problem)."""
     if shas(ctx, "origin/main..main") == [] and not probe:
         return "", None  # nothing ahead of what origin last showed: no network
@@ -476,7 +445,7 @@ def push(ctx: Context, probe: bool) -> tuple[str, Problem | None]:
         return "", None  # the owner is mid-operation; nothing is pushed until it is done
     fetch = ctx.git("fetch", "-q", "origin", "main")
     if fetch.code != 0:
-        return "", Problem("fetch", f"git fetch failed ({_last_line(fetch.text)}); the push waits for the next sweep")
+        return "", Problem("fetch", f"git fetch failed ({last_line(fetch.text)}); the push waits for the next sweep")
     behind = ctx.git("rev-list", "--count", "main..origin/main")
     if behind.code != 0 or behind.out.strip() != "0":
         count = behind.out.strip() if behind.code == 0 else "an unknown number of"
@@ -487,12 +456,12 @@ def push(ctx: Context, probe: bool) -> tuple[str, Problem | None]:
         return "", Problem("compare", "could not compare main with origin/main; nothing was pushed")
     odd = stranger(ctx, ahead)
     if odd:
-        return "", Problem(f"stranger:{odd}", f"not pushed: {odd} is not a nightly commit; push by hand")
+        return "", Problem(f"stranger:{odd}", f"not pushed: {odd} is not a nightly or weekly commit; push by hand")
     target = f"{ahead[-1]}:refs/heads/main" if ahead else "main"
     if ctx.dry_run:
         check = ctx.git("push", "--dry-run", "origin", target)
         if check.code != 0:
-            return "", Problem("push-check", f"git push --dry-run failed ({_last_line(check.text)}), so a live "
+            return "", Problem("push-check", f"git push --dry-run failed ({last_line(check.text)}), so a live "
                                              "night could not push")
         ctx.log("git push --dry-run works")
         return (f"would push {len(ahead)} commit(s)" if ahead else ""), None
@@ -500,7 +469,7 @@ def push(ctx: Context, probe: bool) -> tuple[str, Problem | None]:
         return "", None
     result = ctx.git("push", "-q", "origin", target)
     if result.code != 0:
-        return "", Problem("push", f"git push failed ({_last_line(result.text)}); the next sweep retries")
+        return "", Problem("push", f"git push failed ({last_line(result.text)}); the next sweep retries")
     return f"pushed {len(ahead)} commit(s)", None
 
 
@@ -524,7 +493,7 @@ def ingest(ctx: Context) -> Problem | None:
     if result.code == TIMED_OUT:
         return Problem("ingest:timed out", INGEST_TIMED_OUT)
     failed = [line.strip() for line in result.text.splitlines() if "FAILED" in line]
-    detail = "; ".join(failed[:3]) or _last_line(result.text)
+    detail = "; ".join(failed[:3]) or last_line(result.text)
     return Problem(ingest_key(failed or [detail]), f"the ingest kept something back: {detail}")
 
 
@@ -608,7 +577,16 @@ def sweep(ctx: Context, state: dict) -> tuple[int, dict]:
     problems += [push_problem] if push_problem is not None else []
     state = {**state, "push_check": ctx.today.isoformat()} if probe else state
     code, state = tell(ctx, state, lines, pushed, problems)
-    return code, evening(ctx, state, ok=code == EXIT_OK)
+    state = evening(ctx, state, ok=code == EXIT_OK)
+    if ctx.week is None:  # the night is told first; the week's block takes far longer, and has its own checks
+        return code, state
+    try:
+        week_code, state = ctx.week(ctx, state)
+    except Exception as e:  # its crash is told without losing what the night just saved
+        ctx.log(traceback.format_exc())
+        week_code, state = tell(ctx, state, [], "", [Problem(f"crash:weekly:{type(e).__name__}: {e}",
+                                                             f"the weekly crashed: {type(e).__name__}: {e}")])
+    return max(code, week_code), state
 
 
 def load_state(path: Path) -> dict:
@@ -696,7 +674,7 @@ def mac_notifier(log: Callable[[str], None]) -> Callable[[str, str], None]:
                   "-e", "end run")
         result = run(["osascript", *script, title, message[:900]], Path.home(), TIMEOUT_GIT)
         if result.code != 0:
-            log(f"the notification failed: {_last_line(result.text)}")
+            log(f"the notification failed: {last_line(result.text)}")
 
     return notify
 
@@ -726,7 +704,21 @@ def stay_awake(log: Callable[[str], None]) -> None:
         log(f"caffeinate unavailable: {e}")
 
 
+def weekly_block(log: Callable[[str], None]) -> Callable[[Context, dict], tuple[int, dict]]:
+    """scripts/weekly.py's block; if it does not import, the nights still run and the owner is told once a day."""
+    try:
+        from scripts import weekly
+    except Exception as e:  # noqa: BLE001  a broken weekly must never stop a night
+        log(traceback.format_exc())
+        broken = Problem(f"weekly-import:{type(e).__name__}", f"the weekly does not import ({type(e).__name__}: {e}); "
+                                                              "the nights still run, the weekend block does not")
+        return lambda ctx, state: tell(ctx, state, [], "", [broken])
+    return weekly.run_week
+
+
 def sweep_once(dry_run: bool) -> int:
+    from scripts.yahoo_close import posted
+
     LOGS.mkdir(parents=True, exist_ok=True)
     log = file_logger(LOGS / "nightly.log")
     with exclusive(LOGS / "nightly.lock") as held:
@@ -737,6 +729,7 @@ def sweep_once(dry_run: bool) -> int:
             repo=REPO, stocks=STOCKS, uw_mcp=UW_MCP, downloads=DOWNLOADS, state_file=LOGS / "nightly-state.json",
             now=datetime.now(NY), dry_run=dry_run, run=run, notify=mac_notifier(log),
             ping=pinger(healthcheck_url(run), log), log=log, clock=lambda: datetime.now(NY), sleep=sleep,
+            posted=posted, week=weekly_block(log),
         )
         code = run_agent(ctx)
         if code != EXIT_OK:
@@ -761,4 +754,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    # Run as the module scripts.weekly imports, so the two share one copy of this file and its classes.
+    from scripts import nightly as agent
+
+    raise SystemExit(agent.main())

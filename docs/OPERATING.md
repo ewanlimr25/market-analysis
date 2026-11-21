@@ -54,6 +54,9 @@ Before the commit, check that `sb_report.md` and `sc_report.md` were rewritten (
 Friday just closed): on 10-31 the backtests ran but the two report steps did not, and the weekly commit carried
 the previous week's scorecards (findings D39).
 
+**With the nightly agent installed (§1), the weekend block runs itself** right after the week's last night, with
+that check built in, and is committed as `weekly: <session>`. The block above stays the way to run a week by hand.
+
 **`DATE` is the Friday just closed, and the block belongs on the weekend.** With no `DATE` the batch prices
 today (the Makefile's default), which has no export until 8 PM: every sheet fails L1 and stores those empty inputs
 beside it, and a later sheet for that date reuses them unless run with `python3 -m engine.name.sheet ... --refresh`
@@ -144,17 +147,28 @@ exits at once, with no network call (a dry run also checks the push credentials 
 2. **Nights.** For each session after the last committed `analyses/daily/<date>/` whose five files are in the panel,
    oldest first:
    - on the last session of the week, the three truth-set builds (never between 09:00 and 16:15 on a session day,
-     checked before each build; then it waits);
+     checked before each build; then it waits). They wait, too, until Yahoo has posted that session's SPY and QQQ
+     close (`scripts/yahoo_close.py`, two requests a sweep; none in a dry run): its daily bar stays empty for hours
+     after the bell (on 2026-11-20 until about 21:35 ET), and a rebuild before then stops short of the session. The
+     wait is told once a day and uses up no try. It lasts until 23:00 that evening; then the night goes ahead, and a
+     close still missing is `make daily`'s stop below, held for you. Yahoo out of reach is a failure, told, and the
+     next sweep asks again;
    - `make daily DATE=<session>`;
    - `git commit -m "daily: <session>" -- analyses/daily ledger`: that session's outputs alone. Anything else you have
      staged stays staged, and git refuses this commit during a merge.
 
    A missing session stops the sessions after it; it never skips one. Before each session, and again before each
    commit, it checks the repo afresh (below).
-3. **Push.** It pushes the tip it checked, when every commit ahead of `origin/main` is a nightly commit (no merge
-   commits, nothing outside `analyses/daily` and `ledger`). It never pulls, and pushes nothing during a git operation.
+3. **Push.** It pushes the tip it checked, when every commit ahead of `origin/main` is the agent's own: a nightly
+   commit (nothing outside `analyses/daily` and `ledger`) or a weekly one (below). No merge commits. It never pulls,
+   and pushes nothing during a git operation.
 4. **Tell.** A macOS notification gives the session, the S-B gate and the S-A candidate count. A healthchecks.io
    check is pinged when the keychain holds its URL.
+5. **The weekend block** (`scripts/weekly.py`), once the week's last session is committed: §0's weekend block in its
+   order, then `git commit -m "weekly: <session>" -- data/universe.json data/backtest analyses/ticker ledger/name`
+   (only what the block writes: the three reports, the watch names' sheets, `ledger/name`, the universe), the push,
+   and a notification with the sheet count, the test count, and whether a criterion of S-B's go/no-go moved since
+   the last weekly (the §4 check; what to make of it stays yours). Below, under "The weekend block".
 
 **It runs no night, and says why, when:**
 - `analyses/daily` or `ledger` hold uncommitted changes (a hand run);
@@ -175,6 +189,26 @@ Each problem is told once a day. While the agent is running a night (the log is 
 
 **The reminder:** at 20:05 on a session day, if tonight's files are neither in the panel nor downloading, it posts a
 reminder and opens the download page, once a night.
+
+**The weekend block** runs in the sweep after the week's last night is committed and told, so usually on Friday
+night, before Saturday's FINRA pull reads `data/universe.json`. Its window ends at 09:00 of the next session: run
+later, the truth set and the reports would run past the session. It starts only if the clock, read after the nights,
+is an hour or more before that, and it reads the clock again before every step, so it never runs into a session. A
+week whose window closes without its weekly (the Mac off all weekend, a held failure) is told once and left to you;
+run §4 by hand. A `weekly: <session>` commit already there, yours included (`weekly: <session> sheets` counts), means
+the week is done.
+- It runs nothing, and says why, for the same reasons as a night, and also when `data/universe.json`,
+  `data/backtest`, `analyses/ticker`, `ledger/name`, `data/watch_names.txt` or `tests/` hold uncommitted changes.
+- It commits nothing, and says why, if anything it does not write changed while it ran (the code, the tests, the watch
+  list, a night's files, another report, a sheet you made), or if the repo left `main` or began a git operation.
+- A failed step, or a report whose `Inputs` do not run through the session (D39: S-B's prices and index vols, S-C's
+  prices), commits nothing and leaves the outputs in place. The week is held like a night: one more try two hours
+  after the failure, over its own outputs (the ticker ledger skips rows it already has), then nothing until `HEAD`
+  moves; then it tries again over them. A week cut off by 09:00 stops there and says so, once.
+- Either way its outputs, `ledger/name` among them, stay uncommitted, so no night runs until you commit or clear them;
+  the held and cut-off notices say so.
+- It pings the healthcheck only on a failure: the check watches the nights.
+- The dry run says what it would run, once a day, and runs none of it.
 
 Install, dry run first, from the repo:
 
@@ -349,6 +383,10 @@ before the read.
 | about 2027-10 | S-C read: the first week a (variant, structure) pair holds 40 graded forward entry-weeks (the panel selected in 20 of 25 weeks, so about 50 calendar weeks plus the four-week hold) (`make report-sc` prints the count; NOT DUE until then) |
 
 ## 4. Weekly (weekend)
+
+**With the nightly agent installed (§1), this block runs itself** after the week's last night, usually Friday night,
+and is committed as `weekly: <session>`. The commands stay the way to run it by hand, for a week the agent left to
+you. Reading `sb_report.md` (below) stays yours.
 
 ```
 python3 scripts/truthset/build_universe.py       # the ticker spine for prices AND the Saturday FINRA loader (see note)
